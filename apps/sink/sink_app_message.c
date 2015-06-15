@@ -321,32 +321,36 @@ DESCRIPTION
 */
 void SendResponse(uint16 status, uint16 cmd, uint16 value_oid, uint8 value_event, uint8* value_data, uint16 size_data)
 {
-	uint16 length = sizeof(PacketResponse_t) + (size_data ? size_data - 1 : 0);
-	PacketResponse_t *response = (PacketResponse_t *)mallocPanic(length);
-	memset(response, 0, length);
-
-	APP_MSG_DEBUG(("APP_MSG:SendResponse\n"));
-
-	/* fill the rsp */
-	response->status[0] = (status >> 8) & 0xff;
-	response->status[1] = status & 0xff;
-	response->tid[0] = ((cmd + RSP_MASK) >> 8) & 0xff;
-	response->tid[1] = (cmd + RSP_MASK) & 0xff;
-	response->size[0] = ((PACKET_SIZE + size_data) >> 8) & 0xff;
-	response->size[1] = (PACKET_SIZE + size_data) & 0xff;
-	response->id_oid = ID_OID;
-	response->value_oid[0] = value_oid & 0xff;
-	response->value_oid[1] = (value_oid >> 8) & 0xff;
-	response->id_event = ID_EVENT;
-	response->value_event = value_event;
-	response->id_data = ID_DATA;
-	if(value_data)
-		memmove(response->value_data, value_data, size_data);
-
-	SendResponseToDevice((uint8*)response, length);
-
-	free(response);
-	response = NULL;
+	/* 判断蓝牙是否与手机连接 */
+	if((isSppConnected())||(isGattConnected()))
+	{
+		uint16 length = sizeof(PacketResponse_t) + (size_data ? size_data - 1 : 0);
+		PacketResponse_t *response = (PacketResponse_t *)mallocPanic(length);
+		memset(response, 0, length);
+		
+		APP_MSG_DEBUG(("APP_MSG:SendResponse\n"));
+		
+		/* fill the rsp */
+		response->status[0] = (status >> 8) & 0xff;
+		response->status[1] = status & 0xff;
+		response->tid[0] = ((cmd + RSP_MASK) >> 8) & 0xff;
+		response->tid[1] = (cmd + RSP_MASK) & 0xff;
+		response->size[0] = ((PACKET_SIZE + size_data) >> 8) & 0xff;
+		response->size[1] = (PACKET_SIZE + size_data) & 0xff;
+		response->id_oid = ID_OID;
+		response->value_oid[0] = value_oid & 0xff;
+		response->value_oid[1] = (value_oid >> 8) & 0xff;
+		response->id_event = ID_EVENT;
+		response->value_event = value_event;
+		response->id_data = ID_DATA;
+		if(value_data)
+			memmove(response->value_data, value_data, size_data);
+		
+		SendResponseToDevice((uint8*)response, length);
+		
+		free(response);
+		response = NULL;
+	}
 
 }
 

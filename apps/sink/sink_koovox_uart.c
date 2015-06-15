@@ -14,12 +14,8 @@ FILE NAME
 #include "sink_app_message.h"
 #include "sink_app_task.h"
 #include "sink_heart_rate_calc.h"
-
-#if 0
 #include "sink_handle_accelerate_data.h"
-#endif
 
-#define SIZE_UART_MSG	50
 
 UARTStreamTaskData theUARTStreamTask;
 uint8* uart_msg = NULL;
@@ -177,6 +173,36 @@ void UARTStreamMessageHandler (Task pTask, MessageId pId, Message pMessage)
 	}
 }
 
+/****************************************************************************
+NAME 
+  	KoovoxResponseFrameError
+
+DESCRIPTION
+ 	response the frame error conditial
+ 
+RETURNS
+  	void
+*/ 
+static void KoovoxResponseFrameError(uint16 value)
+{
+	uint8 cmd = value & 0xff;
+	uint8 obj = (value >> 8) & 0xff;
+	
+	switch(obj)
+	{
+	case OBJ_STEP_COUNT:
+		if(cmd == START)
+		{
+			/* ÖØ·¢ÃüÁî */
+			KoovoxFillAndSendUartPacket(START, OBJ_STEP_COUNT, 0, 0);
+		}
+		break;
+
+	default:
+		break;
+	}
+}
+
 
 /****************************************************************************
 NAME 
@@ -216,6 +242,26 @@ static void KoovoxUartMessageHandle(uint8 *data, uint16 length)
 			switch(msg->obj)
 			{
 			case OBJ_HEART_RATE:
+				KoovoxResponseHeartRate(msg->data, msg->len);
+				break;
+
+			case OBJ_NECK_PROTECT:
+				KoovoxResponseNeckProtect(msg->data, msg->len);
+				break;
+
+			case OBJ_STEP_COUNT:
+				KoovoxResponseStepCount(msg->data, msg->len);
+				break;
+
+			case OBJ_CONST_SEAT:
+				KoovoxResponseConstSeat(msg->data, msg->len);
+				break;
+
+			case OBJ_FRAME_ERR:
+				KoovoxResponseFrameError(koovox.last_cmd);
+				break;
+
+			default:
 				break;
 			}
 		}
@@ -234,17 +280,19 @@ static void KoovoxUartMessageHandle(uint8 *data, uint16 length)
 				break;
 
 			case OBJ_CONST_SEAT:
+				KoovoxConstSeat(msg->data, msg->len);
 				break;
 
 			case OBJ_HEAD_ACTION:
+				KoovoxHeadAction(msg->data, msg->len);
 				break;
 
 			case OBJ_HEART_RATE:
-				if(GetSampleStatus())
-					KoovoxCalculateHeartRate(msg->data, msg->len);
+				KoovoxCalculateHeartRate(msg->data, msg->len);
 				break;
 
 			case OBJ_I2C_TEST:
+				KoovoxResultI2cTest(msg->data, msg->len);
 				break;
 
 			default:

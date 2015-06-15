@@ -60,6 +60,7 @@
   <file path="sink_app_message.c" />
   <file path="sink_koovox_uart.c" />
   <file path="sink_heart_rate_calc.c" />
+  <file path="sink_handle_accelerate_data.c" />
  </folder>
  <folder name="Header Files" >
   <extension name="h" />
@@ -128,6 +129,7 @@
   <file path="sink_app_message.h" />
   <file path="sink_koovox_uart.h" />
   <file path="sink_heart_rate_calc.h" />
+  <file path="sink_handle_accelerate_data.h" />
  </folder>
  <folder name="GATT db files" >
   <extension name="db" />

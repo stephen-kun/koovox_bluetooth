@@ -19,6 +19,10 @@ FILE NAME
 #include <app/uart/uart_if.h>
 
 #define FRAME_UART_SIZE		5
+#define SIZE_RESPONSE		2
+#define SIZE_FRAME_MSG		4
+#define SIZE_UART_MSG		50
+
 
 
 typedef struct
@@ -58,7 +62,11 @@ typedef enum
 	OBJ_FRAME_ERR		= 0xff
 }enumObj;
 
-
+typedef enum{
+	SUC,
+	ERR,
+	PROCESS
+}enumFrameDetail;
 
 void uart_data_stream_init(void);
 

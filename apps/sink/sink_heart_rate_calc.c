@@ -12,6 +12,7 @@ FILE NAME
 #include "sink_app_core.h"
 #include "sink_app_task.h"
 #include "sink_app_message.h"
+#include "sink_koovox_uart.h"
 
 
 
@@ -487,7 +488,10 @@ void KoovoxCalculateHeartRate(uint8* value, uint8 size_value)
 	uint16 i = 0, j = 0;
 	uint8 heart_rate = 0;
 
-	/*DEBUG(("KoovoxCalculateHeartRate :size_value=%d\n", size_value));*/
+#if 1
+	if(!GetSampleStatus())
+		return;
+#endif
 
 	for(; i<(HR_SAMPLE_POINT_NUM - HR_SAMPLE_FREQUENCE); i++)
 	{
@@ -524,6 +528,53 @@ void KoovoxCalculateHeartRate(uint8* value, uint8 size_value)
 		SendNotifyToDevice(OID_HB , ON, &koovox.heartRateValue, 1);
 	}
 
+}
+
+
+/****************************************************************************
+NAME 
+  	KoovoxResponseHeartRate
+
+DESCRIPTION
+ 	response the heart rate cmd
+ 
+RETURNS
+  	void
+*/ 
+void KoovoxResponseHeartRate(uint8* value, uint8 size_value)
+{
+	if((value == NULL)||(size_value < SIZE_RESPONSE))
+		return;
+
+	{
+	uint8 cmd = 0;
+	uint16 result = 0;
 	
+	cmd = value[0];
+	result = (uint16)value[1];
+
+	if(cmd == START)
+	{
+		if(result == SUC)
+		{
+			/* init the space */
+			Koovox_init_smooth_var();
+			Koovox_init_hb_calc_var();
+		}
+	}
+	else if(cmd == STOP)
+	{ 
+		if(result == SUC)
+		{
+			/* release the space */
+			Koovox_free_hb_calc_var();
+			Koovox_free_smooth_var();
+		}
+	}
+
+	/* response the cmd result */
+	SendResponse(result, CMD_SET, OID_HB, 0, 0, 0);
+	}
+
 }
 

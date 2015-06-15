@@ -174,6 +174,10 @@ typedef struct{
 	uint8 			muteStatus;		/* the mute micphone status */
 
 	uint8 			neckEnable;		/* enable or disable neck protect business */
+	uint8			seatEnable;		/* enable or disable const seat business */
+	uint8			hbEnable;		/* enable or disable heart rate business */
+	uint16			last_cmd;		/* the last of the cmd to STM8 */
+
 	uint8 			driverEnable;	/* enable or disable driver business */
 	uint8			vp_enable;		/* enable or disable present business */
 	uint8 			vp_auto;		/* set auto present business */

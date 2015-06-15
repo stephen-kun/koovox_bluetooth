@@ -9,6 +9,15 @@ FILE NAME
 
 
 #include "sink_handle_accelerate_data.h"
+#include "sink_config.h"
+#include "sink_app_core.h"
+#include "sink_app_task.h"
+#include "sink_app_message.h"
+#include "sink_koovox_uart.h"
+#include "sink_audio_prompts.h"
+
+
+
 
 
 /**********************************************************
@@ -31,8 +40,6 @@ uint32 koovox_step = 0;
 */
 void Koovox_init_step_var(void)
 {
-	uint8 step[4] = {0};
-
 	if(!step_var)
 		step_var = (Acc_step_var *)mallocPanic(sizeof(Acc_step_var));
 		
@@ -43,8 +50,12 @@ void Koovox_init_step_var(void)
 	step_var->min_value = 100;
 	step_var->pre_value = 100;
 
-	// 从pskey中读取步数值
-	
+	/* 从pskey中读取步数值 */
+	{
+	uint16 value[2] = {0};
+	ConfigRetrieve(CONFIG_SPORT_DATA, value, 2);
+	koovox_step = (uint32)value[0] + (((uint32)value[1] << 16)&0xffff0000);
+	}
 }
 
 /**
@@ -64,9 +75,47 @@ void Koovox_free_step_var(void)
 	step[2] = (koovox_step >> 16) & 0xff;
 	step[3] = (koovox_step >> 24) & 0xff;
 
-	// 存取步数值到pskey
-	
+	/* 存取步数值到pskey */
+	{
+		uint16 value[2] = {0};
+		value[0] = koovox_step & 0xffff;
+		value[1] = (koovox_step >> 16) & 0xffff;
+		
+		ConfigStore(CONFIG_SPORT_DATA, value, 2);
+	}
 }
+
+/****************************************************************************
+NAME 
+  	KoovoxResponseStepCount
+
+DESCRIPTION
+ 	response the cmd of step count
+ 
+RETURNS
+  	void
+*/ 
+void KoovoxResponseStepCount(uint8* data, uint8 size_data)
+{
+	if((data==NULL)||(size_data < SIZE_RESPONSE))
+		return;
+
+	{
+	uint8 cmd = data[0];
+	uint16 result = (uint16)data[1];
+
+	if(cmd == START)
+	{
+		if(result == SUC)
+		{
+			/* 初始化计步功能参数 */
+			Koovox_init_step_var();
+		}
+	}
+	
+	}
+}
+
 
 
 /****************************************************************************
@@ -81,61 +130,63 @@ RETURNS
 */ 
 void KoovoxCountStep(uint8* value, uint8 size_value)
 {
-	uint16 curr_value = 0;
-	uint32 curr_index = 0;
 
-	uint8 status = step_var->status;
-	uint32 index_max = step_var->index_max;
-	uint16 min_value = step_var->min_value;
-	uint16 prev_value = step_var->prev_value;
-
-	if(size_value < FRAME_STEP_COUNT)
+	if((size_value < FRAME_STEP_COUNT)||(value == NULL))
 		return;
 
-	curr_value = (uint16)value[0] + ((uint16)value[1] << 8);
-	curr_index = (uint32)value[2] + ((uint32)value[3] << 8) + ((uint32)value[3] << 16) + ((uint32)value[3] << 24);
-
-	
-	if(curr_value > prev_value)
 	{
-		// 检测极小值
-		if(status)
+		uint16 curr_value = 0;
+		uint32 curr_index = 0;
+		
+		uint8 status = step_var->status;
+		uint32 index_max = step_var->index_max;
+		uint16 min_value = step_var->min_value;
+		uint16 pre_value = step_var->pre_value;
+		
+		curr_value = (uint16)value[0] + ((uint16)value[1] << 8);
+		curr_index = (uint32)value[2] + ((uint32)value[3] << 8) + ((uint32)value[3] << 16) + ((uint32)value[3] << 24);
+		
+		
+		if(curr_value > pre_value)
 		{
-			step_var->status = 0;// 设置为上升沿
-
-			if((prev_value < MIN_VALUE_THRESHOLD)&&(step_var->max_flag))
+			/*检测极小值*/
+			if(status)
 			{
-				step_var->max_flag = 0;
-				step_var->min_flag = 1;
-				step_var->min_value = prev_value;
+				step_var->status = 0;/*设置为上升沿*/
+		
+				if((pre_value < MIN_VALUE_THRESHOLD)&&(step_var->max_flag))
+				{
+					step_var->max_flag = 0;
+					step_var->min_flag = 1;
+					step_var->min_value = pre_value;
+				}
 			}
 		}
-	}
-	else
-	{
-		// 检测极大值
-		if(!status)
+		else
 		{
-			step_var->status = 1; // 设置为下降沿
-			
-			if((prev_value > MAX_VALUE_THRESHOLD)
-				&&((curr_index - index_max) >= TIME_THRESHOLD)
-				&&(step_var->min_flag)
-				&&((curr_value - min_value) > VALUE_THRESHOLD))
+			/*检测极大值*/
+			if(!status)
 			{
-				koovox_step++;
-				step_var->max_flag = 1;
-				step_var->min_flag = 0;
-				step_var->index_max = curr_index;
-
-				/**********久坐计时清零**********/
+				step_var->status = 1; /*设置为下降沿*/
 				
+				if((pre_value > MAX_VALUE_THRESHOLD)
+					&&((curr_index - index_max) >= TIME_THRESHOLD)
+					&&(step_var->min_flag)
+					&&((curr_value - min_value) > VALUE_THRESHOLD))
+				{
+					koovox_step++;
+					step_var->max_flag = 1;
+					step_var->min_flag = 0;
+					step_var->index_max = curr_index;
+		
+					/**********久坐计时清零**********/
+					KoovoxFillAndSendUartPacket(ENV, OBJ_STEP_COUNT, 0, 0);
+				}
 			}
 		}
+		
+		step_var->pre_value = curr_value;
 	}
-
-	step_var->p_value = curr_value;
-
 	
 }
 
@@ -218,11 +269,13 @@ RETURNS
 */ 
 void KoovoxProtectNeck(uint8* value, uint8 size_value)
 {
+	if(value == NULL)
+		return;
 
 	if((size_value == 1)&&(*value == NECK_PROTECT_ALARM_EVENT))
 	{
 		/********** 语音提醒用户颈椎保护 **********/
-		
+		AudioPromptPlayEvent(EventKoovoxPromptNectProtectAdvice);
 	}
 	else
 	{
@@ -259,7 +312,8 @@ void KoovoxProtectNeck(uint8* value, uint8 size_value)
 			||((angle_x_curr + ANGLE_VALUE_THRESHOLD) < ANGLE_X_INIT))
 		{
 			/********* 启动定时器 ********/
-			KoovoxFillAndSendUartPacket();
+			uint8 value = TRUE;
+			KoovoxFillAndSendUartPacket(ENV, OBJ_NECK_PROTECT, &value, 1);
 			return ;
 		}
 
@@ -267,7 +321,8 @@ void KoovoxProtectNeck(uint8* value, uint8 size_value)
 			|| ((angle_y_curr + ANGLE_VALUE_THRESHOLD) < ANGLE_Y_INIT))
 		{
 			/********* 启动定时器 ********/
-			
+			uint8 value = TRUE;
+			KoovoxFillAndSendUartPacket(ENV, OBJ_NECK_PROTECT, &value, 1);
 			return ;
 		}
 
@@ -275,16 +330,250 @@ void KoovoxProtectNeck(uint8* value, uint8 size_value)
 			|| ((angle_z_curr + ANGLE_VALUE_THRESHOLD) < ANGLE_Z_INIT))
 		{
 			/********* 启动定时器 ********/
-			
+			uint8 value = TRUE;
+			KoovoxFillAndSendUartPacket(ENV, OBJ_NECK_PROTECT, &value, 1);
 			return ;
 		}
 
 		/***** 关闭定时器 ****/
+		{
+			uint8 value = FALSE;
+			KoovoxFillAndSendUartPacket(ENV, OBJ_NECK_PROTECT, &value, 1);
+		}
 
 		
 	}
 
 	
 }
+
+/****************************************************************************
+NAME 
+  	KoovoxProtectNeck
+
+DESCRIPTION
+ 	neck protect
+ 
+RETURNS
+  	void
+*/ 
+void KoovoxResponseNeckProtect(uint8* data, uint8 size_data)
+{
+	if((data==NULL)||(size_data < SIZE_RESPONSE))
+		return;
+
+	{
+	uint8 cmd = data[0];
+	uint16 result = (uint16)data[1];
+
+	if(cmd == START)
+	{
+		if(result == SUC)
+		{
+			koovox.neckEnable = TRUE;
+		}
+	}
+	else if(cmd == STOP)
+	{
+		if(result == SUC)
+		{
+			koovox.neckEnable = FALSE;
+		}
+	}
+
+	/* response the cmd result */
+	SendResponse(result, CMD_SET, OID_NECK, 0, 0, 0);
+	
+	}
+}
+
+
+/**********************************************************
+*
+***************** const seat ****************************
+*
+***********************************************************/
+
+#define CONST_SEAT_ALARM_EVENT	((uint8)0x01)
+#define GET_UP_MIN_THRESHOLD	25
+#define GET_UP_MAX_THRESHOLD	144
+#define GET_UP_VALUE_THRESHOLD	120
+#define INDEX_THRESHOLD			10
+
+
+Const_seat_var* seat_var = NULL;
+
+
+/**
+* @brief  Koovox_init_const_seat_var
+* @param  none
+* @retval none
+*/
+void Koovox_init_const_seat_var(void)
+{
+	if(!seat_var)
+		seat_var = (Const_seat_var*)malloc(sizeof(Const_seat_var));
+		
+	seat_var->max_flag = 0;
+	seat_var->max_value = 0;
+	seat_var->p_value = 100;
+	seat_var->status = 0;
+	seat_var->max_index = 0;
+}
+
+
+/**
+* @brief  Koovox_free_const_seat_var
+* @param  none
+* @retval none
+*/
+void Koovox_free_const_seat_var(void)
+{
+	free(seat_var);
+	seat_var = NULL;
+}
+
+
+
+/****************************************************************************
+NAME 
+  	KoovoxConstSeat
+
+DESCRIPTION
+ 	const seat prompt
+ 
+RETURNS
+  	void
+*/ 
+void KoovoxConstSeat(uint8* data, uint8 size_data)
+{
+	if(data == NULL)
+		return;
+
+	if((data[0]==CONST_SEAT_ALARM_EVENT)&&(size_data == 1))
+	{
+		/********** 语音提醒用户已久坐 **********/
+		AudioPromptPlayEvent(EventKoovoxPromptNectProtectAdvice);
+	}
+	else
+	{
+		/* 完成起身动作检测 */
+		uint16 curr_value = (uint16)data[0] + (((uint16)data[1] << 8)&0xff00);
+		uint16 pre_value = seat_var->p_value;
+		uint32 curr_index = (uint32)data[2] + ((uint32)data[3] << 8) + ((uint32)data[3] << 16) + ((uint32)data[3] << 24);
+		uint8 status = seat_var->status;
+
+		seat_var->p_value = curr_value;
+
+		if(curr_value > pre_value)
+		{
+			/* 极小值检测 */
+			if(status)
+			{
+				/* 设置为上升沿 */
+				seat_var->status = 0;
+
+				if((pre_value < GET_UP_MIN_THRESHOLD)&&
+					(seat_var->max_flag)&&
+					(seat_var->max_value - pre_value > GET_UP_VALUE_THRESHOLD)&&
+					(curr_index - seat_var->max_index < INDEX_THRESHOLD))
+				{
+					/* 检测到起身动作 */
+					KoovoxFillAndSendUartPacket(ENV, OBJ_CONST_SEAT, 0, 0);
+
+					Koovox_init_const_seat_var();
+				}
+			}
+		}
+		else
+		{
+			/* 极大值检测 */
+			if(!status)
+			{
+				/* 设置为下降沿 */
+				seat_var->status = 1;
+
+				if(pre_value > GET_UP_MAX_THRESHOLD)
+				{
+					seat_var->max_flag = 1;
+					seat_var->max_index = curr_index;
+					seat_var->max_value = pre_value;
+				}
+			}
+		}
+		
+		
+	}
+
+}
+
+
+/****************************************************************************
+NAME 
+  	KoovoxConstSeat
+
+DESCRIPTION
+ 	const seat prompt
+ 
+RETURNS
+  	void
+*/ 
+void KoovoxResponseConstSeat(uint8* data, uint8 size_data)
+{
+
+	if((data==NULL)||(size_data < SIZE_RESPONSE))
+		return;
+
+	{
+	uint8 cmd = data[0];
+	uint16 result = (uint16)data[1];
+
+	if(cmd == START)
+	{
+		if(result == SUC)
+		{
+			koovox.seatEnable = TRUE;
+			Koovox_init_const_seat_var();
+		}
+	}
+	else if(cmd == STOP)
+	{
+		if(result == SUC)
+		{
+			koovox.seatEnable = FALSE;
+			Koovox_free_const_seat_var();
+		}
+
+	}
+
+	/* response the cmd result */
+	SendResponse(result, CMD_SET, OID_NECK, 0, 0, 0);
+	
+	}
+}
+
+
+/**********************************************************
+*
+***************** head action ****************************
+*
+***********************************************************/
+
+
+/****************************************************************************
+NAME 
+  	KoovoxHeadAction
+
+DESCRIPTION
+ 	head action check
+ 
+RETURNS
+  	void
+*/ 
+void KoovoxHeadAction(uint8* data, uint8 size_data)
+{
+
+}
+
 
 

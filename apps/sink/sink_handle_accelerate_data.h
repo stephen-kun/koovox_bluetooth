@@ -21,16 +21,17 @@ FILE NAME
 #define VALUE_THRESHOLD			40
 
 typedef struct{
-	uint8 status ;// 0:表示上升沿； 1:表示下降沿	
+	uint8 status ;/* 0:表示上升沿； 1:表示下降沿 */
 	uint8 max_flag ;
 	uint8 min_flag;
 	uint16 min_value;
 	uint16 pre_value;
-	uint32 index_max;	// 前一个极大值下标
+	uint32 index_max;	/*前一个极大值下标*/
 }Acc_step_var;
 
 void Koovox_init_step_var(void);
 void Koovox_free_step_var(void);
+void KoovoxResponseStepCount(uint8* data, uint8 size_data);
 void KoovoxCountStep(uint8* value, uint8 size_value);
 
 
@@ -43,9 +44,31 @@ void KoovoxCountStep(uint8* value, uint8 size_value);
 
 int8 Angle_search(const uint16* table, uint16 size, int16 key);
 void KoovoxProtectNeck(uint8* value, uint8 size_value);
+void KoovoxResponseNeckProtect(uint8* data, uint8 size_data);
+
 
 
 /****************** const seat  ******************/
+
+typedef struct{
+	uint8 status;/* 0:表示上升沿； 1:表示下降沿	*/
+	uint8 max_flag;
+	uint8 max_value;
+	uint16 p_value;/* 前一个加速度矢量和 */
+	uint32 max_index;
+}Const_seat_var;
+
+
+void Koovox_init_const_seat_var(void);
+void Koovox_free_const_seat_var(void);
+void KoovoxConstSeat(uint8* data, uint8 size_data);
+void KoovoxResponseConstSeat(uint8* data, uint8 size_data);
+
+
+/****************** head action  ******************/
+void KoovoxHeadAction(uint8* data, uint8 size_data);
+
+
 
 #endif
 

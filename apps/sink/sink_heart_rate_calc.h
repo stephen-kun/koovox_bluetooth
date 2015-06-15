@@ -71,6 +71,7 @@ void Koovox_init_smooth_var(void);
 void Koovox_free_smooth_var(void);
 
 void KoovoxCalculateHeartRate(uint8* value, uint8 size_value);
+void KoovoxResponseHeartRate(uint8* value, uint8 size_value);
 
 
 #endif

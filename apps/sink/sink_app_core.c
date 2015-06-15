@@ -453,6 +453,24 @@ void KoovoxStopNeckProtect(void)
 	
 }
 
+
+/*************************************************************************
+NAME
+    KoovoxResultI2cTest
+    
+DESCRIPTION
+    
+*/
+void KoovoxResultI2cTest(uint8* data, uint8 size_data)
+{
+	uint16 value = 0;
+	ConfigRetrieve(CONFIG_ACC_I2C_TEST_RESULT,&value, 1);
+	DEBUG(("acc_i2c result:%d pskey_value:%d\n", data[0], value));
+	if(value != (uint16)data[0])
+		ConfigStore(CONFIG_ACC_I2C_TEST_RESULT, (const void*)data, 1);
+}
+
+
 /*************************************************************************
 NAME
     KoovoxStartConstSeatPrompt

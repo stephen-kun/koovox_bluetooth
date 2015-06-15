@@ -257,6 +257,16 @@ DESCRIPTION
 void KoovoxStopSportMode(void);
 
 
+/*************************************************************************
+NAME
+    KoovoxResultI2cTest
+    
+DESCRIPTION
+    
+*/
+void KoovoxResultI2cTest(uint8* data, uint8 size_data);
+
+
 /****************************************************************************
 NAME
     KoovoxAudioPresencePlayEvent

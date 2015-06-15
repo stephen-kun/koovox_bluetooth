@@ -5411,7 +5411,7 @@ $__init:
 	or	AL,#H'4000
 	st	AL,@$_theSink+H'0034
 	bsr	$_configManagerPioMap
-	ld	AL,#H'0023
+	ld	AL,#H'0026
 	st	AL,@(0,Y)
 	ld	AL,#($_koovox)
 	ld	AH,#H'0000
@@ -5484,13 +5484,13 @@ $_main:
 	.SEG	CONST
 ?LC6:
 	dc	H'31
+	dc	H'39
+	dc	H'3A
+	dc	H'31
+	dc	H'33
+	dc	H'3A
 	dc	H'35
-	dc	H'3A
-	dc	H'34
-	dc	H'37
-	dc	H'3A
-	dc	H'34
-	dc	H'38
+	dc	H'36
 	dc	H'00
 ?LC5:
 	dc	H'4D
@@ -8746,7 +8746,7 @@ $_KoovoxLog:
 ?L15:
 	ld	AH,@(H'0003,Y)
 	st	AH,@(0,Y)
-	ld	AL,@$_koovox+H'0013
+	ld	AL,@$_koovox+H'0016
 	ld	AH,@(H'0004,Y)
 	bsr	$_SendMessageWithSink
 	ld	AL,@(H'0004,Y)
@@ -9030,70 +9030,142 @@ $_KoovoxStopNeckProtect:
 	dc	H'74
 	dc	H'00
 	.CODE
+$_KoovoxResultI2cTest:
+	enterl	#6
+?LBB_KoovoxResultI2cTest:
+	st	AL,@(H'0003,Y)
+?LBB8:
+	ld	AL,#H'0000
+	st	AL,@(H'0002,Y)
+	ld	AL,#H'0001
+	st	AL,@(0,Y)
+	ld	AL,#H'002D
+	ld	AH,@$XAP_UY
+	add	AH,#H'0002
+	bsr	$_ConfigRetrieve
+	ld	X,@(H'0003,Y)
+	ld	AL,@(0,X)
+	st	AL,@(0,Y)
+	ld	AL,@(H'0002,Y)
+	st	AL,@(H'0001,Y)
+	ld	AL,#(?LC5)
+	bsr	$_printf
+	ld	AL,@(H'0002,Y)
+	ld	X,@(H'0003,Y)
+	cmp	AL,@(0,X)
+	beq	?L62
+	ld	AL,#H'0001
+	st	AL,@(0,Y)
+	ld	AL,#H'002D
+	ld	AH,@$XAP_UXL
+	bsr	$_ConfigStore
+?L62:
+?LBE8:
+?LBE_KoovoxResultI2cTest:
+	leavel	#6
+	.SEG	CONST
+?LC5:
+	dc	H'61
+	dc	H'63
+	dc	H'63
+	dc	H'5F
+	dc	H'69
+	dc	H'32
+	dc	H'63
+	dc	H'20
+	dc	H'72
+	dc	H'65
+	dc	H'73
+	dc	H'75
+	dc	H'6C
+	dc	H'74
+	dc	H'3A
+	dc	H'25
+	dc	H'64
+	dc	H'20
+	dc	H'70
+	dc	H'73
+	dc	H'6B
+	dc	H'65
+	dc	H'79
+	dc	H'5F
+	dc	H'76
+	dc	H'61
+	dc	H'6C
+	dc	H'75
+	dc	H'65
+	dc	H'3A
+	dc	H'25
+	dc	H'64
+	dc	H'0A
+	dc	H'00
+	.CODE
+;.stabn	192,0,0,?LBB8
+;.stabn	224,0,0,?LBE8
 $_KoovoxStartConstSeatPrompt:
 	enterl	#4
 ?LBB_KoovoxStartConstSeatPrompt:
-?LBB8:
+?LBB9:
 	ld	AL,#H'0005
 	bsr	$_SetSampleStatus
 	ld	AL,#H'0010
-?LBB9:
+?LBB10:
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
 	st	AL,@(H'0001,Y)
 	ld	AL,#($_koovox_sport_common_plugin)
 	ld	AH,#H'0002
 	bsr	$_AudioSportModePlayPrompt
+?LBE10:
 ?LBE9:
-?LBE8:
 ?LBE_KoovoxStartConstSeatPrompt:
 	leavel	#4
-;.stabn	192,0,0,?LBB9
-;.stabn	224,0,0,?LBE9
+;.stabn	192,0,0,?LBB10
+;.stabn	224,0,0,?LBE10
 $_KoovoxStopConstSeatPrompt:
 	enterl	#2
 ?LBB_KoovoxStopConstSeatPrompt:
-?LBB10:
+?LBB11:
 	ld	AL,#H'0000
 	bsr	$_SetSampleStatus
-?LBB11:
+?LBB12:
 	ld	AL,#($_koovox_sport_common_plugin)
 	bsr	$_AudioSportModeStopPrompt
+?LBE12:
 ?LBE11:
-?LBE10:
 ?LBE_KoovoxStopConstSeatPrompt:
 	leavel	#2
 $_KoovoxStartSafeDriver:
 	enterl	#4
 ?LBB_KoovoxStartSafeDriver:
-?LBB12:
+?LBB13:
 	ld	AL,#H'0004
 	bsr	$_SetSampleStatus
 	ld	AL,#H'0004
-?LBB13:
+?LBB14:
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
 	st	AL,@(H'0001,Y)
 	ld	AL,#($_koovox_sport_common_plugin)
 	ld	AH,#H'0002
 	bsr	$_AudioSportModePlayPrompt
+?LBE14:
 ?LBE13:
-?LBE12:
 ?LBE_KoovoxStartSafeDriver:
 	leavel	#4
-;.stabn	192,0,0,?LBB13
-;.stabn	224,0,0,?LBE13
+;.stabn	192,0,0,?LBB14
+;.stabn	224,0,0,?LBE14
 $_KoovoxStopSafeDriver:
 	enterl	#2
 ?LBB_KoovoxStopSafeDriver:
-?LBB14:
+?LBB15:
 	ld	AL,#H'0000
 	bsr	$_SetSampleStatus
-?LBB15:
+?LBB16:
 	ld	AL,#($_koovox_sport_common_plugin)
 	bsr	$_AudioSportModeStopPrompt
+?LBE16:
 ?LBE15:
-?LBE14:
 ?LBE_KoovoxStopSafeDriver:
 	leavel	#2
 _KoovoxRssiPairMode:
@@ -9109,7 +9181,7 @@ _KoovoxRssiPairMode:
 _KoovoxAsrCall:
 	enterl	#17
 ?LBB_KoovoxAsrCall:
-?LBB16:
+?LBB17:
 	bsr	$_RecoverPreviousMode
 	ld	AL,#H'000C
 	st	AL,@(0,Y)
@@ -9119,25 +9191,25 @@ _KoovoxAsrCall:
 	bsr	$_ConfigRetrieve
 	st	AL,@(H'000E,Y)
 	cmp	AL,#H'0000
-	beq	?L67
+	beq	?L70
 	ld	AL,#H'0001
 	ld	AH,@$XAP_UY
 	add	AH,#H'000D
 	bsr	$_HfpLinkGetSlcSink
 	cmp	AL,#H'0000
-	beq	?L69
+	beq	?L72
 	ld	AL,@(H'000D,Y)
 	bsr	$_SinkIsValid
 	cmp	AL,#H'0000
-	beq	?L69
+	beq	?L72
 	ld	AL,@$XAP_UY
 	add	AL,#H'0001
 	st	AL,@(0,Y)
 	ld	AL,#H'0001
 	ld	AH,@(H'000E,Y)
 	bsr	$_HfpDialNumberRequest
-	bra	(?L67)
-?L69:
+	bra	(?L70)
+?L72:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
@@ -9145,25 +9217,25 @@ _KoovoxAsrCall:
 	bsr	$_MessageSend
 	ld	AL,#H'40D1
 	bsr	$_sinkQueueEvent
-?L67:
-?LBE16:
+?L70:
+?LBE17:
 ?LBE_KoovoxAsrCall:
 	leavel	#17
-;.stabn	192,0,0,?LBB16
-;.stabn	224,0,0,?LBE16
+;.stabn	192,0,0,?LBB17
+;.stabn	224,0,0,?LBE17
 _KoovoxStartStopSportMode:
 	enterl	#12
 ?LBB_KoovoxStartStopSportMode:
-?LBB17:
+?LBB18:
 	ld	AL,#H'0000
 	st	AL,@(H'0005,Y)
 	bsr	$_GetSampleStatus
 	st	AL,@(H'0006,Y)
 	cmp	AL,#H'0001
-	bne	?L72
+	bne	?L75
 	bsr	$_isOnlineState
 	cmp	AL,#H'0000
-	beq	?L73
+	beq	?L76
 	ld	AL,#H'0002
 	st	AL,@(H'0005,Y)
 	ld	AL,@$XAP_UY
@@ -9174,9 +9246,9 @@ _KoovoxStartStopSportMode:
 	ld	AL,#H'0002
 	ld	AH,#H'0005
 	bsr	$_SendNotifyToDevice
-	bra	(?L74)
-?L73:
-?LBB18:
+	bra	(?L77)
+?L76:
+?LBB19:
 	ld	AL,#H'0000
 	st	AL,@(H'0003,Y)
 	st	AL,@(H'0002,Y)
@@ -9226,19 +9298,19 @@ _KoovoxStartStopSportMode:
 	ld	AH,@$XAP_UY
 	add	AH,#H'0002
 	bsr	$_ConfigStore
-?L74:
-?LBE18:
+?L77:
+?LBE19:
 	bsr	$_KoovoxStopSportMode
 	ld	AL,#H'4798
 	bsr	$_AudioPromptPlayEvent
-	bra	(?L71)
-?L72:
+	bra	(?L74)
+?L75:
 	ld	AL,#H'4797
 	bsr	$_AudioPromptPlayEvent
 	bsr	$_KoovoxStartSportMode
 	bsr	$_isOnlineState
 	cmp	AL,#H'0000
-	beq	?L71
+	beq	?L74
 	ld	AH,#H'0001
 	st	AH,@(H'0005,Y)
 	ld	AL,@$XAP_UY
@@ -9248,57 +9320,57 @@ _KoovoxStartStopSportMode:
 	ld	AL,#H'0002
 	ld	AH,#H'0005
 	bsr	$_SendNotifyToDevice
-?L71:
-?LBE17:
+?L74:
+?LBE18:
 ?LBE_KoovoxStartStopSportMode:
 	leavel	#12
-;.stabn	192,0,0,?LBB17
 ;.stabn	192,0,0,?LBB18
+;.stabn	192,0,0,?LBB19
+;.stabn	224,0,0,?LBE19
 ;.stabn	224,0,0,?LBE18
-;.stabn	224,0,0,?LBE17
 _KoovoxSwitchToNextMode:
 	enterl	#5
 ?LBB_KoovoxSwitchToNextMode:
-?LBB19:
+?LBB20:
 	ld	AL,#H'0000
 	st	AL,@(H'0002,Y)
 	bsr	$_GetCurrMode
 	cmp	AL,#H'0001
-	beq	?L83
+	beq	?L86
 	cmp	AL,#H'0001
-	bcs	?L80
+	bcs	?L83
 	cmp	AL,#H'0002
-	beq	?L85
+	beq	?L88
 	cmp	AL,#H'0004
-	beq	?L85
-	bra	(?L79)
-?L80:
+	beq	?L88
+	bra	(?L82)
+?L83:
 	bsr	$_isConnectedState
 	cmp	AL,#H'0000
-	beq	?L81
+	beq	?L84
 	ld	AL,#H'0001
 	st	AL,@(H'0002,Y)
-	bra	(?L90)
-?L81:
+	bra	(?L93)
+?L84:
 	ld	AL,#H'0002
-	bra	(?L89)
-?L83:
+	bra	(?L92)
+?L86:
 	ld	AL,#H'0002
 	st	AL,@(H'0002,Y)
 	ld	AL,#H'0000
-?L90:
+?L93:
 	bsr	$_SetMusicStatus
-	bra	(?L79)
-?L85:
+	bra	(?L82)
+?L88:
 	ld	AL,#H'0000
-?L89:
+?L92:
 	st	AL,@(H'0002,Y)
-?L79:
+?L82:
 	ld	AL,@(H'0002,Y)
 	bsr	$_KoovoxSetModePrompt
 	bsr	$_isOnlineState
 	cmp	AL,#H'0000
-	beq	?L78
+	beq	?L81
 	ld	AL,@$XAP_UY
 	add	AL,#H'0002
 	st	AL,@(0,Y)
@@ -9307,25 +9379,25 @@ _KoovoxSwitchToNextMode:
 	ld	AL,#H'0003
 	ld	AH,#H'0003
 	bsr	$_SendNotifyToDevice
-?L78:
-?LBE19:
+?L81:
+?LBE20:
 ?LBE_KoovoxSwitchToNextMode:
 	leavel	#5
-;.stabn	192,0,0,?LBB19
-;.stabn	224,0,0,?LBE19
+;.stabn	192,0,0,?LBB20
+;.stabn	224,0,0,?LBE20
 _KoovoxSmartAudioPrompt:
 	enterl	#6
 ?LBB_KoovoxSmartAudioPrompt:
-?LBB20:
+?LBB21:
 	bsr	$_get_battery_level_as_percentage
 	bsr	$_UpdateBatteryValue
 	bsr	$_isOnlineState
 	cmp	AL,#H'0000
-	beq	?L96
+	beq	?L99
 	ld	AL,#H'0000
-?LBB21:
+?LBB22:
 	st	AL,@(H'0002,Y)
-	ld	AL,@$_koovox+H'001F
+	ld	AL,@$_koovox+H'0022
 	st	AL,@(H'0003,Y)
 	ld	AL,@$XAP_UY
 	add	AL,#H'0002
@@ -9334,38 +9406,38 @@ _KoovoxSmartAudioPrompt:
 	st	AL,@(H'0001,Y)
 	ld	AH,#H'0003
 	bsr	$_SendNotifyToDevice
-?LBE21:
-	bra	(?L95)
-?L96:
+?LBE22:
+	bra	(?L98)
+?L99:
 	bsr	$_isConnectableState
 	cmp	AL,#H'0000
-	bne	?L98
+	bne	?L101
 	ld	AL,#H'4788
 	bsr	$_AudioPromptPlayEvent
 	ld	AL,#H'478C
-	bra	(?L100)
-?L98:
+	bra	(?L103)
+?L101:
 	ld	AL,#H'4789
-?L100:
+?L103:
 	bsr	$_AudioPromptPlayEvent
 	ld	AH,#H'0000
-	ld	AL,@$_koovox+H'001F
+	ld	AL,@$_koovox+H'0022
 	bsr	$_KoovoxPromptPlayBattery
-?L95:
-?LBE20:
+?L98:
+?LBE21:
 ?LBE_KoovoxSmartAudioPrompt:
 	leavel	#6
-;.stabn	192,0,0,?LBB21
-;.stabn	224,0,0,?LBE21
+;.stabn	192,0,0,?LBB22
+;.stabn	224,0,0,?LBE22
 _KoovoxSportAudioPrompt:
 	enterl	#5
 ?LBB_KoovoxSportAudioPrompt:
-?LBB22:
+?LBB23:
 	ld	AL,#H'0000
 	st	AL,@(H'0002,Y)
 	bsr	$_isOnlineState
 	cmp	AL,#H'0000
-	beq	?L102
+	beq	?L105
 	ld	AL,#H'0002
 	st	AL,@(H'0002,Y)
 	ld	AL,@$XAP_UY
@@ -9376,33 +9448,33 @@ _KoovoxSportAudioPrompt:
 	ld	AL,#H'0002
 	ld	AH,#H'0003
 	bsr	$_SendNotifyToDevice
-	bra	(?L101)
-?L102:
+	bra	(?L104)
+?L105:
 	ld	AH,#H'0000
-	ld	AL,@$_koovox+H'001E
+	ld	AL,@$_koovox+H'0021
 	bsr	$_KoovoPromptPlayHeartRate
-?L101:
-?LBE22:
+?L104:
+?LBE23:
 ?LBE_KoovoxSportAudioPrompt:
 	leavel	#5
-;.stabn	192,0,0,?LBB22
-;.stabn	224,0,0,?LBE22
+;.stabn	192,0,0,?LBB23
+;.stabn	224,0,0,?LBE23
 _KoovoxStartAutoSpeechRecognition:
 	enterl	#4
 ?LBB_KoovoxStartAutoSpeechRecognition:
 	bsr	$_isOnlineState
 	cmp	AL,#H'0000
-	beq	?L105
+	beq	?L108
 	ld	AL,#H'0001
 	bsr	$_SetAsrStatus
 	bsr	$_GetCurrMode
 	cmp	AL,#H'0004
-	beq	?L106
+	beq	?L109
 	bsr	$_GetCurrMode
 	bsr	$_StorePreviousMode
 	ld	AL,#H'0004
 	bsr	$_SetCurrMode
-?L106:
+?L109:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#H'0001
@@ -9410,11 +9482,11 @@ _KoovoxStartAutoSpeechRecognition:
 	ld	AL,#H'0003
 	ld	AH,#H'0006
 	bsr	$_SendNotifyToDevice
-	bra	(?L104)
-?L105:
+	bra	(?L107)
+?L108:
 	ld	AL,#H'478C
 	bsr	$_AudioPromptPlayEvent
-?L104:
+?L107:
 ?LBE_KoovoxStartAutoSpeechRecognition:
 	leavel	#4
 _KoovoxStopAutoSpeechRecognition:
@@ -9424,7 +9496,7 @@ _KoovoxStopAutoSpeechRecognition:
 	bsr	$_SetAsrStatus
 	bsr	$_isOnlineState
 	cmp	AL,#H'0000
-	beq	?L109
+	beq	?L112
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#H'0001
@@ -9444,7 +9516,7 @@ _KoovoxStopAutoSpeechRecognition:
 	ld	AL,#($_theSink)
 	ld	AH,#H'40CF
 	bsr	$_MessageSendLater
-?L109:
+?L112:
 ?LBE_KoovoxStopAutoSpeechRecognition:
 	leavel	#5
 _KoovoxPlayPauseMusic:
@@ -9480,26 +9552,26 @@ _KoovoxPlayPrevious:
 $_KoovoxSwitchToCallMode:
 	enterl	#3
 ?LBB_KoovoxSwitchToCallMode:
-?LBB23:
+?LBB24:
 	bsr	$_GetCurrMode
 	st	AL,@(0,Y)
 	bsr	$_StorePreviousMode
 	ld	AL,@(0,Y)
 	cmp	AL,#H'0002
-	bne	?L115
+	bne	?L118
 	bsr	$_isOnlineState
 	cmp	AL,#H'0000
-	bne	?L115
+	bne	?L118
 	ld	AL,#H'0000
 	bsr	$_SetPromptStatus
-?L115:
+?L118:
 	ld	AL,#H'0003
 	bsr	$_SetCurrMode
-?LBE23:
+?LBE24:
 ?LBE_KoovoxSwitchToCallMode:
 	leavel	#3
-;.stabn	192,0,0,?LBB23
-;.stabn	224,0,0,?LBE23
+;.stabn	192,0,0,?LBB24
+;.stabn	224,0,0,?LBE24
 _KoovoxAnswerCall:
 	enterl	#3
 ?LBB_KoovoxAnswerCall:
@@ -9543,16 +9615,16 @@ _KoovoxHangOffCall:
 _KoovoxRecordCall:
 	enterl	#5
 ?LBB_KoovoxRecordCall:
-?LBB24:
+?LBB25:
 	bsr	$_isOnlineState
 	cmp	AL,#H'0000
-	beq	?L126
-?LBB25:
+	beq	?L129
+?LBB26:
 	ld	AL,#H'0000
 	st	AL,@(H'0002,Y)
 	bsr	$_isRecordBusy
 	cmp	AL,#H'0000
-	beq	?L127
+	beq	?L130
 	ld	AL,#H'0000
 	bsr	$_SetRecordStatus
 	ld	AL,#H'0002
@@ -9566,8 +9638,8 @@ _KoovoxRecordCall:
 	ld	AH,#H'0005
 	bsr	$_SendNotifyToDevice
 	ld	AL,#H'478F
-	bra	(?L130)
-?L127:
+	bra	(?L133)
+?L130:
 	ld	AL,#H'0001
 	bsr	$_SetRecordStatus
 	ld	AH,#H'0001
@@ -9580,27 +9652,27 @@ _KoovoxRecordCall:
 	ld	AH,#H'0005
 	bsr	$_SendNotifyToDevice
 	ld	AL,#H'478E
-	bra	(?L130)
-?L126:
-?LBE25:
+	bra	(?L133)
+?L129:
+?LBE26:
 	ld	AL,#H'478C
-?L130:
+?L133:
 	bsr	$_AudioPromptPlayEvent
-?LBE24:
+?LBE25:
 ?LBE_KoovoxRecordCall:
 	leavel	#5
-;.stabn	192,0,0,?LBB25
-;.stabn	224,0,0,?LBE25
+;.stabn	192,0,0,?LBB26
+;.stabn	224,0,0,?LBE26
 _KoovoxPresetCall:
 	enterl	#4
 ?LBB_KoovoxPresetCall:
 	bsr	$_isPresentBusy
 	st	AL,@(H'0001,Y)
 	cmp	AL,#H'0000
-	bne	?L131
+	bne	?L134
 	bsr	$_isPresentEnable
 	cmp	AL,#H'0000
-	beq	?L131
+	beq	?L134
 	ld	AL,#H'0001
 	bsr	$_SetPresentStatus
 	ld	AL,#($_theSink)
@@ -9611,17 +9683,17 @@ _KoovoxPresetCall:
 	ld	AL,#($_theSink)
 	ld	AH,#H'4008
 	bsr	$_MessageSend
-?L131:
+?L134:
 ?LBE_KoovoxPresetCall:
 	leavel	#4
 _KoovoxPromptPrecence:
 	enterl	#5
 ?LBB_KoovoxPromptPrecence:
-?LBB26:
+?LBB27:
 	bsr	$_isVoiceMessageEnable
 	cmp	AL,#H'0000
-	beq	?L134
-?LBB27:
+	beq	?L137
+?LBB28:
 	ld	AL,#H'0001
 	st	AL,@(H'0002,Y)
 	ld	AH,@$XAP_UY
@@ -9634,19 +9706,19 @@ _KoovoxPromptPrecence:
 	bsr	$_GetPresentScenceEvent
 	bsr	$_KoovoxAudioPresencePlayEvent
 	ld	AL,#H'4796
-	bra	(?L136)
-?L134:
-?LBE27:
+	bra	(?L139)
+?L137:
+?LBE28:
 	bsr	$_GetPresentScenceEvent
 	bsr	$_KoovoxAudioPresencePlayEvent
 	ld	AL,#H'4790
-?L136:
+?L139:
 	bsr	$_KoovoxAudioPresencePlayEvent
-?LBE26:
+?LBE27:
 ?LBE_KoovoxPromptPrecence:
 	leavel	#5
-;.stabn	192,0,0,?LBB27
-;.stabn	224,0,0,?LBE27
+;.stabn	192,0,0,?LBB28
+;.stabn	224,0,0,?LBE28
 _KoovoxRecoverPreviousMode:
 	enterl	#2
 ?LBB_KoovoxRecoverPreviousMode:
@@ -9658,7 +9730,7 @@ _KoovoxPeriodPromptHeartRate:
 ?LBB_KoovoxPeriodPromptHeartRate:
 	bsr	$_isPromptEnable
 	cmp	AL,#H'0000
-	beq	?L138
+	beq	?L141
 	ld	AH,#H'0000
 	st	AH,@(0,Y)
 	ld	AL,#H'7530
@@ -9667,12 +9739,12 @@ _KoovoxPeriodPromptHeartRate:
 	ld	AL,#($_koovox)
 	ld	AH,#H'40CC
 	bsr	$_MessageSendLater
-	tst	@$_koovox+H'001E
-	beq	?L138
+	tst	@$_koovox+H'0021
+	beq	?L141
 	ld	AH,#H'0000
-	ld	AL,@$_koovox+H'001E
+	ld	AL,@$_koovox+H'0021
 	bsr	$_KoovoPromptPlayHeartRate
-?L138:
+?L141:
 ?LBE_KoovoxPeriodPromptHeartRate:
 	leavel	#5
 $_KoovoxStopHeartRateMeasure:
@@ -9710,39 +9782,39 @@ $_KoovoxStartHeartRateMeasure:
 $_KoovoxStopSportMode:
 	enterl	#2
 ?LBB_KoovoxStopSportMode:
-?LBB28:
+?LBB29:
 	ld	AL,#H'0000
 	bsr	$_SetSampleStatus
 	ld	AL,#H'0000
 	bsr	$_SetPromptStatus
 	ld	AL,#H'0000
 	bsr	$_UpdateHeartRateValue
-?LBB29:
+?LBB30:
 	ld	AL,#($_koovox_sport_common_plugin)
 	bsr	$_AudioSportModeStopPrompt
-?LBE29:
+?LBE30:
 	bsr	$_HeartRateSensorDisable
 	bsr	$_ClearStepValue
 	bsr	$_ClearTimeValue
-?LBE28:
+?LBE29:
 ?LBE_KoovoxStopSportMode:
 	leavel	#2
 $_KoovoxStartSportMode:
 	enterl	#6
 ?LBB_KoovoxStartSportMode:
-?LBB30:
+?LBB31:
 	ld	AL,#H'0001
 	bsr	$_SetSampleStatus
 	bsr	$_HeartRateSensorEnable
-?LBB31:
+?LBB32:
 	ld	AL,#H'0001
 	st	AL,@(H'0002,Y)
 	bsr	$_isOnlineState
 	cmp	AL,#H'0000
-	bne	?L145
+	bne	?L148
 	ld	AL,#H'0003
 	st	AL,@(H'0002,Y)
-?L145:
+?L148:
 	ld	AL,@(H'0002,Y)
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
@@ -9750,11 +9822,11 @@ $_KoovoxStartSportMode:
 	ld	AL,#($_koovox_sport_common_plugin)
 	ld	AH,#H'0003
 	bsr	$_AudioSportModePlayPrompt
-?LBE31:
+?LBE32:
 	bsr	$_isOnlineState
 	st	AL,@(H'0003,Y)
 	cmp	AL,#H'0000
-	bne	?L144
+	bne	?L147
 	ld	AL,#H'0001
 	bsr	$_SetPromptStatus
 	ld	AL,@(H'0003,Y)
@@ -9762,28 +9834,28 @@ $_KoovoxStartSportMode:
 	ld	AL,#($_koovox)
 	ld	AH,#H'40CC
 	bsr	$_MessageSend
-?L144:
-?LBE30:
+?L147:
+?LBE31:
 ?LBE_KoovoxStartSportMode:
 	leavel	#6
-;.stabn	192,0,0,?LBB31
-;.stabn	224,0,0,?LBE31
+;.stabn	192,0,0,?LBB32
+;.stabn	224,0,0,?LBE32
 _KoovoxEmergencyCall:
 	enterl	#3
 ?LBB_KoovoxEmergencyCall:
 	bsr	$_stateManagerGetState
 	cmp	AL,#H'0002
-	bcz	?L148
+	bcz	?L151
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'4026
 	bsr	$_MessageSend
-	bra	(?L147)
-?L148:
+	bra	(?L150)
+?L151:
 	ld	AL,#H'4789
 	bsr	$_AudioPromptPlayEvent
-?L147:
+?L150:
 ?LBE_KoovoxEmergencyCall:
 	leavel	#3
 _KoovoxEventEngine:
@@ -9791,27 +9863,27 @@ _KoovoxEventEngine:
 ?LBB_KoovoxEventEngine:
 	st	AL,@(0,Y)
 	st	AH,@(H'0001,Y)
-?LBB32:
+?LBB33:
 	ld	AL,#H'0000
 	st	AL,@(H'0002,Y)
 	cmp	AL,@(H'0005,Y)
-	bcc	?L153
-?L159:
+	bcc	?L156
+?L162:
 	ld	AL,@(H'0002,Y)
 	smult	#H'0005
 	ld	X,@(H'0001,Y)
 	add	X,@$XAP_AL
 	ld	AL,@(0,Y)
 	cmp	AL,@(0,X)
-	bne	?L154
+	bne	?L157
 	tst	@(H'0002,X)
-	beq	?L157
+	beq	?L160
 	ld	AH,@(H'0001,X)
 	ld	AL,@(H'0002,X)
 	st	AH,@(-1,Y)
 	st	AL,@(-2,Y)
-	bsr	?L163
-?L163:
+	bsr	?L166
+?L166:
 	add	X,@(-2,Y)
 	st	X,@H'ffff
 	ld	X,@$XAP_UXH
@@ -9819,10 +9891,10 @@ _KoovoxEventEngine:
 	st	X,@(-1,Y)
 	ld	XH,@(-1,Y)
 	ld	X,@H'ffff
-	bsr	-?L163,X
+	bsr	-?L166,X
 	cmp	AL,#H'0000
-	beq	?L154
-?L157:
+	beq	?L157
+?L160:
 	ld	AL,@(H'0002,Y)
 	smult	#H'0005
 	ld	X,@(H'0001,Y)
@@ -9830,14 +9902,14 @@ _KoovoxEventEngine:
 	ld	AH,@(H'0003,X)
 	ld	AL,@(H'0004,X)
 	cmp	AH,#H'0000
-	bne	?L164
+	bne	?L167
 	cmp	AL,#H'0000
-	beq	?L154
-?L164:
+	beq	?L157
+?L167:
 	st	AH,@(-1,Y)
 	st	AL,@(-2,Y)
-	bsr	?L165
-?L165:
+	bsr	?L168
+?L168:
 	add	X,@(-2,Y)
 	st	X,@H'ffff
 	ld	X,@$XAP_UXH
@@ -9845,124 +9917,124 @@ _KoovoxEventEngine:
 	st	X,@(-1,Y)
 	ld	XH,@(-1,Y)
 	ld	X,@H'ffff
-	bsr	-?L165,X
-	bra	(?L153)
-?L154:
+	bsr	-?L168,X
+	bra	(?L156)
+?L157:
 	ld	AL,@(H'0002,Y)
 	add	AL,#H'0001
 	st	AL,@(H'0002,Y)
 	cmp	AL,@(H'0005,Y)
-	bcs	?L159
-?L153:
-?LBE32:
+	bcs	?L162
+?L156:
+?LBE33:
 ?LBE_KoovoxEventEngine:
 	leavel	#5
-;.stabn	192,0,0,?LBB32
-;.stabn	224,0,0,?LBE32
+;.stabn	192,0,0,?LBB33
+;.stabn	224,0,0,?LBE33
 $_KoovoxEventHandler:
 	enterl	#4
 ?LBB_KoovoxEventHandler:
 	st	AL,@(H'0001,Y)
-?LBB33:
+?LBB34:
 	bsr	$_GetCurrMode
 	cmp	AL,#(H'0001+H'0004)
-	bcc	?L167
+	bcc	?L170
 	ld	X,@$XAP_AL
-	ld	X,@(?JTBASE175,X)
+	ld	X,@(?JTBASE178,X)
 	brxl
 	.SEG	CONST
-?JTBASE175:
+?JTBASE178:
 	.CODE
-?L175:
+?L178:
 	.SEG	CONST
-	dc	lwrd(?L169-?L175)
-	dc	lwrd(?L170-?L175)
-	dc	lwrd(?L171-?L175)
-	dc	lwrd(?L172-?L175)
-	dc	lwrd(?L173-?L175)
+	dc	lwrd(?L172-?L178)
+	dc	lwrd(?L173-?L178)
+	dc	lwrd(?L174-?L178)
+	dc	lwrd(?L175-?L178)
+	dc	lwrd(?L176-?L178)
 	.CODE
-?L169:
+?L172:
 	ld	AL,#H'0006
 	st	AL,@(0,Y)
 	ld	AL,@(H'0001,Y)
 	ld	AH,#(_businessMode)
-	bra	(?L176)
-?L170:
+	bra	(?L179)
+?L173:
 	ld	AL,#H'0007
 	st	AL,@(0,Y)
 	ld	AL,@(H'0001,Y)
 	ld	AH,#(_musicMode)
-	bra	(?L176)
-?L171:
+	bra	(?L179)
+?L174:
 	ld	AL,#H'0006
 	st	AL,@(0,Y)
 	ld	AL,@(H'0001,Y)
 	ld	AH,#(_sportMode)
-	bra	(?L176)
-?L172:
+	bra	(?L179)
+?L175:
 	ld	AL,#H'0009
 	st	AL,@(0,Y)
 	ld	AL,@(H'0001,Y)
 	ld	AH,#(_callMode)
-	bra	(?L176)
-?L173:
+	bra	(?L179)
+?L176:
 	ld	AL,#H'0005
 	st	AL,@(0,Y)
 	ld	AL,@(H'0001,Y)
 	ld	AH,#(_asrMode)
-?L176:
+?L179:
 	bsr	_KoovoxEventEngine
-?L167:
-?LBE33:
+?L170:
+?LBE34:
 ?LBE_KoovoxEventHandler:
 	leavel	#4
-;.stabn	192,0,0,?LBB33
-;.stabn	224,0,0,?LBE33
+;.stabn	192,0,0,?LBB34
+;.stabn	224,0,0,?LBE34
 $_KoovoxRcvShortKalimbaMsg:
 	enterl	#13
 ?LBB_KoovoxRcvShortKalimbaMsg:
 	st	AL,@(H'0009,Y)
 	ld	X,@$XAP_AL
-?LBB34:
+?LBB35:
 	ld	AL,@(0,X)
 	add	AL,#-H'4F20
 	cmp	AL,#(H'0001+H'0008)
-	bcc	?L177
+	bcc	?L180
 	ld	X,@$XAP_AL
-	ld	X,@(?JTBASE196,X)
+	ld	X,@(?JTBASE199,X)
 	brxl
 	.SEG	CONST
-?JTBASE196:
+?JTBASE199:
 	.CODE
-?L196:
+?L199:
 	.SEG	CONST
-	dc	lwrd(?L179-?L196)
-	dc	lwrd(?L188-?L196)
-	dc	lwrd(?L185-?L196)
-	dc	lwrd(?L186-?L196)
-	dc	lwrd(?L181-?L196)
-	dc	lwrd(?L183-?L196)
-	dc	lwrd(?L187-?L196)
-	dc	lwrd(?L190-?L196)
-	dc	lwrd(?L191-?L196)
+	dc	lwrd(?L182-?L199)
+	dc	lwrd(?L191-?L199)
+	dc	lwrd(?L188-?L199)
+	dc	lwrd(?L189-?L199)
+	dc	lwrd(?L184-?L199)
+	dc	lwrd(?L186-?L199)
+	dc	lwrd(?L190-?L199)
+	dc	lwrd(?L193-?L199)
+	dc	lwrd(?L194-?L199)
 	.CODE
-?L179:
+?L182:
 	ld	X,@(H'0009,Y)
 	ld	AL,@(H'0001,X)
 	and	AL,#H'00FF
 	bsr	$_UpdateHeartRateValue
 	bsr	$_isOnlineState
 	cmp	AL,#H'0000
-	beq	?L177
-	ld	AL,#($_koovox+H'001E)
+	beq	?L180
+	ld	AL,#($_koovox+H'0021)
 	st	AL,@(0,Y)
 	ld	AL,#H'0001
 	st	AL,@(H'0001,Y)
 	ld	AL,#H'0500
 	ld	AH,#H'0001
-	bra	(?L201)
-?L181:
-?LBB35:
+	bra	(?L204)
+?L184:
+?LBB36:
 	ld	AL,#H'0000
 	st	AL,@(H'0007,Y)
 	ld	AL,#H'0001
@@ -9976,21 +10048,21 @@ $_KoovoxRcvShortKalimbaMsg:
 	st	AL,@(0,Y)
 	ld	AL,@(H'0007,Y)
 	st	AL,@(H'0001,Y)
-	ld	AL,#(?LC5)
+	ld	AL,#(?LC6)
 	bsr	$_printf
 	ld	AL,@(H'0007,Y)
 	ld	X,@(H'0009,Y)
 	cmp	AL,@(H'0001,X)
-	beq	?L177
+	beq	?L180
 	ld	AH,@$XAP_UXL
 	add	AH,#H'0001
 	ld	AL,#H'0001
 	st	AL,@(0,Y)
 	ld	AL,#H'002C
-	bra	(?L200)
-?L183:
-?LBE35:
-?LBB36:
+	bra	(?L203)
+?L186:
+?LBE36:
+?LBB37:
 	ld	AL,#H'0000
 	st	AL,@(H'0008,Y)
 	ld	X,#H'0001
@@ -10004,38 +10076,38 @@ $_KoovoxRcvShortKalimbaMsg:
 	st	AL,@(0,Y)
 	ld	AL,@(H'0008,Y)
 	st	AL,@(H'0001,Y)
-	ld	AL,#(?LC6)
+	ld	AL,#(?LC5)
 	bsr	$_printf
 	ld	AL,@(H'0008,Y)
 	ld	X,@(H'0009,Y)
 	cmp	AL,@(H'0001,X)
-	beq	?L177
+	beq	?L180
 	ld	AH,@$XAP_UXL
 	add	AH,#H'0001
 	ld	AL,#H'0001
 	st	AL,@(0,Y)
 	ld	AL,#H'002D
-?L200:
+?L203:
 	bsr	$_ConfigStore
-?LBE36:
-	bra	(?L177)
-?L185:
+?LBE37:
+	bra	(?L180)
+?L188:
 	ld	AL,#(?LC7)
 	bsr	$_puts
 	ld	AL,#H'47A4
-	bra	(?L199)
-?L186:
+	bra	(?L202)
+?L189:
 	ld	AL,#(?LC8)
-	bra	(?L198)
-?L187:
+	bra	(?L201)
+?L190:
 	ld	AL,#(?LC9)
-?L198:
+?L201:
 	bsr	$_puts
 	ld	AL,#H'47A1
-?L199:
+?L202:
 	bsr	$_AudioPromptPlayEvent
-	bra	(?L177)
-?L188:
+	bra	(?L180)
+?L191:
 	ld	X,@(H'0009,Y)
 	ld	AL,@(H'0001,X)
 	and	AL,#H'00FF
@@ -10050,9 +10122,9 @@ $_KoovoxRcvShortKalimbaMsg:
 	bsr	$_UpdateTimeValue
 	bsr	$_isOnlineState
 	cmp	AL,#H'0000
-	beq	?L177
+	beq	?L180
 	ld	AL,#H'0005
-?LBB37:
+?LBB38:
 	st	AL,@(0,Y)
 	ld	AL,@$XAP_UY
 	add	AL,#H'0002
@@ -10090,78 +10162,43 @@ $_KoovoxRcvShortKalimbaMsg:
 	st	AL,@(H'0001,Y)
 	ld	AL,#H'1400
 	ld	AH,#H'0000
-?L201:
+?L204:
 	bsr	$_SendNotifyToDevice
-?LBE37:
-	bra	(?L177)
-?L190:
+?LBE38:
+	bra	(?L180)
+?L193:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'4008
-	bra	(?L197)
-?L191:
+	bra	(?L200)
+?L194:
 	bsr	$_isActiveState
 	cmp	AL,#H'0000
-	beq	?L192
+	beq	?L195
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'400A
-	bra	(?L197)
-?L192:
+	bra	(?L200)
+?L195:
 	bsr	$_isIncomingState
 	cmp	AL,#H'0000
-	beq	?L177
+	beq	?L180
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'4009
-?L197:
+?L200:
 	bsr	$_MessageSend
-?L177:
-?LBE34:
+?L180:
+?LBE35:
 ?LBE_KoovoxRcvShortKalimbaMsg:
 	leavel	#13
 	.SEG	CONST
-?LC5:
+?LC6:
 	dc	H'68
 	dc	H'62
-	dc	H'5F
-	dc	H'69
-	dc	H'32
-	dc	H'63
-	dc	H'20
-	dc	H'72
-	dc	H'65
-	dc	H'73
-	dc	H'75
-	dc	H'6C
-	dc	H'74
-	dc	H'3A
-	dc	H'25
-	dc	H'64
-	dc	H'20
-	dc	H'70
-	dc	H'73
-	dc	H'6B
-	dc	H'65
-	dc	H'79
-	dc	H'5F
-	dc	H'76
-	dc	H'61
-	dc	H'6C
-	dc	H'75
-	dc	H'65
-	dc	H'3A
-	dc	H'25
-	dc	H'64
-	dc	H'0A
-	dc	H'00
-?LC6:
-	dc	H'61
-	dc	H'63
-	dc	H'63
 	dc	H'5F
 	dc	H'69
 	dc	H'32
@@ -10292,26 +10329,26 @@ $_KoovoxRcvShortKalimbaMsg:
 	dc	H'50
 	dc	H'00
 	.CODE
-;.stabn	192,0,0,?LBB34
 ;.stabn	192,0,0,?LBB35
-;.stabn	224,0,0,?LBE35
 ;.stabn	192,0,0,?LBB36
 ;.stabn	224,0,0,?LBE36
 ;.stabn	192,0,0,?LBB37
 ;.stabn	224,0,0,?LBE37
-;.stabn	224,0,0,?LBE34
+;.stabn	192,0,0,?LBB38
+;.stabn	224,0,0,?LBE38
+;.stabn	224,0,0,?LBE35
 $_KoovoxRcvLongKalimbaMsg:
 	enterl	#8
 ?LBB_KoovoxRcvLongKalimbaMsg:
 	st	AL,@(H'0002,Y)
-?LBB38:
 ?LBB39:
+?LBB40:
 	ld	AH,#H'0000
 	st	AH,@(H'0003,Y)
 	ld	X,@$XAP_AL
 	cmp	AH,@(H'0001,X)
-	bcc	?L219
-?L211:
+	bcc	?L222
+?L214:
 	ld	X,@(H'0002,Y)
 	add	X,@(H'0003,Y)
 	ld	AL,@(H'0002,X)
@@ -10323,13 +10360,13 @@ $_KoovoxRcvLongKalimbaMsg:
 	st	AH,@(H'0003,Y)
 	ld	X,@(H'0002,Y)
 	cmp	AH,@(H'0001,X)
-	bcs	?L211
-?L219:
+	bcs	?L214
+?L222:
 	ld	AL,#H'000A
 	bsr	$_putchar
 	ld	X,@(H'0002,Y)
-?LBE39:
-?LBB40:
+?LBE40:
+?LBB41:
 	ld	AL,@(H'0001,X)
 	smult	#H'0005
 	add	AL,#H'0005
@@ -10339,8 +10376,8 @@ $_KoovoxRcvLongKalimbaMsg:
 	st	AH,@(H'0005,Y)
 	ld	X,@(H'0002,Y)
 	cmp	AH,@(H'0001,X)
-	bcc	?L221
-?L216:
+	bcc	?L224
+?L219:
 	ld	AL,@(H'0005,Y)
 	smult	#H'0005
 	ld	AH,@(H'0004,Y)
@@ -10357,8 +10394,8 @@ $_KoovoxRcvLongKalimbaMsg:
 	st	AL,@(H'0005,Y)
 	ld	X,@(H'0002,Y)
 	cmp	AL,@(H'0001,X)
-	bcs	?L216
-?L221:
+	bcs	?L219
+?L224:
 	ld	AL,@(H'0005,Y)
 	smult	#H'0005
 	ld	AH,@(H'0004,Y)
@@ -10370,8 +10407,8 @@ $_KoovoxRcvLongKalimbaMsg:
 	bsr	$_KoovoxLog
 	ld	AL,@(H'0004,Y)
 	bsr	$_free
-?LBE40:
-?LBE38:
+?LBE41:
+?LBE39:
 ?LBE_KoovoxRcvLongKalimbaMsg:
 	leavel	#8
 	.SEG	CONST
@@ -10387,18 +10424,18 @@ $_KoovoxRcvLongKalimbaMsg:
 	dc	H'20
 	dc	H'00
 	.CODE
-;.stabn	192,0,0,?LBB38
 ;.stabn	192,0,0,?LBB39
-;.stabn	224,0,0,?LBE39
 ;.stabn	192,0,0,?LBB40
 ;.stabn	224,0,0,?LBE40
-;.stabn	224,0,0,?LBE38
+;.stabn	192,0,0,?LBB41
+;.stabn	224,0,0,?LBE41
+;.stabn	224,0,0,?LBE39
 $_KoovoPromptPlayNumber:
 	enterl	#16
 ?LBB_KoovoPromptPlayNumber:
 	st	AH,@(H'0006,Y)
 	st	AL,@(H'0007,Y)
-?LBB41:
+?LBB42:
 	ld	AL,#(?LC12)
 	st	AL,@(0,Y)
 	ld	AH,@(H'0006,Y)
@@ -10412,20 +10449,20 @@ $_KoovoPromptPlayNumber:
 	add	AL,#H'0003
 	bsr	$_strlen
 	cmp	AL,#H'0002
-	beq	?L229
-	cmp	AL,#(H'0001+H'0002)
-	bcc	?L239
-	cmp	AL,#H'0001
-	beq	?L228
-	bra	(?L226)
-?L239:
-	cmp	AL,#H'0003
 	beq	?L232
-	bra	(?L226)
-?L228:
+	cmp	AL,#(H'0001+H'0002)
+	bcc	?L242
+	cmp	AL,#H'0001
+	beq	?L231
+	bra	(?L229)
+?L242:
+	cmp	AL,#H'0003
+	beq	?L235
+	bra	(?L229)
+?L231:
 	ld	AL,@(H'0007,Y)
-	bra	(?L241)
-?L229:
+	bra	(?L244)
+?L232:
 	ld	AH,#H'000A
 	st	AH,@(H'0001,Y)
 	ld	AL,#H'0000
@@ -10447,26 +10484,26 @@ $_KoovoPromptPlayNumber:
 	ld	AH,@(H'0008,Y)
 	ld	AL,@(H'0009,Y)
 	cmp	AH,#hwrd(H'0001+H'0001)
-	bcs	?L230
-	bne	?L245
+	bcs	?L233
+	bne	?L248
 	cmp	AL,#lwrd(H'0001+H'0001)
-	bcs	?L230
-?L245:
+	bcs	?L233
+?L248:
 	ld	AL,@(H'0009,Y)
 	add	AL,#H'476D
 	bsr	$_AudioPromptPlayEvent
-?L230:
+?L233:
 	ld	AL,#H'47A7
 	bsr	$_AudioPromptPlayEvent
 	ld	AH,@(H'000C,Y)
 	ld	AL,@(H'000D,Y)
 	cmp	AH,#H'0000
-	bne	?L246
+	bne	?L249
 	cmp	AL,#H'0000
-	beq	?L226
-?L246:
-	bra	(?L240)
-?L232:
+	beq	?L229
+?L249:
+	bra	(?L243)
+?L235:
 	ld	AL,#H'0064
 	st	AL,@(H'0001,Y)
 	ld	AH,#H'0000
@@ -10488,24 +10525,24 @@ $_KoovoPromptPlayNumber:
 	ld	AH,@(H'000A,Y)
 	ld	AL,@(H'000B,Y)
 	cmp	AH,#hwrd(H'0001+H'0001)
-	bcs	?L233
-	bne	?L247
+	bcs	?L236
+	bne	?L250
 	cmp	AL,#lwrd(H'0001+H'0001)
-	bcs	?L233
-?L247:
+	bcs	?L236
+?L250:
 	ld	AL,@(H'000B,Y)
 	add	AL,#H'476D
 	bsr	$_AudioPromptPlayEvent
-?L233:
+?L236:
 	ld	AL,#H'47A8
 	bsr	$_AudioPromptPlayEvent
 	ld	AH,@(H'000C,Y)
 	ld	AL,@(H'000D,Y)
 	cmp	AH,#H'0000
-	bne	?L248
+	bne	?L251
 	cmp	AL,#H'0000
-	beq	?L226
-?L248:
+	beq	?L229
+?L251:
 	ld	AL,#H'000A
 	st	AL,@(H'0001,Y)
 	ld	AH,#H'0000
@@ -10527,31 +10564,31 @@ $_KoovoPromptPlayNumber:
 	ld	AH,@(H'0008,Y)
 	ld	AL,@(H'0009,Y)
 	cmp	AH,#hwrd(H'0001+H'0001)
-	bcs	?L235
-	bne	?L249
+	bcs	?L238
+	bne	?L252
 	cmp	AL,#lwrd(H'0001+H'0001)
-	bcs	?L235
-?L249:
+	bcs	?L238
+?L252:
 	ld	AL,@(H'0009,Y)
 	add	AL,#H'476D
 	bsr	$_AudioPromptPlayEvent
-?L235:
+?L238:
 	ld	AL,#H'47A7
 	bsr	$_AudioPromptPlayEvent
 	ld	AH,@(H'000C,Y)
 	ld	AL,@(H'000D,Y)
 	cmp	AH,#H'0000
-	bne	?L250
+	bne	?L253
 	cmp	AL,#H'0000
-	beq	?L226
-?L250:
-?L240:
+	beq	?L229
+?L253:
+?L243:
 	ld	AL,@(H'000D,Y)
-?L241:
+?L244:
 	add	AL,#H'476D
 	bsr	$_AudioPromptPlayEvent
-?L226:
-?LBE41:
+?L229:
+?LBE42:
 ?LBE_KoovoPromptPlayNumber:
 	leavel	#16
 	.SEG	CONST
@@ -10561,8 +10598,8 @@ $_KoovoPromptPlayNumber:
 	dc	H'64
 	dc	H'00
 	.CODE
-;.stabn	192,0,0,?LBB41
-;.stabn	224,0,0,?LBE41
+;.stabn	192,0,0,?LBB42
+;.stabn	224,0,0,?LBE42
 $_KoovoPromptPlayHeartRate:
 	enterl	#4
 ?LBB_KoovoPromptPlayHeartRate:
@@ -10580,18 +10617,18 @@ $_KoovoxPromptPlayBattery:
 ?LBB_KoovoxPromptPlayBattery:
 	st	AH,@(H'0002,Y)
 	st	AL,@(H'0003,Y)
-?LBB42:
+?LBB43:
 	cmp	AH,#hwrd(H'0001+H'0064)
-	bcs	?L257
-	bne	?L252
+	bcs	?L260
+	bne	?L255
 	cmp	AL,#lwrd(H'0001+H'0064)
-	bcc	?L252
-?L257:
+	bcc	?L255
+?L260:
 	cmp	AH,#H'0000
-	bne	?L258
+	bne	?L261
 	cmp	AL,#H'0000
-	beq	?L252
-?L258:
+	beq	?L255
+?L261:
 	ld	AL,#H'4787
 	bsr	$_AudioPromptPlayEvent
 	ld	AH,#H'000A
@@ -10623,51 +10660,51 @@ $_KoovoxPromptPlayBattery:
 	ld	AH,@(H'0004,Y)
 	ld	AL,@(H'0005,Y)
 	cmp	AH,#H'0000
-	bne	?L259
+	bne	?L262
 	cmp	AL,#H'0000
-	beq	?L255
-?L259:
+	beq	?L258
+?L262:
 	bsr	$_KoovoPromptPlayNumber
 	ld	AL,#H'47A9
 	bsr	$_AudioPromptPlayEvent
-?L255:
+?L258:
 	ld	AH,@(H'0006,Y)
 	ld	AL,@(H'0007,Y)
 	cmp	AH,#H'0000
-	bne	?L260
+	bne	?L263
 	cmp	AL,#H'0000
-	beq	?L252
-?L260:
+	beq	?L255
+?L263:
 	bsr	$_KoovoPromptPlayNumber
 	ld	AL,#H'47AA
 	bsr	$_AudioPromptPlayEvent
-?L252:
-?LBE42:
+?L255:
+?LBE43:
 ?LBE_KoovoxPromptPlayBattery:
 	leavel	#10
-;.stabn	192,0,0,?LBB42
-;.stabn	224,0,0,?LBE42
+;.stabn	192,0,0,?LBB43
+;.stabn	224,0,0,?LBE43
 $_KoovoxCurrentModePrompt:
 	enterl	#2
 ?LBB_KoovoxCurrentModePrompt:
 	cmp	AL,#H'0001
-	beq	?L264
+	beq	?L267
 	cmp	AL,#H'0001
-	bcs	?L263
+	bcs	?L266
 	cmp	AL,#H'0002
-	beq	?L265
-	bra	(?L261)
-?L263:
+	beq	?L268
+	bra	(?L264)
+?L266:
 	ld	AL,#H'479B
-	bra	(?L268)
-?L264:
+	bra	(?L271)
+?L267:
 	ld	AL,#H'479C
-	bra	(?L268)
-?L265:
-	ld	AL,#H'479D
+	bra	(?L271)
 ?L268:
+	ld	AL,#H'479D
+?L271:
 	bsr	$_AudioPromptPlayEvent
-?L261:
+?L264:
 ?LBE_KoovoxCurrentModePrompt:
 	leavel	#2
 $_KoovoxSetModePrompt:
@@ -10683,7 +10720,7 @@ $_KoovoxAudioPresencePlayEvent:
 	enterl	#14
 ?LBB_KoovoxAudioPresencePlayEvent:
 	st	AL,@(H'0007,Y)
-?LBB43:
+?LBB44:
 	st	AL,@(H'0008,Y)
 	bsr	$_stateManagerGetState
 	ld	X,@$XAP_AL
@@ -10693,34 +10730,34 @@ $_KoovoxAudioPresencePlayEvent:
 	ld	AH,#H'0000
 	st	AH,@(H'000B,Y)
 	tst	@$_theSink+H'0008
-	beq	?L274
+	beq	?L277
 	ld	AL,@$_theSink+H'0008
-	bra	(?L283)
-?L274:
+	bra	(?L286)
+?L277:
 	ld	AL,#H'0000
-	bra	(?L273)
-?L282:
+	bra	(?L276)
+?L285:
 	ld	X,@(H'000A,Y)
 	ld	AL,@(0,X)
 	cmp	AL,@(H'0008,Y)
-	bne	?L279
+	bne	?L282
 	ld	AH,@(H'0002,X)
 	ld	AL,@$XAP_AH
 	and	AL,#H'3FFF
 	and	AL,@(H'0009,Y)
 	cmp	AL,#H'0000
-	beq	?L279
+	beq	?L282
 	lsr	#H'000E
 	and	AH,#H'0001
 	cmp	AH,#H'0000
-	beq	?L280
+	beq	?L283
 	tst	@$_theSink+H'0022
-	beq	?L280
+	beq	?L283
 	ld	AL,@(H'0009,Y)
 	and	AL,#H'2000
 	cmp	AL,#H'0000
-	beq	?L279
-?L280:
+	beq	?L282
+?L283:
 	ld	AH,#H'0001
 	st	AH,@(H'000B,Y)
 	ld	X,@$_theSink+H'0005
@@ -10768,52 +10805,52 @@ $_KoovoxAudioPresencePlayEvent:
 	bsr	$_AudioPlayAudioPrompt
 	bsr	$_GetAudioPlugin
 	cmp	AL,#($_csr_voice_presences_plugin)
-	beq	?L279
+	beq	?L282
 	ld	AH,@(H'0007,Y)
 	cmp	AH,#H'4002
-	bne	?L279
+	bne	?L282
 	bsr	$_GetAudioPlugin
 	ld	AH,#H'7000
 	bsr	$_MessageCancelAll
-?L279:
+?L282:
 	ld	AL,@(H'000A,Y)
 	add	AL,#H'0003
-?L283:
+?L286:
 	st	AL,@(H'000A,Y)
 	ld	X,@(H'000A,Y)
 	ld	AL,@(H'0001,X)
 	and	AL,#H'00FF
 	cmp	AL,#H'00FF
-	bne	?L282
+	bne	?L285
 	ld	AL,@(H'000B,Y)
-?L273:
-?LBE43:
+?L276:
+?LBE44:
 ?LBE_KoovoxAudioPresencePlayEvent:
 	leavel	#14
-;.stabn	192,0,0,?LBB43
-;.stabn	224,0,0,?LBE43
+;.stabn	192,0,0,?LBB44
+;.stabn	224,0,0,?LBE44
 $_KoovoxAutoSwitchToMusicMode:
 	enterl	#2
 ?LBB_KoovoxAutoSwitchToMusicMode:
 	bsr	$_GetCurrMode
 	cmp	AL,#H'0000
-	bne	?L289
+	bne	?L292
 	ld	AL,#(?LC13)
 	bsr	$_puts
 	ld	AL,#H'0000
 	bsr	$_StorePreviousMode
 	ld	AL,#H'0001
 	bsr	$_SetCurrMode
-	bra	(?L288)
-?L289:
+	bra	(?L291)
+?L292:
 	bsr	$_GetCurrMode
 	cmp	AL,#H'0001
-	bne	?L288
+	bne	?L291
 	ld	AL,#(?LC14)
 	bsr	$_puts
 	ld	AL,#H'0001
 	bsr	$_StorePreviousMode
-?L288:
+?L291:
 ?LBE_KoovoxAutoSwitchToMusicMode:
 	leavel	#2
 	.SEG	CONST
@@ -10868,14 +10905,14 @@ $_KoovoxAutoLeaveToMusicMode:
 ?LBB_KoovoxAutoLeaveToMusicMode:
 	bsr	$_GetCurrMode
 	cmp	AL,#H'0001
-	bne	?L293
+	bne	?L296
 	bsr	$_isAutoMusic
 	cmp	AL,#H'0000
-	beq	?L293
+	beq	?L296
 	ld	AL,#(?LC15)
 	bsr	$_puts
 	bsr	$_RecoverPreviousMode
-?L293:
+?L296:
 ?LBE_KoovoxAutoLeaveToMusicMode:
 	leavel	#2
 	.SEG	CONST
@@ -10921,7 +10958,7 @@ $_KoovoxHandleEventCvcKalimbaLoaded:
 ?LBB_KoovoxHandleEventCvcKalimbaLoaded:
 	bsr	$_isPresentBusy
 	cmp	AL,#H'0000
-	beq	?L298
+	beq	?L301
 	ld	AL,@$_theSink+H'0022
 	bsr	$_StreamSourceFromSink
 	st	AL,@(H'0003,Y)
@@ -10930,8 +10967,8 @@ $_KoovoxHandleEventCvcKalimbaLoaded:
 	ld	AH,@$XAP_AL
 	ld	AL,@(H'0003,Y)
 	bsr	$_StreamDisconnect
-	bra	(?L299)
-?L298:
+	bra	(?L302)
+?L301:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	st	AL,@(H'0001,Y)
@@ -10939,41 +10976,23 @@ $_KoovoxHandleEventCvcKalimbaLoaded:
 	ld	AL,#H'4F04
 	ld	AH,#H'0000
 	bsr	$_KalimbaSendMessage
-?L299:
+?L302:
 	bsr	$_isGattConnected
 	cmp	AL,#H'0000
-	beq	?L297
+	beq	?L300
 	bsr	$_isAsrBusy
 	cmp	AL,#H'0000
-	beq	?L297
+	beq	?L300
 	ld	AL,#H'4795
 	bsr	$_TonesPlayEvent
-?L297:
+?L300:
 ?LBE_KoovoxHandleEventCvcKalimbaLoaded:
 	leavel	#6
 $_KoovoxHandleEventCodecKalimbaLoaded:
 	enterl	#5
 ?LBB_KoovoxHandleEventCodecKalimbaLoaded:
-?LBB44:
-	bsr	$_KoovoxRestartDsp
 ?LBB45:
-	bsr	$_GetHeartRateValue
-	ld	AH,@$XAP_AL
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'4F09
-	bsr	$_KalimbaSendMessage
-?LBE45:
-?LBE44:
-?LBE_KoovoxHandleEventCodecKalimbaLoaded:
-	leavel	#5
-;.stabn	192,0,0,?LBB45
-;.stabn	224,0,0,?LBE45
-$_KoovoxHandleEventSportKalimbaLoaded:
-	enterl	#5
-?LBB_KoovoxHandleEventSportKalimbaLoaded:
+	bsr	$_KoovoxRestartDsp
 ?LBB46:
 	bsr	$_GetHeartRateValue
 	ld	AH,@$XAP_AL
@@ -10984,33 +11003,51 @@ $_KoovoxHandleEventSportKalimbaLoaded:
 	ld	AL,#H'4F09
 	bsr	$_KalimbaSendMessage
 ?LBE46:
-?LBE_KoovoxHandleEventSportKalimbaLoaded:
+?LBE45:
+?LBE_KoovoxHandleEventCodecKalimbaLoaded:
 	leavel	#5
 ;.stabn	192,0,0,?LBB46
 ;.stabn	224,0,0,?LBE46
+$_KoovoxHandleEventSportKalimbaLoaded:
+	enterl	#5
+?LBB_KoovoxHandleEventSportKalimbaLoaded:
+?LBB47:
+	bsr	$_GetHeartRateValue
+	ld	AH,@$XAP_AL
+	ld	AL,#H'0000
+	st	AL,@(0,Y)
+	st	AL,@(H'0001,Y)
+	st	AL,@(H'0002,Y)
+	ld	AL,#H'4F09
+	bsr	$_KalimbaSendMessage
+?LBE47:
+?LBE_KoovoxHandleEventSportKalimbaLoaded:
+	leavel	#5
+;.stabn	192,0,0,?LBB47
+;.stabn	224,0,0,?LBE47
 $_KoovoxAudioPromptTime:
 	enterl	#3
 ?LBB_KoovoxAudioPromptTime:
 	st	AH,@(0,Y)
 	cmp	AL,#H'0000
-	beq	?L304
+	beq	?L307
 	ld	AH,#H'0000
 	bsr	$_KoovoPromptPlayNumber
 	ld	AL,#H'47A9
 	bsr	$_AudioPromptPlayEvent
-?L304:
+?L307:
 	tst	@(0,Y)
-	beq	?L305
+	beq	?L308
 	ld	AH,#H'0000
 	ld	AL,@(0,Y)
 	bsr	$_KoovoPromptPlayNumber
 	ld	AL,#H'47AA
 	bsr	$_AudioPromptPlayEvent
-?L305:
+?L308:
 	bsr	$_get_battery_level_as_percentage
 	bsr	$_UpdateBatteryValue
 	ld	AH,#H'0000
-	ld	AL,@$_koovox+H'001F
+	ld	AL,@$_koovox+H'0022
 	bsr	$_KoovoxPromptPlayBattery
 ?LBE_KoovoxAudioPromptTime:
 	leavel	#3
@@ -11019,27 +11056,27 @@ $_KoovoxAudioPromptSportData:
 ?LBB_KoovoxAudioPromptSportData:
 	st	AL,@(0,Y)
 	cmp	AH,#H'0000
-	beq	?L307
+	beq	?L310
 	ld	AL,@$XAP_AH
 	ld	AH,#H'0000
 	bsr	$_KoovoPromptPlayNumber
 	ld	AL,#H'47A9
 	bsr	$_AudioPromptPlayEvent
-?L307:
+?L310:
 	tst	@(H'0003,Y)
-	beq	?L308
+	beq	?L311
 	ld	AH,#H'0000
 	ld	AL,@(H'0003,Y)
 	bsr	$_KoovoPromptPlayNumber
 	ld	AL,#H'47AA
 	bsr	$_AudioPromptPlayEvent
-?L308:
+?L311:
 	tst	@(0,Y)
-	beq	?L306
+	beq	?L309
 	ld	AH,#H'0000
 	ld	AL,@(0,Y)
 	bsr	$_KoovoPromptPlayNumber
-?L306:
+?L309:
 ?LBE_KoovoxAudioPromptSportData:
 	leavel	#3
 $_HeartRateSensorEnable:
@@ -11065,24 +11102,24 @@ $_HeartRateSensorDisable:
 $_get_battery_level_as_percentage:
 	enterl	#6
 ?LBB_get_battery_level_as_percentage:
-?LBB47:
+?LBB48:
 	ld	AL,@$XAP_UY
 	add	AL,#H'0002
 	bsr	$_PowerBatteryGetVoltage
 	ld	X,@$_theSink+H'0004
 	ld	AL,@(H'0007,X)
 	cmp	AL,@(H'0008,X)
-	bcz	?L313
+	bcz	?L316
 	ld	AL,@(H'0002,Y)
 	cmp	AL,@(H'0008,X)
-	bcs	?L313
+	bcs	?L316
 	ld	X,@$_theSink+H'0004
 	ld	AL,@(H'0002,Y)
 	cmp	AL,@(H'0007,X)
-	bcz	?L316
+	bcz	?L319
 	ld	AL,#H'0064
-	bra	(?L312)
-?L316:
+	bra	(?L315)
+?L319:
 	ld	X,@$_theSink+H'0004
 	ld	AL,@(H'0002,Y)
 	sub	AL,@(H'0008,X)
@@ -11097,23 +11134,23 @@ $_get_battery_level_as_percentage:
 	ld	AH,@H'fff8
 	ld	AL,@H'fff9
 	bsr	$___udivhi3
-	bra	(?L312)
-?L313:
+	bra	(?L315)
+?L316:
 	ld	AL,#H'0000
-?L312:
-?LBE47:
+?L315:
+?LBE48:
 ?LBE_get_battery_level_as_percentage:
 	leavel	#6
-;.stabn	192,0,0,?LBB47
-;.stabn	224,0,0,?LBE47
+;.stabn	192,0,0,?LBB48
+;.stabn	224,0,0,?LBE48
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 237 used[1] = 34 used[3] = 2 total = 273
-;# Function pattern *movqi3 used[0] = 414 total = 414
+;# Function pattern *movqi2 used[0] = 244 used[1] = 34 used[3] = 2 total = 280
+;# Function pattern *movqi3 used[0] = 425 total = 425
 ;# Function pattern *movqi8 used[0] = 5 total = 5
 ;# Function pattern *movhi used[0] = 2 used[2] = 25 used[3] = 19 total = 46
 ;# Function pattern *addhi3 used[0] = 2 total = 2
-;# Function pattern *addqi0 used[0] = 23 total = 23
+;# Function pattern *addqi0 used[0] = 24 total = 24
 ;# Function pattern *addqi2 used[0] = 23 used[2] = 6 total = 29
 ;# Function pattern *andqi3 used[0] = 17 total = 17
 ;# Function pattern *subqi3 used[0] = 2 total = 2
@@ -11128,14 +11165,14 @@ $_get_battery_level_as_percentage:
 ;# Function pattern jump used[0] = 54 total = 54
 ;# Function pattern *call1 used[0] = 120 total = 120
 ;# Function pattern *call4 used[0] = 1 total = 1
-;# Function pattern *call_value1 used[0] = 144 total = 144
+;# Function pattern *call_value1 used[0] = 147 total = 147
 ;# Function pattern *call_value4 used[0] = 1 total = 1
 ;# Function pattern tablejump_1 used[0] = 3 total = 3
 ;# Function pattern zero_extendqihi2+1 used[0] = 1 total = 1
 ;# Function pattern movstrqi+2 used[0] = 3 total = 3
 ;# Function pattern movstrqi+3 used[0] = 42 used[1] = 9 total = 51
 ;# Function pattern movstrqi+4 used[1] = 5 total = 5
-;# Function pattern movstrqi+5 used[0] = 39 total = 39
+;# Function pattern movstrqi+5 used[0] = 40 total = 40
 ;# Function pattern movstrqi+6 used[0] = 7 total = 7
 ;# Function pattern movstrqi+7 used[0] = 4 total = 4
 	MODULE	sink_app_message
@@ -11308,29 +11345,29 @@ $_KoovoxAppConnection:
 	cmp	AL,#H'0002
 	bne	?L11
 	ld	AL,@(H'0001,Y)
-	st	AL,@$_koovox+H'0014
+	st	AL,@$_koovox+H'0017
 	ld	AL,@(H'0002,Y)
-	st	AL,@$_koovox+H'0013
+	st	AL,@$_koovox+H'0016
 	ld	AL,#H'001E
 	bsr	$_malloc
-	st	AL,@$_koovox+H'0018
-	ld	AL,#H'001E
-	bsr	$_malloc
-	st	AL,@$_koovox+H'001A
-	ld	AL,@(H'0002,Y)
-	st	AL,@$_koovox+H'0019
 	st	AL,@$_koovox+H'001B
+	ld	AL,#H'001E
+	bsr	$_malloc
+	st	AL,@$_koovox+H'001D
+	ld	AL,@(H'0002,Y)
+	st	AL,@$_koovox+H'001C
+	st	AL,@$_koovox+H'001E
 	bra	(?L12)
 ?L11:
 	ld	AL,#H'0000
-	st	AL,@$_koovox+H'0014
+	st	AL,@$_koovox+H'0017
 	ld	AL,@(0,Y)
-	st	AL,@$_koovox+H'0013
+	st	AL,@$_koovox+H'0016
 	ld	AL,#H'001E
 	bsr	$_malloc
-	st	AL,@$_koovox+H'0016
+	st	AL,@$_koovox+H'0019
 	ld	AL,#H'0000
-	st	AL,@$_koovox+H'0017
+	st	AL,@$_koovox+H'001A
 ?L12:
 	ld	AL,@(H'0005,Y)
 	st	AL,@$_koovox+H'0004
@@ -11350,29 +11387,29 @@ $_KoovoxAppDisconnection:
 	enterl	#3
 ?LBB_KoovoxAppDisconnection:
 	ld	AL,#H'0000
-	st	AL,@$_koovox+H'0013
-	st	AL,@$_koovox+H'0014
-	st	AL,@$_koovox+H'0015
+	st	AL,@$_koovox+H'0016
+	st	AL,@$_koovox+H'0017
+	st	AL,@$_koovox+H'0018
 	ld	AL,@$_koovox+H'0004
 	cmp	AL,#H'0002
 	bne	?L17
-	ld	AL,@$_koovox+H'0018
+	ld	AL,@$_koovox+H'001B
 	bsr	$_free
 	ld	AL,#H'0000
-	st	AL,@$_koovox+H'0018
-	st	AL,@$_koovox+H'0019
-	ld	AL,@$_koovox+H'001A
-	bsr	$_free
-	ld	AL,#H'0000
-	st	AL,@$_koovox+H'001A
 	st	AL,@$_koovox+H'001B
+	st	AL,@$_koovox+H'001C
+	ld	AL,@$_koovox+H'001D
+	bsr	$_free
+	ld	AL,#H'0000
+	st	AL,@$_koovox+H'001D
+	st	AL,@$_koovox+H'001E
 	bra	(?L18)
 ?L17:
-	ld	AL,@$_koovox+H'0016
+	ld	AL,@$_koovox+H'0019
 	bsr	$_free
 	ld	AL,#H'0000
-	st	AL,@$_koovox+H'0016
-	st	AL,@$_koovox+H'0017
+	st	AL,@$_koovox+H'0019
+	st	AL,@$_koovox+H'001A
 ?L18:
 	ld	AL,#H'0000
 	st	AL,@$_koovox+H'0004
@@ -11630,16 +11667,24 @@ $_SendResponse:
 	st	AL,@(H'0001,Y)
 	st	AH,@(H'0002,Y)
 ?LBB6:
+	bsr	$_isSppConnected
+	cmp	AL,#H'0000
+	bne	?L75
+	bsr	$_isGattConnected
+	cmp	AL,#H'0000
+	beq	?L73
+?L75:
+?LBB7:
 	tst	@(H'000A,Y)
-	beq	?L74
+	beq	?L76
 	ld	AH,@(H'000A,Y)
 	add	AH,#H'000C
 	st	AH,@(H'0003,Y)
-	bra	(?L75)
-?L74:
+	bra	(?L77)
+?L76:
 	ld	AL,#H'000D
 	st	AL,@(H'0003,Y)
-?L75:
+?L77:
 	ld	AL,@(H'0003,Y)
 	bsr	$_malloc
 	st	AL,@(H'0004,Y)
@@ -11690,98 +11735,100 @@ $_SendResponse:
 	ld	AL,#H'0003
 	st	AL,@(H'000B,X)
 	tst	@(H'0009,Y)
-	beq	?L76
+	beq	?L78
 	ld	AL,@$XAP_UXL
 	add	AL,#H'000C
 	ld	AH,@(H'000A,Y)
 	st	AH,@(0,Y)
 	ld	AH,@(H'0009,Y)
 	bsr	$_memmove
-?L76:
+?L78:
 	ld	AL,@(H'0004,Y)
 	ld	AH,@(H'0003,Y)
 	bsr	$_SendResponseToDevice
 	ld	AL,@(H'0004,Y)
 	bsr	$_free
+?L73:
+?LBE7:
 ?LBE6:
 ?LBE_SendResponse:
 	leavel	#7
-;.stabn	192,0,0,?LBB6
-;.stabn	224,0,0,?LBE6
+;.stabn	192,0,0,?LBB7
+;.stabn	224,0,0,?LBE7
 $_SetRequestAction:
 	enterl	#8
 ?LBB_SetRequestAction:
-?LBB7:
+?LBB8:
 	st	AL,@(H'0001,Y)
 	cmp	AH,#(H'0001+H'0005)
-	bcc	?L78
+	bcc	?L80
 	ld	AL,#H'0190
-	bra	(?L77)
-?L78:
+	bra	(?L79)
+?L80:
 	ld	X,@(H'0001,Y)
 	ld	AL,@(H'0002,X)
 	asl	#H'0008
 	add	AL,@(H'0001,X)
 	cmp	AL,#H'0D00
-	beq	?L115
+	beq	?L117
 	cmp	AL,#(H'0001+H'0D00)
-	bcc	?L134
-	cmp	AL,#H'0500
-	beq	?L85
-	cmp	AL,#(H'0001+H'0500)
-	bcc	?L135
-	cmp	AL,#H'0100
-	beq	?L80
-	cmp	AL,#(H'0001+H'0100)
 	bcc	?L136
-	cmp	AL,#H'0002
-	beq	?L90
-	bra	(?L79)
-?L136:
-	cmp	AL,#H'0300
-	beq	?L81
-	bra	(?L79)
-?L135:
-	cmp	AL,#H'0900
-	beq	?L82
-	cmp	AL,#(H'0001+H'0900)
+	cmp	AL,#H'0500
+	beq	?L87
+	cmp	AL,#(H'0001+H'0500)
 	bcc	?L137
-	cmp	AL,#H'0800
-	beq	?L105
-	bra	(?L79)
-?L137:
-	cmp	AL,#H'0A00
-	beq	?L104
-	bra	(?L79)
-?L134:
-	cmp	AL,#H'1300
-	beq	?L129
-	cmp	AL,#(H'0001+H'1300)
+	cmp	AL,#H'0100
+	beq	?L82
+	cmp	AL,#(H'0001+H'0100)
 	bcc	?L138
-	cmp	AL,#H'0F00
-	beq	?L123
-	cmp	AL,#(H'0001+H'0F00)
-	bcc	?L139
-	cmp	AL,#H'0E00
-	beq	?L120
-	bra	(?L79)
-?L139:
-	cmp	AL,#H'1000
-	beq	?L126
-	bra	(?L79)
+	cmp	AL,#H'0002
+	beq	?L92
+	bra	(?L81)
 ?L138:
-	cmp	AL,#H'1600
+	cmp	AL,#H'0300
+	beq	?L83
+	bra	(?L81)
+?L137:
+	cmp	AL,#H'0900
+	beq	?L84
+	cmp	AL,#(H'0001+H'0900)
+	bcc	?L139
+	cmp	AL,#H'0800
+	beq	?L107
+	bra	(?L81)
+?L139:
+	cmp	AL,#H'0A00
+	beq	?L106
+	bra	(?L81)
+?L136:
+	cmp	AL,#H'1300
 	beq	?L131
-	cmp	AL,#(H'0001+H'1600)
+	cmp	AL,#(H'0001+H'1300)
 	bcc	?L140
-	cmp	AL,#H'1500
-	beq	?L130
-	bra	(?L79)
+	cmp	AL,#H'0F00
+	beq	?L125
+	cmp	AL,#(H'0001+H'0F00)
+	bcc	?L141
+	cmp	AL,#H'0E00
+	beq	?L122
+	bra	(?L81)
+?L141:
+	cmp	AL,#H'1000
+	beq	?L128
+	bra	(?L81)
 ?L140:
+	cmp	AL,#H'1600
+	beq	?L133
+	cmp	AL,#(H'0001+H'1600)
+	bcc	?L142
+	cmp	AL,#H'1500
+	beq	?L132
+	bra	(?L81)
+?L142:
 	cmp	AL,#H'1700
-	beq	?L110
-	bra	(?L79)
-?L80:
+	beq	?L112
+	bra	(?L81)
+?L82:
 	ld	AL,#H'0000
 	bsr	$_SetResponseStatus
 	ld	AH,@(H'0001,Y)
@@ -11794,52 +11841,52 @@ $_SetRequestAction:
 	st	AL,@(0,Y)
 	ld	AL,#($_koovox)
 	ld	AH,#H'40D1
-	bra	(?L145)
-?L81:
+	bra	(?L147)
+?L83:
 	ld	X,@(H'0001,Y)
 	ld	AL,@(H'0006,X)
 	bsr	$_KoovoxSetModePrompt
-	bra	(?L79)
-?L82:
+	bra	(?L81)
+?L84:
 	ld	X,@(H'0001,Y)
-?LBB8:
+?LBB9:
 	ld	AL,@(H'0006,X)
 	ld	AH,@(H'0007,X)
 	st	AH,@(H'0002,Y)
 	bsr	$_SetPresentScence
 	ld	AL,@(H'0002,Y)
 	cmp	AL,#H'0001
-	bne	?L83
+	bne	?L85
 	ld	AL,#(?LC0)
 	bsr	$_puts
-	bra	(?L146)
-?L83:
+	bra	(?L148)
+?L85:
 	ld	AL,#(?LC1)
 	bsr	$_puts
-	bra	(?L124)
-?L85:
+	bra	(?L126)
+?L87:
 	ld	X,@(H'0001,Y)
-?LBE8:
+?LBE9:
 	ld	AL,@(H'0006,X)
 	cmp	AL,#H'0001
-	bne	?L86
+	bne	?L88
 	bsr	$_GetSampleStatus
 	cmp	AL,#H'0000
-	beq	?L87
+	beq	?L89
 	ld	AL,#H'0064
-	bra	(?L77)
-?L87:
+	bra	(?L79)
+?L89:
 	bsr	$_KoovoxStartHeartRateMeasure
-	bra	(?L79)
-?L86:
+	bra	(?L81)
+?L88:
 	bsr	$_KoovoxStopHeartRateMeasure
-	bra	(?L79)
-?L90:
+	bra	(?L81)
+?L92:
 	ld	X,@(H'0001,Y)
 	ld	AL,@(H'0004,X)
 	cmp	AL,#H'0005
-	bne	?L79
-?LBB9:
+	bne	?L81
+?LBB10:
 	ld	AH,@(H'0006,X)
 	st	AH,@(H'0003,Y)
 	ld	AL,@(H'0007,X)
@@ -11847,157 +11894,157 @@ $_SetRequestAction:
 	bsr	$_GetCurrMode
 	ld	X,@(H'0003,Y)
 	cmp	X,@$XAP_AL
-	beq	?L92
+	beq	?L94
 	ld	AL,@$XAP_UXL
 	bsr	$_SetCurrMode
-?L92:
+?L94:
 	ld	AH,@(H'0004,Y)
 	cmp	AH,#H'0001
-	bne	?L93
+	bne	?L95
 	ld	AL,@(H'0003,Y)
 	cmp	AL,#H'0002
-	bne	?L79
+	bne	?L81
 	ld	AL,#H'4797
 	bsr	$_AudioPromptPlayEvent
 	bsr	$_KoovoxStartSportMode
-	bra	(?L79)
-?L93:
+	bra	(?L81)
+?L95:
 	ld	X,@(H'0004,Y)
 	cmp	X,#H'0002
-	bne	?L79
+	bne	?L81
 	ld	AH,@(H'0003,Y)
 	cmp	AH,#H'0002
-	bne	?L79
+	bne	?L81
 	bsr	$_KoovoxStopSportMode
 	ld	AL,#H'4798
-	bra	(?L144)
-?L104:
+	bra	(?L146)
+?L106:
 	ld	AH,@(H'0001,Y)
-?LBE9:
+?LBE10:
 	add	AH,#H'0006
 	ld	AL,#H'000C
 	st	AL,@(0,Y)
 	ld	AL,#H'0002
 	bsr	$_ConfigStore
-	bra	(?L79)
-?L105:
+	bra	(?L81)
+?L107:
 	ld	X,@(H'0001,Y)
 	ld	AL,@(H'0006,X)
 	cmp	AL,#H'0001
-	bne	?L106
+	bne	?L108
 	ld	AL,#H'0001
 	bsr	$_SetNeckProtectEnable
 	bsr	$_GetSampleStatus
 	cmp	AL,#H'0000
-	bne	?L79
+	bne	?L81
 	bsr	$_KoovoxStartNeckProtect
-	bra	(?L79)
-?L106:
+	bra	(?L81)
+?L108:
 	ld	AL,#H'0000
 	bsr	$_SetNeckProtectEnable
 	bsr	$_GetSampleStatus
 	cmp	AL,#H'0003
-	bne	?L79
+	bne	?L81
 	bsr	$_KoovoxStopNeckProtect
-	bra	(?L79)
-?L110:
+	bra	(?L81)
+?L112:
 	ld	X,@(H'0001,Y)
 	ld	AL,@(H'0006,X)
 	cmp	AL,#H'0001
-	bne	?L111
+	bne	?L113
 	bsr	$_GetSampleStatus
 	cmp	AL,#H'0000
-	bne	?L79
+	bne	?L81
 	bsr	$_KoovoxStartConstSeatPrompt
 	ld	AL,#H'479F
-	bra	(?L144)
-?L111:
+	bra	(?L146)
+?L113:
 	bsr	$_GetSampleStatus
 	cmp	AL,#H'0005
-	bne	?L79
+	bne	?L81
 	bsr	$_KoovoxStopConstSeatPrompt
 	ld	AL,#H'47A0
-	bra	(?L144)
-?L115:
+	bra	(?L146)
+?L117:
 	ld	X,@(H'0001,Y)
 	ld	AL,@(H'0006,X)
 	cmp	AL,#H'0001
-	bne	?L116
+	bne	?L118
 	ld	AL,#H'0001
 	bsr	$_SetDriverEnable
 	bsr	$_GetSampleStatus
 	cmp	AL,#H'0000
-	bne	?L79
+	bne	?L81
 	bsr	$_KoovoxStartSafeDriver
 	ld	AL,#H'47A2
-	bra	(?L144)
-?L116:
+	bra	(?L146)
+?L118:
 	ld	AL,#H'0000
 	bsr	$_SetDriverEnable
 	bsr	$_GetSampleStatus
 	cmp	AL,#H'0004
-	bne	?L79
+	bne	?L81
 	bsr	$_KoovoxStopSafeDriver
 	ld	AL,#H'47A3
-?L144:
+?L146:
 	bsr	$_AudioPromptPlayEvent
-	bra	(?L79)
-?L120:
+	bra	(?L81)
+?L122:
 	ld	X,@(H'0001,Y)
 	ld	AL,@(H'0006,X)
 	cmp	AL,#H'0001
-	bne	?L121
+	bne	?L123
+	ld	AL,#H'0000
+	bra	(?L145)
+?L123:
+	ld	AL,#H'0001
+?L145:
+	bsr	$_SetPresentEnable
+	bra	(?L81)
+?L125:
+	ld	X,@(H'0001,Y)
+	ld	AL,@(H'0006,X)
+	cmp	AL,#H'0001
+	bne	?L126
+?L148:
+	ld	AL,#H'0001
+	bra	(?L144)
+?L126:
+	ld	AL,#H'0000
+?L144:
+	bsr	$_SetPresentAuto
+	bra	(?L81)
+?L128:
+	ld	X,@(H'0001,Y)
+	ld	AL,@(H'0006,X)
+	cmp	AL,#H'0001
+	bne	?L129
 	ld	AL,#H'0000
 	bra	(?L143)
-?L121:
+?L129:
 	ld	AL,#H'0001
 ?L143:
-	bsr	$_SetPresentEnable
-	bra	(?L79)
-?L123:
-	ld	X,@(H'0001,Y)
-	ld	AL,@(H'0006,X)
-	cmp	AL,#H'0001
-	bne	?L124
-?L146:
-	ld	AL,#H'0001
-	bra	(?L142)
-?L124:
-	ld	AL,#H'0000
-?L142:
-	bsr	$_SetPresentAuto
-	bra	(?L79)
-?L126:
-	ld	X,@(H'0001,Y)
-	ld	AL,@(H'0006,X)
-	cmp	AL,#H'0001
-	bne	?L127
-	ld	AL,#H'0000
-	bra	(?L141)
-?L127:
-	ld	AL,#H'0001
-?L141:
 	bsr	$_SetVoiceMessageEnable
-	bra	(?L79)
-?L129:
+	bra	(?L81)
+?L131:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'409A
-?L145:
+?L147:
 	bsr	$_MessageSend
-	bra	(?L79)
-?L130:
+	bra	(?L81)
+?L132:
 	ld	X,@(H'0001,Y)
-?LBB10:
+?LBB11:
 	ld	AL,@(H'0006,X)
 	ld	AH,@(H'0007,X)
 	bsr	$_KoovoxAudioPromptTime
-?LBE10:
-	bra	(?L79)
-?L131:
+?LBE11:
+	bra	(?L81)
+?L133:
 	ld	X,@(H'0001,Y)
-?LBB11:
+?LBB12:
 	ld	AL,@(H'0006,X)
 	asl	#H'0008
 	add	AL,@(H'0007,X)
@@ -12005,11 +12052,11 @@ $_SetRequestAction:
 	ld	X,@(H'0009,X)
 	st	X,@(0,Y)
 	bsr	$_KoovoxAudioPromptSportData
-?L79:
-?LBE11:
+?L81:
+?LBE12:
 	ld	AL,#H'00C8
-?L77:
-?LBE7:
+?L79:
+?LBE8:
 ?LBE_SetRequestAction:
 	leavel	#8
 	.SEG	CONST
@@ -12051,72 +12098,72 @@ $_SetRequestAction:
 	dc	H'45
 	dc	H'00
 	.CODE
-;.stabn	192,0,0,?LBB7
 ;.stabn	192,0,0,?LBB8
-;.stabn	224,0,0,?LBE8
 ;.stabn	192,0,0,?LBB9
 ;.stabn	224,0,0,?LBE9
 ;.stabn	192,0,0,?LBB10
 ;.stabn	224,0,0,?LBE10
 ;.stabn	192,0,0,?LBB11
 ;.stabn	224,0,0,?LBE11
-;.stabn	224,0,0,?LBE7
+;.stabn	192,0,0,?LBB12
+;.stabn	224,0,0,?LBE12
+;.stabn	224,0,0,?LBE8
 $_GetRequestAction:
 	enterl	#42
 ?LBB_GetRequestAction:
-?LBB12:
+?LBB13:
 	ld	X,#H'0000
 	st	X,@(H'0020,Y)
 	cmp	AH,#(H'0001+H'0005)
-	bcc	?L180
+	bcc	?L182
 	ld	AL,#H'0190
-	bra	(?L179)
-?L180:
+	bra	(?L181)
+?L182:
 	ld	X,@$XAP_AL
 	ld	AL,@(H'0002,X)
 	asl	#H'0008
 	add	AL,@(H'0001,X)
 	st	AL,@H'fff9
 	cmp	AL,#H'0800
-	beq	?L190
+	beq	?L192
 	cmp	AL,#(H'0001+H'0800)
-	bcc	?L196
-	cmp	AL,#H'0400
-	beq	?L186
-	cmp	AL,#(H'0001+H'0400)
-	bcc	?L197
-	cmp	AL,#H'0300
-	beq	?L182
-	bra	(?L193)
-?L197:
-	cmp	AL,#H'0500
-	beq	?L188
-	cmp	AL,#H'0600
-	beq	?L189
-	bra	(?L193)
-?L196:
-	cmp	AL,#H'0C00
-	beq	?L187
-	cmp	AL,#(H'0001+H'0C00)
 	bcc	?L198
-	cmp	AL,#H'0A00
-	beq	?L183
-	bra	(?L193)
+	cmp	AL,#H'0400
+	beq	?L188
+	cmp	AL,#(H'0001+H'0400)
+	bcc	?L199
+	cmp	AL,#H'0300
+	beq	?L184
+	bra	(?L195)
+?L199:
+	cmp	AL,#H'0500
+	beq	?L190
+	cmp	AL,#H'0600
+	beq	?L191
+	bra	(?L195)
 ?L198:
+	cmp	AL,#H'0C00
+	beq	?L189
+	cmp	AL,#(H'0001+H'0C00)
+	bcc	?L200
+	cmp	AL,#H'0A00
+	beq	?L185
+	bra	(?L195)
+?L200:
 	ld	X,@H'fff9
 	cmp	X,#H'0D00
-	beq	?L191
+	beq	?L193
 	cmp	X,#H'1000
-	beq	?L192
-	bra	(?L193)
-?L182:
+	beq	?L194
+	bra	(?L195)
+?L184:
 	bsr	$_GetCurrMode
 	st	AL,@(H'0020,Y)
 	ld	AL,#H'0300
-	bra	(?L202)
-?L183:
+	bra	(?L204)
+?L185:
 	ld	AL,#H'000C
-?LBB13:
+?LBB14:
 	st	AL,@(0,Y)
 	ld	AL,@$XAP_UY
 	add	AL,#H'0004
@@ -12136,7 +12183,7 @@ $_GetRequestAction:
 	bsr	$_ConfigRetrieve
 	bsr	$_isSppConnected
 	cmp	AL,#H'0000
-	beq	?L184
+	beq	?L186
 	ld	AL,#H'0A00
 	st	AL,@(0,Y)
 	ld	AL,#H'0000
@@ -12145,10 +12192,10 @@ $_GetRequestAction:
 	add	X,#H'0004
 	st	X,@(H'0002,Y)
 	ld	AL,#H'000C
-	bra	(?L200)
-?L184:
+	bra	(?L202)
+?L186:
 	ld	X,#H'0006
-?LBB14:
+?LBB15:
 	st	X,@(0,Y)
 	ld	AL,@$XAP_UY
 	add	AL,#H'0010
@@ -12172,24 +12219,24 @@ $_GetRequestAction:
 	st	AL,@(H'0002,Y)
 	ld	X,#H'0006
 	st	X,@(H'0003,Y)
-	bra	(?L201)
-?L186:
+	bra	(?L203)
+?L188:
+?LBE15:
 ?LBE14:
-?LBE13:
 	bsr	$_get_battery_level_as_percentage
 	bsr	$_UpdateBatteryValue
 	bsr	$_GetBatteryValue
 	st	AL,@(H'0020,Y)
 	ld	AL,#H'0400
-?L202:
+?L204:
 	st	AL,@(0,Y)
 	ld	AL,#H'0000
 	st	AL,@(H'0001,Y)
 	ld	AL,@$XAP_UY
 	add	AL,#H'0020
-	bra	(?L199)
-?L187:
-?LBB15:
+	bra	(?L201)
+?L189:
+?LBB16:
 	ld	AL,#H'000A
 	st	AL,@(0,Y)
 	ld	AL,@$XAP_UY
@@ -12210,9 +12257,9 @@ $_GetRequestAction:
 	add	X,#H'0016
 	st	X,@(H'0002,Y)
 	ld	AL,#H'0008
-	bra	(?L200)
-?L188:
-?LBE15:
+	bra	(?L202)
+?L190:
+?LBE16:
 	bsr	$_GetHeartRateValue
 	st	AL,@(H'0020,Y)
 	ld	AL,#H'0500
@@ -12223,9 +12270,9 @@ $_GetRequestAction:
 	add	AL,#H'0020
 	st	AL,@(H'0002,Y)
 	st	AH,@(H'0003,Y)
-	bra	(?L201)
-?L189:
-?LBB16:
+	bra	(?L203)
+?L191:
+?LBB17:
 	ld	AL,#H'0000
 	st	AL,@(H'0021,Y)
 	st	AL,@(H'0022,Y)
@@ -12258,10 +12305,10 @@ $_GetRequestAction:
 	add	AL,#H'0021
 	st	AL,@(H'0002,Y)
 	ld	AL,#H'0004
-	bra	(?L200)
-?L190:
-?LBE16:
-?LBB17:
+	bra	(?L202)
+?L192:
+?LBE17:
+?LBB18:
 	ld	AL,@$_koovox+H'000D
 	st	AL,@(H'0025,Y)
 	ld	AL,#H'0800
@@ -12270,11 +12317,11 @@ $_GetRequestAction:
 	st	AL,@(H'0001,Y)
 	ld	AL,@$XAP_UY
 	add	AL,#H'0025
-	bra	(?L199)
-?L191:
-?LBE17:
-?LBB18:
-	ld	AL,@$_koovox+H'000E
+	bra	(?L201)
+?L193:
+?LBE18:
+?LBB19:
+	ld	AL,@$_koovox+H'0011
 	st	AL,@(H'0026,Y)
 	ld	AL,#H'0D00
 	st	AL,@(0,Y)
@@ -12282,11 +12329,11 @@ $_GetRequestAction:
 	st	AL,@(H'0001,Y)
 	ld	AL,@$XAP_UY
 	add	AL,#H'0026
-	bra	(?L199)
-?L192:
-?LBE18:
-?LBB19:
-	ld	AL,@$_koovox+H'0011
+	bra	(?L201)
+?L194:
+?LBE19:
+?LBB20:
+	ld	AL,@$_koovox+H'0014
 	st	AL,@(H'0027,Y)
 	ld	AL,#H'1000
 	st	AL,@(0,Y)
@@ -12294,32 +12341,32 @@ $_GetRequestAction:
 	st	AL,@(H'0001,Y)
 	ld	AL,@$XAP_UY
 	add	AL,#H'0027
-?L199:
+?L201:
 	st	AL,@(H'0002,Y)
 	ld	AL,#H'0001
-?L200:
+?L202:
 	st	AL,@(H'0003,Y)
-?L201:
+?L203:
 	ld	AL,#H'00C8
 	ld	AH,#H'2B01
 	bsr	$_SendResponse
-?LBE19:
-	bra	(?L181)
-?L193:
+?LBE20:
+	bra	(?L183)
+?L195:
 	bsr	$_isGattConnected
 	cmp	AL,#H'0000
-	beq	?L181
+	beq	?L183
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	st	AL,@(H'0001,Y)
 	st	AL,@(H'0002,Y)
-	ld	AL,@$_koovox+H'0014
-	ld	AH,@$_koovox+H'0015
+	ld	AL,@$_koovox+H'0017
+	ld	AH,@$_koovox+H'0018
 	bsr	$_GattAccessResponse
-?L181:
+?L183:
 	ld	AL,#H'00C8
-?L179:
-?LBE12:
+?L181:
+?LBE13:
 ?LBE_GetRequestAction:
 	leavel	#42
 	.SEG	CONST
@@ -12334,13 +12381,11 @@ $_GetRequestAction:
 	dc	H'38
 	dc	H'00
 	.CODE
-;.stabn	192,0,0,?LBB12
 ;.stabn	192,0,0,?LBB13
 ;.stabn	192,0,0,?LBB14
-;.stabn	224,0,0,?LBE14
-;.stabn	224,0,0,?LBE13
 ;.stabn	192,0,0,?LBB15
 ;.stabn	224,0,0,?LBE15
+;.stabn	224,0,0,?LBE14
 ;.stabn	192,0,0,?LBB16
 ;.stabn	224,0,0,?LBE16
 ;.stabn	192,0,0,?LBB17
@@ -12349,18 +12394,20 @@ $_GetRequestAction:
 ;.stabn	224,0,0,?LBE18
 ;.stabn	192,0,0,?LBB19
 ;.stabn	224,0,0,?LBE19
-;.stabn	224,0,0,?LBE12
+;.stabn	192,0,0,?LBB20
+;.stabn	224,0,0,?LBE20
+;.stabn	224,0,0,?LBE13
 $_SendMessageWithSink:
 	enterl	#6
 ?LBB_SendMessageWithSink:
 	st	AL,@(H'0001,Y)
 	st	AH,@(H'0002,Y)
-?LBB20:
+?LBB21:
 	ld	AH,@(H'0006,Y)
 	bsr	$_SinkClaim
 	st	AL,@(H'0003,Y)
 	cmp	AL,#-H'0001
-	beq	?L212
+	beq	?L214
 	ld	AL,@(H'0001,Y)
 	bsr	$_SinkMap
 	add	AL,@(H'0003,Y)
@@ -12371,17 +12418,17 @@ $_SendMessageWithSink:
 	ld	AL,@(H'0001,Y)
 	ld	AH,@(H'0006,Y)
 	bsr	$_SinkFlush
-?L212:
-?LBE20:
+?L214:
+?LBE21:
 ?LBE_SendMessageWithSink:
 	leavel	#6
-;.stabn	192,0,0,?LBB20
-;.stabn	224,0,0,?LBE20
+;.stabn	192,0,0,?LBB21
+;.stabn	224,0,0,?LBE21
 $_SendResponseToDevice:
 	enterl	#9
 ?LBB_SendResponseToDevice:
 	st	AL,@(H'0003,Y)
-?LBB21:
+?LBB22:
 	st	AH,@(H'0004,Y)
 	ld	AL,@$XAP_AH
 	add	AL,#H'0002
@@ -12401,31 +12448,31 @@ $_SendResponseToDevice:
 	bsr	$_memcpy
 	bsr	$_isSppConnected
 	cmp	AL,#H'0000
-	beq	?L217
+	beq	?L219
 	ld	AL,@(H'0004,Y)
 	add	AL,#H'0002
 	st	AL,@(0,Y)
-	ld	AL,@$_koovox+H'0013
+	ld	AL,@$_koovox+H'0016
 	ld	AH,@(H'0006,Y)
 	bsr	$_SendMessageWithSink
-	bra	(?L218)
-?L217:
+	bra	(?L220)
+?L219:
 	bsr	$_isGattConnected
 	cmp	AL,#H'0000
-	beq	?L218
+	beq	?L220
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,@(H'0005,Y)
 	st	AL,@(H'0001,Y)
 	ld	AL,@(H'0006,Y)
 	st	AL,@(H'0002,Y)
-	ld	AL,@$_koovox+H'0014
-	ld	AH,@$_koovox+H'0015
+	ld	AL,@$_koovox+H'0017
+	ld	AH,@$_koovox+H'0018
 	bsr	$_GattAccessResponse
-?L218:
+?L220:
 	ld	AL,@(H'0006,Y)
 	bsr	$_free
-?LBE21:
+?LBE22:
 ?LBE_SendResponseToDevice:
 	leavel	#9
 	.SEG	CONST
@@ -12434,24 +12481,24 @@ $_SendResponseToDevice:
 	dc	H'7D
 	dc	H'00
 	.CODE
-;.stabn	192,0,0,?LBB21
-;.stabn	224,0,0,?LBE21
+;.stabn	192,0,0,?LBB22
+;.stabn	224,0,0,?LBE22
 $_SendNotifyToDevice:
 	enterl	#7
 ?LBB_SendNotifyToDevice:
 	st	AL,@(H'0001,Y)
 	st	AH,@(H'0002,Y)
-?LBB22:
+?LBB23:
 	tst	@(H'0008,Y)
-	beq	?L221
+	beq	?L223
 	ld	AH,@(H'0008,Y)
 	add	AH,#H'000C
 	st	AH,@(H'0003,Y)
-	bra	(?L222)
-?L221:
+	bra	(?L224)
+?L223:
 	ld	AL,#H'000D
 	st	AL,@(H'0003,Y)
-?L222:
+?L224:
 	ld	AL,@(H'0003,Y)
 	bsr	$_malloc
 	st	AL,@(H'0004,Y)
@@ -12491,29 +12538,29 @@ $_SendNotifyToDevice:
 	ld	AL,#H'0003
 	st	AL,@(H'000B,X)
 	tst	@(H'0007,Y)
-	beq	?L223
+	beq	?L225
 	ld	AL,@$XAP_UXL
 	add	AL,#H'000C
 	ld	AH,@(H'0008,Y)
 	st	AH,@(0,Y)
 	ld	AH,@(H'0007,Y)
 	bsr	$_memmove
-?L223:
+?L225:
 	ld	AL,@(H'0004,Y)
 	ld	AH,@(H'0003,Y)
 	bsr	$_SendMessageToDevice
 	ld	AL,@(H'0004,Y)
 	bsr	$_free
-?LBE22:
+?LBE23:
 ?LBE_SendNotifyToDevice:
 	leavel	#7
-;.stabn	192,0,0,?LBB22
-;.stabn	224,0,0,?LBE22
+;.stabn	192,0,0,?LBB23
+;.stabn	224,0,0,?LBE23
 $_SendMessageToDevice:
 	enterl	#7
 ?LBB_SendMessageToDevice:
 	st	AL,@(H'0001,Y)
-?LBB23:
+?LBB24:
 	st	AH,@(H'0002,Y)
 	ld	AL,@$XAP_AH
 	add	AL,#H'0002
@@ -12534,28 +12581,28 @@ $_SendMessageToDevice:
 	bsr	$_memcpy
 	bsr	$_isSppConnected
 	cmp	AL,#H'0000
-	beq	?L225
+	beq	?L227
 	ld	AL,@(H'0003,Y)
 	st	AL,@(0,Y)
-	ld	AL,@$_koovox+H'0013
+	ld	AL,@$_koovox+H'0016
 	ld	AH,@(H'0004,Y)
 	bsr	$_SendMessageWithSink
-	bra	(?L226)
-?L225:
+	bra	(?L228)
+?L227:
 	bsr	$_isGattConnected
 	cmp	AL,#H'0000
-	beq	?L226
+	beq	?L228
 	ld	AL,@(H'0004,Y)
 	ld	AH,@(H'0003,Y)
 	bsr	$_send_notify_characteristic_to_device
-?L226:
+?L228:
 	ld	AL,@(H'0004,Y)
 	bsr	$_free
-?LBE23:
+?LBE24:
 ?LBE_SendMessageToDevice:
 	leavel	#7
-;.stabn	192,0,0,?LBB23
-;.stabn	224,0,0,?LBE23
+;.stabn	192,0,0,?LBB24
+;.stabn	224,0,0,?LBE24
 $_send_notify_characteristic_to_device:
 	enterl	#5
 ?LBB_send_notify_characteristic_to_device:
@@ -12569,7 +12616,7 @@ $_send_notify_characteristic_to_device:
 	ld	AL,@H'fff8
 	st	AL,@(H'0002,Y)
 	ld	AL,@H'ffff
-	ld	AH,@$_koovox+H'0014
+	ld	AH,@$_koovox+H'0017
 	bsr	$_GattNotificationRequest
 ?LBE_send_notify_characteristic_to_device:
 	leavel	#5
@@ -12577,23 +12624,23 @@ $_DisposeGattGetCharacteristicValue:
 	enterl	#6
 ?LBB_DisposeGattGetCharacteristicValue:
 	ld	X,@$XAP_AL
-?LBB24:
-	tst	@$_koovox+H'0019
-	beq	?L230
-	ld	AL,@$_koovox+H'0019
+?LBB25:
+	tst	@$_koovox+H'001C
+	beq	?L232
+	ld	AL,@$_koovox+H'001C
 	st	AL,@(0,Y)
-	ld	AL,@$_koovox+H'0018
+	ld	AL,@$_koovox+H'001B
 	ld	AH,#(?LC3)
 	bsr	$_KoovoxMessageStr
 	cmp	AL,#H'0000
-	beq	?L231
-	ld	AH,@$_koovox+H'0019
+	beq	?L233
+	ld	AH,@$_koovox+H'001C
 	add	AH,#-H'0002
-	ld	AL,@$_koovox+H'0018
+	ld	AL,@$_koovox+H'001B
 	bsr	$_GetRequestAction
-	bra	(?L232)
-?L231:
-	ld	X,@$_koovox+H'0018
+	bra	(?L234)
+?L233:
+	ld	X,@$_koovox+H'001B
 	ld	AL,@(H'0002,X)
 	asl	#H'0008
 	add	AL,@(H'0001,X)
@@ -12605,16 +12652,16 @@ $_DisposeGattGetCharacteristicValue:
 	ld	AL,#H'0190
 	ld	AH,#H'2B01
 	bsr	$_SendResponse
-?L232:
+?L234:
 	ld	AL,#H'0000
-	st	AL,@$_koovox+H'0019
-	ld	AL,@$_koovox+H'0018
+	st	AL,@$_koovox+H'001C
+	ld	AL,@$_koovox+H'001B
 	ld	AH,#H'001E
 	st	AH,@(0,Y)
 	ld	AH,#H'0000
 	bsr	$_memset
-	bra	(?L229)
-?L230:
+	bra	(?L231)
+?L232:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	st	AL,@(H'0001,Y)
@@ -12622,33 +12669,33 @@ $_DisposeGattGetCharacteristicValue:
 	ld	AL,@(0,X)
 	ld	AH,@(H'0001,X)
 	bsr	$_GattAccessResponse
-?L229:
-?LBE24:
+?L231:
+?LBE25:
 ?LBE_DisposeGattGetCharacteristicValue:
 	leavel	#6
-;.stabn	192,0,0,?LBB24
-;.stabn	224,0,0,?LBE24
+;.stabn	192,0,0,?LBB25
+;.stabn	224,0,0,?LBE25
 $_DisposeGattSetCharacteristicValue:
 	enterl	#7
 ?LBB_DisposeGattSetCharacteristicValue:
 	ld	X,@$XAP_AL
-?LBB25:
-	tst	@$_koovox+H'001B
-	beq	?L235
-	ld	AL,@$_koovox+H'001B
+?LBB26:
+	tst	@$_koovox+H'001E
+	beq	?L237
+	ld	AL,@$_koovox+H'001E
 	st	AL,@(0,Y)
-	ld	AL,@$_koovox+H'001A
+	ld	AL,@$_koovox+H'001D
 	ld	AH,#(?LC3)
 	bsr	$_KoovoxMessageStr
 	st	AL,@H'fff8
-	ld	X,@$_koovox+H'001A
+	ld	X,@$_koovox+H'001D
 	ld	AL,@(H'0002,X)
 	asl	#H'0008
 	add	AL,@(H'0001,X)
 	st	AL,@(H'0004,Y)
 	tst	@H'fff8
-	beq	?L236
-	ld	AH,@$_koovox+H'001B
+	beq	?L238
+	ld	AH,@$_koovox+H'001E
 	add	AH,#-H'0002
 	ld	AL,@$XAP_UXL
 	bsr	$_SetRequestAction
@@ -12660,8 +12707,8 @@ $_DisposeGattSetCharacteristicValue:
 	st	AL,@(H'0002,Y)
 	st	AL,@(H'0003,Y)
 	ld	AL,@H'fff8
-	bra	(?L239)
-?L236:
+	bra	(?L241)
+?L238:
 	ld	AL,@(H'0004,Y)
 	st	AL,@(0,Y)
 	ld	AL,#H'0000
@@ -12669,18 +12716,18 @@ $_DisposeGattSetCharacteristicValue:
 	st	AL,@(H'0002,Y)
 	st	AL,@(H'0003,Y)
 	ld	AL,#H'0190
-?L239:
+?L241:
 	ld	AH,#H'2B02
 	bsr	$_SendResponse
 	ld	AL,#H'0000
-	st	AL,@$_koovox+H'001B
-	ld	AL,@$_koovox+H'001A
+	st	AL,@$_koovox+H'001E
+	ld	AL,@$_koovox+H'001D
 	ld	AH,#H'001E
 	st	AH,@(0,Y)
 	ld	AH,#H'0000
 	bsr	$_memset
-	bra	(?L234)
-?L235:
+	bra	(?L236)
+?L237:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	st	AL,@(H'0001,Y)
@@ -12688,12 +12735,12 @@ $_DisposeGattSetCharacteristicValue:
 	ld	AL,@(0,X)
 	ld	AH,@(H'0001,X)
 	bsr	$_GattAccessResponse
-?L234:
-?LBE25:
+?L236:
+?LBE26:
 ?LBE_DisposeGattSetCharacteristicValue:
 	leavel	#7
-;.stabn	192,0,0,?LBB25
-;.stabn	224,0,0,?LBE25
+;.stabn	192,0,0,?LBB26
+;.stabn	224,0,0,?LBE26
 	ENDMOD
 
 ;# Function pattern *movqi2 used[0] = 238 used[1] = 44 used[3] = 1 total = 283
@@ -12710,11 +12757,11 @@ $_DisposeGattSetCharacteristicValue:
 ;# Function pattern *zero_extendqihi2 used[0] = 1 total = 1
 ;# Function pattern jump used[0] = 74 total = 74
 ;# Function pattern *call1 used[0] = 59 total = 59
-;# Function pattern *call_value1 used[0] = 77 total = 77
+;# Function pattern *call_value1 used[0] = 79 total = 79
 ;# Function pattern tablejump_1 used[0] = 1 total = 1
 ;# Function pattern zero_extendqihi2+1 used[0] = 1 total = 1
 ;# Function pattern movstrqi+2 used[0] = 2 total = 2
-;# Function pattern movstrqi+3 used[0] = 18 used[1] = 11 total = 29
+;# Function pattern movstrqi+3 used[0] = 20 used[1] = 11 total = 31
 ;# Function pattern movstrqi+4 used[0] = 1 used[1] = 13 total = 14
 ;# Function pattern movstrqi+5 used[0] = 53 total = 53
 ;# Function pattern movstrqi+7 used[1] = 1 total = 1
@@ -12858,13 +12905,13 @@ $_GetCurrMode:
 $_SetSampleStatus:
 ; leaf function with empty stack frame
 ?LBB_SetSampleStatus:
-	st	AL,@$_koovox+H'001C
+	st	AL,@$_koovox+H'001F
 ?LBE_SetSampleStatus:
 	rts
 $_GetSampleStatus:
 ; leaf function with empty stack frame
 ?LBB_GetSampleStatus:
-	ld	AL,@$_koovox+H'001C
+	ld	AL,@$_koovox+H'001F
 ?LBE_GetSampleStatus:
 	rts
 $_SetMuteStatus:
@@ -12945,13 +12992,13 @@ $_isPresentBusy:
 $_SetDriverEnable:
 ; leaf function with empty stack frame
 ?LBB_SetDriverEnable:
-	st	AL,@$_koovox+H'000E
+	st	AL,@$_koovox+H'0011
 ?LBE_SetDriverEnable:
 	rts
 $_isDriverEnable:
 ; leaf function with empty stack frame
 ?LBB_isDriverEnable:
-	ld	AL,@$_koovox+H'000E
+	ld	AL,@$_koovox+H'0011
 	cmp	AL,#H'0001
 	bne	?L49
 	ld	AL,#H'0001
@@ -12964,13 +13011,13 @@ $_isDriverEnable:
 $_SetActionCallEnable:
 ; leaf function with empty stack frame
 ?LBB_SetActionCallEnable:
-	st	AL,@$_koovox+H'0012
+	st	AL,@$_koovox+H'0015
 ?LBE_SetActionCallEnable:
 	rts
 $_isActionCallEnable:
 ; leaf function with empty stack frame
 ?LBB_isActionCallEnable:
-	ld	AL,@$_koovox+H'0012
+	ld	AL,@$_koovox+H'0015
 	cmp	AL,#H'0001
 	bne	?L54
 	ld	AL,#H'0001
@@ -13002,13 +13049,13 @@ $_isNeckProtectEnable:
 $_SetPresentEnable:
 ; leaf function with empty stack frame
 ?LBB_SetPresentEnable:
-	st	AL,@$_koovox+H'000F
+	st	AL,@$_koovox+H'0012
 ?LBE_SetPresentEnable:
 	rts
 $_isPresentEnable:
 ; leaf function with empty stack frame
 ?LBB_isPresentEnable:
-	tst	@$_koovox+H'000F
+	tst	@$_koovox+H'0012
 	bne	?L64
 	ld	AL,#H'0001
 	bra	(?L63)
@@ -13020,13 +13067,13 @@ $_isPresentEnable:
 $_SetPresentAuto:
 ; leaf function with empty stack frame
 ?LBB_SetPresentAuto:
-	st	AL,@$_koovox+H'0010
+	st	AL,@$_koovox+H'0013
 ?LBE_SetPresentAuto:
 	rts
 $_isPresentAuto:
 ; leaf function with empty stack frame
 ?LBB_isPresentAuto:
-	ld	AL,@$_koovox+H'0010
+	ld	AL,@$_koovox+H'0013
 	cmp	AL,#H'0001
 	bne	?L68
 	ld	AL,#H'0001
@@ -13039,13 +13086,13 @@ $_isPresentAuto:
 $_SetVoiceMessageEnable:
 ; leaf function with empty stack frame
 ?LBB_SetVoiceMessageEnable:
-	st	AL,@$_koovox+H'0011
+	st	AL,@$_koovox+H'0014
 ?LBE_SetVoiceMessageEnable:
 	rts
 $_isVoiceMessageEnable:
 ; leaf function with empty stack frame
 ?LBB_isVoiceMessageEnable:
-	tst	@$_koovox+H'0011
+	tst	@$_koovox+H'0014
 	bne	?L73
 	ld	AL,#H'0001
 	bra	(?L72)
@@ -13057,83 +13104,83 @@ $_isVoiceMessageEnable:
 $_UpdateBatteryValue:
 ; leaf function with empty stack frame
 ?LBB_UpdateBatteryValue:
-	st	AL,@$_koovox+H'001F
+	st	AL,@$_koovox+H'0022
 ?LBE_UpdateBatteryValue:
 	rts
 $_GetBatteryValue:
 ; leaf function with empty stack frame
 ?LBB_GetBatteryValue:
-	ld	AL,@$_koovox+H'001F
+	ld	AL,@$_koovox+H'0022
 ?LBE_GetBatteryValue:
 	rts
 $_UpdateStepValue:
 ; leaf function with empty stack frame
 ?LBB_UpdateStepValue:
 	ld	AH,#H'0000
-	add	AL,@$_koovox+H'0021
+	add	AL,@$_koovox+H'0024
 	nop
-	addc	AH,@$_koovox+H'0020
-	st	AH,@$_koovox+H'0020
-	st	AL,@$_koovox+H'0021
+	addc	AH,@$_koovox+H'0023
+	st	AH,@$_koovox+H'0023
+	st	AL,@$_koovox+H'0024
 ?LBE_UpdateStepValue:
 	rts
 $_ClearStepValue:
 ; leaf function with empty stack frame
 ?LBB_ClearStepValue:
 	ld	AL,#H'0000
-	st	AL,@$_koovox+H'0021
-	st	AL,@$_koovox+H'0020
+	st	AL,@$_koovox+H'0024
+	st	AL,@$_koovox+H'0023
 ?LBE_ClearStepValue:
 	rts
 $_GetStepValue:
 ; leaf function with empty stack frame
 ?LBB_GetStepValue:
-	ld	AH,@$_koovox+H'0020
-	ld	AL,@$_koovox+H'0021
+	ld	AH,@$_koovox+H'0023
+	ld	AL,@$_koovox+H'0024
 ?LBE_GetStepValue:
 	rts
 $_UpdateTimeValue:
 ; leaf function with empty stack frame
 ?LBB_UpdateTimeValue:
-	add	AL,@$_koovox+H'0022
-	st	AL,@$_koovox+H'0022
+	add	AL,@$_koovox+H'0025
+	st	AL,@$_koovox+H'0025
 ?LBE_UpdateTimeValue:
 	rts
 $_ClearTimeValue:
 ; leaf function with empty stack frame
 ?LBB_ClearTimeValue:
 	ld	AL,#H'0000
-	st	AL,@$_koovox+H'0022
+	st	AL,@$_koovox+H'0025
 ?LBE_ClearTimeValue:
 	rts
 $_GetTimeValue:
 ; leaf function with empty stack frame
 ?LBB_GetTimeValue:
-	ld	AL,@$_koovox+H'0022
+	ld	AL,@$_koovox+H'0025
 ?LBE_GetTimeValue:
 	rts
 $_UpdateHeartRateValue:
 ; leaf function with empty stack frame
 ?LBB_UpdateHeartRateValue:
-	st	AL,@$_koovox+H'001E
+	st	AL,@$_koovox+H'0021
 ?LBE_UpdateHeartRateValue:
 	rts
 $_GetHeartRateValue:
 ; leaf function with empty stack frame
 ?LBB_GetHeartRateValue:
-	ld	AL,@$_koovox+H'001E
+	ld	AL,@$_koovox+H'0021
 ?LBE_GetHeartRateValue:
 	rts
 $_SetPromptStatus:
 ; leaf function with empty stack frame
 ?LBB_SetPromptStatus:
-	st	AL,@$_koovox+H'001D
+	st	AL,@$_koovox+H'0020
 ?LBE_SetPromptStatus:
 	rts
 $_isPromptEnable:
 ; leaf function with empty stack frame
 ?LBB_isPromptEnable:
-	ld	AL,@$_koovox+H'001D
+	ld	AL,@$_koovox+H'0020
 	cmp	AL,#H'0001
 	bne	?L87
 	ld	AL,#H'0001
@@ -13267,25 +13314,25 @@ _handleSPPMessage:
 	st	AL,@(H'0007,Y)
 	cmp	AL,#H'0000
 	beq	?L113
-	ld	AL,@$_koovox+H'0016
-	add	AL,@$_koovox+H'0017
+	ld	AL,@$_koovox+H'0019
+	add	AL,@$_koovox+H'001A
 	ld	AH,@(H'0007,Y)
 	st	AH,@(0,Y)
 	ld	AH,@(H'0006,Y)
 	bsr	$_memcpy
 	ld	AH,@(H'0007,Y)
-	add	AH,@$_koovox+H'0017
-	st	AH,@$_koovox+H'0017
+	add	AH,@$_koovox+H'001A
+	st	AH,@$_koovox+H'001A
 	add	AH,#-H'0002
-	ld	AL,@$_koovox+H'0016
+	ld	AL,@$_koovox+H'0019
 	bsr	$_DisposeSppMessage
-	ld	AL,@$_koovox+H'0016
+	ld	AL,@$_koovox+H'0019
 	ld	AH,@(H'0007,Y)
 	st	AH,@(0,Y)
 	ld	AH,#H'0000
 	bsr	$_memset
 	ld	AL,#H'0000
-	st	AL,@$_koovox+H'0017
+	st	AL,@$_koovox+H'001A
 	ld	AH,@(H'0005,Y)
 	cmp	AH,#H'001E
 	bcz	?L113
@@ -13293,7 +13340,7 @@ _handleSPPMessage:
 	st	AH,@(H'0008,Y)
 	cmp	AH,#(H'0001+H'001D)
 	bcc	?L113
-	ld	AL,@$_koovox+H'0016
+	ld	AL,@$_koovox+H'0019
 	ld	X,@(H'0006,Y)
 	add	X,@(H'0007,Y)
 	st	X,@(H'0009,Y)
@@ -13301,8 +13348,8 @@ _handleSPPMessage:
 	ld	AH,@$XAP_UXL
 	bsr	$_memcpy
 	ld	AL,@(H'0008,Y)
-	add	AL,@$_koovox+H'0017
-	st	AL,@$_koovox+H'0017
+	add	AL,@$_koovox+H'001A
+	st	AL,@$_koovox+H'001A
 	ld	AH,@(H'0008,Y)
 	st	AH,@(0,Y)
 	ld	AL,@(H'0009,Y)
@@ -13310,17 +13357,17 @@ _handleSPPMessage:
 	bsr	$_KoovoxMessageStr
 	cmp	AL,#H'0000
 	beq	?L113
-	ld	AH,@$_koovox+H'0017
+	ld	AH,@$_koovox+H'001A
 	add	AH,#-H'0002
-	ld	AL,@$_koovox+H'0016
+	ld	AL,@$_koovox+H'0019
 	bsr	$_DisposeSppMessage
-	ld	AL,@$_koovox+H'0016
+	ld	AL,@$_koovox+H'0019
 	ld	AH,#H'001E
 	st	AH,@(0,Y)
 	ld	AH,#H'0000
 	bsr	$_memset
 	ld	AL,#H'0000
-	st	AL,@$_koovox+H'0017
+	st	AL,@$_koovox+H'001A
 ?L113:
 	ld	X,@(H'0004,Y)
 	ld	AL,@(H'0001,X)
@@ -13454,7 +13501,7 @@ $_koovox_message_handler:
 	.CODE
 	.SEG	VAR
 $_koovox:
-	DS	35
+	DS	38
 	ENDMOD
 
 ;# Function pattern *movqi2 used[0] = 59 used[1] = 4 total = 63
@@ -32996,7 +33043,7 @@ $_server_handle_gatt_access_ind:
 	ld	AH,@$XAP_AL
 	ld	X,@$XAP_AL
 	ld	AL,@(H'0001,X)
-	st	AL,@$_koovox+H'0015
+	st	AL,@$_koovox+H'0018
 	ld	AL,@(H'0001,X)
 	cmp	AL,#(H'0001+H'0015)
 	bcc	?L42
@@ -33190,7 +33237,7 @@ $_handle_heart_rate_measurement_access:
 	st	AL,@(0,Y)
 	ld	AL,#H'0001
 	st	AL,@(H'0001,Y)
-	ld	AL,#($_koovox+H'001E)
+	ld	AL,#($_koovox+H'0021)
 	bra	(?L5)
 ?L3:
 	ld	AL,#H'0000
@@ -33567,18 +33614,18 @@ $_handle_get_characteristic_access:
 	bsr	$_DisposeGattGetCharacteristicValue
 	bra	(?L54)
 ?L55:
-	ld	AL,@$_koovox+H'0018
-	add	AL,@$_koovox+H'0019
+	ld	AL,@$_koovox+H'001B
+	add	AL,@$_koovox+H'001C
 	ld	AH,@(H'0003,Y)
 	add	AH,#H'0005
 	ld	X,@(H'0003,Y)
 	ld	X,@(H'0004,X)
 	st	X,@(0,Y)
 	bsr	$_memcpy
-	ld	AL,@$_koovox+H'0019
+	ld	AL,@$_koovox+H'001C
 	ld	X,@(H'0003,Y)
 	add	AL,@(H'0004,X)
-	st	AL,@$_koovox+H'0019
+	st	AL,@$_koovox+H'001C
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	st	AL,@(H'0001,Y)
@@ -33598,17 +33645,17 @@ $_handle_set_characteristic_access:
 	and	AL,#H'0002
 	cmp	AL,#H'0000
 	beq	?L58
-	ld	AL,@$_koovox+H'001A
-	add	AL,@$_koovox+H'001B
+	ld	AL,@$_koovox+H'001D
+	add	AL,@$_koovox+H'001E
 	ld	AH,@$XAP_UXL
 	add	AH,#H'0005
 	ld	X,@(H'0004,X)
 	st	X,@(0,Y)
 	bsr	$_memcpy
-	ld	AL,@$_koovox+H'001B
+	ld	AL,@$_koovox+H'001E
 	ld	X,@(H'0003,Y)
 	add	AL,@(H'0004,X)
-	st	AL,@$_koovox+H'001B
+	st	AL,@$_koovox+H'001E
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	st	AL,@(H'0001,Y)
@@ -33812,6 +33859,853 @@ $_handle_device_appearance_access:
 ;# Function pattern jump used[0] = 2 total = 2
 ;# Function pattern *call1 used[0] = 6 total = 6
 ;# Function pattern movstrqi+3 used[0] = 2 used[1] = 2 total = 4
+	MODULE	sink_handle_accelerate_data
+	.LARGE
+; GNU C version 3.3.3 (CSR version 30 for xapnative)
+; 	compiled by GNU C version 3.2.3 (mingw special 20030504-1).
+;# options passed:  -IC:/ADK3.5/tools/include/firmware
+;# -IC:/ADK3.5/tools/include/standard
+;# -IC:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release -I./ -iprefix
+;# -isystem -D__GNUC__=3 -D__GNUC_MINOR__=3 -D__GNUC_PATCHLEVEL__=3
+;# -DENABLE_BATTERY_OPERATION -DENABLE_PSKEY_CONFIG -DDEVICE_ID_PSKEY
+;# -DENABLE_KOOVOX -DENABLE_LOG -DBLE_ENABLED -DGATT_SERVER_ENABLED
+;# -DGATT_SERVER_BAS_ENABLED -DENABLE_CAPSENSE -DENABLE_AVRCP -DINCLUDE_DSP
+;# -DINCLUDE_CVC -DENABLE_GAIA -MD -MQ -massisted-crt0 -mlarge-mode
+;# -mno-inline-block-copy-mode -mfunction-ptr-pi -mal-first -mleaf-optim
+;# -mno-function-sizeof -mworkaround-b96516 -ansi -auxbase-strip -g -O
+;# -pedantic -Wall -Wmissing-prototypes -Wstrict-prototypes -Wsign-compare
+;# -Wredundant-decls -Werror -ansi -fno-builtin-memcpy
+;# options enabled:  -fdefer-pop -fthread-jumps -fpeephole -ffunction-cse
+;# -fkeep-static-consts -fpcc-struct-return -fgcse-lm -fgcse-sm
+;# -floop-optimize -fcrossjumping -fif-conversion -fif-conversion2
+;# -fsched-interblock -fsched-spec -fbranch-count-reg -fcprop-registers
+;# -fcommon -fgnu-linker -fargument-alias -fmerge-constants
+;# -fzero-initialized-in-bss -fleading-underscore -fident -fpeephole2
+;# -fguess-branch-probability -fmath-errno -ftrapping-math -mlarge-mode
+;# -mquiet-mode -mbitfield-mode -mleaf-optim -mfunction-ptr-pi
+;# -massisted-crt0 -mworkaround-b96516 -mal-first
+
+	.ENHANCED
+	.SEG	VAR
+$_step_var:
+	DS	1
+$_koovox_step:
+	DS	2
+	.CODE
+$_Koovox_init_step_var:
+	enterl	#5
+?LBB_Koovox_init_step_var:
+?LBB2:
+	tst	@$_step_var
+	bne	?L2
+	ld	AL,#H'0007
+	bsr	$_malloc
+	st	AL,@$_step_var
+?L2:
+	ld	X,@$_step_var
+	ld	AH,#H'0000
+	st	AH,@(0,X)
+	ld	X,@$_step_var
+	st	AH,@(H'0006,X)
+	st	AH,@(H'0005,X)
+	ld	X,@$_step_var
+	ld	AL,#H'0001
+	st	AL,@(H'0001,X)
+	ld	X,@$_step_var
+	st	AL,@(H'0002,X)
+	ld	X,@$_step_var
+	ld	AL,#H'0064
+	st	AL,@(H'0003,X)
+	ld	X,@$_step_var
+	st	AL,@(H'0004,X)
+	ld	AL,#H'0000
+	ld	X,@$XAP_UY
+	add	X,#H'0001
+?LBB3:
+	st	AL,@(H'0001,X)
+	st	AH,@(H'0001,Y)
+	ld	AL,#H'0002
+	st	AL,@(0,Y)
+	ld	AL,#H'002E
+	ld	AH,@$XAP_UXL
+	bsr	$_ConfigRetrieve
+	ld	AH,#H'0000
+	ld	AL,@(H'0001,Y)
+	st	AH,@H'fff8
+	st	AL,@H'fff9
+	ld	AH,@(H'0002,Y)
+	ld	AL,#H'0000
+	or	AL,@H'fff9
+	or	AH,@H'fff8
+	st	AH,@$_koovox_step
+	st	AL,@$_koovox_step+1
+?LBE3:
+?LBE2:
+?LBE_Koovox_init_step_var:
+	leavel	#5
+;.stabn	192,0,0,?LBB3
+;.stabn	224,0,0,?LBE3
+$_Koovox_free_step_var:
+	enterl	#5
+?LBB_Koovox_free_step_var:
+?LBB4:
+	ld	AL,@$_step_var
+	bsr	$_free
+	ld	AL,#H'0000
+	st	AL,@$_step_var
+	ld	X,@$_koovox_step+H'0001
+	ld	AH,#H'0000
+	ld	AL,@$_koovox_step
+?LBB5:
+	st	X,@(H'0001,Y)
+	st	AL,@(H'0002,Y)
+	ld	AL,#H'0002
+	st	AL,@(0,Y)
+	ld	AL,#H'002E
+	ld	AH,@$XAP_UY
+	add	AH,#H'0001
+	bsr	$_ConfigStore
+?LBE5:
+?LBE4:
+?LBE_Koovox_free_step_var:
+	leavel	#5
+;.stabn	192,0,0,?LBB5
+;.stabn	224,0,0,?LBE5
+$_KoovoxResponseStepCount:
+	enterl	#2
+?LBB_KoovoxResponseStepCount:
+	ld	X,@$XAP_AL
+?LBB6:
+	cmp	AL,#H'0000
+	beq	?L4
+	cmp	AH,#H'0001
+	bcz	?L4
+?LBB7:
+	ld	AL,@(0,X)
+	ld	AH,@(H'0001,X)
+	cmp	AL,#H'0001
+	bne	?L4
+	cmp	AH,#H'0000
+	bne	?L4
+	bsr	$_Koovox_init_step_var
+?L4:
+?LBE7:
+?LBE6:
+?LBE_KoovoxResponseStepCount:
+	leavel	#2
+;.stabn	192,0,0,?LBB7
+;.stabn	224,0,0,?LBE7
+$_KoovoxCountStep:
+	enterl	#11
+?LBB_KoovoxCountStep:
+	st	AL,@H'fff8
+?LBB8:
+	cmp	AH,#H'0005
+	bcz	?L11
+	cmp	AL,#H'0000
+	beq	?L11
+?LBB9:
+	ld	AH,@$_step_var
+	st	AH,@(H'0004,Y)
+	ld	X,@$XAP_AH
+	ld	AH,@(0,X)
+	st	AH,@(H'0003,Y)
+	ld	AH,@(H'0005,X)
+	ld	AL,@(H'0006,X)
+	st	AH,@(H'0005,Y)
+	st	AL,@(H'0006,Y)
+	ld	AH,@(H'0003,X)
+	st	AH,@(H'0007,Y)
+	ld	AL,@(H'0004,X)
+	st	AL,@(H'0008,Y)
+	ld	X,@H'fff8
+	ld	AL,@(H'0001,X)
+	asl	#H'0008
+	ld	AH,@$XAP_AL
+	add	AH,@(0,X)
+	st	AH,@(H'0002,Y)
+	ld	AH,#H'0000
+	ld	AL,@(H'0002,X)
+	st	AH,@H'fffa
+	st	AL,@H'fffb
+	ld	AH,#H'0000
+	ld	AL,@(H'0003,X)
+	st	AH,@H'fff8
+	st	AL,@H'fff9
+	asl	#H'0008
+	add	AL,@H'fffb
+	nop
+	addc	AH,@H'fffa
+	st	AH,@H'fffa
+	st	AL,@H'fffb
+	ld	AH,@H'fff8
+	ld	AL,@H'fff9
+	asl	#H'0010
+	add	AL,@H'fffb
+	nop
+	addc	AH,@H'fffa
+	st	AH,@H'fffa
+	st	AL,@H'fffb
+	ld	AH,@H'fff8
+	ld	AL,@H'fff9
+	asl	#H'0018
+	add	AL,@H'fffb
+	nop
+	addc	AH,@H'fffa
+	st	AH,@H'fffa
+	st	AL,@H'fffb
+	ld	AL,@(H'0002,Y)
+	cmp	AL,@(H'0008,Y)
+	bcz	?L14
+	ld	X,@(H'0004,Y)
+	tst	@(0,X)
+	beq	?L17
+	ld	AH,#H'0000
+	st	AH,@(0,X)
+	ld	AL,@(H'0008,Y)
+	cmp	AL,#(H'0001+H'0045)
+	bcc	?L17
+	ld	X,@$_step_var
+	tst	@(H'0001,X)
+	beq	?L17
+	st	AH,@(H'0001,X)
+	ld	X,@$_step_var
+	ld	AL,#H'0001
+	st	AL,@(H'0002,X)
+	ld	X,@$_step_var
+	ld	AH,@(H'0008,Y)
+	st	AH,@(H'0003,X)
+	bra	(?L17)
+?L14:
+	tst	@(H'0003,Y)
+	bne	?L17
+	ld	X,@$_step_var
+	ld	AL,#H'0001
+	st	AL,@(0,X)
+	ld	AH,@(H'0008,Y)
+	cmp	AH,#H'005A
+	bcz	?L17
+	ld	AH,@H'fffa
+	ld	AL,@H'fffb
+	sub	AL,@(H'0006,Y)
+	nop
+	subc	AH,@(H'0005,Y)
+	cmp	AH,#hwrd(H'0001+H'0002)
+	bcs	?L17
+	bne	?L23
+	cmp	AL,#lwrd(H'0001+H'0002)
+	bcs	?L17
+?L23:
+	ld	X,@$_step_var
+	tst	@(H'0002,X)
+	beq	?L17
+	ld	AL,@(H'0002,Y)
+	sub	AL,@(H'0007,Y)
+	cmp	AL,#H'0028
+	bcz	?L17
+	ld	AH,@$_koovox_step
+	ld	AL,@$_koovox_step+1
+	add	AL,#H'0001
+	nop
+	addc	AH,#H'0000
+	st	AH,@$_koovox_step
+	st	AL,@$_koovox_step+1
+	ld	AL,#H'0001
+	st	AL,@(H'0001,X)
+	ld	X,@$_step_var
+	ld	AH,@(H'0003,Y)
+	st	AH,@(H'0002,X)
+	ld	X,@$_step_var
+	ld	AH,@H'fffa
+	ld	AL,@H'fffb
+	st	AH,@(H'0005,X)
+	st	AL,@(H'0006,X)
+	ld	AL,@(H'0003,Y)
+	st	AL,@(0,Y)
+	st	AL,@(H'0001,Y)
+	ld	AL,#H'0006
+	ld	AH,#H'0010
+	bsr	$_KoovoxFillAndSendUartPacket
+?L17:
+	ld	X,@$_step_var
+	ld	AH,@(H'0002,Y)
+	st	AH,@(H'0004,X)
+?L11:
+?LBE9:
+?LBE8:
+?LBE_KoovoxCountStep:
+	leavel	#11
+;.stabn	192,0,0,?LBB9
+;.stabn	224,0,0,?LBE9
+	.SEG	CONST
+$_sin_table:
+	dc	H'0011
+	dc	H'0022
+	dc	H'0034
+	dc	H'0045
+	dc	H'0057
+	dc	H'0068
+	dc	H'0079
+	dc	H'008B
+	dc	H'009C
+	dc	H'00AD
+	dc	H'00BE
+	dc	H'00CF
+	dc	H'00E0
+	dc	H'00F1
+	dc	H'0102
+	dc	H'0113
+	dc	H'0124
+	dc	H'0135
+	dc	H'0145
+	dc	H'0156
+	dc	H'0166
+	dc	H'0176
+	dc	H'0186
+	dc	H'0196
+	dc	H'01A6
+	dc	H'01B6
+	dc	H'01C5
+	dc	H'01D5
+	dc	H'01E4
+	dc	H'01F4
+	dc	H'0203
+	dc	H'0211
+	dc	H'0220
+	dc	H'022F
+	dc	H'023D
+	dc	H'024B
+	dc	H'0259
+	dc	H'0267
+	dc	H'0275
+	dc	H'0282
+	dc	H'0290
+	dc	H'029D
+	dc	H'02A9
+	dc	H'02B6
+	dc	H'02C3
+	dc	H'02CF
+	dc	H'02DB
+	dc	H'02E7
+	dc	H'02F2
+	dc	H'02FE
+	dc	H'0309
+	dc	H'0314
+	dc	H'031E
+	dc	H'0329
+	dc	H'0333
+	dc	H'033D
+	dc	H'0346
+	dc	H'0350
+	dc	H'0359
+	dc	H'0362
+	dc	H'036A
+	dc	H'0372
+	dc	H'037B
+	dc	H'0382
+	dc	H'038A
+	dc	H'0391
+	dc	H'0398
+	dc	H'039F
+	dc	H'03A5
+	dc	H'03AB
+	dc	H'03B1
+	dc	H'03B7
+	dc	H'03BC
+	dc	H'03C1
+	dc	H'03C5
+	dc	H'03CA
+	dc	H'03CE
+	dc	H'03D2
+	dc	H'03D5
+	dc	H'03D8
+	dc	H'03DB
+	dc	H'03DE
+	dc	H'03E0
+	dc	H'03E2
+	dc	H'03E4
+	dc	H'03E5
+	dc	H'03E6
+	dc	H'03E7
+	dc	H'03E7
+	dc	H'03E8
+	.CODE
+$_Angle_search:
+	enterl	#2
+?LBB_Angle_search:
+	st	AL,@(-1,Y)
+	ld	X,@$XAP_AH
+?LBB10:
+	ld	AL,#H'0000
+	st	AL,@(-2,Y)
+	ld	AL,#-H'0001
+	add	AL,@$XAP_AH
+	st	AL,@H'fff8
+	ld	AH,@$XAP_AL
+	lsr	#H'0001
+	tst	@(H'0002,Y)
+	beq	?L26
+	ld	AL,@(H'0002,Y)
+	bra	(?L39)
+?L26:
+	ld	AL,@(H'0002,Y)
+	nadd	AL,#H'0000
+?L39:
+	st	AL,@H'fff9
+	add	X,@(-1,Y)
+	cmp	AL,@(-H'0001,X)
+	bcz	?L28
+	ld	AH,#H'005A
+	bra	(?L25)
+?L28:
+	ld	AL,@(-2,Y)
+	cmp	AL,@H'fff8
+	bcc	?L38
+?L36:
+	ld	X,@$XAP_AH
+	add	X,@(-1,Y)
+	ld	AL,@H'fff9
+	cmp	AL,@(0,X)
+	bcz	?L32
+	add	AH,#H'0001
+	st	AH,@(-2,Y)
+	bra	(?L40)
+?L32:
+	ld	X,@$XAP_AH
+	add	X,@(-1,Y)
+	ld	AL,@H'fff9
+	cmp	AL,@(0,X)
+	bcc	?L25
+	add	AH,#-H'0001
+	st	AH,@H'fff8
+?L40:
+	ld	AH,@H'fff8
+	add	AH,@(-2,Y)
+	lsr	#H'0001
+	ld	AL,@(-2,Y)
+	cmp	AL,@H'fff8
+	bcs	?L36
+?L38:
+	ld	AH,@(-2,Y)
+?L25:
+?LBE10:
+	ld	AL,@$XAP_AH
+?LBE_Angle_search:
+	leavel	#2
+;.stabn	192,0,0,?LBB10
+;.stabn	224,0,0,?LBE10
+$_KoovoxProtectNeck:
+	enterl	#13
+?LBB_KoovoxProtectNeck:
+	ld	X,@$XAP_AL
+?LBB11:
+	cmp	AL,#H'0000
+	beq	?L46
+	cmp	AH,#H'0001
+	bne	?L48
+	ld	AL,@(0,X)
+	cmp	AL,#H'0001
+	bne	?L48
+	ld	AL,#H'47A1
+	bsr	$_AudioPromptPlayEvent
+	bra	(?L46)
+?L48:
+?LBB12:
+	ld	AL,@(H'0001,X)
+	asl	#H'0008
+	add	AL,@(0,X)
+	st	AL,@(H'0008,Y)
+	ld	AL,@(H'0003,X)
+	asl	#H'0008
+	add	AL,@(H'0002,X)
+	st	AL,@(H'0009,Y)
+	ld	AL,@(H'0005,X)
+	asl	#H'0008
+	add	AL,@(H'0004,X)
+	st	AL,@(H'000A,Y)
+	ld	AL,@(H'0008,Y)
+	st	AL,@(0,Y)
+	ld	AL,#($_sin_table)
+	ld	AH,#H'005A
+	bsr	$_Angle_search
+	st	AL,@(H'0006,Y)
+	ld	AL,@(H'0009,Y)
+	st	AL,@(0,Y)
+	ld	AL,#($_sin_table)
+	ld	AH,#H'005A
+	bsr	$_Angle_search
+	st	AL,@(H'0007,Y)
+	ld	AL,@(H'000A,Y)
+	st	AL,@(0,Y)
+	ld	AL,#($_sin_table)
+	ld	AH,#H'005A
+	bsr	$_Angle_search
+	ld	AH,#H'005A
+	sub	AH,@$XAP_AL
+	tst	@(H'0008,Y)
+	bpl	?L50
+	ld	AL,@(H'0006,Y)
+	nadd	AL,#H'0000
+	st	AL,@(H'0006,Y)
+?L50:
+	tst	@(H'0009,Y)
+	bmi	?L51
+	beq	?L51
+	ld	AL,@(H'0007,Y)
+	nadd	AL,#H'0000
+	st	AL,@(H'0007,Y)
+?L51:
+	tst	@(H'000A,Y)
+	bmi	?L52
+	beq	?L52
+	nadd	AH,#H'0000
+?L52:
+	ld	AL,@(H'0006,Y)
+	add	AL,#-H'0005
+	cmp	AL,#H'0050
+	bcz	?L53
+?LBB13:
+	ld	AH,#H'0001
+	st	AH,@(H'0002,Y)
+	ld	AL,@$XAP_UY
+	add	AL,#H'0002
+	bra	(?L57)
+?L53:
+	ld	AL,@(H'0007,Y)
+?LBE13:
+	add	AL,#-H'0005
+	cmp	AL,#H'0050
+	bcz	?L54
+?LBB14:
+	ld	AH,#H'0001
+	st	AH,@(H'0003,Y)
+	ld	AL,@$XAP_UY
+	add	AL,#H'0003
+?L57:
+	st	AL,@(0,Y)
+	st	AH,@(H'0001,Y)
+	bra	(?L56)
+?L54:
+?LBE14:
+	ld	AL,#H'0028
+	add	AL,@$XAP_AH
+	cmp	AL,#H'0050
+	bcz	?L55
+?LBB15:
+	ld	AH,#H'0001
+	st	AH,@(H'0004,Y)
+	ld	AL,@$XAP_UY
+	add	AL,#H'0004
+	bra	(?L57)
+?L55:
+?LBE15:
+?LBB16:
+	ld	AL,#H'0000
+	st	AL,@(H'0005,Y)
+	ld	AL,@$XAP_UY
+	add	AL,#H'0005
+	st	AL,@(0,Y)
+	ld	AL,#H'0001
+	st	AL,@(H'0001,Y)
+?L56:
+	ld	AL,#H'0006
+	ld	AH,#H'0004
+	bsr	$_KoovoxFillAndSendUartPacket
+?L46:
+?LBE16:
+?LBE12:
+?LBE11:
+?LBE_KoovoxProtectNeck:
+	leavel	#13
+;.stabn	192,0,0,?LBB12
+;.stabn	192,0,0,?LBB13
+;.stabn	224,0,0,?LBE13
+;.stabn	192,0,0,?LBB14
+;.stabn	224,0,0,?LBE14
+;.stabn	192,0,0,?LBB15
+;.stabn	224,0,0,?LBE15
+;.stabn	192,0,0,?LBB16
+;.stabn	224,0,0,?LBE16
+;.stabn	224,0,0,?LBE12
+$_KoovoxResponseNeckProtect:
+	enterl	#6
+?LBB_KoovoxResponseNeckProtect:
+	ld	X,@$XAP_AL
+?LBB17:
+	cmp	AL,#H'0000
+	beq	?L63
+	cmp	AH,#H'0001
+	bcz	?L63
+?LBB18:
+	ld	AL,@(0,X)
+	ld	AH,@(H'0001,X)
+	cmp	AL,#H'0001
+	bne	?L66
+	cmp	AH,#H'0000
+	bne	?L68
+	st	AL,@$_koovox+H'000D
+	bra	(?L68)
+?L66:
+	cmp	AL,#H'0002
+	bne	?L68
+	cmp	AH,#H'0000
+	bne	?L68
+	st	AH,@$_koovox+H'000D
+?L68:
+	ld	AL,#H'0800
+	st	AL,@(0,Y)
+	ld	AL,#H'0000
+	st	AL,@(H'0001,Y)
+	st	AL,@(H'0002,Y)
+	st	AL,@(H'0003,Y)
+	ld	AL,@$XAP_AH
+	ld	AH,#H'2B02
+	bsr	$_SendResponse
+?L63:
+?LBE18:
+?LBE17:
+?LBE_KoovoxResponseNeckProtect:
+	leavel	#6
+;.stabn	192,0,0,?LBB18
+;.stabn	224,0,0,?LBE18
+	.SEG	VAR
+$_seat_var:
+	DS	1
+	.CODE
+$_Koovox_init_const_seat_var:
+	enterl	#2
+?LBB_Koovox_init_const_seat_var:
+	tst	@$_seat_var
+	bne	?L75
+	ld	AL,#H'0006
+	bsr	$_malloc
+	st	AL,@$_seat_var
+?L75:
+	ld	X,@$_seat_var
+	ld	AH,#H'0000
+	st	AH,@(H'0001,X)
+	ld	X,@$_seat_var
+	st	AH,@(H'0002,X)
+	ld	X,@$_seat_var
+	ld	AL,#H'0064
+	st	AL,@(H'0003,X)
+	ld	X,@$_seat_var
+	st	AH,@(0,X)
+	ld	X,@$_seat_var
+	st	AH,@(H'0005,X)
+	st	AH,@(H'0004,X)
+?LBE_Koovox_init_const_seat_var:
+	leavel	#2
+$_Koovox_free_const_seat_var:
+	enterl	#2
+?LBB_Koovox_free_const_seat_var:
+	ld	AL,@$_seat_var
+	bsr	$_free
+	ld	AL,#H'0000
+	st	AL,@$_seat_var
+?LBE_Koovox_free_const_seat_var:
+	leavel	#2
+$_KoovoxConstSeat:
+	enterl	#7
+?LBB_KoovoxConstSeat:
+	st	AL,@H'fff8
+?LBB19:
+	cmp	AL,#H'0000
+	beq	?L77
+	ld	X,@$XAP_AL
+	ld	AL,@(0,X)
+	cmp	AL,#H'0001
+	bne	?L79
+	cmp	AH,#H'0001
+	bne	?L79
+	ld	AL,#H'47A1
+	bsr	$_AudioPromptPlayEvent
+	bra	(?L77)
+?L79:
+	ld	X,@H'fff8
+?LBB20:
+	ld	AL,@(H'0001,X)
+	asl	#H'0008
+	and	AL,#-H'0100
+	add	AL,@(0,X)
+	st	AL,@(H'0002,Y)
+	ld	AH,@$_seat_var
+	st	AH,@(H'0004,Y)
+	ld	X,@$XAP_AH
+	ld	AH,@(H'0003,X)
+	st	AH,@(H'0003,Y)
+	ld	X,@H'fff8
+	ld	AH,#H'0000
+	ld	AL,@(H'0002,X)
+	st	AH,@H'fffa
+	st	AL,@H'fffb
+	ld	AH,#H'0000
+	ld	AL,@(H'0003,X)
+	st	AH,@H'fff8
+	st	AL,@H'fff9
+	asl	#H'0008
+	add	AL,@H'fffb
+	nop
+	addc	AH,@H'fffa
+	st	AH,@H'fffa
+	st	AL,@H'fffb
+	ld	AH,@H'fff8
+	ld	AL,@H'fff9
+	asl	#H'0010
+	add	AL,@H'fffb
+	nop
+	addc	AH,@H'fffa
+	st	AH,@H'fffa
+	st	AL,@H'fffb
+	ld	AH,@H'fff8
+	ld	AL,@H'fff9
+	asl	#H'0018
+	add	AL,@H'fffb
+	nop
+	addc	AH,@H'fffa
+	st	AH,@H'fffa
+	st	AL,@H'fffb
+	ld	X,@(H'0004,Y)
+	ld	AL,@(0,X)
+	ld	AH,@(H'0002,Y)
+	st	AH,@(H'0003,X)
+	cmp	AH,@(H'0003,Y)
+	bcz	?L81
+	cmp	AL,#H'0000
+	beq	?L77
+	ld	X,@$_seat_var
+	ld	AL,#H'0000
+	st	AL,@(0,X)
+	ld	AH,@(H'0003,Y)
+	cmp	AH,#(H'0001+H'0018)
+	bcc	?L77
+	ld	X,@$_seat_var
+	tst	@(H'0001,X)
+	beq	?L77
+	ld	AL,@(H'0002,X)
+	sub	AL,@$XAP_AH
+	cmp	AL,#H'0078
+	bcz	?L77
+	ld	AH,@H'fffa
+	ld	AL,@H'fffb
+	sub	AL,@(H'0005,X)
+	nop
+	subc	AH,@(H'0004,X)
+	cmp	AH,#hwrd(H'0001+H'0009)
+	bcs	?L91
+	bne	?L77
+	cmp	AL,#lwrd(H'0001+H'0009)
+	bcc	?L77
+?L91:
+	ld	AL,#H'0000
+	st	AL,@(0,Y)
+	st	AL,@(H'0001,Y)
+	ld	AL,#H'0006
+	ld	AH,#H'0002
+	bsr	$_KoovoxFillAndSendUartPacket
+	bsr	$_Koovox_init_const_seat_var
+	bra	(?L77)
+?L81:
+	cmp	AL,#H'0000
+	bne	?L77
+	ld	X,@$_seat_var
+	ld	AL,#H'0001
+	st	AL,@(0,X)
+	ld	AH,@(H'0003,Y)
+	cmp	AH,#H'0090
+	bcz	?L77
+	ld	X,@$_seat_var
+	st	AL,@(H'0001,X)
+	ld	X,@$_seat_var
+	ld	AH,@H'fffa
+	ld	AL,@H'fffb
+	st	AH,@(H'0004,X)
+	st	AL,@(H'0005,X)
+	ld	X,@$_seat_var
+	ld	AL,@(H'0003,Y)
+	st	AL,@(H'0002,X)
+?L77:
+?LBE20:
+?LBE19:
+?LBE_KoovoxConstSeat:
+	leavel	#7
+;.stabn	192,0,0,?LBB20
+;.stabn	224,0,0,?LBE20
+$_KoovoxResponseConstSeat:
+	enterl	#7
+?LBB_KoovoxResponseConstSeat:
+	ld	X,@$XAP_AL
+?LBB21:
+	cmp	AL,#H'0000
+	beq	?L93
+	cmp	AH,#H'0001
+	bcz	?L93
+?LBB22:
+	ld	AL,@(0,X)
+	ld	AH,@(H'0001,X)
+	st	AH,@(H'0004,Y)
+	cmp	AL,#H'0001
+	bne	?L96
+	cmp	AH,#H'0000
+	bne	?L98
+	st	AL,@$_koovox+H'000E
+	bsr	$_Koovox_init_const_seat_var
+	bra	(?L98)
+?L96:
+	cmp	AL,#H'0002
+	bne	?L98
+	tst	@(H'0004,Y)
+	bne	?L98
+	ld	AL,@(H'0004,Y)
+	st	AL,@$_koovox+H'000E
+	bsr	$_Koovox_free_const_seat_var
+?L98:
+	ld	AL,#H'0800
+	st	AL,@(0,Y)
+	ld	AL,#H'0000
+	st	AL,@(H'0001,Y)
+	st	AL,@(H'0002,Y)
+	st	AL,@(H'0003,Y)
+	ld	AL,@(H'0004,Y)
+	ld	AH,#H'2B02
+	bsr	$_SendResponse
+?L93:
+?LBE22:
+?LBE21:
+?LBE_KoovoxResponseConstSeat:
+	leavel	#7
+;.stabn	192,0,0,?LBB22
+;.stabn	224,0,0,?LBE22
+$_KoovoxHeadAction:
+; leaf function with empty stack frame
+?LBB_KoovoxHeadAction:
+?LBE_KoovoxHeadAction:
+	rts
+	ENDMOD
+
+;# Function pattern *movqi2 used[0] = 100 used[1] = 9 total = 109
+;# Function pattern *movqi3 used[0] = 122 total = 122
+;# Function pattern *movhi used[2] = 10 used[3] = 16 total = 26
+;# Function pattern *addhi3 used[0] = 7 total = 7
+;# Function pattern *iorhi3 used[0] = 1 total = 1
+;# Function pattern *subhi3 used[0] = 2 total = 2
+;# Function pattern *addqi0 used[0] = 6 total = 6
+;# Function pattern *addqi2 used[0] = 9 used[2] = 6 total = 15
+;# Function pattern *andqi3 used[0] = 1 total = 1
+;# Function pattern *subqi3 used[0] = 3 total = 3
+;# Function pattern *ashlhi3 used[0] = 6 total = 6
+;# Function pattern *lshrqi3 used[0] = 2 total = 2
+;# Function pattern *ashlqi3 used[0] = 5 total = 5
+;# Function pattern negqi2 used[0] = 4 total = 4
+;# Function pattern *zero_extendqihi2 used[0] = 6 total = 6
+;# Function pattern jump used[0] = 12 total = 12
+;# Function pattern *call1 used[0] = 11 total = 11
+;# Function pattern *call_value1 used[0] = 9 total = 9
+;# Function pattern zero_extendqihi2+1 used[0] = 1 total = 1
+;# Function pattern movstrqi+3 used[0] = 12 used[1] = 12 total = 24
+;# Function pattern movstrqi+4 used[1] = 2 total = 2
+;# Function pattern movstrqi+5 used[0] = 27 total = 27
+;# Function pattern movstrqi+7 used[0] = 2 total = 2
 	MODULE	sink_heart_rate_calc
 	.LARGE
 ; GNU C version 3.3.3 (CSR version 30 for xapnative)
@@ -34495,78 +35389,81 @@ _Koovox_heartrate_smooth:
 ;.stabn	224,0,0,?LBE13
 ;.stabn	224,0,0,?LBE11
 $_KoovoxCalculateHeartRate:
-	enterl	#6
+	enterl	#9
 ?LBB_KoovoxCalculateHeartRate:
-	st	AL,@(-2,Y)
+	st	AL,@(H'0002,Y)
 ?LBB14:
 	ld	AL,#H'0000
-	st	AL,@H'fff8
-	st	AL,@H'fff9
-?L167:
+	st	AL,@(H'0003,Y)
+	st	AL,@(H'0004,Y)
+	bsr	$_GetSampleStatus
+	cmp	AL,#H'0000
+	beq	?L162
+?L168:
 	ld	X,@$_hb_calc_buff
-	add	X,@H'fff8
+	add	X,@(H'0003,Y)
 	ld	AL,@(H'0014,X)
 	st	AL,@(0,X)
-	ld	X,#H'0001
-	add	X,@H'fff8
-	st	X,@H'fff8
-	cmp	X,#H'0063
-	bcz	?L167
-	cmp	X,#(H'0001+H'0077)
-	bcc	?L177
-?L172:
-	ld	AL,@$_hb_calc_buff
-	ld	X,@H'fff8
-	add	X,@$XAP_AL
-	st	X,@(-1,Y)
-	ld	X,@H'fff9
-	add	X,@(-2,Y)
+	ld	AL,@(H'0003,Y)
+	add	AL,#H'0001
+	st	AL,@(H'0003,Y)
+	cmp	AL,#H'0063
+	bcz	?L168
+	cmp	AL,#(H'0001+H'0077)
+	bcc	?L178
+?L173:
+	ld	X,@$_hb_calc_buff
+	ld	AL,@(H'0003,Y)
+	add	AL,@$XAP_UXL
+	st	AL,@(-1,Y)
+	ld	X,@(H'0002,Y)
+	add	X,@(H'0004,Y)
 	ld	AL,@(0,X)
 	asl	#H'0008
 	and	AL,#H'0F00
 	ld	X,@(-1,Y)
 	st	AL,@(0,X)
-	ld	AL,#H'0001
-	add	AL,@H'fff9
-	st	AL,@H'fff9
+	ld	AL,@(H'0004,Y)
+	add	AL,#H'0001
+	st	AL,@(H'0004,Y)
 	ld	X,@$_hb_calc_buff
-	add	X,@H'fff8
-	st	X,@(H'0003,Y)
-	ld	AH,@$XAP_AL
-	add	AH,@(-2,Y)
+	add	X,@(H'0003,Y)
+	st	X,@(H'0006,Y)
+	ld	AH,@(H'0002,Y)
+	add	AH,@$XAP_AL
 	ld	AL,@(0,X)
 	ld	X,@$XAP_AH
 	add	AL,@(0,X)
-	ld	X,@(H'0003,Y)
+	ld	X,@(H'0006,Y)
 	st	AL,@(0,X)
-	ld	AL,#H'0001
-	add	AL,@H'fff9
-	st	AL,@H'fff9
-	ld	X,#H'0001
-	add	X,@H'fff8
-	st	X,@H'fff8
-	cmp	X,#H'0077
-	bcz	?L172
-?L177:
+	ld	AL,@(H'0004,Y)
+	add	AL,#H'0001
+	st	AL,@(H'0004,Y)
+	ld	AL,@(H'0003,Y)
+	add	AL,#H'0001
+	st	AL,@(H'0003,Y)
+	cmp	AL,#H'0077
+	bcz	?L173
+?L178:
 	ld	AL,@$_hb_calc_buff
 	ld	AH,#H'0078
 	bsr	_Koovox_heartrate_calc
-	st	AL,@(H'0002,Y)
+	st	AL,@(H'0005,Y)
 	st	AL,@(0,Y)
 	ld	AL,#(?LC1)
 	bsr	$_printf
-	ld	AL,@(H'0002,Y)
+	ld	AL,@(H'0005,Y)
 	bsr	_Koovox_heartrate_smooth
-	st	AL,@(H'0002,Y)
+	st	AL,@(H'0005,Y)
 	st	AL,@(0,Y)
 	ld	AL,#(?LC2)
 	bsr	$_printf
-	ld	AL,@(H'0002,Y)
+	ld	AL,@(H'0005,Y)
 	bsr	$_UpdateHeartRateValue
 	bsr	$_isOnlineState
 	cmp	AL,#H'0000
 	beq	?L162
-	ld	AL,#($_koovox+H'001E)
+	ld	AL,#($_koovox+H'0021)
 	st	AL,@(0,Y)
 	ld	AL,#H'0001
 	st	AL,@(H'0001,Y)
@@ -34576,7 +35473,7 @@ $_KoovoxCalculateHeartRate:
 ?L162:
 ?LBE14:
 ?LBE_KoovoxCalculateHeartRate:
-	leavel	#6
+	leavel	#9
 	.SEG	CONST
 ?LC1:
 	dc	H'6F
@@ -34606,14 +35503,58 @@ $_KoovoxCalculateHeartRate:
 	.CODE
 ;.stabn	192,0,0,?LBB14
 ;.stabn	224,0,0,?LBE14
+$_KoovoxResponseHeartRate:
+	enterl	#7
+?LBB_KoovoxResponseHeartRate:
+	ld	X,@$XAP_AL
+?LBB15:
+	cmp	AL,#H'0000
+	beq	?L181
+	cmp	AH,#H'0001
+	bcz	?L181
+?LBB16:
+	ld	AL,@(0,X)
+	ld	AH,@(H'0001,X)
+	st	AH,@(H'0004,Y)
+	cmp	AL,#H'0001
+	bne	?L184
+	cmp	AH,#H'0000
+	bne	?L186
+	bsr	$_Koovox_init_smooth_var
+	bsr	$_Koovox_init_hb_calc_var
+	bra	(?L186)
+?L184:
+	cmp	AL,#H'0002
+	bne	?L186
+	tst	@(H'0004,Y)
+	bne	?L186
+	bsr	$_Koovox_free_hb_calc_var
+	bsr	$_Koovox_free_smooth_var
+?L186:
+	ld	AL,#H'0500
+	st	AL,@(0,Y)
+	ld	AL,#H'0000
+	st	AL,@(H'0001,Y)
+	st	AL,@(H'0002,Y)
+	st	AL,@(H'0003,Y)
+	ld	AL,@(H'0004,Y)
+	ld	AH,#H'2B02
+	bsr	$_SendResponse
+?L181:
+?LBE16:
+?LBE15:
+?LBE_KoovoxResponseHeartRate:
+	leavel	#7
+;.stabn	192,0,0,?LBB16
+;.stabn	224,0,0,?LBE16
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 123 used[1] = 19 used[3] = 2 total = 144
-;# Function pattern *movqi3 used[0] = 108 total = 108
+;# Function pattern *movqi2 used[0] = 129 used[1] = 20 used[3] = 2 total = 151
+;# Function pattern *movqi3 used[0] = 119 total = 119
 ;# Function pattern *movqi8 used[0] = 23 total = 23
 ;# Function pattern *movhi used[2] = 2 total = 2
 ;# Function pattern *addqi0 used[0] = 9 total = 9
-;# Function pattern *addqi2 used[0] = 28 used[2] = 32 total = 60
+;# Function pattern *addqi2 used[0] = 34 used[2] = 26 total = 60
 ;# Function pattern *andqi3 used[0] = 2 total = 2
 ;# Function pattern *subqi3 used[0] = 4 used[1] = 2 total = 6
 ;# Function pattern *udivqi3_const used[0] = 1 total = 1
@@ -34622,12 +35563,12 @@ $_KoovoxCalculateHeartRate:
 ;# Function pattern *lshrqi3 used[0] = 2 total = 2
 ;# Function pattern *ashlqi3 used[0] = 1 total = 1
 ;# Function pattern *zero_extendqihi2_1 used[0] = 1 used[1] = 2 total = 3
-;# Function pattern jump used[0] = 14 total = 14
-;# Function pattern *call1 used[0] = 6 total = 6
-;# Function pattern *call_value1 used[0] = 18 total = 18
-;# Function pattern movstrqi+3 used[0] = 5 used[1] = 9 total = 14
+;# Function pattern jump used[0] = 15 total = 15
+;# Function pattern *call1 used[0] = 11 total = 11
+;# Function pattern *call_value1 used[0] = 19 total = 19
+;# Function pattern movstrqi+3 used[0] = 8 used[1] = 10 total = 18
 ;# Function pattern movstrqi+4 used[1] = 6 used[2] = 3 total = 9
-;# Function pattern movstrqi+5 used[0] = 35 total = 35
+;# Function pattern movstrqi+5 used[0] = 38 total = 38
 	MODULE	sink_indicators
 	.LARGE
 ; GNU C version 3.3.3 (CSR version 30 for xapnative)
@@ -36167,21 +37108,46 @@ _UARTStreamMessageHandler:
 ?L19:
 ?LBE_UARTStreamMessageHandler:
 	leavel	#2
+_KoovoxResponseFrameError:
+	enterl	#4
+?LBB_KoovoxResponseFrameError:
+	ld	X,@$XAP_AL
+?LBB4:
+	and	X,#H'00FF
+	ld	AH,@$XAP_AL
+	lsr	#H'0008
+	and	AH,#H'00FF
+	cmp	AH,#H'0010
+	bne	?L25
+	cmp	X,#H'0001
+	bne	?L25
+	ld	AL,#H'0000
+	st	AL,@(0,Y)
+	st	AL,@(H'0001,Y)
+	ld	AL,#H'0001
+	ld	AH,#H'0010
+	bsr	$_KoovoxFillAndSendUartPacket
+?L25:
+?LBE4:
+?LBE_KoovoxResponseFrameError:
+	leavel	#4
+;.stabn	192,0,0,?LBB4
+;.stabn	224,0,0,?LBE4
 _KoovoxUartMessageHandle:
 	enterl	#9
 ?LBB_KoovoxUartMessageHandle:
 	st	AL,@(H'0002,Y)
 	st	AH,@(H'0003,Y)
-?LBB4:
+?LBB5:
 	st	AL,@(H'0004,Y)
 	cmp	AL,#H'0000
-	beq	?L25
+	beq	?L33
 	ld	AL,@$XAP_AH
 	add	AL,#-H'0005
 	ld	X,@(H'0004,Y)
 	cmp	AL,@(H'0002,X)
-	bcs	?L25
-?LBB5:
+	bcs	?L33
+?LBB6:
 	ld	AL,@$XAP_AH
 	lsl	#H'0010
 	asr	#H'000E
@@ -36190,8 +37156,8 @@ _KoovoxUartMessageHandle:
 	ld	AH,#H'0000
 	st	AH,@(H'0006,Y)
 	cmp	AH,@(H'0003,Y)
-	bcc	?L55
-?L32:
+	bcc	?L67
+?L40:
 	ld	AL,@(H'0006,Y)
 	smult	#H'0003
 	ld	AH,@(H'0005,Y)
@@ -36207,8 +37173,8 @@ _KoovoxUartMessageHandle:
 	add	AL,#H'0001
 	st	AL,@(H'0006,Y)
 	cmp	AL,@(H'0003,Y)
-	bcs	?L32
-?L55:
+	bcs	?L40
+?L67:
 	ld	AL,@(H'0005,Y)
 	bsr	$_printf
 	ld	AL,@(H'0005,Y)
@@ -36216,36 +37182,132 @@ _KoovoxUartMessageHandle:
 	ld	AL,#H'000A
 	bsr	$_putchar
 	ld	X,@(H'0004,Y)
-?LBE5:
+?LBE6:
 	ld	AL,@(0,X)
 	cmp	AL,#H'0003
-	beq	?L34
+	beq	?L42
 	cmp	AL,#H'0006
-	beq	?L39
-	bra	(?L25)
-?L34:
+	beq	?L52
+	bra	(?L33)
+?L42:
 	ld	AL,#H'0001
 	st	AL,@$_respond_flag
-	bra	(?L25)
-?L39:
+	ld	X,@(H'0004,Y)
+	ld	AL,@(H'0001,X)
+	cmp	AL,#H'0010
+	beq	?L46
+	cmp	AL,#(H'0001+H'0010)
+	bcc	?L51
+	cmp	AL,#H'0002
+	beq	?L47
+	cmp	AL,#H'0004
+	beq	?L45
+	bra	(?L33)
+?L51:
+	cmp	AL,#H'0020
+	beq	?L44
+	cmp	AL,#H'00FF
+	beq	?L48
+	bra	(?L33)
+?L44:
+	ld	AL,@(H'0004,Y)
+	add	AL,#H'0003
+	ld	X,@(H'0004,Y)
+	ld	AH,@(H'0002,X)
+	bsr	$_KoovoxResponseHeartRate
+	bra	(?L33)
+?L45:
+	ld	AL,@(H'0004,Y)
+	add	AL,#H'0003
+	ld	X,@(H'0004,Y)
+	ld	AH,@(H'0002,X)
+	bsr	$_KoovoxResponseNeckProtect
+	bra	(?L33)
+?L46:
+	ld	AL,@(H'0004,Y)
+	add	AL,#H'0003
+	ld	X,@(H'0004,Y)
+	ld	AH,@(H'0002,X)
+	bsr	$_KoovoxResponseStepCount
+	bra	(?L33)
+?L47:
+	ld	AL,@(H'0004,Y)
+	add	AL,#H'0003
+	ld	X,@(H'0004,Y)
+	ld	AH,@(H'0002,X)
+	bsr	$_KoovoxResponseConstSeat
+	bra	(?L33)
+?L48:
+	ld	AL,@$_koovox+H'0010
+	bsr	_KoovoxResponseFrameError
+	bra	(?L33)
+?L52:
 	ld	X,@(H'0004,Y)
 	ld	AL,@(H'0001,X)
 	cmp	AL,#H'0008
-	beq	?L25
-	cmp	AL,#H'0008
-	bcz	?L25
+	beq	?L57
+	cmp	AL,#(H'0001+H'0008)
+	bcc	?L62
+	cmp	AL,#H'0002
+	beq	?L56
+	cmp	AL,#H'0004
+	beq	?L55
+	bra	(?L33)
+?L62:
 	cmp	AL,#H'0020
-	bne	?L25
-	bsr	$_GetSampleStatus
-	cmp	AL,#H'0000
-	beq	?L25
+	beq	?L58
+	cmp	AL,#(H'0001+H'0020)
+	bcc	?L63
+	cmp	AL,#H'0010
+	beq	?L54
+	bra	(?L33)
+?L63:
+	cmp	AL,#H'0040
+	beq	?L59
+	bra	(?L33)
+?L54:
+	ld	AL,@(H'0004,Y)
+	add	AL,#H'0003
+	ld	X,@(H'0004,Y)
+	ld	AH,@(H'0002,X)
+	bsr	$_KoovoxCountStep
+	bra	(?L33)
+?L55:
+	ld	AL,@(H'0004,Y)
+	add	AL,#H'0003
+	ld	X,@(H'0004,Y)
+	ld	AH,@(H'0002,X)
+	bsr	$_KoovoxProtectNeck
+	bra	(?L33)
+?L56:
+	ld	AL,@(H'0004,Y)
+	add	AL,#H'0003
+	ld	X,@(H'0004,Y)
+	ld	AH,@(H'0002,X)
+	bsr	$_KoovoxConstSeat
+	bra	(?L33)
+?L57:
+	ld	AL,@(H'0004,Y)
+	add	AL,#H'0003
+	ld	X,@(H'0004,Y)
+	ld	AH,@(H'0002,X)
+	bsr	$_KoovoxHeadAction
+	bra	(?L33)
+?L58:
 	ld	AL,@(H'0004,Y)
 	add	AL,#H'0003
 	ld	X,@(H'0004,Y)
 	ld	AH,@(H'0002,X)
 	bsr	$_KoovoxCalculateHeartRate
-?L25:
-?LBE4:
+	bra	(?L33)
+?L59:
+	ld	AL,@(H'0004,Y)
+	add	AL,#H'0003
+	ld	X,@(H'0004,Y)
+	ld	AH,@(H'0002,X)
+	bsr	$_KoovoxResultI2cTest
+?L33:
+?LBE5:
 ?LBE_KoovoxUartMessageHandle:
 	leavel	#9
 	.SEG	CONST
@@ -36256,26 +37318,26 @@ _KoovoxUartMessageHandle:
 	dc	H'20
 	dc	H'00
 	.CODE
-;.stabn	192,0,0,?LBB4
 ;.stabn	192,0,0,?LBB5
+;.stabn	192,0,0,?LBB6
+;.stabn	224,0,0,?LBE6
 ;.stabn	224,0,0,?LBE5
-;.stabn	224,0,0,?LBE4
 $_KoovoxFillAndSendUartPacket:
 	enterl	#11
 ?LBB_KoovoxFillAndSendUartPacket:
 	st	AL,@(H'0002,Y)
 	st	AH,@(H'0003,Y)
-?LBB6:
+?LBB7:
 	tst	@(H'000C,Y)
-	beq	?L65
+	beq	?L85
 	ld	AH,@(H'000C,Y)
 	add	AH,#H'0005
 	st	AH,@(H'0004,Y)
-	bra	(?L66)
-?L65:
+	bra	(?L86)
+?L85:
 	ld	AL,#H'0006
 	st	AL,@(H'0004,Y)
-?L66:
+?L86:
 	ld	AL,@(H'0004,Y)
 	bsr	$_malloc
 	st	AL,@(H'0005,Y)
@@ -36289,12 +37351,12 @@ $_KoovoxFillAndSendUartPacket:
 	ld	AL,#H'0003
 	st	AL,@H'fff8
 	cmp	AH,#H'0001
-	bcz	?L67
-?LBB7:
+	bcz	?L87
+?LBB8:
 	ld	AH,#H'0000
 	cmp	AH,@(H'000C,Y)
-	bcc	?L73
-?L72:
+	bcc	?L93
+?L92:
 	ld	X,@(H'0005,Y)
 	add	X,@H'fff8
 	st	X,@(H'0008,Y)
@@ -36309,12 +37371,12 @@ $_KoovoxFillAndSendUartPacket:
 	st	AL,@H'fff8
 	add	AH,#H'0001
 	cmp	AH,@(H'000C,Y)
-	bcs	?L72
-?LBE7:
-	bra	(?L73)
-?L67:
+	bcs	?L92
+?LBE8:
+	bra	(?L93)
+?L87:
 	tst	@(H'000B,Y)
-	beq	?L74
+	beq	?L94
 	ld	AH,@(H'0005,Y)
 	add	AH,@$XAP_AL
 	ld	X,@(H'000B,Y)
@@ -36324,8 +37386,8 @@ $_KoovoxFillAndSendUartPacket:
 	ld	AH,#H'0001
 	add	AH,@H'fff8
 	st	AH,@H'fff8
-	bra	(?L73)
-?L74:
+	bra	(?L93)
+?L94:
 	ld	X,@(H'0005,Y)
 	add	X,@$XAP_AL
 	ld	AL,#H'0000
@@ -36333,7 +37395,7 @@ $_KoovoxFillAndSendUartPacket:
 	ld	AL,#H'0001
 	add	AL,@H'fff8
 	st	AL,@H'fff8
-?L73:
+?L93:
 	ld	X,@(H'0005,Y)
 	add	X,@H'fff8
 	ld	AL,#H'007B
@@ -36345,7 +37407,7 @@ $_KoovoxFillAndSendUartPacket:
 	ld	AL,@(H'0005,Y)
 	ld	AH,@(H'0004,Y)
 	bsr	_uart_data_stream_tx_data
-?LBB8:
+?LBB9:
 	ld	AL,@(H'0004,Y)
 	lsl	#H'0010
 	asr	#H'000E
@@ -36354,8 +37416,8 @@ $_KoovoxFillAndSendUartPacket:
 	ld	AH,#H'0000
 	st	AH,@(H'0007,Y)
 	cmp	AH,@(H'0004,Y)
-	bcc	?L84
-?L80:
+	bcc	?L104
+?L100:
 	ld	AL,@(H'0007,Y)
 	smult	#H'0003
 	ld	AH,@(H'0006,Y)
@@ -36371,42 +37433,45 @@ $_KoovoxFillAndSendUartPacket:
 	add	AL,#H'0001
 	st	AL,@(H'0007,Y)
 	cmp	AL,@(H'0004,Y)
-	bcs	?L80
-?L84:
+	bcs	?L100
+?L104:
 	ld	AL,@(H'0006,Y)
 	bsr	$_printf
 	ld	AL,@(H'0006,Y)
 	bsr	$_free
 	ld	AL,#H'000A
 	bsr	$_putchar
-?LBE8:
+?LBE9:
 	ld	AL,@(H'0005,Y)
 	bsr	$_free
-?LBE6:
+?LBE7:
 ?LBE_KoovoxFillAndSendUartPacket:
 	leavel	#11
-;.stabn	192,0,0,?LBB6
 ;.stabn	192,0,0,?LBB7
-;.stabn	224,0,0,?LBE7
 ;.stabn	192,0,0,?LBB8
 ;.stabn	224,0,0,?LBE8
-;.stabn	224,0,0,?LBE6
+;.stabn	192,0,0,?LBB9
+;.stabn	224,0,0,?LBE9
+;.stabn	224,0,0,?LBE7
 	.SEG	VAR
 $_theUARTStreamTask:
 	DS	4
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 61 used[1] = 17 total = 78
-;# Function pattern *movqi3 used[0] = 66 total = 66
+;# Function pattern *movqi2 used[0] = 65 used[1] = 17 total = 82
+;# Function pattern *movqi3 used[0] = 99 total = 99
 ;# Function pattern *movqi8 used[0] = 11 total = 11
 ;# Function pattern *movhi used[2] = 1 used[3] = 1 total = 2
-;# Function pattern *addqi2 used[0] = 18 used[2] = 6 total = 24
+;# Function pattern *addqi2 used[0] = 27 used[2] = 6 total = 33
+;# Function pattern *andqi3 used[0] = 2 total = 2
 ;# Function pattern *mulqi3_const used[0] = 4 total = 4
-;# Function pattern jump used[0] = 5 total = 5
-;# Function pattern *call1 used[0] = 12 total = 12
-;# Function pattern *call_value1 used[0] = 29 total = 29
-;# Function pattern movstrqi+3 used[0] = 4 used[1] = 2 total = 6
-;# Function pattern movstrqi+5 used[0] = 18 total = 18
+;# Function pattern *lshrqi3 used[0] = 1 total = 1
+;# Function pattern jump used[0] = 19 total = 19
+;# Function pattern *call1 used[0] = 23 total = 23
+;# Function pattern *call_value1 used[0] = 28 total = 28
+;# Function pattern movstrqi+3 used[0] = 3 used[1] = 2 total = 5
+;# Function pattern movstrqi+4 used[1] = 3 total = 3
+;# Function pattern movstrqi+5 used[0] = 28 total = 28
 	MODULE	sink_led_manager
 	.LARGE
 ; GNU C version 3.3.3 (CSR version 30 for xapnative)

@@ -64,4 +64,5 @@ sink_koovox_uart.o: sink_koovox_uart.c sink_koovox_uart.h \
   C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/gatt.h \
   sink_gatt_server_bas.h sink_gatt_client.h sink_app_core.h \
   sink_app_message.h sink_app_task.h \
-  C:/ADK3.5/tools/include/firmware/partition.h sink_heart_rate_calc.h
+  C:/ADK3.5/tools/include/firmware/partition.h sink_heart_rate_calc.h \
+  sink_handle_accelerate_data.h
