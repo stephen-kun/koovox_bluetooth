@@ -1,0 +1,3065 @@
+[00000000.0003] Kalimba plugin built on Aug  1 2014
+[00000000.0003] KalEnv constructor called
+[00000000.0152] KalEnv destructed
+[00000000.0170] KalEnv constructor called
+[00000000.0297] KalEnv destructed
+[00000000.0299] KalEnv constructor called
+[00000000.0438] KalEnv destructed
+[00000000.0591] KalEnv constructor called
+[00000000.0725] KalEnv destructed
+[00000000.0744] KalEnv constructor called
+[00000000.0886] KalEnv destructed
+[00000000.0888] KalEnv constructor called
+[00000000.1042] KalEnv destructed
+[00000000.1178] KalEnv constructor called
+[00000000.1294] KalEnv destructed
+[00000000.1311] KalEnv constructor called
+[00000000.1426] KalEnv destructed
+[00000000.1427] KalEnv constructor called
+[00000000.1541] KalEnv destructed
+[00000000.1636] KalEnv constructor called
+[00000000.1752] KalEnv destructed
+[00000000.1768] KalEnv constructor called
+[00000000.1884] KalEnv destructed
+[00000000.1885] KalEnv constructor called
+[00000000.2007] KalEnv destructed
+[00000000.2088] KalEnv constructor called
+[00000000.2210] KalEnv destructed
+[00000000.2226] KalEnv constructor called
+[00000000.2345] KalEnv destructed
+[00000000.2346] KalEnv constructor called
+[00000000.2469] KalEnv destructed
+[00000007.2610] KalEnv constructor called
+[00000007.2798] KalEnv::init()
+[00000007.2825] Loading symbols from 'C:/ADK3.5/kalimba/apps/cvc_headset/cvc_headset.elf'...
+[00000007.4142] KalEnv constructor called
+[00000007.4341] KalEnv::init()
+[00000007.4369] Loading symbols from 'C:/ADK3.5/kalimba/apps/cvc_headset_2mic/cvc_headset_2mic.elf'...
+[00000007.5556] KalEnv constructor called
+[00000007.5741] KalEnv::init()
+[00000007.5766] Loading symbols from 'C:/ADK3.5/kalimba/apps/cvc_handsfree_2mic/cvc_handsfree_2mic.elf'...
+[00000007.7061] KalEnv constructor called
+[00000007.7231] KalEnv::init()
+[00000007.7258] Loading symbols from 'C:/ADK3.5/kalimba/apps/cvc_handsfree/cvc_handsfree.elf'...
+[00000007.8432] KalEnv constructor called
+[00000007.8618] KalEnv::init()
+[00000007.8649] Loading symbols from 'C:/ADK3.5/kalimba/apps/a2dp_sink/sbc_decoder.elf'...
+[00000008.0308] KalEnv constructor called
+[00000008.0489] KalEnv::init()
+[00000008.0521] Loading symbols from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_2mic/a2dp_low_latency_2mic.elf'...
+[00000008.1920] KalEnv constructor called
+[00000008.2092] KalEnv::init()
+[00000008.2123] Loading symbols from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_1mic/a2dp_low_latency_1mic.elf'...
+[00000008.3479] KalEnv constructor called
+[00000008.3671] KalEnv::init()
+[00000008.3701] Loading symbols from 'C:/ADK3.5/kalimba/apps/a2dp_sink/spdif_sink.elf'...
+[00000008.5387] KalEnv constructor called
+[00000008.5556] KalEnv::init()
+[00000008.5589] Loading symbols from 'C:/ADK3.5/kalimba/apps/a2dp_sink/faststream_decoder.elf'...
+[00000008.9115] KalEnv constructor called
+[00000008.9292] KalEnv::init()
+[00000008.9320] Loading symbols from 'C:/ADK3.5/kalimba/apps/vee_heartrate/vee_heartrate.elf'...
+[00000411.8708] KalEnv::load
+[00000411.8712] KalEnv::createDebugger
+[00000411.8712] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00000413.5630] Kal: Attaching to a gordon
+[00000413.5634] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset/cvc_headset.elf'...
+[00000413.5634] KalEnv::loadMemoryMap
+[00000413.5651] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00000413.5865] Kal: Loaded kalimba/gordon_peripherals.xml
+[00000413.6126] KalEnv::load
+[00000413.6130] KalEnv::createDebugger
+[00000413.6130] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00000413.7424] Kal: Attaching to a gordon
+[00000413.7427] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset_2mic/cvc_headset_2mic.elf'...
+[00000413.7427] KalEnv::loadMemoryMap
+[00000413.7436] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00000413.7543] Kal: Loaded kalimba/gordon_peripherals.xml
+[00000413.7620] KalEnv::load
+[00000413.7624] KalEnv::createDebugger
+[00000413.7624] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00000413.8995] Kal: Attaching to a gordon
+[00000413.9001] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree_2mic/cvc_handsfree_2mic.elf'...
+[00000413.9002] KalEnv::loadMemoryMap
+[00000413.9022] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00000413.9217] Kal: Loaded kalimba/gordon_peripherals.xml
+[00000413.9307] KalEnv::load
+[00000413.9313] KalEnv::createDebugger
+[00000413.9313] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00000414.0610] Kal: Attaching to a gordon
+[00000414.0613] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree/cvc_handsfree.elf'...
+[00000414.0613] KalEnv::loadMemoryMap
+[00000414.0624] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00000414.0766] Kal: Loaded kalimba/gordon_peripherals.xml
+[00000414.0830] KalEnv::load
+[00000414.0839] KalEnv::createDebugger
+[00000414.0840] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00000414.2166] Kal: Attaching to a gordon
+[00000414.2170] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/sbc_decoder.elf'...
+[00000414.2171] KalEnv::loadMemoryMap
+[00000414.2187] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00000414.2370] Kal: Loaded kalimba/gordon_peripherals.xml
+[00000414.2462] KalEnv::load
+[00000414.2466] KalEnv::createDebugger
+[00000414.2467] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00000414.3769] Kal: Attaching to a gordon
+[00000414.3773] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_2mic/a2dp_low_latency_2mic.elf'...
+[00000414.3773] KalEnv::loadMemoryMap
+[00000414.3787] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00000414.4027] Kal: Loaded kalimba/gordon_peripherals.xml
+[00000414.4137] KalEnv::load
+[00000414.4148] KalEnv::createDebugger
+[00000414.4148] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00000414.5417] Kal: Attaching to a gordon
+[00000414.5419] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_1mic/a2dp_low_latency_1mic.elf'...
+[00000414.5419] KalEnv::loadMemoryMap
+[00000414.5428] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00000414.5604] Kal: Loaded kalimba/gordon_peripherals.xml
+[00000414.5696] KalEnv::load
+[00000414.5704] KalEnv::createDebugger
+[00000414.5705] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00000414.7045] Kal: Attaching to a gordon
+[00000414.7049] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/spdif_sink.elf'...
+[00000414.7049] KalEnv::loadMemoryMap
+[00000414.7066] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00000414.7274] Kal: Loaded kalimba/gordon_peripherals.xml
+[00000414.7330] KalEnv::load
+[00000414.7338] KalEnv::createDebugger
+[00000414.7339] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00000414.8650] Kal: Attaching to a gordon
+[00000414.8654] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/faststream_decoder.elf'...
+[00000414.8654] KalEnv::loadMemoryMap
+[00000414.8673] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00000414.8903] Kal: Loaded kalimba/gordon_peripherals.xml
+[00000414.9057] KalEnv::load
+[00000414.9062] KalEnv::createDebugger
+[00000414.9062] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00000415.0463] Kal: Attaching to a gordon
+[00000415.0469] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/vee_heartrate/vee_heartrate.elf'...
+[00000415.0470] KalEnv::loadMemoryMap
+[00000415.0492] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00000415.0705] Kal: Loaded kalimba/gordon_peripherals.xml
+[00000415.2064] KalEnv::setActive 0
+[00000415.3082] KalEnv::setActive 0
+[00000415.3391] KalEnv::setActive 0
+[00000415.3662] KalEnv::setActive 0
+[00000415.3921] KalEnv::setActive 0
+[00000415.4137] KalEnv::setActive 0
+[00000415.4329] KalEnv::setActive 0
+[00000415.4506] KalEnv::setActive 0
+[00000415.4628] KalEnv::setActive 0
+[00000415.4730] KalEnv::setActive 0
+[00000433.6975] KalEnv::stopRunning
+[00000433.6976] KalEnv::stopRunning
+[00000433.6976] KalEnv::stopRunning
+[00000433.6976] KalEnv::stopRunning
+[00000433.6977] KalEnv::stopRunning
+[00000433.6977] KalEnv::stopRunning
+[00000433.6977] KalEnv::stopRunning
+[00000433.6977] KalEnv::stopRunning
+[00000433.6977] KalEnv::stopRunning
+[00000433.6977] KalEnv::stopRunning
+[00000433.6977] KalEnv::startRunning
+[00000433.7439] KalEnv::go
+[00000433.7708] KalEnv::kalStateChanged to 2
+[00000617.9836] KalEnv::kalStateChanged to 6
+[00001773.1826] <font size=4><b>Kal: Error: Could not acquire interlock - reqBadTransBroken<br></b></font>
+[00001773.1845] <font size=4><b>Kal: Error: Transport failure (Verified read failed) - Couldn't read dsp_enables register<br></b></font>
+[00001773.4357] <font size=4><b>Kal: Error: Could not acquire interlock - reqBadTransBroken<br></b></font>
+[00001773.6877] <font size=4><b>Kal: Error: Could not acquire interlock - reqBadTransBroken<br></b></font>
+[00001773.6878] <font size=4><b>Kal: Could not acquire interlock - reqBadTransBroken<br></b></font>
+[00001773.6878] <font size=4><b>Kal: Too many transport failures. Disconnecting<br></b></font>
+[00001773.6878] <font size=4><b>Kal: Transport string was: <br></b></font>
+[00001774.4839] <font size=4><b>Kal: Error: Transport failure (Verified read failed) - Couldn't read dsp_enables register<br></b></font>
+[00001774.4840] <font size=4><b>Kal: Transport failure (Verified read failed) - Couldn't read dsp_enables register<br></b></font>
+[00001774.4840] <font size=4><b>Kal: Too many transport failures. Disconnecting<br></b></font>
+[00001774.4841] <font size=4><b>Kal: Transport string was: <br></b></font>
+[00001774.4851] KalEnv::setActive 1
+[00001774.4981] KalEnv::setActive 1
+[00001774.5130] KalEnv::setActive 1
+[00001774.5331] KalEnv::setActive 1
+[00001774.5532] KalEnv::setActive 1
+[00001774.5759] KalEnv::setActive 1
+[00001774.6022] KalEnv::setActive 1
+[00001774.6321] KalEnv::setActive 1
+[00001774.6649] KalEnv::setActive 1
+[00001774.7016] KalEnv::setActive 1
+[00001774.7085] KalEnv::stop
+[00001775.2475] KalEnv::stop
+[00001776.0097] KalEnv::stop
+[00001776.7681] KalEnv::stop
+[00001777.5250] KalEnv::stop
+[00001778.2894] KalEnv::stop
+[00001779.0471] KalEnv::stop
+[00001779.8070] KalEnv::stop
+[00001780.5643] KalEnv::stop
+[00001781.3228] KalEnv::stop
+[00001781.4253] <font size=4><b>Kal: Error: kalaccess library not initialized<br></b></font>
+[00001781.5477] <font size=4><b>Kal: Error: kalaccess library not initialized<br></b></font>
+[00001781.5482] KalEnv::setActive 1
+[00001781.5482] KalEnv::setActive 1
+[00001781.5482] KalEnv::setActive 1
+[00001781.5482] KalEnv::setActive 1
+[00001781.5482] KalEnv::setActive 1
+[00001781.5482] KalEnv::setActive 1
+[00001781.5482] KalEnv::setActive 1
+[00001781.5482] KalEnv::setActive 1
+[00001781.5482] KalEnv::setActive 1
+[00001781.5482] KalEnv::setActive 1
+[00001781.5482] KalEnv::stop
+[00001781.5488] KalEnv::stop
+[00001781.5492] KalEnv::stop
+[00001781.5496] KalEnv::stop
+[00001781.5500] KalEnv::stop
+[00001781.5508] KalEnv::stop
+[00001781.5512] KalEnv::stop
+[00001781.5516] KalEnv::stop
+[00001781.5520] KalEnv::stop
+[00001781.5524] KalEnv::stop
+[00002026.6708] KalEnv::load
+[00002026.6714] KalEnv::createDebugger
+[00002026.6715] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00002028.5852] Kal: Attaching to a gordon
+[00002028.5858] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset/cvc_headset.elf'...
+[00002028.5859] KalEnv::loadMemoryMap
+[00002028.5881] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00002028.6176] Kal: Loaded kalimba/gordon_peripherals.xml
+[00002028.6381] KalEnv::load
+[00002028.6386] KalEnv::createDebugger
+[00002028.6387] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00002028.7685] Kal: Attaching to a gordon
+[00002028.7689] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset_2mic/cvc_headset_2mic.elf'...
+[00002028.7690] KalEnv::loadMemoryMap
+[00002028.7703] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00002028.7885] Kal: Loaded kalimba/gordon_peripherals.xml
+[00002028.7962] KalEnv::load
+[00002028.7971] KalEnv::createDebugger
+[00002028.7972] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00002028.9576] Kal: Attaching to a gordon
+[00002028.9582] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree_2mic/cvc_handsfree_2mic.elf'...
+[00002028.9583] KalEnv::loadMemoryMap
+[00002028.9605] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00002028.9856] Kal: Loaded kalimba/gordon_peripherals.xml
+[00002028.9916] KalEnv::load
+[00002028.9921] KalEnv::createDebugger
+[00002028.9922] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00002029.1156] Kal: Attaching to a gordon
+[00002029.1162] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree/cvc_handsfree.elf'...
+[00002029.1162] KalEnv::loadMemoryMap
+[00002029.1181] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00002029.1401] Kal: Loaded kalimba/gordon_peripherals.xml
+[00002029.1558] KalEnv::load
+[00002029.1573] KalEnv::createDebugger
+[00002029.1574] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00002029.3093] Kal: Attaching to a gordon
+[00002029.3097] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/sbc_decoder.elf'...
+[00002029.3098] KalEnv::loadMemoryMap
+[00002029.3115] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00002029.3329] Kal: Loaded kalimba/gordon_peripherals.xml
+[00002029.3381] KalEnv::load
+[00002029.3385] KalEnv::createDebugger
+[00002029.3386] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00002029.4792] Kal: Attaching to a gordon
+[00002029.4796] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_2mic/a2dp_low_latency_2mic.elf'...
+[00002029.4797] KalEnv::loadMemoryMap
+[00002029.4813] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00002029.5027] Kal: Loaded kalimba/gordon_peripherals.xml
+[00002029.5117] KalEnv::load
+[00002029.5122] KalEnv::createDebugger
+[00002029.5122] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00002029.6547] Kal: Attaching to a gordon
+[00002029.6552] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_1mic/a2dp_low_latency_1mic.elf'...
+[00002029.6552] KalEnv::loadMemoryMap
+[00002029.6569] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00002029.6787] Kal: Loaded kalimba/gordon_peripherals.xml
+[00002029.6923] KalEnv::load
+[00002029.6933] KalEnv::createDebugger
+[00002029.6934] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00002029.8340] Kal: Attaching to a gordon
+[00002029.8346] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/spdif_sink.elf'...
+[00002029.8347] KalEnv::loadMemoryMap
+[00002029.8371] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00002029.8635] Kal: Loaded kalimba/gordon_peripherals.xml
+[00002029.8692] KalEnv::load
+[00002029.8701] KalEnv::createDebugger
+[00002029.8702] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00002030.0126] Kal: Attaching to a gordon
+[00002030.0132] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/faststream_decoder.elf'...
+[00002030.0132] KalEnv::loadMemoryMap
+[00002030.0155] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00002030.0356] Kal: Loaded kalimba/gordon_peripherals.xml
+[00002030.0481] KalEnv::load
+[00002030.0487] KalEnv::createDebugger
+[00002030.0488] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00002030.1946] Kal: Attaching to a gordon
+[00002030.1950] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/vee_heartrate/vee_heartrate.elf'...
+[00002030.1950] KalEnv::loadMemoryMap
+[00002030.1964] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00002030.2146] Kal: Loaded kalimba/gordon_peripherals.xml
+[00002030.2250] KalEnv::setActive 0
+[00002030.2730] KalEnv::setActive 0
+[00002030.3086] KalEnv::setActive 0
+[00002030.3378] KalEnv::setActive 0
+[00002030.3632] KalEnv::setActive 0
+[00002030.3863] KalEnv::setActive 0
+[00002030.4061] KalEnv::setActive 0
+[00002030.4230] KalEnv::setActive 0
+[00002030.4376] KalEnv::setActive 0
+[00002030.4496] KalEnv::setActive 0
+[00002092.7952] KalEnv::stopRunning
+[00002092.7953] KalEnv::stopRunning
+[00002092.7953] KalEnv::stopRunning
+[00002092.7953] KalEnv::stopRunning
+[00002092.7953] KalEnv::stopRunning
+[00002092.7953] KalEnv::stopRunning
+[00002092.7953] KalEnv::stopRunning
+[00002092.7953] KalEnv::stopRunning
+[00002092.7953] KalEnv::stopRunning
+[00002092.7953] KalEnv::stopRunning
+[00002092.7953] KalEnv::startRunning
+[00002092.8252] KalEnv::go
+[00002092.8498] KalEnv::kalStateChanged to 2
+[00002434.4865] KalEnv::kalStateChanged to 6
+[00002968.8220] KalEnv::stopRunning
+[00002968.8221] KalEnv::stopRunning
+[00002968.8221] KalEnv::stopRunning
+[00002968.8221] KalEnv::stopRunning
+[00002968.8222] KalEnv::stopRunning
+[00002968.8222] KalEnv::stopRunning
+[00002968.8222] KalEnv::stopRunning
+[00002968.8222] KalEnv::stopRunning
+[00002968.8223] KalEnv::stopRunning
+[00002968.8223] KalEnv::stopRunning
+[00002969.0524] KalEnv::startRunning
+[00002969.0760] KalEnv::go
+[00002969.1047] KalEnv::kalStateChanged to 2
+[00003024.3382] KalEnv::kalStateChanged to 6
+[00003220.8486] KalEnv::stopRunning
+[00003220.8487] KalEnv::stopRunning
+[00003220.8487] KalEnv::stopRunning
+[00003220.8487] KalEnv::stopRunning
+[00003220.8487] KalEnv::stopRunning
+[00003220.8487] KalEnv::stopRunning
+[00003220.8487] KalEnv::stopRunning
+[00003220.8487] KalEnv::stopRunning
+[00003220.8488] KalEnv::stopRunning
+[00003220.8488] KalEnv::stopRunning
+[00003221.0145] KalEnv::startRunning
+[00003221.0336] KalEnv::go
+[00003221.0596] KalEnv::kalStateChanged to 2
+[00003740.9934] KalEnv::kalStateChanged to 6
+[00003747.8354] KalEnv::kalStateChanged to 3
+[00003747.8814] KalEnv::stopRunning
+[00003747.8815] KalEnv::stopRunning
+[00003747.8815] KalEnv::stopRunning
+[00003747.8816] KalEnv::stopRunning
+[00003747.8816] KalEnv::stopRunning
+[00003747.8816] KalEnv::stopRunning
+[00003747.8816] KalEnv::stopRunning
+[00003747.8816] KalEnv::stopRunning
+[00003747.8817] KalEnv::stopRunning
+[00003747.8817] KalEnv::stopRunning
+[00003748.0515] KalEnv::startRunning
+[00003748.0654] KalEnv::go
+[00003748.2219] KalEnv::kalStateChanged to 2
+[00003771.8521] KalEnv::kalStateChanged to 6
+[00003832.7514] KalEnv::stopRunning
+[00003832.7515] KalEnv::stopRunning
+[00003832.7515] KalEnv::stopRunning
+[00003832.7516] KalEnv::stopRunning
+[00003832.7516] KalEnv::stopRunning
+[00003832.7516] KalEnv::stopRunning
+[00003832.7517] KalEnv::stopRunning
+[00003832.7517] KalEnv::stopRunning
+[00003832.7517] KalEnv::stopRunning
+[00003832.7517] KalEnv::stopRunning
+[00003832.9670] KalEnv::startRunning
+[00003832.9934] KalEnv::go
+[00003833.0302] KalEnv::kalStateChanged to 2
+[00003889.2831] KalEnv::kalStateChanged to 6
+[00004672.7058] KalEnv::setActive 0
+[00004672.7058] KalEnv::setActive 0
+[00004672.7059] KalEnv::setActive 0
+[00004672.7059] KalEnv::setActive 0
+[00004672.7059] KalEnv::setActive 0
+[00004672.7059] KalEnv::setActive 0
+[00004672.7059] KalEnv::setActive 0
+[00004672.7059] KalEnv::setActive 0
+[00004672.7059] KalEnv::setActive 0
+[00004672.7059] KalEnv::setActive 0
+[00004686.0268] KalEnv::stopRunning
+[00004686.0269] KalEnv::stopRunning
+[00004686.0270] KalEnv::stopRunning
+[00004686.0270] KalEnv::stopRunning
+[00004686.0271] KalEnv::stopRunning
+[00004686.0271] KalEnv::stopRunning
+[00004686.0271] KalEnv::stopRunning
+[00004686.0271] KalEnv::stopRunning
+[00004686.0272] KalEnv::stopRunning
+[00004686.0272] KalEnv::stopRunning
+[00004686.0273] KalEnv::startRunning
+[00004686.0980] KalEnv::go
+[00004686.1127] KalEnv::kalStateChanged to 3
+[00004686.1436] KalEnv::kalStateChanged to 2
+[00004711.8584] KalEnv::kalStateChanged to 6
+[00004725.6344] KalEnv::setActive 0
+[00004725.6344] KalEnv::setActive 0
+[00004725.6345] KalEnv::setActive 0
+[00004725.6345] KalEnv::setActive 0
+[00004725.6345] KalEnv::setActive 0
+[00004725.6345] KalEnv::setActive 0
+[00004725.6345] KalEnv::setActive 0
+[00004725.6345] KalEnv::setActive 0
+[00004725.6345] KalEnv::setActive 0
+[00004725.6345] KalEnv::setActive 0
+[00004734.2833] KalEnv::setActive 1
+[00004734.3124] KalEnv::setActive 1
+[00004734.3234] KalEnv::setActive 1
+[00004734.3372] KalEnv::setActive 1
+[00004734.3554] KalEnv::setActive 1
+[00004734.3744] KalEnv::setActive 1
+[00004734.3962] KalEnv::setActive 1
+[00004734.4198] KalEnv::setActive 1
+[00004734.4472] KalEnv::setActive 1
+[00004734.4774] KalEnv::setActive 1
+[00004734.5274] KalEnv::stop
+[00004734.5394] KalEnv::stop
+[00004734.5480] KalEnv::stop
+[00004734.5568] KalEnv::stop
+[00004734.5626] KalEnv::stop
+[00004734.5714] KalEnv::stop
+[00004734.5799] KalEnv::stop
+[00004734.5888] KalEnv::stop
+[00004734.5974] KalEnv::stop
+[00004734.6058] KalEnv::stop
+[00004860.7750] KalEnv::load
+[00004860.7754] KalEnv::createDebugger
+[00004860.7754] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00004862.6377] Kal: Attaching to a gordon
+[00004862.6381] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset/cvc_headset.elf'...
+[00004862.6381] KalEnv::loadMemoryMap
+[00004862.6396] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00004862.6592] Kal: Loaded kalimba/gordon_peripherals.xml
+[00004862.6903] KalEnv::load
+[00004862.6907] KalEnv::createDebugger
+[00004862.6908] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00004862.8348] Kal: Attaching to a gordon
+[00004862.8351] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset_2mic/cvc_headset_2mic.elf'...
+[00004862.8352] KalEnv::loadMemoryMap
+[00004862.8363] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00004862.8522] Kal: Loaded kalimba/gordon_peripherals.xml
+[00004862.8631] KalEnv::load
+[00004862.8635] KalEnv::createDebugger
+[00004862.8636] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00004862.9969] Kal: Attaching to a gordon
+[00004862.9974] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree_2mic/cvc_handsfree_2mic.elf'...
+[00004862.9974] KalEnv::loadMemoryMap
+[00004862.9991] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00004863.0228] Kal: Loaded kalimba/gordon_peripherals.xml
+[00004863.0346] KalEnv::load
+[00004863.0366] KalEnv::createDebugger
+[00004863.0371] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00004863.1737] Kal: Attaching to a gordon
+[00004863.1739] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree/cvc_handsfree.elf'...
+[00004863.1739] KalEnv::loadMemoryMap
+[00004863.1747] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00004863.1890] Kal: Loaded kalimba/gordon_peripherals.xml
+[00004863.2590] KalEnv::load
+[00004863.2596] KalEnv::createDebugger
+[00004863.2596] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00004863.4085] Kal: Attaching to a gordon
+[00004863.4089] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/sbc_decoder.elf'...
+[00004863.4089] KalEnv::loadMemoryMap
+[00004863.4104] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00004863.4287] Kal: Loaded kalimba/gordon_peripherals.xml
+[00004863.4393] KalEnv::load
+[00004863.4397] KalEnv::createDebugger
+[00004863.4398] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00004863.5713] Kal: Attaching to a gordon
+[00004863.5717] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_2mic/a2dp_low_latency_2mic.elf'...
+[00004863.5718] KalEnv::loadMemoryMap
+[00004863.5734] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00004863.5946] Kal: Loaded kalimba/gordon_peripherals.xml
+[00004863.6062] KalEnv::load
+[00004863.6068] KalEnv::createDebugger
+[00004863.6068] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00004863.7646] Kal: Attaching to a gordon
+[00004863.7649] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_1mic/a2dp_low_latency_1mic.elf'...
+[00004863.7649] KalEnv::loadMemoryMap
+[00004863.7660] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00004863.7811] Kal: Loaded kalimba/gordon_peripherals.xml
+[00004863.7926] KalEnv::load
+[00004863.7930] KalEnv::createDebugger
+[00004863.7930] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00004863.9153] Kal: Attaching to a gordon
+[00004863.9155] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/spdif_sink.elf'...
+[00004863.9155] KalEnv::loadMemoryMap
+[00004863.9161] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00004863.9245] Kal: Loaded kalimba/gordon_peripherals.xml
+[00004863.9286] KalEnv::load
+[00004863.9295] KalEnv::createDebugger
+[00004863.9295] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00004864.0623] Kal: Attaching to a gordon
+[00004864.0627] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/faststream_decoder.elf'...
+[00004864.0627] KalEnv::loadMemoryMap
+[00004864.0642] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00004864.0794] Kal: Loaded kalimba/gordon_peripherals.xml
+[00004864.0865] KalEnv::load
+[00004864.0870] KalEnv::createDebugger
+[00004864.0871] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00004864.2251] Kal: Attaching to a gordon
+[00004864.2254] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/vee_heartrate/vee_heartrate.elf'...
+[00004864.2255] KalEnv::loadMemoryMap
+[00004864.2269] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00004864.2420] Kal: Loaded kalimba/gordon_peripherals.xml
+[00004864.2539] KalEnv::setActive 0
+[00004864.3039] KalEnv::setActive 0
+[00004864.3363] KalEnv::setActive 0
+[00004864.3698] KalEnv::setActive 0
+[00004864.3998] KalEnv::setActive 0
+[00004864.4235] KalEnv::setActive 0
+[00004864.4446] KalEnv::setActive 0
+[00004864.4641] KalEnv::setActive 0
+[00004864.4806] KalEnv::setActive 0
+[00004864.4903] KalEnv::setActive 0
+[00004911.4592] KalEnv::setActive 0
+[00004911.4592] KalEnv::setActive 0
+[00004911.4592] KalEnv::setActive 0
+[00004911.4593] KalEnv::setActive 0
+[00004911.4593] KalEnv::setActive 0
+[00004911.4593] KalEnv::setActive 0
+[00004911.4593] KalEnv::setActive 0
+[00004911.4593] KalEnv::setActive 0
+[00004911.4593] KalEnv::setActive 0
+[00004911.4593] KalEnv::setActive 0
+[00005313.9347] KalEnv::setActive 1
+[00005313.9476] KalEnv::setActive 1
+[00005313.9586] KalEnv::setActive 1
+[00005313.9756] KalEnv::setActive 1
+[00005313.9963] KalEnv::setActive 1
+[00005314.0171] KalEnv::setActive 1
+[00005314.0400] KalEnv::setActive 1
+[00005314.0654] KalEnv::setActive 1
+[00005314.0926] KalEnv::setActive 1
+[00005314.1229] KalEnv::setActive 1
+[00005314.1691] KalEnv::stop
+[00005314.1813] KalEnv::stop
+[00005314.1869] KalEnv::stop
+[00005314.1952] KalEnv::stop
+[00005314.2037] KalEnv::stop
+[00005314.2122] KalEnv::stop
+[00005314.2207] KalEnv::stop
+[00005314.2292] KalEnv::stop
+[00005314.2349] KalEnv::stop
+[00005314.2433] KalEnv::stop
+[00005385.5785] KalEnv::load
+[00005385.5788] KalEnv::createDebugger
+[00005385.5788] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00005387.2636] Kal: Attaching to a gordon
+[00005387.2638] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset/cvc_headset.elf'...
+[00005387.2638] KalEnv::loadMemoryMap
+[00005387.2647] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00005387.2756] Kal: Loaded kalimba/gordon_peripherals.xml
+[00005387.2921] KalEnv::load
+[00005387.2925] KalEnv::createDebugger
+[00005387.2925] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00005387.4236] Kal: Attaching to a gordon
+[00005387.4242] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset_2mic/cvc_headset_2mic.elf'...
+[00005387.4242] KalEnv::loadMemoryMap
+[00005387.4265] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00005387.4523] Kal: Loaded kalimba/gordon_peripherals.xml
+[00005387.4567] KalEnv::load
+[00005387.4572] KalEnv::createDebugger
+[00005387.4573] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00005387.5905] Kal: Attaching to a gordon
+[00005387.5909] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree_2mic/cvc_handsfree_2mic.elf'...
+[00005387.5910] KalEnv::loadMemoryMap
+[00005387.5927] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00005387.6154] Kal: Loaded kalimba/gordon_peripherals.xml
+[00005387.6266] KalEnv::load
+[00005387.6275] KalEnv::createDebugger
+[00005387.6275] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00005387.7828] Kal: Attaching to a gordon
+[00005387.7831] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree/cvc_handsfree.elf'...
+[00005387.7832] KalEnv::loadMemoryMap
+[00005387.7845] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00005387.7989] Kal: Loaded kalimba/gordon_peripherals.xml
+[00005387.8013] KalEnv::load
+[00005387.8020] KalEnv::createDebugger
+[00005387.8021] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00005387.9314] Kal: Attaching to a gordon
+[00005387.9316] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/sbc_decoder.elf'...
+[00005387.9316] KalEnv::loadMemoryMap
+[00005387.9323] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00005387.9401] Kal: Loaded kalimba/gordon_peripherals.xml
+[00005387.9425] KalEnv::load
+[00005387.9429] KalEnv::createDebugger
+[00005387.9429] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00005388.0692] Kal: Attaching to a gordon
+[00005388.0693] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_2mic/a2dp_low_latency_2mic.elf'...
+[00005388.0694] KalEnv::loadMemoryMap
+[00005388.0699] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00005388.0770] Kal: Loaded kalimba/gordon_peripherals.xml
+[00005388.0792] KalEnv::load
+[00005388.0795] KalEnv::createDebugger
+[00005388.0795] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00005388.2069] Kal: Attaching to a gordon
+[00005388.2072] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_1mic/a2dp_low_latency_1mic.elf'...
+[00005388.2073] KalEnv::loadMemoryMap
+[00005388.2092] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00005388.2283] Kal: Loaded kalimba/gordon_peripherals.xml
+[00005388.2367] KalEnv::load
+[00005388.2376] KalEnv::createDebugger
+[00005388.2377] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00005388.3654] Kal: Attaching to a gordon
+[00005388.3657] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/spdif_sink.elf'...
+[00005388.3657] KalEnv::loadMemoryMap
+[00005388.3667] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00005388.3779] Kal: Loaded kalimba/gordon_peripherals.xml
+[00005388.3813] KalEnv::load
+[00005388.3819] KalEnv::createDebugger
+[00005388.3819] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00005388.5217] Kal: Attaching to a gordon
+[00005388.5226] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/faststream_decoder.elf'...
+[00005388.5226] KalEnv::loadMemoryMap
+[00005388.5263] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00005388.5558] Kal: Loaded kalimba/gordon_peripherals.xml
+[00005388.5594] KalEnv::load
+[00005388.5599] KalEnv::createDebugger
+[00005388.5599] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00005388.6891] Kal: Attaching to a gordon
+[00005388.6894] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/vee_heartrate/vee_heartrate.elf'...
+[00005388.6894] KalEnv::loadMemoryMap
+[00005388.6903] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00005388.7021] Kal: Loaded kalimba/gordon_peripherals.xml
+[00005388.7092] KalEnv::setActive 0
+[00005388.7611] KalEnv::setActive 0
+[00005388.7950] KalEnv::setActive 0
+[00005388.8274] KalEnv::setActive 0
+[00005388.8546] KalEnv::setActive 0
+[00005388.8778] KalEnv::setActive 0
+[00005388.8987] KalEnv::setActive 0
+[00005388.9160] KalEnv::setActive 0
+[00005388.9315] KalEnv::setActive 0
+[00005388.9429] KalEnv::setActive 0
+[00005444.3089] KalEnv::stopRunning
+[00005444.3090] KalEnv::stopRunning
+[00005444.3090] KalEnv::stopRunning
+[00005444.3090] KalEnv::stopRunning
+[00005444.3090] KalEnv::stopRunning
+[00005444.3090] KalEnv::stopRunning
+[00005444.3090] KalEnv::stopRunning
+[00005444.3090] KalEnv::stopRunning
+[00005444.3091] KalEnv::stopRunning
+[00005444.3091] KalEnv::stopRunning
+[00005444.3091] KalEnv::startRunning
+[00005444.3386] KalEnv::go
+[00005444.3604] KalEnv::kalStateChanged to 2
+[00005459.6326] KalEnv::kalStateChanged to 6
+[00005484.6395] KalEnv::setActive 1
+[00005484.7637] KalEnv::setActive 1
+[00005484.9011] KalEnv::setActive 1
+[00005485.0162] KalEnv::setActive 1
+[00005485.1563] KalEnv::setActive 1
+[00005485.2814] KalEnv::setActive 1
+[00005485.4123] KalEnv::setActive 1
+[00005485.5421] KalEnv::setActive 1
+[00005485.6655] KalEnv::setActive 1
+[00005485.8186] KalEnv::setActive 1
+[00005485.8337] KalEnv::stop
+[00005485.8424] KalEnv::stop
+[00005485.8540] KalEnv::stop
+[00005485.8624] KalEnv::stop
+[00005485.8709] KalEnv::stop
+[00005485.8793] KalEnv::stop
+[00005485.8879] KalEnv::stop
+[00005485.8935] KalEnv::stop
+[00005485.8990] KalEnv::stop
+[00005485.9076] KalEnv::stop
+[00005566.1072] KalEnv::load
+[00005566.1080] KalEnv::createDebugger
+[00005566.1081] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00005567.7809] Kal: Attaching to a gordon
+[00005567.7815] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset/cvc_headset.elf'...
+[00005567.7815] KalEnv::loadMemoryMap
+[00005567.7837] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00005567.8025] Kal: Loaded kalimba/gordon_peripherals.xml
+[00005567.8573] KalEnv::load
+[00005567.8582] KalEnv::createDebugger
+[00005567.8582] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00005567.9821] Kal: Attaching to a gordon
+[00005567.9824] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset_2mic/cvc_headset_2mic.elf'...
+[00005567.9824] KalEnv::loadMemoryMap
+[00005567.9835] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00005568.0015] Kal: Loaded kalimba/gordon_peripherals.xml
+[00005568.0194] KalEnv::load
+[00005568.0212] KalEnv::createDebugger
+[00005568.0213] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00005568.1648] Kal: Attaching to a gordon
+[00005568.1650] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree_2mic/cvc_handsfree_2mic.elf'...
+[00005568.1651] KalEnv::loadMemoryMap
+[00005568.1662] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00005568.1780] Kal: Loaded kalimba/gordon_peripherals.xml
+[00005568.1854] KalEnv::load
+[00005568.1861] KalEnv::createDebugger
+[00005568.1861] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00005568.3273] Kal: Attaching to a gordon
+[00005568.3276] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree/cvc_handsfree.elf'...
+[00005568.3277] KalEnv::loadMemoryMap
+[00005568.3290] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00005568.3473] Kal: Loaded kalimba/gordon_peripherals.xml
+[00005568.3589] KalEnv::load
+[00005568.3594] KalEnv::createDebugger
+[00005568.3594] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00005568.4916] Kal: Attaching to a gordon
+[00005568.4919] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/sbc_decoder.elf'...
+[00005568.4919] KalEnv::loadMemoryMap
+[00005568.4928] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00005568.5041] Kal: Loaded kalimba/gordon_peripherals.xml
+[00005568.5104] KalEnv::load
+[00005568.5111] KalEnv::createDebugger
+[00005568.5112] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00005568.6464] Kal: Attaching to a gordon
+[00005568.6470] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_2mic/a2dp_low_latency_2mic.elf'...
+[00005568.6471] KalEnv::loadMemoryMap
+[00005568.6499] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00005568.6792] Kal: Loaded kalimba/gordon_peripherals.xml
+[00005568.6940] KalEnv::load
+[00005568.6948] KalEnv::createDebugger
+[00005568.6948] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00005568.8270] Kal: Attaching to a gordon
+[00005568.8273] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_1mic/a2dp_low_latency_1mic.elf'...
+[00005568.8273] KalEnv::loadMemoryMap
+[00005568.8281] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00005568.8462] Kal: Loaded kalimba/gordon_peripherals.xml
+[00005568.8681] KalEnv::load
+[00005568.8687] KalEnv::createDebugger
+[00005568.8688] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00005568.9997] Kal: Attaching to a gordon
+[00005568.9999] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/spdif_sink.elf'...
+[00005569.0000] KalEnv::loadMemoryMap
+[00005569.0011] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00005569.0147] Kal: Loaded kalimba/gordon_peripherals.xml
+[00005569.0193] KalEnv::load
+[00005569.0200] KalEnv::createDebugger
+[00005569.0201] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00005569.1570] Kal: Attaching to a gordon
+[00005569.1576] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/faststream_decoder.elf'...
+[00005569.1577] KalEnv::loadMemoryMap
+[00005569.1603] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00005569.1899] Kal: Loaded kalimba/gordon_peripherals.xml
+[00005569.2016] KalEnv::load
+[00005569.2021] KalEnv::createDebugger
+[00005569.2021] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00005569.3388] Kal: Attaching to a gordon
+[00005569.3394] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/vee_heartrate/vee_heartrate.elf'...
+[00005569.3395] KalEnv::loadMemoryMap
+[00005569.3417] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00005569.3721] Kal: Loaded kalimba/gordon_peripherals.xml
+[00005569.3868] KalEnv::setActive 0
+[00005569.4636] KalEnv::setActive 0
+[00005569.5006] KalEnv::setActive 0
+[00005569.5308] KalEnv::setActive 0
+[00005569.5577] KalEnv::setActive 0
+[00005569.5825] KalEnv::setActive 0
+[00005569.6054] KalEnv::setActive 0
+[00005569.6236] KalEnv::setActive 0
+[00005569.6387] KalEnv::setActive 0
+[00005569.6484] KalEnv::setActive 0
+[00006077.8074] KalEnv::setActive 0
+[00006077.8074] KalEnv::setActive 0
+[00006077.8074] KalEnv::setActive 0
+[00006077.8074] KalEnv::setActive 0
+[00006077.8075] KalEnv::setActive 0
+[00006077.8075] KalEnv::setActive 0
+[00006077.8075] KalEnv::setActive 0
+[00006077.8075] KalEnv::setActive 0
+[00006077.8075] KalEnv::setActive 0
+[00006077.8075] KalEnv::setActive 0
+[00006214.5015] KalEnv::setActive 1
+[00006214.5147] KalEnv::setActive 1
+[00006214.5263] KalEnv::setActive 1
+[00006214.5400] KalEnv::setActive 1
+[00006214.5561] KalEnv::setActive 1
+[00006214.5758] KalEnv::setActive 1
+[00006214.5977] KalEnv::setActive 1
+[00006214.6230] KalEnv::setActive 1
+[00006214.6555] KalEnv::setActive 1
+[00006214.6892] KalEnv::setActive 1
+[00006214.7463] KalEnv::stop
+[00006214.7558] KalEnv::stop
+[00006214.7640] KalEnv::stop
+[00006214.7755] KalEnv::stop
+[00006214.7841] KalEnv::stop
+[00006214.7925] KalEnv::stop
+[00006214.8010] KalEnv::stop
+[00006214.8095] KalEnv::stop
+[00006214.8180] KalEnv::stop
+[00006214.8265] KalEnv::stop
+[00006529.6129] KalEnv::load
+[00006529.6134] KalEnv::createDebugger
+[00006529.6135] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00006531.3156] Kal: Attaching to a gordon
+[00006531.3161] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset/cvc_headset.elf'...
+[00006531.3162] KalEnv::loadMemoryMap
+[00006531.3183] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00006531.3477] Kal: Loaded kalimba/gordon_peripherals.xml
+[00006531.3896] KalEnv::load
+[00006531.3908] KalEnv::createDebugger
+[00006531.3909] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00006531.5232] Kal: Attaching to a gordon
+[00006531.5236] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset_2mic/cvc_headset_2mic.elf'...
+[00006531.5236] KalEnv::loadMemoryMap
+[00006531.5254] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00006531.5436] Kal: Loaded kalimba/gordon_peripherals.xml
+[00006531.5520] KalEnv::load
+[00006531.5526] KalEnv::createDebugger
+[00006531.5527] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00006531.6753] Kal: Attaching to a gordon
+[00006531.6759] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree_2mic/cvc_handsfree_2mic.elf'...
+[00006531.6760] KalEnv::loadMemoryMap
+[00006531.6781] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00006531.6996] Kal: Loaded kalimba/gordon_peripherals.xml
+[00006531.7076] KalEnv::load
+[00006531.7083] KalEnv::createDebugger
+[00006531.7084] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00006531.8612] Kal: Attaching to a gordon
+[00006531.8616] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree/cvc_handsfree.elf'...
+[00006531.8616] KalEnv::loadMemoryMap
+[00006531.8632] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00006531.8817] Kal: Loaded kalimba/gordon_peripherals.xml
+[00006531.8873] KalEnv::load
+[00006531.8880] KalEnv::createDebugger
+[00006531.8880] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00006532.0261] Kal: Attaching to a gordon
+[00006532.0267] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/sbc_decoder.elf'...
+[00006532.0267] KalEnv::loadMemoryMap
+[00006532.0291] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00006532.0594] Kal: Loaded kalimba/gordon_peripherals.xml
+[00006532.0655] KalEnv::load
+[00006532.0663] KalEnv::createDebugger
+[00006532.0663] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00006532.2034] Kal: Attaching to a gordon
+[00006532.2040] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_2mic/a2dp_low_latency_2mic.elf'...
+[00006532.2041] KalEnv::loadMemoryMap
+[00006532.2073] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00006532.2303] Kal: Loaded kalimba/gordon_peripherals.xml
+[00006532.2396] KalEnv::load
+[00006532.2403] KalEnv::createDebugger
+[00006532.2403] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00006532.3794] Kal: Attaching to a gordon
+[00006532.3801] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_1mic/a2dp_low_latency_1mic.elf'...
+[00006532.3802] KalEnv::loadMemoryMap
+[00006532.3830] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00006532.4126] Kal: Loaded kalimba/gordon_peripherals.xml
+[00006532.4235] KalEnv::load
+[00006532.4244] KalEnv::createDebugger
+[00006532.4244] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00006532.5619] Kal: Attaching to a gordon
+[00006532.5623] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/spdif_sink.elf'...
+[00006532.5623] KalEnv::loadMemoryMap
+[00006532.5637] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00006532.5822] Kal: Loaded kalimba/gordon_peripherals.xml
+[00006532.5925] KalEnv::load
+[00006532.5933] KalEnv::createDebugger
+[00006532.5934] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00006532.7312] Kal: Attaching to a gordon
+[00006532.7318] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/faststream_decoder.elf'...
+[00006532.7319] KalEnv::loadMemoryMap
+[00006532.7342] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00006532.7591] Kal: Loaded kalimba/gordon_peripherals.xml
+[00006532.7663] KalEnv::load
+[00006532.7673] KalEnv::createDebugger
+[00006532.7674] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00006532.9035] Kal: Attaching to a gordon
+[00006532.9041] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/vee_heartrate/vee_heartrate.elf'...
+[00006532.9041] KalEnv::loadMemoryMap
+[00006532.9064] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00006532.9340] Kal: Loaded kalimba/gordon_peripherals.xml
+[00006532.9452] KalEnv::setActive 0
+[00006533.0486] KalEnv::setActive 0
+[00006533.0935] KalEnv::setActive 0
+[00006533.1234] KalEnv::setActive 0
+[00006533.1488] KalEnv::setActive 0
+[00006533.1705] KalEnv::setActive 0
+[00006533.1906] KalEnv::setActive 0
+[00006533.2078] KalEnv::setActive 0
+[00006533.2218] KalEnv::setActive 0
+[00006533.2321] KalEnv::setActive 0
+[00006670.9224] KalEnv::setActive 1
+[00006670.9319] KalEnv::setActive 1
+[00006670.9439] KalEnv::setActive 1
+[00006670.9569] KalEnv::setActive 1
+[00006670.9734] KalEnv::setActive 1
+[00006670.9937] KalEnv::setActive 1
+[00006671.0163] KalEnv::setActive 1
+[00006671.0396] KalEnv::setActive 1
+[00006671.0668] KalEnv::setActive 1
+[00006671.0966] KalEnv::setActive 1
+[00006671.1502] KalEnv::stop
+[00006671.1619] KalEnv::stop
+[00006671.1676] KalEnv::stop
+[00006671.1760] KalEnv::stop
+[00006671.1849] KalEnv::stop
+[00006671.1933] KalEnv::stop
+[00006671.2024] KalEnv::stop
+[00006671.2109] KalEnv::stop
+[00006671.2194] KalEnv::stop
+[00006671.2279] KalEnv::stop
+[00006745.3168] KalEnv::load
+[00006745.3173] KalEnv::createDebugger
+[00006745.3174] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00006747.2129] Kal: Attaching to a gordon
+[00006747.2133] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset/cvc_headset.elf'...
+[00006747.2134] KalEnv::loadMemoryMap
+[00006747.2145] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00006747.2252] Kal: Loaded kalimba/gordon_peripherals.xml
+[00006747.3237] KalEnv::load
+[00006747.3240] KalEnv::createDebugger
+[00006747.3241] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00006747.4624] Kal: Attaching to a gordon
+[00006747.4626] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset_2mic/cvc_headset_2mic.elf'...
+[00006747.4626] KalEnv::loadMemoryMap
+[00006747.4632] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00006747.4739] Kal: Loaded kalimba/gordon_peripherals.xml
+[00006747.4826] KalEnv::load
+[00006747.4830] KalEnv::createDebugger
+[00006747.4831] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00006747.6130] Kal: Attaching to a gordon
+[00006747.6132] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree_2mic/cvc_handsfree_2mic.elf'...
+[00006747.6132] KalEnv::loadMemoryMap
+[00006747.6138] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00006747.6206] Kal: Loaded kalimba/gordon_peripherals.xml
+[00006747.6244] KalEnv::load
+[00006747.6247] KalEnv::createDebugger
+[00006747.6247] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00006747.7547] Kal: Attaching to a gordon
+[00006747.7550] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree/cvc_handsfree.elf'...
+[00006747.7551] KalEnv::loadMemoryMap
+[00006747.7564] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00006747.7766] Kal: Loaded kalimba/gordon_peripherals.xml
+[00006747.7849] KalEnv::load
+[00006747.7853] KalEnv::createDebugger
+[00006747.7854] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00006747.9306] Kal: Attaching to a gordon
+[00006747.9312] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/sbc_decoder.elf'...
+[00006747.9312] KalEnv::loadMemoryMap
+[00006747.9336] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00006747.9501] Kal: Loaded kalimba/gordon_peripherals.xml
+[00006747.9616] KalEnv::load
+[00006747.9623] KalEnv::createDebugger
+[00006747.9623] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00006748.0983] Kal: Attaching to a gordon
+[00006748.0986] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_2mic/a2dp_low_latency_2mic.elf'...
+[00006748.0986] KalEnv::loadMemoryMap
+[00006748.0999] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00006748.1155] Kal: Loaded kalimba/gordon_peripherals.xml
+[00006748.1225] KalEnv::load
+[00006748.1232] KalEnv::createDebugger
+[00006748.1233] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00006748.2522] Kal: Attaching to a gordon
+[00006748.2526] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_1mic/a2dp_low_latency_1mic.elf'...
+[00006748.2527] KalEnv::loadMemoryMap
+[00006748.2547] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00006748.2756] Kal: Loaded kalimba/gordon_peripherals.xml
+[00006748.2829] KalEnv::load
+[00006748.2837] KalEnv::createDebugger
+[00006748.2838] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00006748.4265] Kal: Attaching to a gordon
+[00006748.4271] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/spdif_sink.elf'...
+[00006748.4271] KalEnv::loadMemoryMap
+[00006748.4293] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00006748.4617] Kal: Loaded kalimba/gordon_peripherals.xml
+[00006748.4786] KalEnv::load
+[00006748.4794] KalEnv::createDebugger
+[00006748.4794] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00006748.6270] Kal: Attaching to a gordon
+[00006748.6273] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/faststream_decoder.elf'...
+[00006748.6274] KalEnv::loadMemoryMap
+[00006748.6290] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00006748.6443] Kal: Loaded kalimba/gordon_peripherals.xml
+[00006748.6551] KalEnv::load
+[00006748.6559] KalEnv::createDebugger
+[00006748.6560] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00006748.7885] Kal: Attaching to a gordon
+[00006748.7889] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/vee_heartrate/vee_heartrate.elf'...
+[00006748.7889] KalEnv::loadMemoryMap
+[00006748.7901] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00006748.8057] Kal: Loaded kalimba/gordon_peripherals.xml
+[00006748.8136] KalEnv::setActive 0
+[00006748.8636] KalEnv::setActive 0
+[00006748.9020] KalEnv::setActive 0
+[00006748.9340] KalEnv::setActive 0
+[00006748.9614] KalEnv::setActive 0
+[00006748.9850] KalEnv::setActive 0
+[00006749.0100] KalEnv::setActive 0
+[00006749.0280] KalEnv::setActive 0
+[00006749.0416] KalEnv::setActive 0
+[00006749.0522] KalEnv::setActive 0
+[00006765.1149] KalEnv::stopRunning
+[00006765.1149] KalEnv::stopRunning
+[00006765.1149] KalEnv::stopRunning
+[00006765.1150] KalEnv::stopRunning
+[00006765.1150] KalEnv::stopRunning
+[00006765.1150] KalEnv::stopRunning
+[00006765.1150] KalEnv::stopRunning
+[00006765.1150] KalEnv::stopRunning
+[00006765.1150] KalEnv::stopRunning
+[00006765.1150] KalEnv::stopRunning
+[00006765.1150] KalEnv::startRunning
+[00006765.1379] KalEnv::go
+[00006765.1570] KalEnv::kalStateChanged to 2
+[00007074.9886] KalEnv::kalStateChanged to 6
+[00007271.6741] KalEnv::setActive 1
+[00007271.8036] KalEnv::setActive 1
+[00007271.9207] KalEnv::setActive 1
+[00007272.0566] KalEnv::setActive 1
+[00007272.1929] KalEnv::setActive 1
+[00007272.3179] KalEnv::setActive 1
+[00007272.4931] KalEnv::setActive 1
+[00007272.6969] KalEnv::setActive 1
+[00007272.8300] KalEnv::setActive 1
+[00007272.9624] KalEnv::setActive 1
+[00007272.9814] KalEnv::stop
+[00007272.9902] KalEnv::stop
+[00007273.0017] KalEnv::stop
+[00007273.0101] KalEnv::stop
+[00007273.0187] KalEnv::stop
+[00007273.0277] KalEnv::stop
+[00007273.0363] KalEnv::stop
+[00007273.0451] KalEnv::stop
+[00007273.0537] KalEnv::stop
+[00007273.0626] KalEnv::stop
+[00007344.1049] KalEnv::load
+[00007344.1053] KalEnv::createDebugger
+[00007344.1054] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00007345.7705] Kal: Attaching to a gordon
+[00007345.7709] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset/cvc_headset.elf'...
+[00007345.7709] KalEnv::loadMemoryMap
+[00007345.7723] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00007345.7908] Kal: Loaded kalimba/gordon_peripherals.xml
+[00007345.8150] KalEnv::load
+[00007345.8157] KalEnv::createDebugger
+[00007345.8157] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00007345.9498] Kal: Attaching to a gordon
+[00007345.9502] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset_2mic/cvc_headset_2mic.elf'...
+[00007345.9502] KalEnv::loadMemoryMap
+[00007345.9516] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00007345.9706] Kal: Loaded kalimba/gordon_peripherals.xml
+[00007345.9835] KalEnv::load
+[00007345.9845] KalEnv::createDebugger
+[00007345.9846] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00007346.1260] Kal: Attaching to a gordon
+[00007346.1265] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree_2mic/cvc_handsfree_2mic.elf'...
+[00007346.1266] KalEnv::loadMemoryMap
+[00007346.1288] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00007346.1643] Kal: Loaded kalimba/gordon_peripherals.xml
+[00007346.1763] KalEnv::load
+[00007346.1768] KalEnv::createDebugger
+[00007346.1768] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00007346.3117] Kal: Attaching to a gordon
+[00007346.3121] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree/cvc_handsfree.elf'...
+[00007346.3121] KalEnv::loadMemoryMap
+[00007346.3128] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00007346.3208] Kal: Loaded kalimba/gordon_peripherals.xml
+[00007346.3340] KalEnv::load
+[00007346.3359] KalEnv::createDebugger
+[00007346.3361] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00007346.4733] Kal: Attaching to a gordon
+[00007346.4741] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/sbc_decoder.elf'...
+[00007346.4742] KalEnv::loadMemoryMap
+[00007346.4771] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00007346.5059] Kal: Loaded kalimba/gordon_peripherals.xml
+[00007346.5119] KalEnv::load
+[00007346.5124] KalEnv::createDebugger
+[00007346.5125] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00007346.6374] Kal: Attaching to a gordon
+[00007346.6378] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_2mic/a2dp_low_latency_2mic.elf'...
+[00007346.6378] KalEnv::loadMemoryMap
+[00007346.6392] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00007346.6570] Kal: Loaded kalimba/gordon_peripherals.xml
+[00007346.6650] KalEnv::load
+[00007346.6658] KalEnv::createDebugger
+[00007346.6658] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00007346.7924] Kal: Attaching to a gordon
+[00007346.7929] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_1mic/a2dp_low_latency_1mic.elf'...
+[00007346.7930] KalEnv::loadMemoryMap
+[00007346.7944] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00007346.8123] Kal: Loaded kalimba/gordon_peripherals.xml
+[00007346.8261] KalEnv::load
+[00007346.8265] KalEnv::createDebugger
+[00007346.8265] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00007346.9728] Kal: Attaching to a gordon
+[00007346.9734] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/spdif_sink.elf'...
+[00007346.9735] KalEnv::loadMemoryMap
+[00007346.9757] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00007347.0115] Kal: Loaded kalimba/gordon_peripherals.xml
+[00007347.0201] KalEnv::load
+[00007347.0207] KalEnv::createDebugger
+[00007347.0208] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00007347.1535] Kal: Attaching to a gordon
+[00007347.1537] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/faststream_decoder.elf'...
+[00007347.1537] KalEnv::loadMemoryMap
+[00007347.1543] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00007347.1620] Kal: Loaded kalimba/gordon_peripherals.xml
+[00007347.1680] KalEnv::load
+[00007347.1683] KalEnv::createDebugger
+[00007347.1683] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00007347.2995] Kal: Attaching to a gordon
+[00007347.3000] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/vee_heartrate/vee_heartrate.elf'...
+[00007347.3000] KalEnv::loadMemoryMap
+[00007347.3024] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00007347.3139] Kal: Loaded kalimba/gordon_peripherals.xml
+[00007347.3302] KalEnv::setActive 0
+[00007347.4128] KalEnv::setActive 0
+[00007347.4706] KalEnv::setActive 0
+[00007347.5295] KalEnv::setActive 0
+[00007347.5741] KalEnv::setActive 0
+[00007347.6102] KalEnv::setActive 0
+[00007347.6438] KalEnv::setActive 0
+[00007347.6740] KalEnv::setActive 0
+[00007347.6957] KalEnv::setActive 0
+[00007347.7114] KalEnv::setActive 0
+[00007511.2815] KalEnv::setActive 1
+[00007511.2893] KalEnv::setActive 1
+[00007511.2988] KalEnv::setActive 1
+[00007511.3141] KalEnv::setActive 1
+[00007511.3301] KalEnv::setActive 1
+[00007511.3494] KalEnv::setActive 1
+[00007511.3710] KalEnv::setActive 1
+[00007511.3947] KalEnv::setActive 1
+[00007511.4224] KalEnv::setActive 1
+[00007511.4580] KalEnv::setActive 1
+[00007511.5079] KalEnv::stop
+[00007511.5197] KalEnv::stop
+[00007511.5287] KalEnv::stop
+[00007511.5371] KalEnv::stop
+[00007511.5456] KalEnv::stop
+[00007511.5541] KalEnv::stop
+[00007511.5598] KalEnv::stop
+[00007511.5683] KalEnv::stop
+[00007511.5777] KalEnv::stop
+[00007511.5832] KalEnv::stop
+[00007567.6360] KalEnv::load
+[00007567.6364] KalEnv::createDebugger
+[00007567.6365] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00007569.3435] Kal: Attaching to a gordon
+[00007569.3440] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset/cvc_headset.elf'...
+[00007569.3440] KalEnv::loadMemoryMap
+[00007569.3456] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00007569.3665] Kal: Loaded kalimba/gordon_peripherals.xml
+[00007569.4082] KalEnv::load
+[00007569.4087] KalEnv::createDebugger
+[00007569.4087] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00007569.5349] Kal: Attaching to a gordon
+[00007569.5354] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset_2mic/cvc_headset_2mic.elf'...
+[00007569.5355] KalEnv::loadMemoryMap
+[00007569.5377] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00007569.5645] Kal: Loaded kalimba/gordon_peripherals.xml
+[00007569.5738] KalEnv::load
+[00007569.5741] KalEnv::createDebugger
+[00007569.5742] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00007569.7223] Kal: Attaching to a gordon
+[00007569.7228] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree_2mic/cvc_handsfree_2mic.elf'...
+[00007569.7229] KalEnv::loadMemoryMap
+[00007569.7251] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00007569.7512] Kal: Loaded kalimba/gordon_peripherals.xml
+[00007569.7593] KalEnv::load
+[00007569.7602] KalEnv::createDebugger
+[00007569.7603] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00007569.8886] Kal: Attaching to a gordon
+[00007569.8890] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree/cvc_handsfree.elf'...
+[00007569.8891] KalEnv::loadMemoryMap
+[00007569.8908] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00007569.9130] Kal: Loaded kalimba/gordon_peripherals.xml
+[00007569.9183] KalEnv::load
+[00007569.9190] KalEnv::createDebugger
+[00007569.9190] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00007570.0656] Kal: Attaching to a gordon
+[00007570.0663] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/sbc_decoder.elf'...
+[00007570.0664] KalEnv::loadMemoryMap
+[00007570.0688] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00007570.0936] Kal: Loaded kalimba/gordon_peripherals.xml
+[00007570.1103] KalEnv::load
+[00007570.1114] KalEnv::createDebugger
+[00007570.1115] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00007570.2582] Kal: Attaching to a gordon
+[00007570.2589] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_2mic/a2dp_low_latency_2mic.elf'...
+[00007570.2590] KalEnv::loadMemoryMap
+[00007570.2618] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00007570.2882] Kal: Loaded kalimba/gordon_peripherals.xml
+[00007570.2999] KalEnv::load
+[00007570.3009] KalEnv::createDebugger
+[00007570.3010] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00007570.4381] Kal: Attaching to a gordon
+[00007570.4385] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_1mic/a2dp_low_latency_1mic.elf'...
+[00007570.4386] KalEnv::loadMemoryMap
+[00007570.4404] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00007570.4594] Kal: Loaded kalimba/gordon_peripherals.xml
+[00007570.4776] KalEnv::load
+[00007570.4785] KalEnv::createDebugger
+[00007570.4785] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00007570.6197] Kal: Attaching to a gordon
+[00007570.6205] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/spdif_sink.elf'...
+[00007570.6206] KalEnv::loadMemoryMap
+[00007570.6233] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00007570.6430] Kal: Loaded kalimba/gordon_peripherals.xml
+[00007570.6522] KalEnv::load
+[00007570.6529] KalEnv::createDebugger
+[00007570.6530] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00007570.7813] Kal: Attaching to a gordon
+[00007570.7815] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/faststream_decoder.elf'...
+[00007570.7815] KalEnv::loadMemoryMap
+[00007570.7823] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00007570.7915] Kal: Loaded kalimba/gordon_peripherals.xml
+[00007570.7961] KalEnv::load
+[00007570.7965] KalEnv::createDebugger
+[00007570.7965] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00007570.9320] Kal: Attaching to a gordon
+[00007570.9325] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/vee_heartrate/vee_heartrate.elf'...
+[00007570.9325] KalEnv::loadMemoryMap
+[00007570.9342] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00007570.9552] Kal: Loaded kalimba/gordon_peripherals.xml
+[00007570.9715] KalEnv::setActive 0
+[00007571.0536] KalEnv::setActive 0
+[00007571.0870] KalEnv::setActive 0
+[00007571.1180] KalEnv::setActive 0
+[00007571.1429] KalEnv::setActive 0
+[00007571.1647] KalEnv::setActive 0
+[00007571.1847] KalEnv::setActive 0
+[00007571.2012] KalEnv::setActive 0
+[00007571.2149] KalEnv::setActive 0
+[00007571.2256] KalEnv::setActive 0
+[00007586.7935] KalEnv::stopRunning
+[00007586.7936] KalEnv::stopRunning
+[00007586.7936] KalEnv::stopRunning
+[00007586.7936] KalEnv::stopRunning
+[00007586.7937] KalEnv::stopRunning
+[00007586.7937] KalEnv::stopRunning
+[00007586.7937] KalEnv::stopRunning
+[00007586.7938] KalEnv::stopRunning
+[00007586.7938] KalEnv::stopRunning
+[00007586.7938] KalEnv::stopRunning
+[00007586.7939] KalEnv::startRunning
+[00007586.8501] KalEnv::go
+[00007586.8742] KalEnv::kalStateChanged to 2
+[00007656.5510] KalEnv::kalStateChanged to 6
+[00007933.3983] KalEnv::setActive 1
+[00007933.5597] KalEnv::setActive 1
+[00007933.7320] KalEnv::setActive 1
+[00007933.9001] KalEnv::setActive 1
+[00007934.0233] KalEnv::setActive 1
+[00007934.1471] KalEnv::setActive 1
+[00007934.2925] KalEnv::setActive 1
+[00007934.4200] KalEnv::setActive 1
+[00007934.5551] KalEnv::setActive 1
+[00007934.7203] KalEnv::setActive 1
+[00007934.7335] KalEnv::stop
+[00007934.7422] KalEnv::stop
+[00007934.7510] KalEnv::stop
+[00007934.7566] KalEnv::stop
+[00007934.7650] KalEnv::stop
+[00007934.7735] KalEnv::stop
+[00007934.7820] KalEnv::stop
+[00007934.7911] KalEnv::stop
+[00007934.7996] KalEnv::stop
+[00007934.8080] KalEnv::stop
+[00008006.8290] KalEnv::load
+[00008006.8295] KalEnv::createDebugger
+[00008006.8296] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00008008.5206] Kal: Attaching to a gordon
+[00008008.5211] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset/cvc_headset.elf'...
+[00008008.5213] KalEnv::loadMemoryMap
+[00008008.5235] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00008008.5476] Kal: Loaded kalimba/gordon_peripherals.xml
+[00008008.5895] KalEnv::load
+[00008008.5900] KalEnv::createDebugger
+[00008008.5901] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00008008.7315] Kal: Attaching to a gordon
+[00008008.7321] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset_2mic/cvc_headset_2mic.elf'...
+[00008008.7321] KalEnv::loadMemoryMap
+[00008008.7342] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00008008.7669] Kal: Loaded kalimba/gordon_peripherals.xml
+[00008008.7797] KalEnv::load
+[00008008.7807] KalEnv::createDebugger
+[00008008.7808] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00008008.9290] Kal: Attaching to a gordon
+[00008008.9296] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree_2mic/cvc_handsfree_2mic.elf'...
+[00008008.9297] KalEnv::loadMemoryMap
+[00008008.9318] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00008008.9656] Kal: Loaded kalimba/gordon_peripherals.xml
+[00008008.9812] KalEnv::load
+[00008008.9818] KalEnv::createDebugger
+[00008008.9818] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00008009.1223] Kal: Attaching to a gordon
+[00008009.1228] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree/cvc_handsfree.elf'...
+[00008009.1229] KalEnv::loadMemoryMap
+[00008009.1242] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00008009.1367] Kal: Loaded kalimba/gordon_peripherals.xml
+[00008009.1504] KalEnv::load
+[00008009.1509] KalEnv::createDebugger
+[00008009.1509] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00008009.2908] Kal: Attaching to a gordon
+[00008009.2910] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/sbc_decoder.elf'...
+[00008009.2910] KalEnv::loadMemoryMap
+[00008009.2916] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00008009.3005] Kal: Loaded kalimba/gordon_peripherals.xml
+[00008009.3047] KalEnv::load
+[00008009.3051] KalEnv::createDebugger
+[00008009.3052] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00008009.4239] Kal: Attaching to a gordon
+[00008009.4243] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_2mic/a2dp_low_latency_2mic.elf'...
+[00008009.4243] KalEnv::loadMemoryMap
+[00008009.4255] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00008009.4383] Kal: Loaded kalimba/gordon_peripherals.xml
+[00008009.4445] KalEnv::load
+[00008009.4450] KalEnv::createDebugger
+[00008009.4450] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00008009.5851] Kal: Attaching to a gordon
+[00008009.5853] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_1mic/a2dp_low_latency_1mic.elf'...
+[00008009.5853] KalEnv::loadMemoryMap
+[00008009.5858] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00008009.5925] Kal: Loaded kalimba/gordon_peripherals.xml
+[00008009.6025] KalEnv::load
+[00008009.6030] KalEnv::createDebugger
+[00008009.6030] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00008009.7356] Kal: Attaching to a gordon
+[00008009.7359] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/spdif_sink.elf'...
+[00008009.7360] KalEnv::loadMemoryMap
+[00008009.7372] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00008009.7554] Kal: Loaded kalimba/gordon_peripherals.xml
+[00008009.7619] KalEnv::load
+[00008009.7628] KalEnv::createDebugger
+[00008009.7628] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00008009.8982] Kal: Attaching to a gordon
+[00008009.8988] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/faststream_decoder.elf'...
+[00008009.8988] KalEnv::loadMemoryMap
+[00008009.9019] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00008009.9345] Kal: Loaded kalimba/gordon_peripherals.xml
+[00008009.9471] KalEnv::load
+[00008009.9476] KalEnv::createDebugger
+[00008009.9477] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00008010.0838] Kal: Attaching to a gordon
+[00008010.0844] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/vee_heartrate/vee_heartrate.elf'...
+[00008010.0845] KalEnv::loadMemoryMap
+[00008010.0867] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00008010.1165] Kal: Loaded kalimba/gordon_peripherals.xml
+[00008010.1348] KalEnv::setActive 0
+[00008010.1953] KalEnv::setActive 0
+[00008010.2287] KalEnv::setActive 0
+[00008010.2602] KalEnv::setActive 0
+[00008010.2895] KalEnv::setActive 0
+[00008010.3148] KalEnv::setActive 0
+[00008010.3375] KalEnv::setActive 0
+[00008010.3560] KalEnv::setActive 0
+[00008010.3711] KalEnv::setActive 0
+[00008010.3845] KalEnv::setActive 0
+[00008025.7981] KalEnv::stopRunning
+[00008025.7982] KalEnv::stopRunning
+[00008025.7982] KalEnv::stopRunning
+[00008025.7982] KalEnv::stopRunning
+[00008025.7983] KalEnv::stopRunning
+[00008025.7983] KalEnv::stopRunning
+[00008025.7983] KalEnv::stopRunning
+[00008025.7983] KalEnv::stopRunning
+[00008025.7983] KalEnv::stopRunning
+[00008025.7983] KalEnv::stopRunning
+[00008025.7984] KalEnv::startRunning
+[00008025.8654] KalEnv::go
+[00008025.8889] KalEnv::kalStateChanged to 2
+[00008101.3621] KalEnv::kalStateChanged to 6
+[00008107.1432] KalEnv::stopRunning
+[00008107.1433] KalEnv::stopRunning
+[00008107.1434] KalEnv::stopRunning
+[00008107.1434] KalEnv::stopRunning
+[00008107.1434] KalEnv::stopRunning
+[00008107.1434] KalEnv::stopRunning
+[00008107.1434] KalEnv::stopRunning
+[00008107.1435] KalEnv::stopRunning
+[00008107.1435] KalEnv::stopRunning
+[00008107.1435] KalEnv::stopRunning
+[00008107.3403] KalEnv::startRunning
+[00008107.3565] KalEnv::go
+[00008107.4030] KalEnv::kalStateChanged to 2
+[00008112.5491] KalEnv::kalStateChanged to 6
+[00008151.3390] KalEnv::stopRunning
+[00008151.3391] KalEnv::stopRunning
+[00008151.3391] KalEnv::stopRunning
+[00008151.3391] KalEnv::stopRunning
+[00008151.3391] KalEnv::stopRunning
+[00008151.3391] KalEnv::stopRunning
+[00008151.3391] KalEnv::stopRunning
+[00008151.3391] KalEnv::stopRunning
+[00008151.3391] KalEnv::stopRunning
+[00008151.3391] KalEnv::stopRunning
+[00008151.4893] KalEnv::startRunning
+[00008151.5197] KalEnv::go
+[00008151.5561] KalEnv::kalStateChanged to 2
+[00008215.3299] KalEnv::kalStateChanged to 6
+[00008487.4873] KalEnv::setActive 0
+[00008487.4873] KalEnv::setActive 0
+[00008487.4874] KalEnv::setActive 0
+[00008487.4874] KalEnv::setActive 0
+[00008487.4874] KalEnv::setActive 0
+[00008487.4874] KalEnv::setActive 0
+[00008487.4874] KalEnv::setActive 0
+[00008487.4874] KalEnv::setActive 0
+[00008487.4874] KalEnv::setActive 0
+[00008487.4874] KalEnv::setActive 0
+[00008620.8669] KalEnv::stopRunning
+[00008620.8670] KalEnv::stopRunning
+[00008620.8671] KalEnv::stopRunning
+[00008620.8671] KalEnv::stopRunning
+[00008620.8672] KalEnv::stopRunning
+[00008620.8672] KalEnv::stopRunning
+[00008620.8672] KalEnv::stopRunning
+[00008620.8673] KalEnv::stopRunning
+[00008620.8673] KalEnv::stopRunning
+[00008620.8673] KalEnv::stopRunning
+[00008620.8674] KalEnv::startRunning
+[00008620.9235] KalEnv::go
+[00008621.1020] KalEnv::kalStateChanged to 2
+[00008680.4915] KalEnv::kalStateChanged to 6
+[00009199.3979] KalEnv::kalStateChanged to 3
+[00009199.4420] KalEnv::stopRunning
+[00009199.4421] KalEnv::stopRunning
+[00009199.4421] KalEnv::stopRunning
+[00009199.4421] KalEnv::stopRunning
+[00009199.4421] KalEnv::stopRunning
+[00009199.4421] KalEnv::stopRunning
+[00009199.4421] KalEnv::stopRunning
+[00009199.4421] KalEnv::stopRunning
+[00009199.4421] KalEnv::stopRunning
+[00009199.4421] KalEnv::stopRunning
+[00009199.6088] KalEnv::startRunning
+[00009199.6269] KalEnv::go
+[00009199.7772] KalEnv::kalStateChanged to 2
+[00009207.1129] KalEnv::kalStateChanged to 6
+[00009367.0811] KalEnv::stopRunning
+[00009367.0812] KalEnv::stopRunning
+[00009367.0812] KalEnv::stopRunning
+[00009367.0812] KalEnv::stopRunning
+[00009367.0812] KalEnv::stopRunning
+[00009367.0812] KalEnv::stopRunning
+[00009367.0812] KalEnv::stopRunning
+[00009367.0813] KalEnv::stopRunning
+[00009367.0813] KalEnv::stopRunning
+[00009367.0813] KalEnv::stopRunning
+[00009367.2395] KalEnv::startRunning
+[00009367.2633] KalEnv::go
+[00009367.2941] KalEnv::kalStateChanged to 2
+[00009385.3172] KalEnv::kalStateChanged to 6
+[00009483.6781] KalEnv::stopRunning
+[00009483.6782] KalEnv::stopRunning
+[00009483.6782] KalEnv::stopRunning
+[00009483.6783] KalEnv::stopRunning
+[00009483.6783] KalEnv::stopRunning
+[00009483.6783] KalEnv::stopRunning
+[00009483.6784] KalEnv::stopRunning
+[00009483.6784] KalEnv::stopRunning
+[00009483.6784] KalEnv::stopRunning
+[00009483.6785] KalEnv::stopRunning
+[00009483.8906] KalEnv::startRunning
+[00009483.9195] KalEnv::go
+[00009483.9499] KalEnv::kalStateChanged to 2
+[00009498.7548] KalEnv::kalStateChanged to 6
+[00009825.0675] KalEnv::stopRunning
+[00009825.0675] KalEnv::stopRunning
+[00009825.0676] KalEnv::stopRunning
+[00009825.0676] KalEnv::stopRunning
+[00009825.0676] KalEnv::stopRunning
+[00009825.0676] KalEnv::stopRunning
+[00009825.0676] KalEnv::stopRunning
+[00009825.0676] KalEnv::stopRunning
+[00009825.0676] KalEnv::stopRunning
+[00009825.0676] KalEnv::stopRunning
+[00009825.2812] KalEnv::startRunning
+[00009825.3071] KalEnv::go
+[00009825.3344] KalEnv::kalStateChanged to 2
+[00010015.4421] KalEnv::stopRunning
+[00010015.4421] KalEnv::stopRunning
+[00010015.4422] KalEnv::stopRunning
+[00010015.4422] KalEnv::stopRunning
+[00010015.4422] KalEnv::stopRunning
+[00010015.4422] KalEnv::stopRunning
+[00010015.4422] KalEnv::stopRunning
+[00010015.4422] KalEnv::stopRunning
+[00010015.4422] KalEnv::stopRunning
+[00010015.4423] KalEnv::stopRunning
+[00010015.6093] KalEnv::startRunning
+[00010015.6277] KalEnv::go
+[00010015.6530] KalEnv::kalStateChanged to 2
+[00010032.6229] KalEnv::kalStateChanged to 3
+[00010032.6313] KalEnv::stopRunning
+[00010032.8196] KalEnv::stopRunning
+[00010032.8196] KalEnv::stopRunning
+[00010032.8196] KalEnv::stopRunning
+[00010032.8196] KalEnv::stopRunning
+[00010032.8196] KalEnv::stopRunning
+[00010032.8197] KalEnv::stopRunning
+[00010032.8197] KalEnv::stopRunning
+[00010032.8197] KalEnv::stopRunning
+[00010032.8197] KalEnv::stopRunning
+[00010032.8197] KalEnv::startRunning
+[00010032.8647] KalEnv::go
+[00010032.8887] KalEnv::kalStateChanged to 2
+[00010040.1424] KalEnv::stopRunning
+[00010040.1425] KalEnv::stopRunning
+[00010040.1425] KalEnv::stopRunning
+[00010040.1425] KalEnv::stopRunning
+[00010040.1425] KalEnv::stopRunning
+[00010040.1425] KalEnv::stopRunning
+[00010040.1425] KalEnv::stopRunning
+[00010040.1425] KalEnv::stopRunning
+[00010040.1426] KalEnv::stopRunning
+[00010040.1426] KalEnv::stopRunning
+[00010040.3709] KalEnv::startRunning
+[00010040.4069] KalEnv::go
+[00010040.4254] KalEnv::kalStateChanged to 2
+[00010042.4670] KalEnv::stopRunning
+[00010042.4671] KalEnv::stopRunning
+[00010042.4671] KalEnv::stopRunning
+[00010042.4671] KalEnv::stopRunning
+[00010042.4671] KalEnv::stopRunning
+[00010042.4671] KalEnv::stopRunning
+[00010042.4671] KalEnv::stopRunning
+[00010042.4672] KalEnv::stopRunning
+[00010042.6994] KalEnv::stopRunning
+[00010042.6995] KalEnv::stopRunning
+[00010042.6995] KalEnv::startRunning
+[00010042.7218] KalEnv::go
+[00010042.7299] KalEnv::kalStateChanged to 3
+[00010042.7414] KalEnv::kalStateChanged to 2
+[00010118.9940] KalEnv::setActive 1
+[00010119.1398] KalEnv::setActive 1
+[00010119.2483] KalEnv::setActive 1
+[00010119.3693] KalEnv::setActive 1
+[00010119.4933] KalEnv::setActive 1
+[00010119.6180] KalEnv::setActive 1
+[00010119.7492] KalEnv::setActive 1
+[00010119.8814] KalEnv::setActive 1
+[00010120.0150] KalEnv::setActive 1
+[00010120.2563] KalEnv::setActive 1
+[00010120.2682] KalEnv::stop
+[00010120.2771] KalEnv::stop
+[00010120.2832] KalEnv::stop
+[00010120.2919] KalEnv::stop
+[00010120.3004] KalEnv::stop
+[00010120.3089] KalEnv::stop
+[00010120.3174] KalEnv::stop
+[00010120.3259] KalEnv::stop
+[00010120.3345] KalEnv::stop
+[00010120.3429] KalEnv::stop
+[00010246.2655] KalEnv::load
+[00010246.2659] KalEnv::createDebugger
+[00010246.2659] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00010248.0964] Kal: Attaching to a gordon
+[00010248.0967] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset/cvc_headset.elf'...
+[00010248.0967] KalEnv::loadMemoryMap
+[00010248.0980] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00010248.1099] Kal: Loaded kalimba/gordon_peripherals.xml
+[00010248.1299] KalEnv::load
+[00010248.1303] KalEnv::createDebugger
+[00010248.1304] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00010248.2623] Kal: Attaching to a gordon
+[00010248.2626] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset_2mic/cvc_headset_2mic.elf'...
+[00010248.2627] KalEnv::loadMemoryMap
+[00010248.2636] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00010248.2744] Kal: Loaded kalimba/gordon_peripherals.xml
+[00010248.2841] KalEnv::load
+[00010248.2849] KalEnv::createDebugger
+[00010248.2851] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00010248.4155] Kal: Attaching to a gordon
+[00010248.4157] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree_2mic/cvc_handsfree_2mic.elf'...
+[00010248.4157] KalEnv::loadMemoryMap
+[00010248.4163] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00010248.4236] Kal: Loaded kalimba/gordon_peripherals.xml
+[00010248.4283] KalEnv::load
+[00010248.4287] KalEnv::createDebugger
+[00010248.4287] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00010248.5596] Kal: Attaching to a gordon
+[00010248.5597] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree/cvc_handsfree.elf'...
+[00010248.5598] KalEnv::loadMemoryMap
+[00010248.5603] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00010248.5687] Kal: Loaded kalimba/gordon_peripherals.xml
+[00010248.5742] KalEnv::load
+[00010248.5748] KalEnv::createDebugger
+[00010248.5749] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00010248.7047] Kal: Attaching to a gordon
+[00010248.7049] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/sbc_decoder.elf'...
+[00010248.7050] KalEnv::loadMemoryMap
+[00010248.7062] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00010248.7183] Kal: Loaded kalimba/gordon_peripherals.xml
+[00010248.8212] KalEnv::load
+[00010248.8216] KalEnv::createDebugger
+[00010248.8216] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00010248.9507] Kal: Attaching to a gordon
+[00010248.9508] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_2mic/a2dp_low_latency_2mic.elf'...
+[00010248.9509] KalEnv::loadMemoryMap
+[00010248.9514] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00010248.9587] Kal: Loaded kalimba/gordon_peripherals.xml
+[00010248.9622] KalEnv::load
+[00010248.9626] KalEnv::createDebugger
+[00010248.9626] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00010249.1054] Kal: Attaching to a gordon
+[00010249.1060] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_1mic/a2dp_low_latency_1mic.elf'...
+[00010249.1061] KalEnv::loadMemoryMap
+[00010249.1084] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00010249.1400] Kal: Loaded kalimba/gordon_peripherals.xml
+[00010249.1507] KalEnv::load
+[00010249.1512] KalEnv::createDebugger
+[00010249.1513] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00010249.2890] Kal: Attaching to a gordon
+[00010249.2896] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/spdif_sink.elf'...
+[00010249.2897] KalEnv::loadMemoryMap
+[00010249.2924] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00010249.3244] Kal: Loaded kalimba/gordon_peripherals.xml
+[00010249.3372] KalEnv::load
+[00010249.3382] KalEnv::createDebugger
+[00010249.3383] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00010249.4790] Kal: Attaching to a gordon
+[00010249.4796] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/faststream_decoder.elf'...
+[00010249.4796] KalEnv::loadMemoryMap
+[00010249.4820] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00010249.5091] Kal: Loaded kalimba/gordon_peripherals.xml
+[00010249.5162] KalEnv::load
+[00010249.5167] KalEnv::createDebugger
+[00010249.5168] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00010249.6471] Kal: Attaching to a gordon
+[00010249.6473] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/vee_heartrate/vee_heartrate.elf'...
+[00010249.6473] KalEnv::loadMemoryMap
+[00010249.6479] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00010249.6548] Kal: Loaded kalimba/gordon_peripherals.xml
+[00010249.6594] KalEnv::setActive 0
+[00010249.7039] KalEnv::setActive 0
+[00010249.7365] KalEnv::setActive 0
+[00010249.7670] KalEnv::setActive 0
+[00010249.7945] KalEnv::setActive 0
+[00010249.8185] KalEnv::setActive 0
+[00010249.8400] KalEnv::setActive 0
+[00010249.8579] KalEnv::setActive 0
+[00010249.8724] KalEnv::setActive 0
+[00010249.8836] KalEnv::setActive 0
+[00010263.0958] KalEnv::stopRunning
+[00010263.0958] KalEnv::stopRunning
+[00010263.0958] KalEnv::stopRunning
+[00010263.0959] KalEnv::stopRunning
+[00010263.0959] KalEnv::stopRunning
+[00010263.0959] KalEnv::stopRunning
+[00010263.0959] KalEnv::stopRunning
+[00010263.0959] KalEnv::stopRunning
+[00010263.0959] KalEnv::stopRunning
+[00010263.0959] KalEnv::stopRunning
+[00010263.0959] KalEnv::startRunning
+[00010263.1331] KalEnv::go
+[00010263.1612] KalEnv::kalStateChanged to 2
+[00010265.4225] KalEnv::kalStateChanged to 6
+[00010327.6050] KalEnv::setActive 0
+[00010327.6050] KalEnv::setActive 0
+[00010327.6050] KalEnv::setActive 0
+[00010327.6050] KalEnv::setActive 0
+[00010327.6050] KalEnv::setActive 0
+[00010327.6050] KalEnv::setActive 0
+[00010327.6050] KalEnv::setActive 0
+[00010327.6050] KalEnv::setActive 0
+[00010327.6050] KalEnv::setActive 0
+[00010327.6050] KalEnv::setActive 0
+[00010361.2813] KalEnv::setActive 1
+[00010361.2988] KalEnv::setActive 1
+[00010361.3111] KalEnv::setActive 1
+[00010361.3254] KalEnv::setActive 1
+[00010361.3424] KalEnv::setActive 1
+[00010361.3615] KalEnv::setActive 1
+[00010361.3856] KalEnv::setActive 1
+[00010361.4184] KalEnv::setActive 1
+[00010361.4478] KalEnv::setActive 1
+[00010361.4792] KalEnv::setActive 1
+[00010361.5337] KalEnv::stop
+[00010361.5442] KalEnv::stop
+[00010361.5525] KalEnv::stop
+[00010361.5611] KalEnv::stop
+[00010361.5696] KalEnv::stop
+[00010361.5781] KalEnv::stop
+[00010361.5865] KalEnv::stop
+[00010361.5950] KalEnv::stop
+[00010361.6060] KalEnv::stop
+[00010361.6186] KalEnv::stop
+[00010432.8381] KalEnv::load
+[00010432.8385] KalEnv::createDebugger
+[00010432.8385] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00010434.5437] Kal: Attaching to a gordon
+[00010434.5446] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset/cvc_headset.elf'...
+[00010434.5446] KalEnv::loadMemoryMap
+[00010434.5457] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00010434.5567] Kal: Loaded kalimba/gordon_peripherals.xml
+[00010434.5865] KalEnv::load
+[00010434.5868] KalEnv::createDebugger
+[00010434.5868] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00010434.7348] Kal: Attaching to a gordon
+[00010434.7353] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset_2mic/cvc_headset_2mic.elf'...
+[00010434.7354] KalEnv::loadMemoryMap
+[00010434.7375] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00010434.7717] Kal: Loaded kalimba/gordon_peripherals.xml
+[00010434.7826] KalEnv::load
+[00010434.7833] KalEnv::createDebugger
+[00010434.7833] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00010434.9198] Kal: Attaching to a gordon
+[00010434.9204] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree_2mic/cvc_handsfree_2mic.elf'...
+[00010434.9205] KalEnv::loadMemoryMap
+[00010434.9226] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00010434.9535] Kal: Loaded kalimba/gordon_peripherals.xml
+[00010434.9669] KalEnv::load
+[00010434.9676] KalEnv::createDebugger
+[00010434.9676] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00010435.1074] Kal: Attaching to a gordon
+[00010435.1078] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree/cvc_handsfree.elf'...
+[00010435.1078] KalEnv::loadMemoryMap
+[00010435.1091] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00010435.1214] Kal: Loaded kalimba/gordon_peripherals.xml
+[00010435.1427] KalEnv::load
+[00010435.1432] KalEnv::createDebugger
+[00010435.1432] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00010435.3010] Kal: Attaching to a gordon
+[00010435.3016] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/sbc_decoder.elf'...
+[00010435.3017] KalEnv::loadMemoryMap
+[00010435.3055] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00010435.3248] Kal: Loaded kalimba/gordon_peripherals.xml
+[00010435.3365] KalEnv::load
+[00010435.3372] KalEnv::createDebugger
+[00010435.3372] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00010435.4812] Kal: Attaching to a gordon
+[00010435.4817] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_2mic/a2dp_low_latency_2mic.elf'...
+[00010435.4818] KalEnv::loadMemoryMap
+[00010435.4840] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00010435.5156] Kal: Loaded kalimba/gordon_peripherals.xml
+[00010435.5351] KalEnv::load
+[00010435.5366] KalEnv::createDebugger
+[00010435.5367] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00010435.6725] Kal: Attaching to a gordon
+[00010435.6727] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_1mic/a2dp_low_latency_1mic.elf'...
+[00010435.6727] KalEnv::loadMemoryMap
+[00010435.6734] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00010435.6829] Kal: Loaded kalimba/gordon_peripherals.xml
+[00010435.6875] KalEnv::load
+[00010435.6879] KalEnv::createDebugger
+[00010435.6880] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00010435.8222] Kal: Attaching to a gordon
+[00010435.8226] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/spdif_sink.elf'...
+[00010435.8226] KalEnv::loadMemoryMap
+[00010435.8241] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00010435.8467] Kal: Loaded kalimba/gordon_peripherals.xml
+[00010435.8596] KalEnv::load
+[00010435.8601] KalEnv::createDebugger
+[00010435.8602] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00010435.9884] Kal: Attaching to a gordon
+[00010435.9886] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/faststream_decoder.elf'...
+[00010435.9886] KalEnv::loadMemoryMap
+[00010435.9894] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00010436.0057] Kal: Loaded kalimba/gordon_peripherals.xml
+[00010436.0191] KalEnv::load
+[00010436.0204] KalEnv::createDebugger
+[00010436.0205] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00010436.1591] Kal: Attaching to a gordon
+[00010436.1598] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/vee_heartrate/vee_heartrate.elf'...
+[00010436.1598] KalEnv::loadMemoryMap
+[00010436.1623] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00010436.1869] Kal: Loaded kalimba/gordon_peripherals.xml
+[00010436.1988] KalEnv::setActive 0
+[00010436.2608] KalEnv::setActive 0
+[00010436.3000] KalEnv::setActive 0
+[00010436.3393] KalEnv::setActive 0
+[00010436.3678] KalEnv::setActive 0
+[00010436.3959] KalEnv::setActive 0
+[00010436.4183] KalEnv::setActive 0
+[00010436.4387] KalEnv::setActive 0
+[00010436.4548] KalEnv::setActive 0
+[00010436.4670] KalEnv::setActive 0
+[00010449.9918] KalEnv::stopRunning
+[00010449.9918] KalEnv::stopRunning
+[00010449.9918] KalEnv::stopRunning
+[00010449.9918] KalEnv::stopRunning
+[00010449.9918] KalEnv::stopRunning
+[00010449.9918] KalEnv::stopRunning
+[00010449.9918] KalEnv::stopRunning
+[00010449.9919] KalEnv::stopRunning
+[00010449.9919] KalEnv::stopRunning
+[00010449.9919] KalEnv::stopRunning
+[00010449.9919] KalEnv::startRunning
+[00010450.0115] KalEnv::go
+[00010450.0309] KalEnv::kalStateChanged to 2
+[00010466.2312] KalEnv::kalStateChanged to 6
+[00010478.7219] KalEnv::stopRunning
+[00010478.7220] KalEnv::stopRunning
+[00010478.7220] KalEnv::stopRunning
+[00010478.7220] KalEnv::stopRunning
+[00010478.7220] KalEnv::stopRunning
+[00010478.7220] KalEnv::stopRunning
+[00010478.7220] KalEnv::stopRunning
+[00010478.7220] KalEnv::stopRunning
+[00010478.7221] KalEnv::stopRunning
+[00010478.7221] KalEnv::stopRunning
+[00010478.8645] KalEnv::startRunning
+[00010478.8796] KalEnv::go
+[00010479.0070] KalEnv::kalStateChanged to 2
+[00010485.2476] KalEnv::kalStateChanged to 6
+[00010503.4764] KalEnv::stopRunning
+[00010503.4765] KalEnv::stopRunning
+[00010503.4766] KalEnv::stopRunning
+[00010503.4766] KalEnv::stopRunning
+[00010503.4766] KalEnv::stopRunning
+[00010503.4766] KalEnv::stopRunning
+[00010503.4766] KalEnv::stopRunning
+[00010503.4767] KalEnv::stopRunning
+[00010503.4767] KalEnv::stopRunning
+[00010503.4767] KalEnv::stopRunning
+[00010503.7361] KalEnv::startRunning
+[00010503.7648] KalEnv::go
+[00010503.8053] KalEnv::kalStateChanged to 2
+[00010512.2363] KalEnv::kalStateChanged to 6
+[00010528.0529] KalEnv::stopRunning
+[00010528.0529] KalEnv::stopRunning
+[00010528.0530] KalEnv::stopRunning
+[00010528.0530] KalEnv::stopRunning
+[00010528.0530] KalEnv::stopRunning
+[00010528.0530] KalEnv::stopRunning
+[00010528.0530] KalEnv::stopRunning
+[00010528.0530] KalEnv::stopRunning
+[00010528.0530] KalEnv::stopRunning
+[00010528.0530] KalEnv::stopRunning
+[00010528.1675] KalEnv::startRunning
+[00010528.1870] KalEnv::go
+[00010528.2098] KalEnv::kalStateChanged to 2
+[00010550.9637] KalEnv::kalStateChanged to 6
+[00010561.9989] KalEnv::kalStateChanged to 3
+[00010562.0156] KalEnv::stopRunning
+[00010562.0156] KalEnv::stopRunning
+[00010562.0156] KalEnv::stopRunning
+[00010562.0156] KalEnv::stopRunning
+[00010562.0156] KalEnv::stopRunning
+[00010562.0156] KalEnv::stopRunning
+[00010562.0156] KalEnv::stopRunning
+[00010562.0156] KalEnv::stopRunning
+[00010562.0157] KalEnv::stopRunning
+[00010562.0157] KalEnv::stopRunning
+[00010562.1908] KalEnv::startRunning
+[00010562.2103] KalEnv::go
+[00010562.3744] KalEnv::kalStateChanged to 2
+[00010568.5742] KalEnv::kalStateChanged to 6
+[00010802.9883] KalEnv::stopRunning
+[00010802.9884] KalEnv::stopRunning
+[00010802.9884] KalEnv::stopRunning
+[00010802.9884] KalEnv::stopRunning
+[00010802.9884] KalEnv::stopRunning
+[00010802.9885] KalEnv::stopRunning
+[00010802.9885] KalEnv::stopRunning
+[00010802.9885] KalEnv::stopRunning
+[00010802.9885] KalEnv::stopRunning
+[00010802.9885] KalEnv::stopRunning
+[00010803.1058] KalEnv::startRunning
+[00010803.1202] KalEnv::go
+[00010803.2108] KalEnv::kalStateChanged to 3
+[00010803.2339] KalEnv::kalStateChanged to 2
+[00010811.6249] KalEnv::kalStateChanged to 6
+[00010962.9840] KalEnv::setActive 1
+[00010963.0967] KalEnv::setActive 1
+[00010963.2332] KalEnv::setActive 1
+[00010963.3484] KalEnv::setActive 1
+[00010963.4894] KalEnv::setActive 1
+[00010963.6094] KalEnv::setActive 1
+[00010963.7482] KalEnv::setActive 1
+[00010963.8794] KalEnv::setActive 1
+[00010964.0067] KalEnv::setActive 1
+[00010964.1404] KalEnv::setActive 1
+[00010964.1606] KalEnv::stop
+[00010964.1691] KalEnv::stop
+[00010964.1776] KalEnv::stop
+[00010964.1860] KalEnv::stop
+[00010964.1975] KalEnv::stop
+[00010964.2060] KalEnv::stop
+[00010964.2145] KalEnv::stop
+[00010964.2202] KalEnv::stop
+[00010964.2291] KalEnv::stop
+[00010964.2376] KalEnv::stop
+[00011036.6217] KalEnv::load
+[00011036.6220] KalEnv::createDebugger
+[00011036.6220] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00011038.3213] Kal: Attaching to a gordon
+[00011038.3219] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset/cvc_headset.elf'...
+[00011038.3219] KalEnv::loadMemoryMap
+[00011038.3242] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00011038.3461] Kal: Loaded kalimba/gordon_peripherals.xml
+[00011038.4862] KalEnv::load
+[00011038.4869] KalEnv::createDebugger
+[00011038.4869] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00011038.6222] Kal: Attaching to a gordon
+[00011038.6223] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset_2mic/cvc_headset_2mic.elf'...
+[00011038.6224] KalEnv::loadMemoryMap
+[00011038.6229] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00011038.6317] Kal: Loaded kalimba/gordon_peripherals.xml
+[00011038.6393] KalEnv::load
+[00011038.6396] KalEnv::createDebugger
+[00011038.6396] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00011038.7707] Kal: Attaching to a gordon
+[00011038.7709] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree_2mic/cvc_handsfree_2mic.elf'...
+[00011038.7709] KalEnv::loadMemoryMap
+[00011038.7714] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00011038.7786] Kal: Loaded kalimba/gordon_peripherals.xml
+[00011038.7902] KalEnv::load
+[00011038.7907] KalEnv::createDebugger
+[00011038.7908] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00011038.9210] Kal: Attaching to a gordon
+[00011038.9212] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree/cvc_handsfree.elf'...
+[00011038.9212] KalEnv::loadMemoryMap
+[00011038.9218] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00011038.9292] Kal: Loaded kalimba/gordon_peripherals.xml
+[00011038.9359] KalEnv::load
+[00011038.9363] KalEnv::createDebugger
+[00011038.9364] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00011039.0668] Kal: Attaching to a gordon
+[00011039.0670] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/sbc_decoder.elf'...
+[00011039.0670] KalEnv::loadMemoryMap
+[00011039.0676] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00011039.0745] Kal: Loaded kalimba/gordon_peripherals.xml
+[00011039.0808] KalEnv::load
+[00011039.0816] KalEnv::createDebugger
+[00011039.0817] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00011039.2112] Kal: Attaching to a gordon
+[00011039.2114] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_2mic/a2dp_low_latency_2mic.elf'...
+[00011039.2115] KalEnv::loadMemoryMap
+[00011039.2121] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00011039.2205] Kal: Loaded kalimba/gordon_peripherals.xml
+[00011039.2305] KalEnv::load
+[00011039.2309] KalEnv::createDebugger
+[00011039.2309] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00011039.3661] Kal: Attaching to a gordon
+[00011039.3666] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_1mic/a2dp_low_latency_1mic.elf'...
+[00011039.3667] KalEnv::loadMemoryMap
+[00011039.3685] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00011039.3900] Kal: Loaded kalimba/gordon_peripherals.xml
+[00011039.3977] KalEnv::load
+[00011039.3983] KalEnv::createDebugger
+[00011039.3984] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00011039.5307] Kal: Attaching to a gordon
+[00011039.5313] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/spdif_sink.elf'...
+[00011039.5313] KalEnv::loadMemoryMap
+[00011039.5325] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00011039.5462] Kal: Loaded kalimba/gordon_peripherals.xml
+[00011039.5557] KalEnv::load
+[00011039.5563] KalEnv::createDebugger
+[00011039.5564] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00011039.6898] Kal: Attaching to a gordon
+[00011039.6900] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/faststream_decoder.elf'...
+[00011039.6900] KalEnv::loadMemoryMap
+[00011039.6906] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00011039.6980] Kal: Loaded kalimba/gordon_peripherals.xml
+[00011039.7076] KalEnv::load
+[00011039.7079] KalEnv::createDebugger
+[00011039.7080] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00011039.8448] Kal: Attaching to a gordon
+[00011039.8453] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/vee_heartrate/vee_heartrate.elf'...
+[00011039.8454] KalEnv::loadMemoryMap
+[00011039.8475] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00011039.8676] Kal: Loaded kalimba/gordon_peripherals.xml
+[00011039.8748] KalEnv::setActive 0
+[00011039.9209] KalEnv::setActive 0
+[00011039.9536] KalEnv::setActive 0
+[00011039.9819] KalEnv::setActive 0
+[00011040.0084] KalEnv::setActive 0
+[00011040.0303] KalEnv::setActive 0
+[00011040.0508] KalEnv::setActive 0
+[00011040.0668] KalEnv::setActive 0
+[00011040.0806] KalEnv::setActive 0
+[00011040.0915] KalEnv::setActive 0
+[00011054.1187] KalEnv::stopRunning
+[00011054.1188] KalEnv::stopRunning
+[00011054.1188] KalEnv::stopRunning
+[00011054.1188] KalEnv::stopRunning
+[00011054.1188] KalEnv::stopRunning
+[00011054.1188] KalEnv::stopRunning
+[00011054.1188] KalEnv::stopRunning
+[00011054.1189] KalEnv::stopRunning
+[00011054.1189] KalEnv::stopRunning
+[00011054.1189] KalEnv::stopRunning
+[00011054.1189] KalEnv::startRunning
+[00011054.1642] KalEnv::go
+[00011054.1924] KalEnv::kalStateChanged to 2
+[00011056.3910] KalEnv::kalStateChanged to 6
+[00011086.0819] KalEnv::stopRunning
+[00011086.0820] KalEnv::stopRunning
+[00011086.0820] KalEnv::stopRunning
+[00011086.0820] KalEnv::stopRunning
+[00011086.0820] KalEnv::stopRunning
+[00011086.0820] KalEnv::stopRunning
+[00011086.0820] KalEnv::stopRunning
+[00011086.0820] KalEnv::stopRunning
+[00011086.0821] KalEnv::stopRunning
+[00011086.0821] KalEnv::stopRunning
+[00011086.2934] KalEnv::startRunning
+[00011086.3260] KalEnv::go
+[00011086.3541] KalEnv::kalStateChanged to 2
+[00011098.9963] KalEnv::kalStateChanged to 6
+[00011131.5470] KalEnv::stopRunning
+[00011131.5471] KalEnv::stopRunning
+[00011131.5471] KalEnv::stopRunning
+[00011131.5472] KalEnv::stopRunning
+[00011131.5472] KalEnv::stopRunning
+[00011131.5472] KalEnv::stopRunning
+[00011131.5472] KalEnv::stopRunning
+[00011131.5472] KalEnv::stopRunning
+[00011131.5473] KalEnv::stopRunning
+[00011131.5473] KalEnv::stopRunning
+[00011131.7561] KalEnv::startRunning
+[00011131.7849] KalEnv::go
+[00011131.8339] KalEnv::kalStateChanged to 2
+[00011138.0626] KalEnv::kalStateChanged to 6
+[00011153.2298] KalEnv::stopRunning
+[00011153.2298] KalEnv::stopRunning
+[00011153.2298] KalEnv::stopRunning
+[00011153.2298] KalEnv::stopRunning
+[00011153.2298] KalEnv::stopRunning
+[00011153.2298] KalEnv::stopRunning
+[00011153.2298] KalEnv::stopRunning
+[00011153.2298] KalEnv::stopRunning
+[00011153.2298] KalEnv::stopRunning
+[00011153.2298] KalEnv::stopRunning
+[00011153.3702] KalEnv::startRunning
+[00011153.3810] KalEnv::go
+[00011153.4133] KalEnv::kalStateChanged to 2
+[00011159.9982] KalEnv::kalStateChanged to 6
+[00011180.1518] KalEnv::kalStateChanged to 3
+[00011180.1714] KalEnv::stopRunning
+[00011180.1714] KalEnv::stopRunning
+[00011180.1714] KalEnv::stopRunning
+[00011180.1715] KalEnv::stopRunning
+[00011180.1715] KalEnv::stopRunning
+[00011180.1715] KalEnv::stopRunning
+[00011180.1715] KalEnv::stopRunning
+[00011180.1715] KalEnv::stopRunning
+[00011180.1715] KalEnv::stopRunning
+[00011180.1715] KalEnv::stopRunning
+[00011180.3106] KalEnv::startRunning
+[00011180.3438] KalEnv::go
+[00011180.4943] KalEnv::kalStateChanged to 2
+[00011184.5745] KalEnv::kalStateChanged to 6
+[00011191.4675] KalEnv::stopRunning
+[00011191.4676] KalEnv::stopRunning
+[00011191.4676] KalEnv::stopRunning
+[00011191.4676] KalEnv::stopRunning
+[00011191.4676] KalEnv::stopRunning
+[00011191.4677] KalEnv::stopRunning
+[00011191.4677] KalEnv::stopRunning
+[00011191.4677] KalEnv::stopRunning
+[00011191.4677] KalEnv::stopRunning
+[00011191.4677] KalEnv::stopRunning
+[00011191.6699] KalEnv::startRunning
+[00011191.6952] KalEnv::go
+[00011191.7224] KalEnv::kalStateChanged to 2
+[00011206.4967] KalEnv::kalStateChanged to 6
+[00011342.5564] KalEnv::stopRunning
+[00011342.5565] KalEnv::stopRunning
+[00011342.5565] KalEnv::stopRunning
+[00011342.5566] KalEnv::stopRunning
+[00011342.5566] KalEnv::stopRunning
+[00011342.5566] KalEnv::stopRunning
+[00011342.5566] KalEnv::stopRunning
+[00011342.5566] KalEnv::stopRunning
+[00011342.5567] KalEnv::stopRunning
+[00011342.5567] KalEnv::stopRunning
+[00011342.7210] KalEnv::startRunning
+[00011342.7665] KalEnv::go
+[00011342.8054] KalEnv::kalStateChanged to 2
+[00011349.0238] KalEnv::kalStateChanged to 6
+[00011387.9144] KalEnv::stopRunning
+[00011387.9145] KalEnv::stopRunning
+[00011387.9145] KalEnv::stopRunning
+[00011387.9145] KalEnv::stopRunning
+[00011387.9145] KalEnv::stopRunning
+[00011387.9145] KalEnv::stopRunning
+[00011387.9145] KalEnv::stopRunning
+[00011387.9145] KalEnv::stopRunning
+[00011387.9145] KalEnv::stopRunning
+[00011387.9145] KalEnv::stopRunning
+[00011388.0279] KalEnv::startRunning
+[00011388.0414] KalEnv::go
+[00011388.0685] KalEnv::kalStateChanged to 2
+[00011394.6152] KalEnv::kalStateChanged to 6
+[00011407.5536] KalEnv::stopRunning
+[00011407.5537] KalEnv::stopRunning
+[00011407.5537] KalEnv::stopRunning
+[00011407.5537] KalEnv::stopRunning
+[00011407.5537] KalEnv::stopRunning
+[00011407.5538] KalEnv::stopRunning
+[00011407.5538] KalEnv::stopRunning
+[00011407.5538] KalEnv::stopRunning
+[00011407.5538] KalEnv::stopRunning
+[00011407.5538] KalEnv::stopRunning
+[00011407.6923] KalEnv::startRunning
+[00011407.7031] KalEnv::go
+[00011407.7278] KalEnv::kalStateChanged to 2
+[00011468.0145] KalEnv::kalStateChanged to 6
+[00011518.9746] KalEnv::stopRunning
+[00011518.9747] KalEnv::stopRunning
+[00011518.9747] KalEnv::stopRunning
+[00011518.9747] KalEnv::stopRunning
+[00011518.9747] KalEnv::stopRunning
+[00011518.9747] KalEnv::stopRunning
+[00011518.9748] KalEnv::stopRunning
+[00011518.9748] KalEnv::stopRunning
+[00011518.9748] KalEnv::stopRunning
+[00011518.9748] KalEnv::stopRunning
+[00011519.1368] KalEnv::startRunning
+[00011519.1570] KalEnv::go
+[00011519.1917] KalEnv::kalStateChanged to 2
+[00011525.3840] KalEnv::kalStateChanged to 6
+[00011532.6426] KalEnv::stopRunning
+[00011532.6426] KalEnv::stopRunning
+[00011532.6427] KalEnv::stopRunning
+[00011532.6427] KalEnv::stopRunning
+[00011532.6427] KalEnv::stopRunning
+[00011532.6427] KalEnv::stopRunning
+[00011532.6428] KalEnv::stopRunning
+[00011532.6428] KalEnv::stopRunning
+[00011532.6428] KalEnv::stopRunning
+[00011532.6428] KalEnv::stopRunning
+[00011532.8802] KalEnv::startRunning
+[00011532.9099] KalEnv::go
+[00011532.9475] KalEnv::kalStateChanged to 2
+[00011557.3186] KalEnv::kalStateChanged to 6
+[00011567.1931] KalEnv::stopRunning
+[00011567.1931] KalEnv::stopRunning
+[00011567.1931] KalEnv::stopRunning
+[00011567.1932] KalEnv::stopRunning
+[00011567.1932] KalEnv::stopRunning
+[00011567.1932] KalEnv::stopRunning
+[00011567.1932] KalEnv::stopRunning
+[00011567.1932] KalEnv::stopRunning
+[00011567.1932] KalEnv::stopRunning
+[00011567.1932] KalEnv::stopRunning
+[00011567.3592] KalEnv::startRunning
+[00011567.3863] KalEnv::go
+[00011567.4242] KalEnv::kalStateChanged to 2
+[00011725.5088] KalEnv::kalStateChanged to 6
+[00011738.0996] KalEnv::stopRunning
+[00011738.0997] KalEnv::stopRunning
+[00011738.0997] KalEnv::stopRunning
+[00011738.0997] KalEnv::stopRunning
+[00011738.0998] KalEnv::stopRunning
+[00011738.0998] KalEnv::stopRunning
+[00011738.0998] KalEnv::stopRunning
+[00011738.0998] KalEnv::stopRunning
+[00011738.0999] KalEnv::stopRunning
+[00011738.0999] KalEnv::stopRunning
+[00011738.3316] KalEnv::startRunning
+[00011738.3631] KalEnv::go
+[00011738.4045] KalEnv::kalStateChanged to 2
+[00011748.9248] KalEnv::kalStateChanged to 6
+[00011818.2548] KalEnv::setActive 0
+[00011818.2548] KalEnv::setActive 0
+[00011818.2548] KalEnv::setActive 0
+[00011818.2548] KalEnv::setActive 0
+[00011818.2548] KalEnv::setActive 0
+[00011818.2548] KalEnv::setActive 0
+[00011818.2548] KalEnv::setActive 0
+[00011818.2549] KalEnv::setActive 0
+[00011818.2549] KalEnv::setActive 0
+[00011818.2549] KalEnv::setActive 0
+[00011830.7437] KalEnv::stopRunning
+[00011830.7438] KalEnv::stopRunning
+[00011830.7438] KalEnv::stopRunning
+[00011830.7439] KalEnv::stopRunning
+[00011830.7439] KalEnv::stopRunning
+[00011830.7439] KalEnv::stopRunning
+[00011830.7440] KalEnv::stopRunning
+[00011830.7440] KalEnv::stopRunning
+[00011830.7440] KalEnv::stopRunning
+[00011830.7441] KalEnv::stopRunning
+[00011830.7441] KalEnv::startRunning
+[00011830.8007] KalEnv::go
+[00011830.8132] KalEnv::kalStateChanged to 3
+[00011831.1041] KalEnv::kalStateChanged to 2
+[00011941.5925] KalEnv::kalStateChanged to 6
+[00012011.5735] KalEnv::setActive 1
+[00012011.6864] KalEnv::setActive 1
+[00012011.8234] KalEnv::setActive 1
+[00012011.9574] KalEnv::setActive 1
+[00012012.0733] KalEnv::setActive 1
+[00012012.2157] KalEnv::setActive 1
+[00012012.3396] KalEnv::setActive 1
+[00012012.4684] KalEnv::setActive 1
+[00012012.5978] KalEnv::setActive 1
+[00012012.7861] KalEnv::setActive 1
+[00012012.8142] KalEnv::stop
+[00012012.8261] KalEnv::stop
+[00012012.8398] KalEnv::stop
+[00012012.8535] KalEnv::stop
+[00012012.8676] KalEnv::stop
+[00012012.8804] KalEnv::stop
+[00012012.8920] KalEnv::stop
+[00012012.9033] KalEnv::stop
+[00012012.9117] KalEnv::stop
+[00012012.9216] KalEnv::stop
+[00012051.9491] KalEnv::load
+[00012051.9496] KalEnv::createDebugger
+[00012051.9497] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00012053.8303] Kal: Attaching to a gordon
+[00012053.8310] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset/cvc_headset.elf'...
+[00012053.8311] KalEnv::loadMemoryMap
+[00012053.8335] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00012053.8635] Kal: Loaded kalimba/gordon_peripherals.xml
+[00012053.8910] KalEnv::load
+[00012053.8918] KalEnv::createDebugger
+[00012053.8918] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00012054.0228] Kal: Attaching to a gordon
+[00012054.0233] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset_2mic/cvc_headset_2mic.elf'...
+[00012054.0233] KalEnv::loadMemoryMap
+[00012054.0252] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00012054.0459] Kal: Loaded kalimba/gordon_peripherals.xml
+[00012054.0544] KalEnv::load
+[00012054.0549] KalEnv::createDebugger
+[00012054.0550] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00012054.1901] Kal: Attaching to a gordon
+[00012054.1904] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree_2mic/cvc_handsfree_2mic.elf'...
+[00012054.1905] KalEnv::loadMemoryMap
+[00012054.1918] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00012054.2095] Kal: Loaded kalimba/gordon_peripherals.xml
+[00012054.2186] KalEnv::load
+[00012054.2193] KalEnv::createDebugger
+[00012054.2193] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00012054.3637] Kal: Attaching to a gordon
+[00012054.3641] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree/cvc_handsfree.elf'...
+[00012054.3641] KalEnv::loadMemoryMap
+[00012054.3655] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00012054.3857] Kal: Loaded kalimba/gordon_peripherals.xml
+[00012054.3993] KalEnv::load
+[00012054.3998] KalEnv::createDebugger
+[00012054.3998] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00012054.5444] Kal: Attaching to a gordon
+[00012054.5452] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/sbc_decoder.elf'...
+[00012054.5453] KalEnv::loadMemoryMap
+[00012054.5488] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00012054.5679] Kal: Loaded kalimba/gordon_peripherals.xml
+[00012054.5743] KalEnv::load
+[00012054.5752] KalEnv::createDebugger
+[00012054.5752] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00012054.7150] Kal: Attaching to a gordon
+[00012054.7154] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_2mic/a2dp_low_latency_2mic.elf'...
+[00012054.7154] KalEnv::loadMemoryMap
+[00012054.7167] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00012054.7317] Kal: Loaded kalimba/gordon_peripherals.xml
+[00012054.7414] KalEnv::load
+[00012054.7421] KalEnv::createDebugger
+[00012054.7422] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00012054.8793] Kal: Attaching to a gordon
+[00012054.8798] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_1mic/a2dp_low_latency_1mic.elf'...
+[00012054.8799] KalEnv::loadMemoryMap
+[00012054.8822] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00012054.9136] Kal: Loaded kalimba/gordon_peripherals.xml
+[00012054.9307] KalEnv::load
+[00012054.9313] KalEnv::createDebugger
+[00012054.9314] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00012055.0730] Kal: Attaching to a gordon
+[00012055.0735] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/spdif_sink.elf'...
+[00012055.0736] KalEnv::loadMemoryMap
+[00012055.0748] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00012055.0851] Kal: Loaded kalimba/gordon_peripherals.xml
+[00012055.1035] KalEnv::load
+[00012055.1046] KalEnv::createDebugger
+[00012055.1047] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00012055.2310] Kal: Attaching to a gordon
+[00012055.2312] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/faststream_decoder.elf'...
+[00012055.2312] KalEnv::loadMemoryMap
+[00012055.2318] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00012055.2388] Kal: Loaded kalimba/gordon_peripherals.xml
+[00012055.2439] KalEnv::load
+[00012055.2442] KalEnv::createDebugger
+[00012055.2442] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00012055.3782] Kal: Attaching to a gordon
+[00012055.3788] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/vee_heartrate/vee_heartrate.elf'...
+[00012055.3788] KalEnv::loadMemoryMap
+[00012055.3807] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00012055.4037] Kal: Loaded kalimba/gordon_peripherals.xml
+[00012055.4140] KalEnv::setActive 0
+[00012055.4719] KalEnv::setActive 0
+[00012055.5048] KalEnv::setActive 0
+[00012055.5321] KalEnv::setActive 0
+[00012055.5582] KalEnv::setActive 0
+[00012055.5802] KalEnv::setActive 0
+[00012055.6015] KalEnv::setActive 0
+[00012055.6172] KalEnv::setActive 0
+[00012055.6323] KalEnv::setActive 0
+[00012055.6419] KalEnv::setActive 0
+[00012076.8334] KalEnv::stopRunning
+[00012076.8334] KalEnv::stopRunning
+[00012076.8335] KalEnv::stopRunning
+[00012076.8335] KalEnv::stopRunning
+[00012076.8335] KalEnv::stopRunning
+[00012076.8335] KalEnv::stopRunning
+[00012076.8335] KalEnv::stopRunning
+[00012076.8335] KalEnv::stopRunning
+[00012076.8336] KalEnv::stopRunning
+[00012076.8336] KalEnv::stopRunning
+[00012076.8336] KalEnv::startRunning
+[00012076.8631] KalEnv::go
+[00012076.9061] KalEnv::kalStateChanged to 2
+[00012083.4064] KalEnv::kalStateChanged to 6
+[00012105.0649] KalEnv::stopRunning
+[00012105.0649] KalEnv::stopRunning
+[00012105.0649] KalEnv::stopRunning
+[00012105.0650] KalEnv::stopRunning
+[00012105.0650] KalEnv::stopRunning
+[00012105.0650] KalEnv::stopRunning
+[00012105.0650] KalEnv::stopRunning
+[00012105.0650] KalEnv::stopRunning
+[00012105.0650] KalEnv::stopRunning
+[00012105.0650] KalEnv::stopRunning
+[00012105.1876] KalEnv::startRunning
+[00012105.2035] KalEnv::go
+[00012105.3902] KalEnv::kalStateChanged to 2
+[00012129.9509] KalEnv::kalStateChanged to 6
+[00012147.2524] KalEnv::stopRunning
+[00012147.2524] KalEnv::stopRunning
+[00012147.2524] KalEnv::stopRunning
+[00012147.2524] KalEnv::stopRunning
+[00012147.2524] KalEnv::stopRunning
+[00012147.2524] KalEnv::stopRunning
+[00012147.2524] KalEnv::stopRunning
+[00012147.2524] KalEnv::stopRunning
+[00012147.2524] KalEnv::stopRunning
+[00012147.2525] KalEnv::stopRunning
+[00012147.3743] KalEnv::startRunning
+[00012147.4122] KalEnv::go
+[00012147.4472] KalEnv::kalStateChanged to 2
+[00012154.7351] KalEnv::kalStateChanged to 6
+[00012370.7993] KalEnv::setActive 0
+[00012370.7993] KalEnv::setActive 0
+[00012370.7993] KalEnv::setActive 0
+[00012370.7994] KalEnv::setActive 0
+[00012370.7994] KalEnv::setActive 0
+[00012370.7994] KalEnv::setActive 0
+[00012370.7994] KalEnv::setActive 0
+[00012370.7994] KalEnv::setActive 0
+[00012370.7994] KalEnv::setActive 0
+[00012370.7994] KalEnv::setActive 0
+[00012697.2248] <font size=4><b>Kal: Error: Could not acquire interlock - reqBadTransBroken<br></b></font>
+[00012697.5740] <font size=4><b>Kal: Error: Could not acquire interlock - reqBadTransBroken<br></b></font>
+[00012697.5741] <font size=4><b>Kal: Error: Transport failure (ÏµÍ³ÕÒ²»µ½Ö¸¶¨µÄÎÄ¼þ¡£<br>: Unable to open USB driver: Unable to send sequence) - Couldn't read dsp_enables register<br></b></font>
+[00012698.0240] <font size=4><b>Kal: Error: Transport failure (ÏµÍ³ÕÒ²»µ½Ö¸¶¨µÄÎÄ¼þ¡£<br>: Unable to open USB driver: Unable to send sequence) - Couldn't read dsp_enables register<br></b></font>
+[00012698.0241] <font size=4><b>Kal: Transport failure (ÏµÍ³ÕÒ²»µ½Ö¸¶¨µÄÎÄ¼þ¡£<br>: Unable to open USB driver: Unable to send sequence) - Couldn't read dsp_enables register<br></b></font>
+[00012698.0241] <font size=4><b>Kal: Too many transport failures. Disconnecting<br></b></font>
+[00012698.0241] <font size=4><b>Kal: Transport string was: À<br></b></font>
+[00012698.3752] KalEnv::setActive 1
+[00012698.3856] KalEnv::setActive 1
+[00012698.3988] KalEnv::setActive 1
+[00012698.4181] KalEnv::setActive 1
+[00012698.4408] KalEnv::setActive 1
+[00012698.4718] KalEnv::setActive 1
+[00012698.5009] KalEnv::setActive 1
+[00012698.5391] KalEnv::setActive 1
+[00012698.5791] KalEnv::setActive 1
+[00012698.6189] KalEnv::setActive 1
+[00012698.6737] KalEnv::stop
+[00012699.4246] KalEnv::stop
+[00012700.4744] KalEnv::stop
+[00012701.5284] KalEnv::stop
+[00012702.5785] KalEnv::stop
+[00012703.6285] KalEnv::stop
+[00012704.6785] KalEnv::stop
+[00012705.7284] KalEnv::stop
+[00012706.7784] KalEnv::stop
+[00012707.8284] KalEnv::stop
+[00016377.6851] KalEnv::load
+[00016377.6855] KalEnv::createDebugger
+[00016377.6855] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00016379.5246] Kal: Attaching to a gordon
+[00016379.5251] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset/cvc_headset.elf'...
+[00016379.5251] KalEnv::loadMemoryMap
+[00016379.5268] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00016379.5504] Kal: Loaded kalimba/gordon_peripherals.xml
+[00016379.6831] KalEnv::load
+[00016379.6834] KalEnv::createDebugger
+[00016379.6834] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00016379.8188] Kal: Attaching to a gordon
+[00016379.8192] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset_2mic/cvc_headset_2mic.elf'...
+[00016379.8192] KalEnv::loadMemoryMap
+[00016379.8204] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00016379.8341] Kal: Loaded kalimba/gordon_peripherals.xml
+[00016379.8502] KalEnv::load
+[00016379.8507] KalEnv::createDebugger
+[00016379.8507] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00016379.9823] Kal: Attaching to a gordon
+[00016379.9827] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree_2mic/cvc_handsfree_2mic.elf'...
+[00016379.9827] KalEnv::loadMemoryMap
+[00016379.9850] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00016380.0049] Kal: Loaded kalimba/gordon_peripherals.xml
+[00016380.0218] KalEnv::load
+[00016380.0223] KalEnv::createDebugger
+[00016380.0224] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00016380.1521] Kal: Attaching to a gordon
+[00016380.1525] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree/cvc_handsfree.elf'...
+[00016380.1526] KalEnv::loadMemoryMap
+[00016380.1545] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00016380.1761] Kal: Loaded kalimba/gordon_peripherals.xml
+[00016380.1911] KalEnv::load
+[00016380.1918] KalEnv::createDebugger
+[00016380.1918] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00016380.3313] Kal: Attaching to a gordon
+[00016380.3318] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/sbc_decoder.elf'...
+[00016380.3319] KalEnv::loadMemoryMap
+[00016380.3336] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00016380.3518] Kal: Loaded kalimba/gordon_peripherals.xml
+[00016380.3664] KalEnv::load
+[00016380.3669] KalEnv::createDebugger
+[00016380.3669] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00016380.5032] Kal: Attaching to a gordon
+[00016380.5035] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_2mic/a2dp_low_latency_2mic.elf'...
+[00016380.5036] KalEnv::loadMemoryMap
+[00016380.5051] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00016380.5233] Kal: Loaded kalimba/gordon_peripherals.xml
+[00016380.5445] KalEnv::load
+[00016380.5451] KalEnv::createDebugger
+[00016380.5451] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00016380.6851] Kal: Attaching to a gordon
+[00016380.6857] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_1mic/a2dp_low_latency_1mic.elf'...
+[00016380.6857] KalEnv::loadMemoryMap
+[00016380.6881] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00016380.7095] Kal: Loaded kalimba/gordon_peripherals.xml
+[00016380.7244] KalEnv::load
+[00016380.7249] KalEnv::createDebugger
+[00016380.7249] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00016380.8527] Kal: Attaching to a gordon
+[00016380.8530] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/spdif_sink.elf'...
+[00016380.8530] KalEnv::loadMemoryMap
+[00016380.8537] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00016380.8624] Kal: Loaded kalimba/gordon_peripherals.xml
+[00016380.8750] KalEnv::load
+[00016380.8754] KalEnv::createDebugger
+[00016380.8754] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00016381.0088] Kal: Attaching to a gordon
+[00016381.0092] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/faststream_decoder.elf'...
+[00016381.0092] KalEnv::loadMemoryMap
+[00016381.0110] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00016381.0272] Kal: Loaded kalimba/gordon_peripherals.xml
+[00016381.0464] KalEnv::load
+[00016381.0469] KalEnv::createDebugger
+[00016381.0469] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00016381.1941] Kal: Attaching to a gordon
+[00016381.1945] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/vee_heartrate/vee_heartrate.elf'...
+[00016381.1946] KalEnv::loadMemoryMap
+[00016381.1964] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00016381.2194] Kal: Loaded kalimba/gordon_peripherals.xml
+[00016381.2412] KalEnv::setActive 0
+[00016381.2853] KalEnv::setActive 0
+[00016381.3198] KalEnv::setActive 0
+[00016381.3491] KalEnv::setActive 0
+[00016381.3757] KalEnv::setActive 0
+[00016381.3991] KalEnv::setActive 0
+[00016381.4193] KalEnv::setActive 0
+[00016381.4368] KalEnv::setActive 0
+[00016381.4514] KalEnv::setActive 0
+[00016381.4626] KalEnv::setActive 0
+[00016418.7108] KalEnv::stopRunning
+[00016418.7109] KalEnv::stopRunning
+[00016418.7109] KalEnv::stopRunning
+[00016418.7110] KalEnv::stopRunning
+[00016418.7110] KalEnv::stopRunning
+[00016418.7110] KalEnv::stopRunning
+[00016418.7110] KalEnv::stopRunning
+[00016418.7110] KalEnv::stopRunning
+[00016418.7110] KalEnv::stopRunning
+[00016418.7110] KalEnv::stopRunning
+[00016418.7111] KalEnv::startRunning
+[00016418.7613] KalEnv::go
+[00016418.8372] KalEnv::kalStateChanged to 2
+[00016426.3476] KalEnv::kalStateChanged to 6
+[00016809.5923] KalEnv::stopRunning
+[00016809.5923] KalEnv::stopRunning
+[00016809.5923] KalEnv::stopRunning
+[00016809.5924] KalEnv::stopRunning
+[00016809.5924] KalEnv::stopRunning
+[00016809.5924] KalEnv::stopRunning
+[00016809.5924] KalEnv::stopRunning
+[00016809.5924] KalEnv::stopRunning
+[00016809.5924] KalEnv::stopRunning
+[00016809.5924] KalEnv::stopRunning
+[00016809.7428] KalEnv::startRunning
+[00016809.7645] KalEnv::go
+[00016809.8503] KalEnv::kalStateChanged to 2
+[00016929.5299] KalEnv::kalStateChanged to 6
+[00017456.3087] KalEnv::stopRunning
+[00017456.3087] KalEnv::stopRunning
+[00017456.3087] KalEnv::stopRunning
+[00017456.3087] KalEnv::stopRunning
+[00017456.3088] KalEnv::stopRunning
+[00017456.3088] KalEnv::stopRunning
+[00017456.3088] KalEnv::stopRunning
+[00017456.3088] KalEnv::stopRunning
+[00017456.3088] KalEnv::stopRunning
+[00017456.3088] KalEnv::stopRunning
+[00017456.4822] KalEnv::startRunning
+[00017456.5150] KalEnv::go
+[00017456.5492] KalEnv::kalStateChanged to 2
+[00017617.3592] KalEnv::kalStateChanged to 6
+[00017630.9469] KalEnv::stopRunning
+[00017630.9470] KalEnv::stopRunning
+[00017630.9470] KalEnv::stopRunning
+[00017630.9470] KalEnv::stopRunning
+[00017630.9471] KalEnv::stopRunning
+[00017630.9471] KalEnv::stopRunning
+[00017630.9471] KalEnv::stopRunning
+[00017630.9471] KalEnv::stopRunning
+[00017630.9471] KalEnv::stopRunning
+[00017630.9472] KalEnv::stopRunning
+[00017631.1367] KalEnv::startRunning
+[00017631.1537] KalEnv::go
+[00017631.1803] KalEnv::kalStateChanged to 2
+[00017642.7809] KalEnv::kalStateChanged to 6
+[00017742.5509] KalEnv::stopRunning
+[00017742.5510] KalEnv::stopRunning
+[00017742.5510] KalEnv::stopRunning
+[00017742.5510] KalEnv::stopRunning
+[00017742.5511] KalEnv::stopRunning
+[00017742.5511] KalEnv::stopRunning
+[00017742.5511] KalEnv::stopRunning
+[00017742.5512] KalEnv::stopRunning
+[00017742.5512] KalEnv::stopRunning
+[00017742.5512] KalEnv::stopRunning
+[00017742.7944] KalEnv::startRunning
+[00017742.8284] KalEnv::go
+[00017742.8661] KalEnv::kalStateChanged to 2
+[00017758.8536] KalEnv::kalStateChanged to 6
+[00018179.2999] <font size=4><b>Kal: Error: Could not acquire interlock - reqBadTransBroken<br></b></font>
+[00018179.3005] <font size=4><b>Kal: Error: Transport failure (Verified read failed) - Couldn't read dsp_enables register<br></b></font>
+[00018179.5528] <font size=4><b>Kal: Error: Could not acquire interlock - reqBadTransBroken<br></b></font>
+[00018179.8039] <font size=4><b>Kal: Error: Could not acquire interlock - reqBadTransBroken<br></b></font>
+[00018179.8040] <font size=4><b>Kal: Could not acquire interlock - reqBadTransBroken<br></b></font>
+[00018179.8040] <font size=4><b>Kal: Too many transport failures. Disconnecting<br></b></font>
+[00018179.8040] <font size=4><b>Kal: Transport string was: <br></b></font>
+[00018180.5962] <font size=4><b>Kal: Error: Transport failure (Verified read failed) - Couldn't read dsp_enables register<br></b></font>
+[00018180.5963] <font size=4><b>Kal: Transport failure (Verified read failed) - Couldn't read dsp_enables register<br></b></font>
+[00018180.5964] <font size=4><b>Kal: Too many transport failures. Disconnecting<br></b></font>
+[00018180.5964] <font size=4><b>Kal: Transport string was: <br></b></font>
+[00018180.5983] KalEnv::setActive 1
+[00018180.6433] KalEnv::setActive 1
+[00018180.6687] KalEnv::setActive 1
+[00018180.6951] KalEnv::setActive 1
+[00018180.7240] KalEnv::setActive 1
+[00018180.7546] KalEnv::setActive 1
+[00018180.7855] KalEnv::setActive 1
+[00018180.8202] KalEnv::setActive 1
+[00018180.8580] KalEnv::setActive 1
+[00018180.8997] KalEnv::setActive 1
+[00018180.9144] KalEnv::stop
+[00018181.3531] KalEnv::stop
+[00018182.1084] KalEnv::stop
+[00018182.8669] KalEnv::stop
+[00018183.6298] KalEnv::stop
+[00018184.3900] KalEnv::stop
+[00018185.1549] KalEnv::stop
+[00018185.9163] KalEnv::stop
+[00018186.6792] KalEnv::stop
+[00018187.4380] KalEnv::stop
+[00018187.5460] <font size=4><b>Kal: Error: kalaccess library not initialized<br></b></font>
+[00018187.8157] <font size=4><b>Kal: Error: kalaccess library not initialized<br></b></font>
+[00018187.8163] KalEnv::setActive 1
+[00018187.8163] KalEnv::setActive 1
+[00018187.8163] KalEnv::setActive 1
+[00018187.8163] KalEnv::setActive 1
+[00018187.8163] KalEnv::setActive 1
+[00018187.8163] KalEnv::setActive 1
+[00018187.8163] KalEnv::setActive 1
+[00018187.8163] KalEnv::setActive 1
+[00018187.8163] KalEnv::setActive 1
+[00018187.8164] KalEnv::setActive 1
+[00018187.8164] KalEnv::stop
+[00018187.8169] KalEnv::stop
+[00018187.8174] KalEnv::stop
+[00018187.8179] KalEnv::stop
+[00018187.8187] KalEnv::stop
+[00018187.8194] KalEnv::stop
+[00018187.8201] KalEnv::stop
+[00018187.8207] KalEnv::stop
+[00018187.8214] KalEnv::stop
+[00018187.8220] KalEnv::stop
+[00018328.0458] KalEnv::load
+[00018328.0461] KalEnv::createDebugger
+[00018328.0462] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00018329.9136] Kal: Attaching to a gordon
+[00018329.9142] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset/cvc_headset.elf'...
+[00018329.9143] KalEnv::loadMemoryMap
+[00018329.9170] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00018329.9395] Kal: Loaded kalimba/gordon_peripherals.xml
+[00018329.9706] KalEnv::load
+[00018329.9713] KalEnv::createDebugger
+[00018329.9714] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00018330.1139] Kal: Attaching to a gordon
+[00018330.1142] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset_2mic/cvc_headset_2mic.elf'...
+[00018330.1143] KalEnv::loadMemoryMap
+[00018330.1157] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00018330.1339] Kal: Loaded kalimba/gordon_peripherals.xml
+[00018330.1419] KalEnv::load
+[00018330.1426] KalEnv::createDebugger
+[00018330.1427] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00018330.2799] Kal: Attaching to a gordon
+[00018330.2805] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree_2mic/cvc_handsfree_2mic.elf'...
+[00018330.2806] KalEnv::loadMemoryMap
+[00018330.2829] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00018330.3066] Kal: Loaded kalimba/gordon_peripherals.xml
+[00018330.3137] KalEnv::load
+[00018330.3143] KalEnv::createDebugger
+[00018330.3144] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00018330.4491] Kal: Attaching to a gordon
+[00018330.4496] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree/cvc_handsfree.elf'...
+[00018330.4496] KalEnv::loadMemoryMap
+[00018330.4513] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00018330.4748] Kal: Loaded kalimba/gordon_peripherals.xml
+[00018330.4824] KalEnv::load
+[00018330.4831] KalEnv::createDebugger
+[00018330.4831] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00018330.6154] Kal: Attaching to a gordon
+[00018330.6158] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/sbc_decoder.elf'...
+[00018330.6158] KalEnv::loadMemoryMap
+[00018330.6173] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00018330.6354] Kal: Loaded kalimba/gordon_peripherals.xml
+[00018330.6449] KalEnv::load
+[00018330.6458] KalEnv::createDebugger
+[00018330.6458] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00018330.7944] Kal: Attaching to a gordon
+[00018330.7950] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_2mic/a2dp_low_latency_2mic.elf'...
+[00018330.7951] KalEnv::loadMemoryMap
+[00018330.7974] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00018330.8336] Kal: Loaded kalimba/gordon_peripherals.xml
+[00018330.8417] KalEnv::load
+[00018330.8423] KalEnv::createDebugger
+[00018330.8424] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00018330.9728] Kal: Attaching to a gordon
+[00018330.9731] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_1mic/a2dp_low_latency_1mic.elf'...
+[00018330.9732] KalEnv::loadMemoryMap
+[00018330.9745] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00018330.9887] Kal: Loaded kalimba/gordon_peripherals.xml
+[00018330.9954] KalEnv::load
+[00018330.9961] KalEnv::createDebugger
+[00018330.9962] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00018331.1293] Kal: Attaching to a gordon
+[00018331.1297] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/spdif_sink.elf'...
+[00018331.1297] KalEnv::loadMemoryMap
+[00018331.1312] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00018331.1441] Kal: Loaded kalimba/gordon_peripherals.xml
+[00018331.1497] KalEnv::load
+[00018331.1504] KalEnv::createDebugger
+[00018331.1504] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00018331.2863] Kal: Attaching to a gordon
+[00018331.2869] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/faststream_decoder.elf'...
+[00018331.2869] KalEnv::loadMemoryMap
+[00018331.2888] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00018331.3112] Kal: Loaded kalimba/gordon_peripherals.xml
+[00018331.3243] KalEnv::load
+[00018331.3248] KalEnv::createDebugger
+[00018331.3249] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00018331.4612] Kal: Attaching to a gordon
+[00018331.4618] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/vee_heartrate/vee_heartrate.elf'...
+[00018331.4619] KalEnv::loadMemoryMap
+[00018331.4641] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00018331.4937] Kal: Loaded kalimba/gordon_peripherals.xml
+[00018331.5065] KalEnv::setActive 0
+[00018331.5642] KalEnv::setActive 0
+[00018331.5997] KalEnv::setActive 0
+[00018331.6296] KalEnv::setActive 0
+[00018331.6569] KalEnv::setActive 0
+[00018331.6826] KalEnv::setActive 0
+[00018331.7055] KalEnv::setActive 0
+[00018331.7222] KalEnv::setActive 0
+[00018331.7377] KalEnv::setActive 0
+[00018331.7478] KalEnv::setActive 0
+[00018763.9581] KalEnv::setActive 0
+[00018763.9582] KalEnv::setActive 0
+[00018763.9582] KalEnv::setActive 0
+[00018763.9582] KalEnv::setActive 0
+[00018763.9582] KalEnv::setActive 0
+[00018763.9582] KalEnv::setActive 0
+[00018763.9582] KalEnv::setActive 0
+[00018763.9582] KalEnv::setActive 0
+[00018763.9582] KalEnv::setActive 0
+[00018763.9582] KalEnv::setActive 0
+[00018795.5490] KalEnv::stopRunning
+[00018795.5491] KalEnv::stopRunning
+[00018795.5491] KalEnv::stopRunning
+[00018795.5491] KalEnv::stopRunning
+[00018795.5492] KalEnv::stopRunning
+[00018795.5492] KalEnv::stopRunning
+[00018795.5492] KalEnv::stopRunning
+[00018795.5492] KalEnv::stopRunning
+[00018795.5492] KalEnv::stopRunning
+[00018795.5492] KalEnv::stopRunning
+[00018795.5492] KalEnv::startRunning
+[00018795.5787] KalEnv::go
+[00018795.6033] KalEnv::kalStateChanged to 2
+[00018813.8918] KalEnv::kalStateChanged to 6
+[00018938.6127] <font size=4><b>Kal: Error: Could not acquire interlock - reqBadTransBroken<br></b></font>
+[00018938.6127] <font size=4><b>Kal: Error: Transport failure (ÏµÍ³ÕÒ²»µ½Ö¸¶¨µÄÎÄ¼þ¡£<br>: Unable to open USB driver: Unable to send sequence) - Couldn't read dsp_enables register<br></b></font>
+[00018938.9627] <font size=4><b>Kal: Error: Could not acquire interlock - reqBadTransBroken<br></b></font>
+[00018939.3126] <font size=4><b>Kal: Error: Could not acquire interlock - reqBadTransBroken<br></b></font>
+[00018939.3127] <font size=4><b>Kal: Could not acquire interlock - reqBadTransBroken<br></b></font>
+[00018939.3127] <font size=4><b>Kal: Too many transport failures. Disconnecting<br></b></font>
+[00018939.3127] <font size=4><b>Kal: Transport string was: <br></b></font>
+[00018940.0128] <font size=4><b>Kal: Error: Transport failure (ÏµÍ³ÕÒ²»µ½Ö¸¶¨µÄÎÄ¼þ¡£<br>: Unable to open USB driver: Unable to send sequence) - Couldn't read dsp_enables register<br></b></font>
+[00018940.0129] <font size=4><b>Kal: Transport failure (ÏµÍ³ÕÒ²»µ½Ö¸¶¨µÄÎÄ¼þ¡£<br>: Unable to open USB driver: Unable to send sequence) - Couldn't read dsp_enables register<br></b></font>
+[00018940.0129] <font size=4><b>Kal: Too many transport failures. Disconnecting<br></b></font>
+[00018940.0129] <font size=4><b>Kal: Transport string was: <br></b></font>
+[00018940.0138] KalEnv::setActive 1
+[00018940.0273] KalEnv::setActive 1
+[00018940.0435] KalEnv::setActive 1
+[00018940.0626] KalEnv::setActive 1
+[00018940.0852] KalEnv::setActive 1
+[00018940.1093] KalEnv::setActive 1
+[00018940.1370] KalEnv::setActive 1
+[00018940.1679] KalEnv::setActive 1
+[00018940.2024] KalEnv::setActive 1
+[00018940.2452] KalEnv::setActive 1
+[00018940.2488] KalEnv::stop
+[00018941.0630] KalEnv::stop
+[00018942.1131] KalEnv::stop
+[00018943.1630] KalEnv::stop
+[00018944.2130] KalEnv::stop
+[00018945.2631] KalEnv::stop
+[00018946.3161] KalEnv::stop
+[00018947.3661] KalEnv::stop
+[00018948.4161] KalEnv::stop
+[00018949.4661] KalEnv::stop
+[00018949.5775] <font size=4><b>Kal: Error: kalaccess library not initialized<br></b></font>
+[00018949.8747] <font size=4><b>Kal: Error: kalaccess library not initialized<br></b></font>
+[00018949.8755] KalEnv::setActive 1
+[00018949.8755] KalEnv::setActive 1
+[00018949.8756] KalEnv::setActive 1
+[00018949.8757] KalEnv::setActive 1
+[00018949.8757] KalEnv::setActive 1
+[00018949.8758] KalEnv::setActive 1
+[00018949.8758] KalEnv::setActive 1
+[00018949.8758] KalEnv::setActive 1
+[00018949.8758] KalEnv::setActive 1
+[00018949.8758] KalEnv::setActive 1
+[00018949.8759] KalEnv::stop
+[00018949.8767] KalEnv::stop
+[00018949.8772] KalEnv::stop
+[00018949.8776] KalEnv::stop
+[00018949.8780] KalEnv::stop
+[00018949.8784] KalEnv::stop
+[00018949.8788] KalEnv::stop
+[00018949.8792] KalEnv::stop
+[00018949.8796] KalEnv::stop
+[00018949.8799] KalEnv::stop
+[00019733.4184] KalEnv::load
+[00019733.4189] KalEnv::createDebugger
+[00019733.4189] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00019735.1413] Kal: Attaching to a gordon
+[00019735.1420] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset/cvc_headset.elf'...
+[00019735.1421] KalEnv::loadMemoryMap
+[00019735.1444] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00019735.1721] Kal: Loaded kalimba/gordon_peripherals.xml
+[00019735.1990] KalEnv::load
+[00019735.1993] KalEnv::createDebugger
+[00019735.1993] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00019735.3289] Kal: Attaching to a gordon
+[00019735.3291] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset_2mic/cvc_headset_2mic.elf'...
+[00019735.3291] KalEnv::loadMemoryMap
+[00019735.3298] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00019735.3382] Kal: Loaded kalimba/gordon_peripherals.xml
+[00019735.3424] KalEnv::load
+[00019735.3430] KalEnv::createDebugger
+[00019735.3431] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00019735.4718] Kal: Attaching to a gordon
+[00019735.4720] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree_2mic/cvc_handsfree_2mic.elf'...
+[00019735.4720] KalEnv::loadMemoryMap
+[00019735.4727] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00019735.4812] Kal: Loaded kalimba/gordon_peripherals.xml
+[00019735.4877] KalEnv::load
+[00019735.4881] KalEnv::createDebugger
+[00019735.4881] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00019735.6239] Kal: Attaching to a gordon
+[00019735.6245] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree/cvc_handsfree.elf'...
+[00019735.6245] KalEnv::loadMemoryMap
+[00019735.6272] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00019735.6528] Kal: Loaded kalimba/gordon_peripherals.xml
+[00019735.6635] KalEnv::load
+[00019735.6643] KalEnv::createDebugger
+[00019735.6644] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00019735.7878] Kal: Attaching to a gordon
+[00019735.7893] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/sbc_decoder.elf'...
+[00019735.7893] KalEnv::loadMemoryMap
+[00019735.7909] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00019735.8077] Kal: Loaded kalimba/gordon_peripherals.xml
+[00019735.8170] KalEnv::load
+[00019735.8174] KalEnv::createDebugger
+[00019735.8175] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00019735.9636] Kal: Attaching to a gordon
+[00019735.9640] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_2mic/a2dp_low_latency_2mic.elf'...
+[00019735.9641] KalEnv::loadMemoryMap
+[00019735.9655] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00019735.9816] Kal: Loaded kalimba/gordon_peripherals.xml
+[00019735.9894] KalEnv::load
+[00019735.9900] KalEnv::createDebugger
+[00019735.9900] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00019736.1194] Kal: Attaching to a gordon
+[00019736.1196] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_1mic/a2dp_low_latency_1mic.elf'...
+[00019736.1196] KalEnv::loadMemoryMap
+[00019736.1205] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00019736.1299] Kal: Loaded kalimba/gordon_peripherals.xml
+[00019736.1383] KalEnv::load
+[00019736.1388] KalEnv::createDebugger
+[00019736.1388] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00019736.2675] Kal: Attaching to a gordon
+[00019736.2677] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/spdif_sink.elf'...
+[00019736.2677] KalEnv::loadMemoryMap
+[00019736.2683] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00019736.2752] Kal: Loaded kalimba/gordon_peripherals.xml
+[00019736.2790] KalEnv::load
+[00019736.2795] KalEnv::createDebugger
+[00019736.2796] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00019736.4162] Kal: Attaching to a gordon
+[00019736.4166] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/faststream_decoder.elf'...
+[00019736.4166] KalEnv::loadMemoryMap
+[00019736.4181] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00019736.4385] Kal: Loaded kalimba/gordon_peripherals.xml
+[00019736.4500] KalEnv::load
+[00019736.4506] KalEnv::createDebugger
+[00019736.4507] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00019736.5822] Kal: Attaching to a gordon
+[00019736.5824] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/vee_heartrate/vee_heartrate.elf'...
+[00019736.5824] KalEnv::loadMemoryMap
+[00019736.5832] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00019736.5928] Kal: Loaded kalimba/gordon_peripherals.xml
+[00019736.6015] KalEnv::setActive 0
+[00019736.6456] KalEnv::setActive 0
+[00019736.6803] KalEnv::setActive 0
+[00019736.7103] KalEnv::setActive 0
+[00019736.7375] KalEnv::setActive 0
+[00019736.7601] KalEnv::setActive 0
+[00019736.7801] KalEnv::setActive 0
+[00019736.7975] KalEnv::setActive 0
+[00019736.8129] KalEnv::setActive 0
+[00019736.8247] KalEnv::setActive 0
+[00020146.4693] KalEnv::stopRunning
+[00020146.4694] KalEnv::stopRunning
+[00020146.4694] KalEnv::stopRunning
+[00020146.4694] KalEnv::stopRunning
+[00020146.4694] KalEnv::stopRunning
+[00020146.4694] KalEnv::stopRunning
+[00020146.4695] KalEnv::stopRunning
+[00020146.4695] KalEnv::stopRunning
+[00020146.4695] KalEnv::stopRunning
+[00020146.4695] KalEnv::stopRunning
+[00020146.4695] KalEnv::startRunning
+[00020146.4896] KalEnv::go
+[00020146.5103] KalEnv::kalStateChanged to 2
+[00020173.5429] KalEnv::kalStateChanged to 6
+[00020211.0765] KalEnv::stopRunning
+[00020211.0766] KalEnv::stopRunning
+[00020211.0766] KalEnv::stopRunning
+[00020211.0766] KalEnv::stopRunning
+[00020211.0767] KalEnv::stopRunning
+[00020211.0767] KalEnv::stopRunning
+[00020211.0767] KalEnv::stopRunning
+[00020211.0767] KalEnv::stopRunning
+[00020211.0768] KalEnv::stopRunning
+[00020211.0768] KalEnv::stopRunning
+[00020211.2346] KalEnv::startRunning
+[00020211.2602] KalEnv::go
+[00020211.3378] KalEnv::kalStateChanged to 2
+[00020217.5645] KalEnv::kalStateChanged to 6
+[00020228.7414] KalEnv::stopRunning
+[00020228.7414] KalEnv::stopRunning
+[00020228.7415] KalEnv::stopRunning
+[00020228.7415] KalEnv::stopRunning
+[00020228.7415] KalEnv::stopRunning
+[00020228.7415] KalEnv::stopRunning
+[00020228.7415] KalEnv::stopRunning
+[00020228.7415] KalEnv::stopRunning
+[00020228.7415] KalEnv::stopRunning
+[00020228.7415] KalEnv::stopRunning
+[00020228.8930] KalEnv::startRunning
+[00020228.9135] KalEnv::go
+[00020228.9686] KalEnv::kalStateChanged to 2
+[00020236.1996] KalEnv::kalStateChanged to 6
+[00020735.4363] KalEnv::stopRunning
+[00020735.4364] KalEnv::stopRunning
+[00020735.4364] KalEnv::stopRunning
+[00020735.4364] KalEnv::stopRunning
+[00020735.4364] KalEnv::stopRunning
+[00020735.4365] KalEnv::stopRunning
+[00020735.4365] KalEnv::stopRunning
+[00020735.4365] KalEnv::stopRunning
+[00020735.4365] KalEnv::stopRunning
+[00020735.4365] KalEnv::stopRunning
+[00020735.5924] KalEnv::startRunning
+[00020735.6136] KalEnv::go
+[00020735.7358] KalEnv::kalStateChanged to 2
+[00020841.9101] <font size=4><b>Kal: Error: Transport failure (ÏµÍ³ÕÒ²»µ½Ö¸¶¨µÄÎÄ¼þ¡£<br>: Unable to open USB driver: Unable to send sequence)<br></b></font>
+[00020841.9101] <font size=4><b>Kal: Error: Transport failure (ÏµÍ³ÕÒ²»µ½Ö¸¶¨µÄÎÄ¼þ¡£<br>: Unable to open USB driver: Unable to send sequence) - Couldn't read dsp_enables register<br></b></font>
+[00020842.0101] <font size=4><b>Kal: Error: Transport failure (ÏµÍ³ÕÒ²»µ½Ö¸¶¨µÄÎÄ¼þ¡£<br>: Unable to open USB driver: Unable to send sequence)<br></b></font>
+[00020842.1101] <font size=4><b>Kal: Error: Transport failure (ÏµÍ³ÕÒ²»µ½Ö¸¶¨µÄÎÄ¼þ¡£<br>: Unable to open USB driver: Unable to send sequence)<br></b></font>
+[00020842.1102] <font size=4><b>Kal: Transport failure (ÏµÍ³ÕÒ²»µ½Ö¸¶¨µÄÎÄ¼þ¡£<br>: Unable to open USB driver: Unable to send sequence)<br></b></font>
+[00020842.1102] <font size=4><b>Kal: Too many transport failures. Disconnecting<br></b></font>
+[00020842.1102] <font size=4><b>Kal: Transport string was: <br></b></font>
+[00020842.3115] KalEnv::setActive 1
+[00020842.3271] KalEnv::setActive 1
+[00020842.3447] KalEnv::setActive 1
+[00020842.3650] KalEnv::setActive 1
+[00020842.3902] KalEnv::setActive 1
+[00020842.4187] KalEnv::setActive 1
+[00020842.4580] KalEnv::setActive 1
+[00020842.4982] KalEnv::setActive 1
+[00020842.5435] KalEnv::setActive 1
+[00020842.5917] KalEnv::setActive 1
+[00020842.6048] KalEnv::stop
+[00020843.1666] KalEnv::stop
+[00020844.2166] KalEnv::stop
+[00020845.2688] KalEnv::stop
+[00020846.3204] KalEnv::stop
+[00020847.3706] KalEnv::stop
+[00020848.4205] KalEnv::stop
+[00020849.4706] KalEnv::stop
+[00020850.5205] KalEnv::stop
+[00020851.5705] KalEnv::stop
+[00020851.6712] <font size=4><b>Kal: Error: kalaccess library not initialized<br></b></font>
+[00020851.9480] <font size=4><b>Kal: Error: kalaccess library not initialized<br></b></font>
+[00020883.6851] KalEnv::setActive 1
+[00020883.6852] KalEnv::setActive 1
+[00020883.6852] KalEnv::setActive 1
+[00020883.6852] KalEnv::setActive 1
+[00020883.6852] KalEnv::setActive 1
+[00020883.6852] KalEnv::setActive 1
+[00020883.6852] KalEnv::setActive 1
+[00020883.6852] KalEnv::setActive 1
+[00020883.6852] KalEnv::setActive 1
+[00020883.6852] KalEnv::setActive 1
+[00020883.6852] KalEnv::stop
+[00020883.6858] KalEnv::stop
+[00020883.6862] KalEnv::stop
+[00020883.6866] KalEnv::stop
+[00020883.6870] KalEnv::stop
+[00020883.6874] KalEnv::stop
+[00020883.6879] KalEnv::stop
+[00020883.6882] KalEnv::stop
+[00020883.6887] KalEnv::stop
+[00020883.6894] KalEnv::stop
+[00020949.5846] KalEnv::load
+[00020949.5850] KalEnv::createDebugger
+[00020949.5850] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00020951.4662] Kal: Attaching to a gordon
+[00020951.4666] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset/cvc_headset.elf'...
+[00020951.4666] KalEnv::loadMemoryMap
+[00020951.4681] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00020951.4890] Kal: Loaded kalimba/gordon_peripherals.xml
+[00020951.5101] KalEnv::load
+[00020951.5105] KalEnv::createDebugger
+[00020951.5106] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00020951.6506] Kal: Attaching to a gordon
+[00020951.6512] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_headset_2mic/cvc_headset_2mic.elf'...
+[00020951.6512] KalEnv::loadMemoryMap
+[00020951.6535] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00020951.6858] Kal: Loaded kalimba/gordon_peripherals.xml
+[00020951.6980] KalEnv::load
+[00020951.6986] KalEnv::createDebugger
+[00020951.6986] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00020951.8299] Kal: Attaching to a gordon
+[00020951.8302] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree_2mic/cvc_handsfree_2mic.elf'...
+[00020951.8303] KalEnv::loadMemoryMap
+[00020951.8314] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00020951.8453] Kal: Loaded kalimba/gordon_peripherals.xml
+[00020951.8493] KalEnv::load
+[00020951.8500] KalEnv::createDebugger
+[00020951.8500] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00020951.9785] Kal: Attaching to a gordon
+[00020951.9788] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/cvc_handsfree/cvc_handsfree.elf'...
+[00020951.9789] KalEnv::loadMemoryMap
+[00020951.9800] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00020951.9944] Kal: Loaded kalimba/gordon_peripherals.xml
+[00020951.9981] KalEnv::load
+[00020951.9985] KalEnv::createDebugger
+[00020951.9986] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00020952.1328] Kal: Attaching to a gordon
+[00020952.1334] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/sbc_decoder.elf'...
+[00020952.1334] KalEnv::loadMemoryMap
+[00020952.1358] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00020952.1649] Kal: Loaded kalimba/gordon_peripherals.xml
+[00020952.1788] KalEnv::load
+[00020952.1797] KalEnv::createDebugger
+[00020952.1798] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00020952.3197] Kal: Attaching to a gordon
+[00020952.3204] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_2mic/a2dp_low_latency_2mic.elf'...
+[00020952.3205] KalEnv::loadMemoryMap
+[00020952.3232] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00020952.3556] Kal: Loaded kalimba/gordon_peripherals.xml
+[00020952.3658] KalEnv::load
+[00020952.3666] KalEnv::createDebugger
+[00020952.3667] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00020952.5096] Kal: Attaching to a gordon
+[00020952.5103] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_low_latency_1mic/a2dp_low_latency_1mic.elf'...
+[00020952.5104] KalEnv::loadMemoryMap
+[00020952.5127] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00020952.5417] Kal: Loaded kalimba/gordon_peripherals.xml
+[00020952.5523] KalEnv::load
+[00020952.5532] KalEnv::createDebugger
+[00020952.5533] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00020952.6895] Kal: Attaching to a gordon
+[00020952.6899] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/spdif_sink.elf'...
+[00020952.6900] KalEnv::loadMemoryMap
+[00020952.6919] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00020952.7124] Kal: Loaded kalimba/gordon_peripherals.xml
+[00020952.7289] KalEnv::load
+[00020952.7297] KalEnv::createDebugger
+[00020952.7298] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00020952.8644] Kal: Attaching to a gordon
+[00020952.8647] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/a2dp_sink/faststream_decoder.elf'...
+[00020952.8647] KalEnv::loadMemoryMap
+[00020952.8656] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00020952.8943] Kal: Loaded kalimba/gordon_peripherals.xml
+[00020952.9030] KalEnv::load
+[00020952.9036] KalEnv::createDebugger
+[00020952.9036] Kal: Transport is: SPITRANS=USB SPIPORT=0
+[00020953.0393] Kal: Attaching to a gordon
+[00020953.0398] Kal: Using symbol info previously loaded from 'C:/ADK3.5/kalimba/apps/vee_heartrate/vee_heartrate.elf'...
+[00020953.0399] KalEnv::loadMemoryMap
+[00020953.0423] Kal: Loaded memory map: 'C:/ADK3.5/xide/bin/../config/kalimba/gordon.map'
+[00020953.0636] Kal: Loaded kalimba/gordon_peripherals.xml
+[00020953.0705] KalEnv::setActive 0
+[00020953.1300] KalEnv::setActive 0
+[00020953.1642] KalEnv::setActive 0
+[00020953.1955] KalEnv::setActive 0
+[00020953.2234] KalEnv::setActive 0
+[00020953.2470] KalEnv::setActive 0
+[00020953.2776] KalEnv::setActive 0
+[00020953.3013] KalEnv::setActive 0
+[00020953.3165] KalEnv::setActive 0
+[00020953.3268] KalEnv::setActive 0
+[00021095.0905] <font size=4><b>Kal: Error: Could not acquire interlock - reqBadTransBroken<br></b></font>
+[00021095.0918] KalEnv::setActive 0
+[00021095.0918] KalEnv::setActive 0
+[00021095.0919] KalEnv::setActive 0
+[00021095.0919] KalEnv::setActive 0
+[00021095.0919] KalEnv::setActive 0
+[00021095.0919] KalEnv::setActive 0
+[00021095.0919] KalEnv::setActive 0
+[00021095.0919] KalEnv::setActive 0
+[00021095.0919] KalEnv::setActive 0
+[00021095.0919] KalEnv::setActive 0
+[00021095.4403] <font size=4><b>Kal: Error: Could not acquire interlock - reqBadTransBroken<br></b></font>
+[00021097.8572] KalEnv::setActive 1
+[00021097.8659] KalEnv::setActive 1
+[00021097.8764] KalEnv::setActive 1
+[00021097.8932] KalEnv::setActive 1
+[00021097.9106] KalEnv::setActive 1
+[00021097.9307] KalEnv::setActive 1
+[00021097.9547] KalEnv::setActive 1
+[00021097.9813] KalEnv::setActive 1
+[00021098.0100] KalEnv::setActive 1
+[00021098.0426] KalEnv::setActive 1
+[00021098.0794] KalEnv::stop
+[00021098.4308] KalEnv::stop
+[00021099.4807] KalEnv::stop
+[00021100.5309] KalEnv::stop
+[00021101.5808] KalEnv::stop
+[00021102.6308] KalEnv::stop
+[00021103.6807] KalEnv::stop
+[00021104.7307] KalEnv::stop
+[00021105.7807] KalEnv::stop
+[00021106.8307] KalEnv::stop

@@ -1,0 +1,1 @@
+file="C:\Users\Administrator\Desktop\tts_voice\sport_mode.wav",compression=ADPCM,rate=8000,channels=Mono
