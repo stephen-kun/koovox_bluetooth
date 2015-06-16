@@ -575,5 +575,35 @@ void KoovoxHeadAction(uint8* data, uint8 size_data)
 
 }
 
+/****************************************************************************
+NAME 
+  	KoovoxResponseHeadAction
+
+DESCRIPTION
+ 	response the cmd of the head action
+ 
+RETURNS
+  	void
+*/ 
+void KoovoxResponseHeadAction(uint8* data, uint8 size_data)
+{
+
+
+#ifdef ENABLE_LOG
+{
+	char* log_msg = (char*)mallocPanic((size_data+1)*LOG_WIDE);
+	uint8 i = 0;
+	for(; i<size_data; i++)
+		sprintf(log_msg + LOG_WIDE*i,"%5d ", data[i]);
+	sprintf(log_msg + LOG_WIDE*i, "\n");
+	APP_CORE_LOG((log_msg));
+	freePanic(log_msg);
+	log_msg = NULL;
+}
+#endif
+
+
+}
+
 
 

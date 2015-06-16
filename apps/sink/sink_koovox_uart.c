@@ -257,6 +257,10 @@ static void KoovoxUartMessageHandle(uint8 *data, uint16 length)
 				KoovoxResponseConstSeat(msg->data, msg->len);
 				break;
 
+			case OBJ_HEAD_ACTION:
+				KoovoxResponseHeadAction(msg->data, msg->len);
+				break;
+
 			case OBJ_FRAME_ERR:
 				KoovoxResponseFrameError(koovox.last_cmd);
 				break;

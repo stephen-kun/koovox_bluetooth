@@ -67,6 +67,7 @@ void KoovoxResponseConstSeat(uint8* data, uint8 size_data);
 
 /****************** head action  ******************/
 void KoovoxHeadAction(uint8* data, uint8 size_data);
+void KoovoxResponseHeadAction(uint8* data, uint8 size_data);
 
 
 

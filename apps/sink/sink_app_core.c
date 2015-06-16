@@ -1170,8 +1170,6 @@ void KoovoxStopHeartRateMeasure(void)
 	HeartRateSensorDisable();
 #else
 	KoovoxFillAndSendUartPacket(STOP, OBJ_HEART_RATE, 0, 0);
-	Koovox_free_hb_calc_var();
-	Koovox_free_smooth_var();
 
 #endif
 
@@ -1193,8 +1191,6 @@ void KoovoxStartHeartRateMeasure(void)
 	SetSampleStatus(HB_ENABLE);
 
 #if 1
-	Koovox_init_hb_calc_var();
-	Koovox_init_smooth_var();
 
 	KoovoxFillAndSendUartPacket(START, OBJ_HEART_RATE, 0, 0);
 #else
@@ -1226,6 +1222,8 @@ void KoovoxStopSportMode(void)
 	/* disable heart rate sampling */
 	SetSampleStatus(SAMPLE_DISABLE);
 
+#if 0
+
 	/* disable herat rate value prompt */
 	SetPromptStatus(PROMPT_DISABLE);
 
@@ -1243,6 +1241,9 @@ void KoovoxStopSportMode(void)
 
 	ClearStepValue();
 	ClearTimeValue();
+#else
+	KoovoxFillAndSendUartPacket(STOP, OBJ_STEP_COUNT, 0, 0);
+#endif
 }
 
 /*************************************************************************
@@ -1259,6 +1260,7 @@ void KoovoxStartSportMode(void)
 
 	/* enable heart rate sample  */
 	SetSampleStatus(SPORT_ENABLE);
+#if 0
 
 	/* enable heart rate sensor */
 	HeartRateSensorEnable();
@@ -1297,7 +1299,11 @@ void KoovoxStartSportMode(void)
 		/* send message to start period audio prompt heart rate value to user */
 		MessageSend(&koovox.task, EventKoovoxPeriodPromptHeartRate, 0);
 	}
-		
+
+#else
+	KoovoxFillAndSendUartPacket(START, OBJ_STEP_COUNT, 0, 0);
+#endif	
+
 }
 
 
