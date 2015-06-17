@@ -22,12 +22,15 @@ DESCRIPTION
 #define PRESENT_VOICE_PORT		(1)
 
 #define PHONE_NUMBER_SIZE			(12)
-#define SPORT_DATA_SIZE				(3)
+#define SPORT_DATA_SIZE				(2)
 
 #define HEART_RATE_SENSOR_PIO	(0x5)
 
 /* interval times prompt heart rate to user (s)*/
 #define AUDIO_PROMPT_TIME		(30)
+
+#define LOG_WIDE	5
+
 
 
 #ifdef DEBUG_APP_CORE

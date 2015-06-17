@@ -917,6 +917,9 @@ void init_koovox_task(void)
 #endif
 
 		uart_data_stream_init();
+
+		/* ·¢ËÍi2c¼ì²âÃüÁî */
+		KoovoxFillAndSendUartPacket(START, OBJ_I2C_TEST, 0, 0);
 	}
 }
 

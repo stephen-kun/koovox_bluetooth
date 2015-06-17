@@ -32,8 +32,6 @@ FILE NAME
 
 #include "sink_heart_rate_calc.h"
 
-#define LOG_WIDE	5
-
 
 /****************************************************************************
 FUNCTIONS pActionHandle
@@ -468,6 +466,12 @@ void KoovoxResultI2cTest(uint8* data, uint8 size_data)
 	DEBUG(("acc_i2c result:%d pskey_value:%d\n", data[0], value));
 	if(value != (uint16)data[0])
 		ConfigStore(CONFIG_ACC_I2C_TEST_RESULT, (const void*)data, 1);
+
+	if(data[0])
+	{
+		/*启动计步功能*/
+		/*KoovoxFillAndSendUartPacket(START, OBJ_STEP_COUNT, 0, 0);*/
+	}
 }
 
 
