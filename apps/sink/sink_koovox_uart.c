@@ -224,12 +224,9 @@ static void KoovoxUartMessageHandle(uint8 *data, uint16 length)
 
 #ifdef DEBUG_PRINT_ENABLED
 	{
-		char* str = (char*)mallocPanic(length*4);
 		uint8 i = 0;
 		for(; i<length; i++)
-			sprintf(str + 3*i, "%2x ", data[i]);
-		DEBUG((str));
-		freePanic(str);
+			DEBUG(("%3d ", data[i]));
 		DEBUG(("\n"));
 	}
 #endif

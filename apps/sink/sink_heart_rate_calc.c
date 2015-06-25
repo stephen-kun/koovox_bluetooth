@@ -510,6 +510,17 @@ void KoovoxCalculateHeartRate(uint8* value, uint8 size_value)
 	}
 #endif
 
+
+#ifdef DEBUG_PRINT_ENABLEDX
+	{
+		uint8 i = 0;
+		for(; i<HR_SAMPLE_POINT_NUM; i++)
+			DEBUG(("%4d ", hb_calc_buff[i]));
+		DEBUG(("\n"));
+	}
+#endif
+
+
 #if 1
 	heart_rate = Koovox_heartrate_calc(hb_calc_buff, HR_SAMPLE_POINT_NUM);
 	DEBUG(("origin:%d ", heart_rate));
