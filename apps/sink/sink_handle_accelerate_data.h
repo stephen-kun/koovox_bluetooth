@@ -15,10 +15,10 @@ FILE NAME
 
 /****************** step count  ******************/
 
-#define MAX_VALUE_THRESHOLD		90
-#define MIN_VALUE_THRESHOLD		70
-#define TIME_THRESHOLD			3
-#define VALUE_THRESHOLD			40
+#define MAX_VALUE_THRESHOLD		143
+#define MIN_VALUE_THRESHOLD		82
+#define TIME_THRESHOLD			6
+#define VALUE_THRESHOLD			60
 
 typedef struct{
 	uint8 status ;/* 0:表示上升沿； 1:表示下降沿 */

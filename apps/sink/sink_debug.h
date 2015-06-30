@@ -23,7 +23,7 @@ DESCRIPTION
  /*end of DO_NOT_DOCUMENT*/
 
     /*The global debug enable*/ 
-    #define DEBUG_PRINT_ENABLED
+    #define DEBUG_PRINT_ENABLEDx
 
     #ifdef DEBUG_PRINT_ENABLED
         #define DEBUG(x) {printf x;}

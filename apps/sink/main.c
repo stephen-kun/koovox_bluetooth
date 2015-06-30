@@ -130,6 +130,8 @@ NOTES
 #include "sink_app_task.h"
 #include "sink_app_message.h"
 #include "sink_app_core.h"
+#include "sink_koovox_uart.h"
+#include "sink_handle_accelerate_data.h"
 static bool power_on_prompt = TRUE;
 #endif
 
@@ -699,6 +701,10 @@ static void handleUEMessage  ( Task task, MessageId id, Message message )
 				KoovoxPowerOnPrompt();
 				power_on_prompt = FALSE;
 			}
+
+			uart_data_stream_init();
+			/* ∑¢ÀÕi2cºÏ≤‚√¸¡Ó */
+			KoovoxFillAndSendUartPacket(START, OBJ_I2C_TEST, 0, 0);
 #endif
             
         break ;          
@@ -795,6 +801,7 @@ static void handleUEMessage  ( Task task, MessageId id, Message message )
 #ifdef  ENABLE_KOOVOX
 			HeartRateSensorDisable();
 			power_on_prompt = TRUE;
+			Koovox_free_step_var();
 #endif
         
         break ;
@@ -3133,6 +3140,8 @@ static void handleUEMessage  ( Task task, MessageId id, Message message )
         /*  GAIA DFU requires that audio not be busy, so disallow any tone  */
             lIndicateEvent = FALSE;
             gaiaDfuRequest();
+
+			KoovoxFillAndSendUartPacket(STOP, OBJ_STEP_COUNT, 0, 0);
         break;
 #endif
 

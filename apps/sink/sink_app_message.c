@@ -518,21 +518,11 @@ uint16 SetRequestAction(uint8* value, uint16 size_value)
 		APP_MSG_DEBUG(("set OID_NECK\n"));
 		if(ON == *(req->value_data))
 		{
-			SetNeckProtectEnable(NECK_ENABLE);
-			if(SAMPLE_DISABLE == GetSampleStatus())
-			{
-				KoovoxStartNeckProtect();
-				/*AudioPromptPlayEvent(EventKoovoxPromptNectProtectEnable);*/
-			}
+			KoovoxStartNeckProtect();
 		}
 		else
 		{
-			SetNeckProtectEnable(NECK_DISABLE);
-			if(NECK_PROTECT == GetSampleStatus())
-			{
-				KoovoxStopNeckProtect();
-				/*AudioPromptPlayEvent(EventKoovoxPromptNectProtectDisable);*/
-			}
+			KoovoxStopNeckProtect();
 		}
 	}
 	break;
@@ -542,19 +532,11 @@ uint16 SetRequestAction(uint8* value, uint16 size_value)
 		APP_MSG_DEBUG(("set OID_SEAT_PROMPT\n"));
 		if(ON == *(req->value_data))
 		{
-			if(SAMPLE_DISABLE == GetSampleStatus())
-			{
-				KoovoxStartConstSeatPrompt();
-				AudioPromptPlayEvent(EventKoovoxPromptNectProtectEnable);
-			}
+			KoovoxStartConstSeatPrompt();
 		}
 		else
 		{
-			if(CONST_SEAT == GetSampleStatus())
-			{
-				KoovoxStopConstSeatPrompt();
-				AudioPromptPlayEvent(EventKoovoxPromptNectProtectDisable);
-			}
+			KoovoxStopConstSeatPrompt();
 		}
 	}
 	break;

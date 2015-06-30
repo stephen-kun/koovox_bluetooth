@@ -81,4 +81,4 @@ main.o: main.c sink_private.h \
   C:/ADK3.5/tools/include/firmware/loader.h \
   C:/ADK3.5/tools/include/firmware/kalimba.h sink_app_task.h \
   C:/ADK3.5/tools/include/firmware/partition.h sink_app_message.h \
-  sink_app_core.h
+  sink_app_core.h sink_koovox_uart.h sink_handle_accelerate_data.h

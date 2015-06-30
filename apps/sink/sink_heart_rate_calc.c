@@ -183,7 +183,7 @@ static uint8 Koovox_heartrate_calc(uint16* data, uint16 len)
 		}
 	}
 
-#ifdef DEBUG_PRINT_ENABLED
+#ifdef DEBUG_PRINT_ENABLEDX
 {
 	uint8 i = 0;
 
@@ -224,7 +224,7 @@ static uint8 Koovox_heartrate_calc(uint16* data, uint16 len)
 			}
 		}
 
-#ifdef DEBUG_PRINT_ENABLED
+#ifdef DEBUG_PRINT_ENABLEDX
 		{
 			uint8 i = 0;
 		
@@ -309,9 +309,12 @@ static uint8 Koovox_heartrate_calc(uint16* data, uint16 len)
   */
 void Koovox_init_hb_calc_var(void)
 {
+	uint16 length = sizeof(uint16)*HR_SAMPLE_POINT_NUM;
+	
 	if(!hb_calc_buff)
-		hb_calc_buff = (uint16*)mallocPanic(sizeof(uint16)*HR_SAMPLE_POINT_NUM);
+		hb_calc_buff = (uint16*)mallocPanic(length);
 
+	memset(hb_calc_buff, 0, length);
 }
 
 /**
@@ -520,6 +523,19 @@ void KoovoxCalculateHeartRate(uint8* value, uint8 size_value)
 	}
 #endif
 
+#ifdef ENABLE_LOG
+	{
+		char* log_msg = (char*)mallocPanic((HR_SAMPLE_FREQUENCE+1)*LOG_WIDE);
+		uint8 i = 0;
+		for(; i<HR_SAMPLE_FREQUENCE; i++)
+			sprintf(log_msg + LOG_WIDE*i,"%5d ", hb_calc_buff[i]);
+		sprintf(log_msg + LOG_WIDE*i, "\n");
+		APP_CORE_LOG((log_msg));
+		freePanic(log_msg);
+		log_msg = NULL;
+	}
+#endif
+
 
 #if 1
 	heart_rate = Koovox_heartrate_calc(hb_calc_buff, HR_SAMPLE_POINT_NUM);
@@ -564,6 +580,8 @@ void KoovoxResponseHeartRate(uint8* value, uint8 size_value)
 	cmd = value[0];
 	result = (uint16)value[1];
 
+	DEBUG(("cmd:%d ,result:%d\n", cmd, result));
+
 	if(cmd == START)
 	{
 		if(result == SUC)
@@ -580,6 +598,7 @@ void KoovoxResponseHeartRate(uint8* value, uint8 size_value)
 			/* release the space */
 			Koovox_free_hb_calc_var();
 			Koovox_free_smooth_var();
+			DEBUG(("free heart rate var\n"));
 		}
 	}
 

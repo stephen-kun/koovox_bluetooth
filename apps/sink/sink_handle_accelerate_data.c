@@ -32,7 +32,6 @@ FILE NAME
 Acc_step_var* step_var = NULL;
 uint32 koovox_step = 0;
 
-
 /**
 * @brief  init step count variable
 * @param  none
@@ -42,6 +41,8 @@ void Koovox_init_step_var(void)
 {
 	if(!step_var)
 		step_var = (Acc_step_var *)mallocPanic(sizeof(Acc_step_var));
+	else
+		return;
 		
 	step_var->status = 0;
 	step_var->index_max = 0;
@@ -53,8 +54,12 @@ void Koovox_init_step_var(void)
 	/* 从pskey中读取步数值 */
 	{
 	uint16 value[2] = {0};
+	uint32 step = 0;
 	ConfigRetrieve(CONFIG_SPORT_DATA, value, 2);
-	koovox_step = (uint32)value[0] + (((uint32)value[1] << 16)&0xffff0000);
+	step = (uint32)value[0];
+	step += ((uint32)value[1] << 16)&0xffff0000;
+	if(koovox_step == 0)
+		koovox_step = step;
 	}
 }
 
@@ -80,6 +85,7 @@ void Koovox_free_step_var(void)
 		uint16 value[2] = {0};
 		value[0] = koovox_step & 0xffff;
 		value[1] = (koovox_step >> 16) & 0xffff;
+		koovox_step = 0;
 		
 		ConfigStore(CONFIG_SPORT_DATA, value, 2);
 	}
@@ -104,13 +110,23 @@ void KoovoxResponseStepCount(uint8* data, uint8 size_data)
 	uint8 cmd = data[0];
 	uint16 result = (uint16)data[1];
 
+	DEBUG(("StepCount: cmd %d result: %d\n", cmd, result));
+
 	if(cmd == START)
+	{
+		if(result != ERR)
+		{
+			/* 初始化计步功能参数 */
+			Koovox_init_step_var();
+		}			
+	}
+	else if(cmd == STOP)
 	{
 		if(result == SUC)
 		{
 			/* 初始化计步功能参数 */
-			Koovox_init_step_var();
-		}
+			Koovox_free_step_var();
+		}			
 	}
 	
 	}
@@ -131,8 +147,32 @@ RETURNS
 void KoovoxCountStep(uint8* value, uint8 size_value)
 {
 
-	if((size_value < FRAME_STEP_COUNT)||(value == NULL))
+	if((size_value < FRAME_STEP_COUNT)
+		||(value == NULL)
+		||(step_var == NULL))
 		return;
+
+#ifdef ENABLE_LOGx
+	{
+		char* log_msg = (char*)mallocPanic((size_value+1)*LOG_WIDE);
+		uint8 i = 0;
+		for(; i<size_value; i++)
+			sprintf(log_msg + LOG_WIDE*i,"%5d ", value[i]);
+		sprintf(log_msg + LOG_WIDE*i, "\n");
+		APP_CORE_LOG((log_msg));
+		freePanic(log_msg);
+		log_msg = NULL;
+	}
+#endif
+
+#ifdef DEBUG_PRINT_ENABLEDX
+	{
+		uint8 i = 0;
+		for(; i<size_value; i++)
+			DEBUG(("%3d ", value[i]));
+		DEBUG(("\n"));
+	}
+#endif
 
 	{
 		uint16 curr_value = 0;
@@ -181,6 +221,23 @@ void KoovoxCountStep(uint8* value, uint8 size_value)
 		
 					/**********久坐计时清零**********/
 					KoovoxFillAndSendUartPacket(ENV, OBJ_STEP_COUNT, 0, 0);
+
+					#if 1
+					if(isOnlineState())
+					{
+						uint8 sport_data[5] = {0};
+						uint8 hb_value = 0;
+						uint32 step = koovox_step;
+						sport_data[0] = hb_value;
+						sport_data[1] = (step >> 24) & 0xff;
+						sport_data[2] = (step >> 16) & 0xff;
+						sport_data[3] = (step >> 8) & 0xff;
+						sport_data[4] = step  & 0xff;
+					
+						/* send the heart rate value to mobile */
+						SendNotifyToDevice(OID_SPORT_VALUE, 0, sport_data, sizeof(sport_data));
+					}
+					#endif
 				}
 			}
 		}
@@ -271,6 +328,19 @@ void KoovoxProtectNeck(uint8* value, uint8 size_value)
 {
 	if(value == NULL)
 		return;
+
+#ifdef ENABLE_LOG
+	{
+		char* log_msg = (char*)mallocPanic((size_value+1)*LOG_WIDE);
+		uint8 i = 0;
+		for(; i<size_value; i++)
+			sprintf(log_msg + LOG_WIDE*i,"%5d ", value[i]);
+		sprintf(log_msg + LOG_WIDE*i, "\n");
+		APP_CORE_LOG((log_msg));
+		freePanic(log_msg);
+		log_msg = NULL;
+	}
+#endif
 
 	if((size_value == 1)&&(*value == NECK_PROTECT_ALARM_EVENT))
 	{
@@ -395,7 +465,7 @@ void KoovoxResponseNeckProtect(uint8* data, uint8 size_data)
 ***********************************************************/
 
 #define CONST_SEAT_ALARM_EVENT	((uint8)0x01)
-#define GET_UP_MIN_THRESHOLD	25
+#define GET_UP_MIN_THRESHOLD	37
 #define GET_UP_MAX_THRESHOLD	144
 #define GET_UP_VALUE_THRESHOLD	120
 #define INDEX_THRESHOLD			10
@@ -449,6 +519,19 @@ void KoovoxConstSeat(uint8* data, uint8 size_data)
 {
 	if(data == NULL)
 		return;
+
+#ifdef ENABLE_LOG
+	{
+		char* log_msg = (char*)mallocPanic((size_data+1)*LOG_WIDE);
+		uint8 i = 0;
+		for(; i<size_data; i++)
+			sprintf(log_msg + LOG_WIDE*i,"%5d ", data[i]);
+		sprintf(log_msg + LOG_WIDE*i, "\n");
+		APP_CORE_LOG((log_msg));
+		freePanic(log_msg);
+		log_msg = NULL;
+	}
+#endif
 
 	if((data[0]==CONST_SEAT_ALARM_EVENT)&&(size_data == 1))
 	{
@@ -574,16 +657,37 @@ void KoovoxHeadAction(uint8* data, uint8 size_data)
 {
 #ifdef ENABLE_LOG
 	{
-		char* log_msg = (char*)mallocPanic((size_data+1)*LOG_WIDE);
-		uint8 i = 0;
-		for(; i<size_data; i++)
-			sprintf(log_msg + LOG_WIDE*i,"%5d ", data[i]);
-		sprintf(log_msg + LOG_WIDE*i, "\n");
+		uint8 size = size_data / 2;
+		char* log_msg = (char*)mallocPanic((size+1)*4);
+		uint8 i = 0, j = 0;
+		uint16 value = 0;
+		for(; i<size_data; j++)
+		{
+			value = (uint16)data[i++];
+			value += (uint16)data[i++] << 8;
+			sprintf(log_msg + 4*j,"%3d ", (int16)value);
+		}
+		sprintf(log_msg + 4*j, "\n");
 		APP_CORE_LOG((log_msg));
 		freePanic(log_msg);
 		log_msg = NULL;
 	}
 #endif
+
+#ifdef DEBUG_PRINT_ENABLED
+{
+	uint8 i = 0;
+	uint16 value = 0;
+	for(; i<size_data; )
+	{
+		value = (uint16)data[i++];
+		value += (uint16)data[i++] << 8;
+		DEBUG(("%d ", (int16)value));
+	}
+	DEBUG(("\n"));
+}
+#endif
+
 }
 
 /****************************************************************************

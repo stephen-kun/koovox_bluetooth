@@ -404,7 +404,7 @@ void KoovoxStartNeckProtect(void)
 
 #if 1
 	{
-		KoovoxFillAndSendUartPacket(START, OBJ_STEP_COUNT, 0, 0);	
+		KoovoxFillAndSendUartPacket(START, OBJ_HEAD_ACTION, 0, 0);	
 	}
 #else
 	{
@@ -437,7 +437,7 @@ void KoovoxStopNeckProtect(void)
 #if 1
 	{
 		DEBUG(("KoovoxStopNeckProtect\n"));
-		KoovoxFillAndSendUartPacket(STOP, OBJ_STEP_COUNT, 0, 0);	
+		KoovoxFillAndSendUartPacket(STOP, OBJ_HEAD_ACTION, 0, 0);	
 	}
 #else
 	{
@@ -470,8 +470,11 @@ void KoovoxResultI2cTest(uint8* data, uint8 size_data)
 	if(data[0])
 	{
 		/*启动计步功能*/
-		/*KoovoxFillAndSendUartPacket(START, OBJ_STEP_COUNT, 0, 0);*/
+		KoovoxFillAndSendUartPacket(START, OBJ_STEP_COUNT, 0, 0);
+		APP_CORE_LOG(("I2C suc\n"));
 	}
+	else
+		APP_CORE_LOG(("I2C failed\n"));
 }
 
 
@@ -486,6 +489,7 @@ void KoovoxStartConstSeatPrompt(void)
 {
 	APP_CORE_DEBUG(("KoovoxStartConstSeatPrompt\n")) ;
 
+#if 0
 	/* enable the health mode */
 	SetSampleStatus(CONST_SEAT);
 
@@ -496,6 +500,9 @@ void KoovoxStartConstSeatPrompt(void)
 
 	AudioSportModePlayPrompt( task, sensor_sample, sensor_value, &theSink.task);
 	}
+#else
+	KoovoxFillAndSendUartPacket(START, OBJ_I2C_TEST, 0, 0);
+#endif
 
 }
 
@@ -1246,7 +1253,7 @@ void KoovoxStopSportMode(void)
 	ClearStepValue();
 	ClearTimeValue();
 #else
-	KoovoxFillAndSendUartPacket(STOP, OBJ_STEP_COUNT, 0, 0);
+	/*KoovoxFillAndSendUartPacket(STOP, OBJ_HEAD_ACTION, 0, 0);*/
 #endif
 }
 
@@ -1305,7 +1312,7 @@ void KoovoxStartSportMode(void)
 	}
 
 #else
-	KoovoxFillAndSendUartPacket(START, OBJ_STEP_COUNT, 0, 0);
+	/*KoovoxFillAndSendUartPacket(START, OBJ_HEAD_ACTION, 0, 0);*/
 #endif	
 
 }

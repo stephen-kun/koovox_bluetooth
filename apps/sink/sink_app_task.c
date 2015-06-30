@@ -916,10 +916,6 @@ void init_koovox_task(void)
 		PartitionMountFilesystem(PARTITION_SERIAL_FLASH , 0x01, PARTITION_LOWER_PRIORITY);
 #endif
 
-		uart_data_stream_init();
-
-		/* ∑¢ÀÕi2cºÏ≤‚√¸¡Ó */
-		KoovoxFillAndSendUartPacket(START, OBJ_I2C_TEST, 0, 0);
 	}
 }
 

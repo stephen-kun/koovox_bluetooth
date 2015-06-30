@@ -110,7 +110,7 @@ RETURNS
 */ 
 static void uart_data_stream_rx_data(Source src)
 {
-	uint16 length = 0;
+	uint16 length = 0, size = 0;
 	const uint8 *data = NULL;
 	uint16 ret = 0;
 	uint8 i = 0;
@@ -123,30 +123,85 @@ static void uart_data_stream_rx_data(Source src)
 	data = SourceMap(src);
 	PanicNull((void*)data);
 
-	for(; i<length; i++)
+	DEBUG(("++++length:%d+++\n", length));
+	
+	size = length;
+	while(length)
 	{
-
 		if(uart_offset == SIZE_UART_MSG)
-		{
-			KoovoxUartMessageHandle(uart_msg, uart_offset);
 			uart_offset = 0;
+	
+		if((length + uart_offset) < SIZE_UART_MSG)
+		{
+			memcpy(uart_msg + uart_offset, data + i, length);
+			uart_offset += length;
+			i += length;
+			length = 0;
 		}
-		
-		uart_msg[uart_offset++] = data[i];
-		
+		else
+		{
+			uint16 len = SIZE_UART_MSG - uart_offset;
+			memcpy(uart_msg + uart_offset, data + i, len);
+			i += len;
+			uart_offset = SIZE_UART_MSG;
+			length -= len;
+		}
+
 		ret = KoovoxMessageStr((const uint8*)uart_msg, FRAME_TAIL, uart_offset);
 		if(ret)
 		{
 			/* handle the received message */
-			KoovoxUartMessageHandle(uart_msg, uart_offset);
+			KoovoxUartMessageHandle(uart_msg, ret);
 		
-			memset(uart_msg, 0, SIZE_UART_MSG);
+			if(ret != uart_offset)
+			{
+				i -= (uart_offset - ret); 
+				length += (uart_offset - ret);
+			}
+		
 			uart_offset = 0;
 		}
 	}
-		
+
+#if 0
+	for(; i<length; )
+	{
+		if(uart_offset == SIZE_UART_MSG)
+			uart_offset = 0;
+
+		if((length + uart_offset) < SIZE_UART_MSG)
+		{
+			uint16 len = length - i;
+			memcpy(uart_msg + uart_offset, data + i, len);
+			uart_offset += len;
+			i += len;
+		}
+		else
+		{
+			uint16 len = SIZE_UART_MSG - uart_offset;
+			memcpy(uart_msg + uart_offset, data + i, len);
+			i += len;
+			uart_offset = SIZE_UART_MSG;
+		}
+				
+		ret = KoovoxMessageStr((const uint8*)uart_msg, FRAME_TAIL, uart_offset);
+		if(ret)
+		{
+			/* handle the received message */
+			KoovoxUartMessageHandle(uart_msg, ret);
+
+			if(ret != uart_offset)
+			{
+				i -= (uart_offset - ret); 
+			}
+
+			uart_offset = 0;
+		}
+	}
+#endif
+
 	/* Discards the specified amount of bytes from the front of the specifiedsource */
-	SourceDrop(src, length);
+	SourceDrop(src, size);
 }
 
 /****************************************************************************
@@ -188,7 +243,8 @@ static void KoovoxResponseFrameError(uint16 value)
 	uint8 cmd = value & 0xff;
 	uint8 obj = (value >> 8) & 0xff;
 	
-	switch(obj)
+	switch(obj)
+
 	{
 	case OBJ_STEP_COUNT:
 		if(cmd == START)
@@ -350,13 +406,10 @@ void KoovoxFillAndSendUartPacket(uint8 cmd, uint8 obj, uint8* value, uint8 size_
 
 #ifdef DEBUG_PRINT_ENABLED
 {
-	char* str = (char*)mallocPanic(length*4);
 	uint8 i = 0;
 	
 	for(; i<length; i++)
-		sprintf(str + 3*i, "%2x ", msg[i]);
-	DEBUG((str));
-	freePanic(str);
+		DEBUG(("%2x ", msg[i]));
 	DEBUG(("\n"));
 }
 #endif
