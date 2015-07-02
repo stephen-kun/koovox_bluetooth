@@ -37,12 +37,9 @@ void KoovoxCountStep(uint8* value, uint8 size_value);
 
 /****************** neck protect  ******************/
 
-#define ANGLE_X_INIT			45
-#define ANGLE_Y_INIT			45
-#define ANGLE_Z_INIT			0
-#define ANGLE_VALUE_THRESHOLD	40
+#define ANGLE_VALUE_THRESHOLD	30
 
-int8 Angle_search(const uint16* table, uint16 size, int16 key);
+int8 Angle_search(const int16* table, uint16 size, int16 key);
 void KoovoxProtectNeck(uint8* value, uint8 size_value);
 void KoovoxResponseNeckProtect(uint8* data, uint8 size_data);
 
@@ -66,6 +63,25 @@ void KoovoxResponseConstSeat(uint8* data, uint8 size_data);
 
 
 /****************** head action  ******************/
+typedef struct{
+	uint8 x_status;/* 0:表示上升沿； 1:表示下降沿	*/
+	uint8 y_status;/* 0:表示上升沿； 1:表示下降沿	*/
+	uint8 z_status;/* 0:表示上升沿； 1:表示下降沿	*/
+	uint8 min_x_flag;
+	uint8 max_y_flag;
+	uint8 max_z_flag;
+	uint16 pre_x_value;
+	uint16 pre_y_value;
+	uint16 pre_z_value;
+	
+}Head_action_var;
+
+typedef enum{
+	CHECK_MIN,
+	CHECK_MAX
+}enumCheck;
+
+
 void KoovoxHeadAction(uint8* data, uint8 size_data);
 void KoovoxResponseHeadAction(uint8* data, uint8 size_data);
 

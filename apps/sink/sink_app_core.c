@@ -404,7 +404,7 @@ void KoovoxStartNeckProtect(void)
 
 #if 1
 	{
-		KoovoxFillAndSendUartPacket(START, OBJ_HEAD_ACTION, 0, 0);	
+		KoovoxFillAndSendUartPacket(START, OBJ_NECK_PROTECT, 0, 0);	
 	}
 #else
 	{
@@ -437,7 +437,7 @@ void KoovoxStopNeckProtect(void)
 #if 1
 	{
 		DEBUG(("KoovoxStopNeckProtect\n"));
-		KoovoxFillAndSendUartPacket(STOP, OBJ_HEAD_ACTION, 0, 0);	
+		KoovoxFillAndSendUartPacket(STOP, OBJ_NECK_PROTECT, 0, 0);	
 	}
 #else
 	{
@@ -445,7 +445,6 @@ void KoovoxStopNeckProtect(void)
 		task = (TaskData *) &koovox_sport_common_plugin;
 		AudioSportModeStopPrompt(task);
 	}
-
 #endif
 
 	
@@ -501,7 +500,7 @@ void KoovoxStartConstSeatPrompt(void)
 	AudioSportModePlayPrompt( task, sensor_sample, sensor_value, &theSink.task);
 	}
 #else
-	KoovoxFillAndSendUartPacket(START, OBJ_I2C_TEST, 0, 0);
+	KoovoxFillAndSendUartPacket(START, OBJ_CONST_SEAT, 0, 0);
 #endif
 
 }
@@ -520,13 +519,15 @@ void KoovoxStopConstSeatPrompt(void)
 
 	/* disable the health mode */
 	SetSampleStatus(SAMPLE_DISABLE);
-
+#if 0
 	{
 		TaskData * task    = NULL;
 		task = (TaskData *) &koovox_sport_common_plugin;
 		AudioSportModeStopPrompt(task);
 	}
-	
+#else
+	KoovoxFillAndSendUartPacket(STOP, OBJ_CONST_SEAT, 0, 0);
+#endif
 }
 
 
@@ -1253,7 +1254,7 @@ void KoovoxStopSportMode(void)
 	ClearStepValue();
 	ClearTimeValue();
 #else
-	/*KoovoxFillAndSendUartPacket(STOP, OBJ_HEAD_ACTION, 0, 0);*/
+	/*KoovoxFillAndSendUartPacket(STOP, OBJ_NOD_HEAD, 0, 0);*/
 #endif
 }
 
@@ -1312,7 +1313,7 @@ void KoovoxStartSportMode(void)
 	}
 
 #else
-	/*KoovoxFillAndSendUartPacket(START, OBJ_HEAD_ACTION, 0, 0);*/
+	/*KoovoxFillAndSendUartPacket(START, OBJ_NOD_HEAD, 0, 0);*/
 #endif	
 
 }

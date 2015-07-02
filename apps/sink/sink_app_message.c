@@ -17,6 +17,7 @@ FILE NAME
 #include "sink_config.h"
 #include "sink_audio_prompts.h"
 #include <kalimba.h>
+#include "sink_koovox_uart.h"
 
 
 #define DEVICE_INFO  "1.0.1:A8"
@@ -543,38 +544,15 @@ uint16 SetRequestAction(uint8* value, uint16 size_value)
 
 	case OID_DRIVER_ENABLE:
 	{
-#if 1
 		APP_MSG_DEBUG(("set OID_DRIVER_ENABLE\n"));
 		if(ON == *(req->value_data))
 		{
-			SetDriverEnable(DRIVER_ENABLE);
-			if(SAMPLE_DISABLE == GetSampleStatus())
-			{
-				KoovoxStartSafeDriver();
-				AudioPromptPlayEvent(EventKoovoxPromptSafeDriverEnable);
-			}
+			KoovoxFillAndSendUartPacket(START, OBJ_NOD_HEAD, 0, 0);	
 		}
 		else
 		{
-			SetDriverEnable(DRIVER_DISABLE);
-			if(SAFE_DRIVER == GetSampleStatus())
-			{
-				KoovoxStopSafeDriver();
-				AudioPromptPlayEvent(EventKoovoxPromptSafeDriverDisable);
-			}
+			KoovoxFillAndSendUartPacket(STOP, OBJ_NOD_HEAD, 0, 0);	
 		}
-#else
-		if(ON == *(req->value_data))
-		{
-			DEBUG(("set OID_DRIVER_ENABLE\n"));
-			SetActionCallEnable(ACTION_CALL_ENABLE);
-		}
-		else
-		{
-			DEBUG(("set OID_DRIVER_DISABLE\n"));
-			SetActionCallEnable(ACTION_CALL_DISABLE);
-		}
-#endif
 	}		
 	break;
 
@@ -584,6 +562,7 @@ uint16 SetRequestAction(uint8* value, uint16 size_value)
 		if(ON == *(req->value_data))
 		{
 			SetPresentEnable(VP_ENABLE);
+			KoovoxFillAndSendUartPacket(START, OBJ_I2C_TEST, 0, 0);	
 		}
 		else
 		{
@@ -598,6 +577,7 @@ uint16 SetRequestAction(uint8* value, uint16 size_value)
 		if(ON == *(req->value_data))
 		{
 			SetPresentAuto(VP_AUTO_ENABLE);
+			KoovoxFillAndSendUartPacket(START, OBJ_I2C_TEST, 0, 0);	
 		}
 		else
 		{
@@ -612,6 +592,7 @@ uint16 SetRequestAction(uint8* value, uint16 size_value)
 		if(ON == *(req->value_data))
 		{
 			SetVoiceMessageEnable(VM_ENABLE);
+			KoovoxFillAndSendUartPacket(START, OBJ_I2C_TEST, 0, 0);	
 		}
 		else
 		{

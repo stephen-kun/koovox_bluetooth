@@ -702,7 +702,6 @@ static void handleUEMessage  ( Task task, MessageId id, Message message )
 				power_on_prompt = FALSE;
 			}
 
-			uart_data_stream_init();
 			/* ·¢ËÍi2c¼ì²âÃüÁî */
 			KoovoxFillAndSendUartPacket(START, OBJ_I2C_TEST, 0, 0);
 #endif

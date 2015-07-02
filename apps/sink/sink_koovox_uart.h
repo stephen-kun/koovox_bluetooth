@@ -55,10 +55,11 @@ typedef enum
 	OBJ_SYSTEM 			= 0x01,
 	OBJ_CONST_SEAT 		= 0x02,
 	OBJ_NECK_PROTECT 	= 0x04,
-	OBJ_HEAD_ACTION		= 0x08,
-	OBJ_STEP_COUNT		= 0x10,
-	OBJ_HEART_RATE		= 0x20,
-	OBJ_I2C_TEST		= 0x40,
+	OBJ_NOD_HEAD		= 0x08,
+	OBJ_SHAKE_HEAD		= 0x10,
+	OBJ_STEP_COUNT		= 0x20,
+	OBJ_HEART_RATE		= 0x40,
+	OBJ_I2C_TEST		= 0x80,
 	OBJ_FRAME_ERR		= 0xff
 }enumObj;
 
@@ -71,6 +72,8 @@ typedef enum{
 void uart_data_stream_init(void);
 
 void KoovoxFillAndSendUartPacket(uint8 cmd, uint8 obj, uint8* value, uint8 size_value);
+
+void KoovoxControlObject(uint8 ctrl, uint8 obj);
 
 extern bool respond_flag;
 

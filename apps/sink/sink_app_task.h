@@ -200,6 +200,8 @@ typedef struct{
 	uint8 			batteryValue;	/* the koovox battery value */
 	uint32			step_value;		/* store the accelerate step value */
 	uint16 			time_value;		/* store the sport time */
+
+	uint8			angle_init_cnt;	/* */
 	
 }gKoovoxTaskData;
 

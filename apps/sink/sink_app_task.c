@@ -915,7 +915,8 @@ void init_koovox_task(void)
 		/* mount external flash to filesystem */
 		PartitionMountFilesystem(PARTITION_SERIAL_FLASH , 0x01, PARTITION_LOWER_PRIORITY);
 #endif
-
+		/* ³õÊ¼»¯´®¿Ú */
+		uart_data_stream_init();
 	}
 }
 

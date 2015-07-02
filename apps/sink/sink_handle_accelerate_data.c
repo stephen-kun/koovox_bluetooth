@@ -71,6 +71,9 @@ void Koovox_init_step_var(void)
 void Koovox_free_step_var(void)
 {
 	uint8 step[4] = {0};
+
+	if(!step_var)
+		return;
 	
 	free(step_var);
 	step_var = NULL;
@@ -152,19 +155,6 @@ void KoovoxCountStep(uint8* value, uint8 size_value)
 		||(step_var == NULL))
 		return;
 
-#ifdef ENABLE_LOGx
-	{
-		char* log_msg = (char*)mallocPanic((size_value+1)*LOG_WIDE);
-		uint8 i = 0;
-		for(; i<size_value; i++)
-			sprintf(log_msg + LOG_WIDE*i,"%5d ", value[i]);
-		sprintf(log_msg + LOG_WIDE*i, "\n");
-		APP_CORE_LOG((log_msg));
-		freePanic(log_msg);
-		log_msg = NULL;
-	}
-#endif
-
 #ifdef DEBUG_PRINT_ENABLEDX
 	{
 		uint8 i = 0;
@@ -183,9 +173,23 @@ void KoovoxCountStep(uint8* value, uint8 size_value)
 		uint16 min_value = step_var->min_value;
 		uint16 pre_value = step_var->pre_value;
 		
-		curr_value = (uint16)value[0] + ((uint16)value[1] << 8);
-		curr_index = (uint32)value[2] + ((uint32)value[3] << 8) + ((uint32)value[3] << 16) + ((uint32)value[3] << 24);
+		curr_value = (uint16)value[0];
+		curr_value += ((uint16)value[1] << 8);
 		
+		curr_index = (uint32)value[2] ;
+		curr_index += ((uint32)value[3] << 8);
+		curr_index += ((uint32)value[4] << 8);
+		curr_index += ((uint32)value[5] << 8);
+
+#ifdef ENABLE_LOG
+	{
+		char* log_msg = (char*)mallocPanic(25);
+		sprintf(log_msg, "%3d index:%ld\n", curr_value, curr_index);
+		APP_CORE_LOG((log_msg));
+		freePanic(log_msg);
+		log_msg = NULL;
+	}
+#endif
 		
 		if(curr_value > pre_value)
 		{
@@ -254,9 +258,14 @@ void KoovoxCountStep(uint8* value, uint8 size_value)
 *
 ***********************************************************/
 #define NECK_PROTECT_ALARM_EVENT	((uint8)0x01)
+#define ANGLE_INIT_COUNT			(5)
+
+static int16 angle_x_int = 0;
+static int16 angle_y_int = 0;
+static int16 angle_z_int = 0;
 
 
-const uint16 sin_table[] = {
+const int16 sin_table[] = {
 17,  34,  52,  69,  87, 104, 121, 139, 156, 173,
 190, 207, 224, 241, 258, 275, 292, 309, 325, 342,
 358, 374, 390, 406, 422, 438, 453, 469, 484, 500,
@@ -277,30 +286,27 @@ const uint16 sin_table[] = {
   *		key: search the key
   * @retval the angle value
   */
-int8 Angle_search(const uint16* table, uint16 size, int16 key)
+int8 Angle_search(const int16* table, uint16 size, int16 key)
 {
 	uint16 low = 0;
 	uint16 high = size - 1;
 	uint16 mid = (low + high) / 2;
-	uint16 key_value = 0;
 
-	if(key)
-		key_value = (uint16)key;
-	else
-		key_value = (uint16)(-key);
+	if(key < 0)
+		key = -key;
 	
 
-	if(key_value > table[size - 1])
+	if(key > table[size - 1])
 		return (int8)90;
 
 	while((low < high))
 	{
-		if(key_value > table[mid])
+		if(key > table[mid])
 		{
 			low = mid + 1;
 			mid = (low + high) / 2;
 		}
-		else if(key_value < table[mid])
+		else if(key < table[mid])
 		{
 			high = mid - 1;
 			mid = (low + high) / 2;
@@ -311,7 +317,6 @@ int8 Angle_search(const uint16* table, uint16 size, int16 key)
 
 	return (int8)low;
 }
-
 
 
 /****************************************************************************
@@ -329,23 +334,30 @@ void KoovoxProtectNeck(uint8* value, uint8 size_value)
 	if(value == NULL)
 		return;
 
-#ifdef ENABLE_LOG
-	{
-		char* log_msg = (char*)mallocPanic((size_value+1)*LOG_WIDE);
-		uint8 i = 0;
-		for(; i<size_value; i++)
-			sprintf(log_msg + LOG_WIDE*i,"%5d ", value[i]);
-		sprintf(log_msg + LOG_WIDE*i, "\n");
-		APP_CORE_LOG((log_msg));
-		freePanic(log_msg);
-		log_msg = NULL;
-	}
+#ifdef DEBUG_PRINT_ENABLED
+		{
+			uint8 i = 0;
+			for(; i<size_value; i++)
+				DEBUG(("%3d ", value[i]));
+			DEBUG(("\n"));
+		}
 #endif
 
 	if((size_value == 1)&&(*value == NECK_PROTECT_ALARM_EVENT))
 	{
 		/********** 语音提醒用户颈椎保护 **********/
 		AudioPromptPlayEvent(EventKoovoxPromptNectProtectAdvice);
+
+#ifdef ENABLE_LOG
+		{
+			char* log_msg = (char*)mallocPanic(15);
+			sprintf(log_msg , "protect neck\n");
+			APP_CORE_LOG((log_msg));
+			freePanic(log_msg);
+			log_msg = NULL;
+		}
+#endif
+
 	}
 	else
 	{
@@ -359,27 +371,65 @@ void KoovoxProtectNeck(uint8* value, uint8 size_value)
 		axis_z = (int16)((uint16)value[4] + ((uint16)value[5] << 8));
 
 		angle_x_curr = Angle_search(sin_table, 90, axis_x);
-		angle_y_curr = Angle_search(sin_table, 90, (uint16)axis_y);
-		angle_z_curr = 90 - Angle_search(sin_table, 90, (uint16)axis_z);
+		angle_y_curr = Angle_search(sin_table, 90, axis_y);
+		angle_z_curr = 90 - Angle_search(sin_table, 90, axis_z);
+
+
+#ifdef ENABLE_LOG
+	 {
+		 char* log_msg = (char*)mallocPanic(25);
+		 sprintf(log_msg, "Acc:%4d %4d %4d\n", axis_x, axis_y, axis_z);
+		 APP_CORE_LOG((log_msg));
+		 memset(log_msg, 0, 25);
+		 sprintf(log_msg , "Angle:%3d %3d %3d\n", angle_x_curr, angle_y_curr, angle_z_curr);
+		 APP_CORE_LOG((log_msg));
+		 freePanic(log_msg);
+		 log_msg = NULL;
+	 }
+#endif
+
+		if(koovox.angle_init_cnt == ANGLE_INIT_COUNT)
+		{
+			angle_x_int /= ANGLE_INIT_COUNT;
+			angle_y_int /= ANGLE_INIT_COUNT;
+			angle_z_int /= ANGLE_INIT_COUNT;
+#ifdef ENABLE_LOG
+		 {
+			 char* log_msg = (char*)mallocPanic(25);
+			 sprintf(log_msg , "init:%3d %3d %3d\n", angle_x_int, angle_y_int, angle_y_int);
+			 APP_CORE_LOG((log_msg));
+			 freePanic(log_msg);
+			 log_msg = NULL;
+		 }
+#endif
+			
+		}
+		else if(koovox.angle_init_cnt < ANGLE_INIT_COUNT)
+		{
+			koovox.angle_init_cnt++;
+			angle_x_int += angle_x_curr;
+			angle_y_int += angle_y_curr;
+			angle_y_int += angle_y_curr;
+			return;
+		}
 
 		if(axis_x < 0)
 		{
 			angle_x_curr = - angle_x_curr;
 		}
 
-		if(axis_y > 0)
+		if(axis_y < 0)
 		{
 			angle_y_curr = - angle_y_curr;
 		}
 		
-		if(axis_z > 0)
+		if(axis_z < 0)
 		{
 			angle_z_curr = - angle_z_curr;
 		}
 
-
-		if((angle_x_curr > (ANGLE_VALUE_THRESHOLD + ANGLE_X_INIT))
-			||((angle_x_curr + ANGLE_VALUE_THRESHOLD) < ANGLE_X_INIT))
+		if((angle_x_curr - (int8)angle_x_int > ANGLE_VALUE_THRESHOLD )
+			||(((int8)angle_x_int - angle_x_curr) > ANGLE_VALUE_THRESHOLD))
 		{
 			/********* 启动定时器 ********/
 			uint8 value = TRUE;
@@ -387,8 +437,8 @@ void KoovoxProtectNeck(uint8* value, uint8 size_value)
 			return ;
 		}
 
-		if((angle_y_curr > (ANGLE_Y_INIT + ANGLE_VALUE_THRESHOLD))
-			|| ((angle_y_curr + ANGLE_VALUE_THRESHOLD) < ANGLE_Y_INIT))
+		if((angle_y_curr - (int8)angle_y_int > ANGLE_VALUE_THRESHOLD )
+			||(((int8)angle_y_int - angle_y_curr) > ANGLE_VALUE_THRESHOLD))
 		{
 			/********* 启动定时器 ********/
 			uint8 value = TRUE;
@@ -396,8 +446,8 @@ void KoovoxProtectNeck(uint8* value, uint8 size_value)
 			return ;
 		}
 
-		if((angle_z_curr > (ANGLE_Z_INIT + ANGLE_VALUE_THRESHOLD))
-			|| ((angle_z_curr + ANGLE_VALUE_THRESHOLD) < ANGLE_Z_INIT))
+		if((angle_z_curr - (int8)angle_z_int > ANGLE_VALUE_THRESHOLD )
+			||(((int8)angle_z_int - angle_z_curr) > ANGLE_VALUE_THRESHOLD))
 		{
 			/********* 启动定时器 ********/
 			uint8 value = TRUE;
@@ -417,7 +467,7 @@ void KoovoxProtectNeck(uint8* value, uint8 size_value)
 	
 }
 
-/****************************************************************************
+/***************************************************************************
 NAME 
   	KoovoxProtectNeck
 
@@ -441,6 +491,7 @@ void KoovoxResponseNeckProtect(uint8* data, uint8 size_data)
 		if(result == SUC)
 		{
 			koovox.neckEnable = TRUE;
+			koovox.angle_init_cnt = 0;
 		}
 	}
 	else if(cmd == STOP)
@@ -520,23 +571,20 @@ void KoovoxConstSeat(uint8* data, uint8 size_data)
 	if(data == NULL)
 		return;
 
-#ifdef ENABLE_LOG
-	{
-		char* log_msg = (char*)mallocPanic((size_data+1)*LOG_WIDE);
-		uint8 i = 0;
-		for(; i<size_data; i++)
-			sprintf(log_msg + LOG_WIDE*i,"%5d ", data[i]);
-		sprintf(log_msg + LOG_WIDE*i, "\n");
-		APP_CORE_LOG((log_msg));
-		freePanic(log_msg);
-		log_msg = NULL;
-	}
-#endif
-
 	if((data[0]==CONST_SEAT_ALARM_EVENT)&&(size_data == 1))
 	{
 		/********** 语音提醒用户已久坐 **********/
 		AudioPromptPlayEvent(EventKoovoxPromptNectProtectAdvice);
+
+#ifdef ENABLE_LOG
+		{
+			char* log_msg = (char*)mallocPanic(15);
+			sprintf(log_msg , "const seat\n");
+			APP_CORE_LOG((log_msg));
+			freePanic(log_msg);
+			log_msg = NULL;
+		}
+#endif
 	}
 	else
 	{
@@ -565,6 +613,16 @@ void KoovoxConstSeat(uint8* data, uint8 size_data)
 					KoovoxFillAndSendUartPacket(ENV, OBJ_CONST_SEAT, 0, 0);
 
 					Koovox_init_const_seat_var();
+
+#ifdef ENABLE_LOG
+				{
+					char* log_msg = (char*)mallocPanic(15);
+					sprintf(log_msg , "sit up\n");
+					APP_CORE_LOG((log_msg));
+					freePanic(log_msg);
+					log_msg = NULL;
+				}
+#endif
 				}
 			}
 		}
@@ -642,6 +700,73 @@ void KoovoxResponseConstSeat(uint8* data, uint8 size_data)
 *
 ***********************************************************/
 
+#define HEAD_ACTION_VALUE_THRESHOLD		(40)
+#define FRAME_HEAD_ACTION				(8)
+
+Head_action_var* head_action_var = NULL;
+
+/****************************************************************************
+NAME 
+  	Koovox_init_head_action_var
+
+DESCRIPTION
+ 	init the head action business variable
+ 
+RETURNS
+  	void
+*/ 
+void Koovox_init_head_action_var(void)
+{
+	if(!head_action_var)
+		head_action_var = (Head_action_var*)malloc(sizeof(Head_action_var));
+
+	head_action_var->x_status = 0;
+	head_action_var->y_status = 0;
+	head_action_var->z_status = 0;
+
+	head_action_var->min_x_flag = 0;
+	head_action_var->max_y_flag = 0;
+	head_action_var->max_z_flag = 0;
+
+	head_action_var->pre_x_value = 100;
+	head_action_var->pre_y_value = 0;
+	head_action_var->pre_z_value = 0;
+}
+
+/****************************************************************************
+NAME 
+  	Koovox_free_head_action_var
+
+DESCRIPTION
+ 	free the head action business variable
+ 
+RETURNS
+  	void
+*/ 
+void Koovox_free_head_action_var(void)
+{
+	if(!head_action_var)
+		return;
+
+	freePanic(head_action_var);
+	head_action_var = NULL;
+}
+
+/****************************************************************************
+NAME 
+  	Koovox_find_max_min_status
+
+DESCRIPTION
+ 	free the head action business variable
+ 
+RETURNS
+  	void
+*/ 
+void Koovox_find_max_min_status(uint16 curr_value, uint16 pre_value, uint16 max_value, uint16 min_value, uint8 check, uint8* status, uint8* flag)
+{
+
+}
+
 
 /****************************************************************************
 NAME 
@@ -657,20 +782,6 @@ void KoovoxHeadAction(uint8* data, uint8 size_data)
 {
 #ifdef ENABLE_LOG
 	{
-		uint8 size = size_data / 2;
-		char* log_msg = (char*)mallocPanic((size+1)*4);
-		uint8 i = 0, j = 0;
-		uint16 value = 0;
-		for(; i<size_data; j++)
-		{
-			value = (uint16)data[i++];
-			value += (uint16)data[i++] << 8;
-			sprintf(log_msg + 4*j,"%3d ", (int16)value);
-		}
-		sprintf(log_msg + 4*j, "\n");
-		APP_CORE_LOG((log_msg));
-		freePanic(log_msg);
-		log_msg = NULL;
 	}
 #endif
 
@@ -688,6 +799,35 @@ void KoovoxHeadAction(uint8* data, uint8 size_data)
 }
 #endif
 
+	if((size_data < FRAME_HEAD_ACTION)
+		||(data == NULL)
+		||(head_action_var == NULL))
+		return;
+
+	{
+		uint16 axis_x, axis_y, temp;
+		uint16 pre_axis_x, pre_axis_y ;
+
+		temp = (uint16)data[0];
+		temp += (uint16)data[1] << 8;
+		axis_x = temp*temp;
+		axis_x /= 100;
+
+		pre_axis_x = head_action_var->pre_x_value;
+		head_action_var->pre_x_value = axis_x;
+
+		temp = (uint16)data[2];
+		temp += (uint16)data[3] << 8;
+		axis_y = temp*temp;
+		axis_y /= 100;
+
+		pre_axis_y = head_action_var->pre_y_value;
+		head_action_var->pre_y_value = axis_y;
+
+
+		
+	}
+
 }
 
 /****************************************************************************
@@ -702,7 +842,29 @@ RETURNS
 */ 
 void KoovoxResponseHeadAction(uint8* data, uint8 size_data)
 {
+	if((data==NULL)||(size_data < SIZE_RESPONSE))
+		return;
+	{
+		uint8 cmd = data[0];
+		uint16 result = (uint16)data[1];
 
+		if(cmd == START)
+		{
+			if(result == SUC)
+			{
+				/* init head action variable */
+				Koovox_init_head_action_var();
+			}
+		}
+		else if(cmd == STOP)
+		{
+			if(result == SUC)
+			{
+				/* free head action variable */
+				Koovox_free_head_action_var();
+			}
+		}
+	}
 }
 
 

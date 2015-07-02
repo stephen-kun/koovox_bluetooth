@@ -278,7 +278,7 @@ static void KoovoxUartMessageHandle(uint8 *data, uint16 length)
 	if((!data) || (msg->len > (length - FRAME_UART_SIZE)))
 		return;
 
-#ifdef DEBUG_PRINT_ENABLED
+#ifdef DEBUG_PRINT_ENABLEDX
 	{
 		uint8 i = 0;
 		for(; i<length; i++)
@@ -310,7 +310,7 @@ static void KoovoxUartMessageHandle(uint8 *data, uint16 length)
 				KoovoxResponseConstSeat(msg->data, msg->len);
 				break;
 
-			case OBJ_HEAD_ACTION:
+			case OBJ_NOD_HEAD:
 				KoovoxResponseHeadAction(msg->data, msg->len);
 				break;
 
@@ -340,7 +340,7 @@ static void KoovoxUartMessageHandle(uint8 *data, uint16 length)
 				KoovoxConstSeat(msg->data, msg->len);
 				break;
 
-			case OBJ_HEAD_ACTION:
+			case OBJ_NOD_HEAD:
 				KoovoxHeadAction(msg->data, msg->len);
 				break;
 
@@ -419,5 +419,18 @@ void KoovoxFillAndSendUartPacket(uint8 cmd, uint8 obj, uint8* value, uint8 size_
 	
 }
 
+/****************************************************************************
+NAME 
+  	KoovoxControlObject
 
+DESCRIPTION
+ 	control the object enable or disable
+ 
+RETURNS
+  	void
+*/ 
+void KoovoxControlObject(uint8 ctrl, uint8 obj)
+{
+	KoovoxFillAndSendUartPacket(ctrl, obj, 0, 0);
+}
 
