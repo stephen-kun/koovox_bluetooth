@@ -311,7 +311,7 @@ static void KoovoxUartMessageHandle(uint8 *data, uint16 length)
 				break;
 
 			case OBJ_NOD_HEAD:
-				KoovoxResponseHeadAction(msg->data, msg->len);
+				KoovoxResponseNodHead(msg->data, msg->len);
 				break;
 
 			case OBJ_FRAME_ERR:
@@ -341,7 +341,7 @@ static void KoovoxUartMessageHandle(uint8 *data, uint16 length)
 				break;
 
 			case OBJ_NOD_HEAD:
-				KoovoxHeadAction(msg->data, msg->len);
+				KoovoxNodHead(msg->data, msg->len);
 				break;
 
 			case OBJ_HEART_RATE:

@@ -25,8 +25,10 @@ typedef struct{
 	uint8 max_flag ;
 	uint8 min_flag;
 	uint16 min_value;
+	uint16 max_value;
 	uint16 pre_value;
-	uint32 index_max;	/*前一个极大值下标*/
+	uint32 index_max;	/* 前一个极大值下标 */
+	uint32 index_min;	/* 前一个极小值下标 */
 }Acc_step_var;
 
 void Koovox_init_step_var(void);
@@ -63,27 +65,25 @@ void KoovoxResponseConstSeat(uint8* data, uint8 size_data);
 
 
 /****************** head action  ******************/
+
+/* 求极值的参数 */
 typedef struct{
-	uint8 x_status;/* 0:表示上升沿； 1:表示下降沿	*/
-	uint8 y_status;/* 0:表示上升沿； 1:表示下降沿	*/
-	uint8 z_status;/* 0:表示上升沿； 1:表示下降沿	*/
-	uint8 min_x_flag;
-	uint8 max_y_flag;
-	uint8 max_z_flag;
-	uint16 pre_x_value;
-	uint16 pre_y_value;
-	uint16 pre_z_value;
-	
-}Head_action_var;
-
-typedef enum{
-	CHECK_MIN,
-	CHECK_MAX
-}enumCheck;
+	uint8 status;/* 0:表示上升沿； 1:表示下降沿	*/
+	uint8 min_flag;
+	uint8 max_flag;
+	int16 min_value;
+	int16 max_value;
+	int16 pre_value;
+	uint32 min_index;
+	uint32 max_index;
+}Extremum_param;
 
 
-void KoovoxHeadAction(uint8* data, uint8 size_data);
-void KoovoxResponseHeadAction(uint8* data, uint8 size_data);
+void Koovox_init_nod_head_var(void);
+void Koovox_free_nod_head_var(void);
+void Koovox_find_max_min_value(uint32 index, int16 curr_value, Extremum_param* param);
+void KoovoxNodHead(uint8* data, uint8 size_data);
+void KoovoxResponseNodHead(uint8* data, uint8 size_data);
 
 
 

@@ -7,7 +7,6 @@ FILE NAME
 
 */
 
-
 #include "sink_handle_accelerate_data.h"
 #include "sink_config.h"
 #include "sink_app_core.h"
@@ -46,9 +45,11 @@ void Koovox_init_step_var(void)
 		
 	step_var->status = 0;
 	step_var->index_max = 0;
+	step_var->index_min = 0;
 	step_var->max_flag = 1;
 	step_var->min_flag = 1;
 	step_var->min_value = 100;
+	step_var->max_value = 100;
 	step_var->pre_value = 100;
 
 	/* 从pskey中读取步数值 */
@@ -169,8 +170,6 @@ void KoovoxCountStep(uint8* value, uint8 size_value)
 		uint32 curr_index = 0;
 		
 		uint8 status = step_var->status;
-		uint32 index_max = step_var->index_max;
-		uint16 min_value = step_var->min_value;
 		uint16 pre_value = step_var->pre_value;
 		
 		curr_value = (uint16)value[0];
@@ -196,14 +195,30 @@ void KoovoxCountStep(uint8* value, uint8 size_value)
 			/*检测极小值*/
 			if(status)
 			{
+				uint16 min_value = step_var->min_value;
 				step_var->status = 0;/*设置为上升沿*/
-		
-				if((pre_value < MIN_VALUE_THRESHOLD)&&(step_var->max_flag))
+
+				if(step_var->max_flag)
 				{
-					step_var->max_flag = 0;
-					step_var->min_flag = 1;
-					step_var->min_value = pre_value;
+					uint32 index_min = step_var->index_min;
+					if((pre_value < MIN_VALUE_THRESHOLD)&&(curr_index - index_min >= TIME_THRESHOLD))
+					{
+						step_var->max_flag = 0;
+						step_var->min_flag = 1;
+						step_var->min_value = pre_value;
+						step_var->index_min = curr_index;
+					}
 				}
+				else
+				{
+					/* 更新极小值 */
+					if(pre_value < min_value)
+					{
+						step_var->min_value = pre_value;
+						step_var->index_min = curr_index;
+					}
+				}
+		
 			}
 		}
 		else
@@ -211,38 +226,53 @@ void KoovoxCountStep(uint8* value, uint8 size_value)
 			/*检测极大值*/
 			if(!status)
 			{
+				uint16 max_value = step_var->max_value;
 				step_var->status = 1; /*设置为下降沿*/
-				
-				if((pre_value > MAX_VALUE_THRESHOLD)
-					&&((curr_index - index_max) >= TIME_THRESHOLD)
-					&&(step_var->min_flag)
-					&&((curr_value - min_value) > VALUE_THRESHOLD))
-				{
-					koovox_step++;
-					step_var->max_flag = 1;
-					step_var->min_flag = 0;
-					step_var->index_max = curr_index;
-		
-					/**********久坐计时清零**********/
-					KoovoxFillAndSendUartPacket(ENV, OBJ_STEP_COUNT, 0, 0);
 
-					#if 1
-					if(isOnlineState())
+				if(step_var->min_flag)
+				{
+					uint32 index_max = step_var->index_max;
+
+					if((pre_value > MAX_VALUE_THRESHOLD)&&(curr_index - index_max >= TIME_THRESHOLD))
 					{
-						uint8 sport_data[5] = {0};
-						uint8 hb_value = 0;
-						uint32 step = koovox_step;
-						sport_data[0] = hb_value;
-						sport_data[1] = (step >> 24) & 0xff;
-						sport_data[2] = (step >> 16) & 0xff;
-						sport_data[3] = (step >> 8) & 0xff;
-						sport_data[4] = step  & 0xff;
-					
-						/* send the heart rate value to mobile */
-						SendNotifyToDevice(OID_SPORT_VALUE, 0, sport_data, sizeof(sport_data));
+						koovox_step++;
+						step_var->max_flag = 1;
+						step_var->min_flag = 0;
+						step_var->index_max = curr_index;
+						
+						/**********久坐计时清零**********/
+						KoovoxFillAndSendUartPacket(ENV, OBJ_STEP_COUNT, 0, 0);
+						
+#if 1
+						if(isOnlineState())
+						{
+							uint8 sport_data[5] = {0};
+							uint8 hb_value = 0;
+							uint32 step = koovox_step;
+							sport_data[0] = hb_value;
+							sport_data[1] = (step >> 24) & 0xff;
+							sport_data[2] = (step >> 16) & 0xff;
+							sport_data[3] = (step >> 8) & 0xff;
+							sport_data[4] = step  & 0xff;
+						
+							/* send the heart rate value to mobile */
+							SendNotifyToDevice(OID_SPORT_VALUE, 0, sport_data, sizeof(sport_data));
+						}
+#endif
 					}
-					#endif
+					
 				}
+				else
+				{
+					/* 更新极大值 */
+					if(pre_value > max_value)
+					{
+						step_var->max_value = pre_value;
+						step_var->index_max = curr_index;
+					}
+					
+				}
+				
 			}
 		}
 		
@@ -299,7 +329,7 @@ int8 Angle_search(const int16* table, uint16 size, int16 key)
 	if(key > table[size - 1])
 		return (int8)90;
 
-	while((low < high))
+	while(low < high)
 	{
 		if(key > table[mid])
 		{
@@ -393,6 +423,9 @@ void KoovoxProtectNeck(uint8* value, uint8 size_value)
 			angle_x_int /= ANGLE_INIT_COUNT;
 			angle_y_int /= ANGLE_INIT_COUNT;
 			angle_z_int /= ANGLE_INIT_COUNT;
+
+			koovox.angle_init_cnt++;
+			
 #ifdef ENABLE_LOG
 		 {
 			 char* log_msg = (char*)mallocPanic(25);
@@ -409,7 +442,7 @@ void KoovoxProtectNeck(uint8* value, uint8 size_value)
 			koovox.angle_init_cnt++;
 			angle_x_int += angle_x_curr;
 			angle_y_int += angle_y_curr;
-			angle_y_int += angle_y_curr;
+			angle_z_int += angle_z_curr;
 			return;
 		}
 
@@ -700,14 +733,21 @@ void KoovoxResponseConstSeat(uint8* data, uint8 size_data)
 *
 ***********************************************************/
 
-#define HEAD_ACTION_VALUE_THRESHOLD		(40)
 #define FRAME_HEAD_ACTION				(8)
+#define HEAD_LEN_MAX_MIN				(3)
+#define HEAD_VALUE_THRESHOLD			(5)
+#define HEAD_ACTION_CHECK				(3)
 
-Head_action_var* head_action_var = NULL;
+
+Extremum_param* nod_x_var = NULL;
+Extremum_param* nod_y_var = NULL;
+
+uint32 head_action_cnt = 0;
+
 
 /****************************************************************************
 NAME 
-  	Koovox_init_head_action_var
+  	Koovox_init_nod_head_var
 
 DESCRIPTION
  	init the head action business variable
@@ -715,27 +755,38 @@ DESCRIPTION
 RETURNS
   	void
 */ 
-void Koovox_init_head_action_var(void)
+void Koovox_init_nod_head_var(void)
 {
-	if(!head_action_var)
-		head_action_var = (Head_action_var*)malloc(sizeof(Head_action_var));
+	if(!nod_x_var)
+		nod_x_var = (Extremum_param*)mallocPanic(sizeof(Extremum_param));
 
-	head_action_var->x_status = 0;
-	head_action_var->y_status = 0;
-	head_action_var->z_status = 0;
+	if(!nod_y_var)
+		nod_y_var = (Extremum_param*)mallocPanic(sizeof(Extremum_param));
 
-	head_action_var->min_x_flag = 0;
-	head_action_var->max_y_flag = 0;
-	head_action_var->max_z_flag = 0;
+	nod_x_var->status = 0;
+	nod_x_var->min_flag = 0;
+	nod_x_var->max_flag = 1;
+	nod_x_var->min_value = 0;
+	nod_x_var->max_value = 0;
+	nod_x_var->pre_value = 0;
+	nod_x_var->min_index = 0;
+	nod_x_var->max_index = 0;
 
-	head_action_var->pre_x_value = 100;
-	head_action_var->pre_y_value = 0;
-	head_action_var->pre_z_value = 0;
+	nod_y_var->status = 0;
+	nod_y_var->min_flag = 1;
+	nod_y_var->max_flag = 0;
+	nod_y_var->min_value = 0;
+	nod_y_var->max_value = 0;
+	nod_y_var->pre_value = 10;
+	nod_y_var->min_index = 0;
+	nod_y_var->max_index = 0;
+
+	head_action_cnt = 0;
 }
 
 /****************************************************************************
 NAME 
-  	Koovox_free_head_action_var
+  	Koovox_free_nod_head_var
 
 DESCRIPTION
  	free the head action business variable
@@ -743,13 +794,16 @@ DESCRIPTION
 RETURNS
   	void
 */ 
-void Koovox_free_head_action_var(void)
+void Koovox_free_nod_head_var(void)
 {
-	if(!head_action_var)
+	if((!nod_x_var)&&(!nod_y_var))
 		return;
 
-	freePanic(head_action_var);
-	head_action_var = NULL;
+	freePanic(nod_x_var);
+	nod_x_var = NULL;
+
+	freePanic(nod_y_var);
+	nod_y_var = NULL;
 }
 
 /****************************************************************************
@@ -762,15 +816,109 @@ DESCRIPTION
 RETURNS
   	void
 */ 
-void Koovox_find_max_min_status(uint16 curr_value, uint16 pre_value, uint16 max_value, uint16 min_value, uint8 check, uint8* status, uint8* flag)
+void Koovox_find_max_min_value(uint32 index, int16 curr_value, Extremum_param* param)
 {
+	uint8 status = param->status;
+	uint8 min_flag = param->min_flag;
+	uint8 max_flag = param->max_flag;
+	int16 pre_value = param->pre_value;
+	
+	if(curr_value > pre_value)
+	{
+		/* 检测极小值 */
+		if(status)
+		{
+			param->status = 0;/* 0:表示上升沿； 1:表示下降沿 */
+			
+			if(max_flag)
+			{
+				uint32 max_index = param->max_index;
+				int16 max_value = param->max_value;
+				/* 存取极小值*/
+				if((index - max_index > HEAD_LEN_MAX_MIN)&&(max_value - pre_value >= HEAD_VALUE_THRESHOLD))
+				{
+					param->min_flag = 1;
+					param->max_flag = 0;
+					param->min_index = index;
+					param->min_value = pre_value;
+				}
+			}
+			else
+			{
+				int16 min_value = param->min_value;
+				
+				/* 更新极小值*/
+				if(pre_value <= min_value)
+				{
+					param->min_value = pre_value;
+					param->min_index = index;
+				}
+			}
+			
+		}
+		
+	}
+	else if(curr_value < pre_value)
+	{
+		/* 检测极大值 */
+		if(!status)
+		{
+			param->status = 1;/* 0:表示上升沿； 1:表示下降沿 */ 
 
+			if(min_flag)
+			{
+				uint32 min_index = param->min_index;
+				int16 min_value = param->min_value;
+				/* 存取极大值*/
+				if((index - min_index > HEAD_LEN_MAX_MIN)&&(pre_value - min_value >= HEAD_VALUE_THRESHOLD))
+				{
+					param->min_flag = 0;
+					param->max_flag = 1;
+					param->max_index = index;
+					param->max_value = pre_value;					
+				}			
+			}
+			else
+			{
+				int16 max_value = param->max_value;
+				
+				/* 更新极大值*/
+				if(pre_value + 1>= max_value)
+				{
+					param->max_value = pre_value;
+					param->max_index = index;
+				}
+			}
+			
+		}
+		
+	}
+	else
+	{
+		int16 min_value = param->min_value;
+		int16 max_value = param->max_value;
+		
+		if(curr_value >= max_value)
+		{
+			/* 更新极大值*/
+			param->max_value = pre_value;
+			param->max_index = index;			
+		}
+		else if(curr_value <= min_value)
+		{
+			/* 更新极小值*/
+			param->min_value = pre_value;
+			param->min_index = index;			
+		}
+	}
+	
 }
+
 
 
 /****************************************************************************
 NAME 
-  	KoovoxHeadAction
+  	KoovoxNodHead
 
 DESCRIPTION
  	head action check
@@ -778,12 +926,8 @@ DESCRIPTION
 RETURNS
   	void
 */ 
-void KoovoxHeadAction(uint8* data, uint8 size_data)
+void KoovoxNodHead(uint8* data, uint8 size_data)
 {
-#ifdef ENABLE_LOG
-	{
-	}
-#endif
 
 #ifdef DEBUG_PRINT_ENABLED
 {
@@ -801,29 +945,82 @@ void KoovoxHeadAction(uint8* data, uint8 size_data)
 
 	if((size_data < FRAME_HEAD_ACTION)
 		||(data == NULL)
-		||(head_action_var == NULL))
+		||(nod_x_var == NULL)
+		||(nod_y_var == NULL))
 		return;
 
 	{
-		uint16 axis_x, axis_y, temp;
-		uint16 pre_axis_x, pre_axis_y ;
+		int16 axis_x, axis_y;
+		uint16 temp = 0;
+		uint32 index = 0;
 
 		temp = (uint16)data[0];
 		temp += (uint16)data[1] << 8;
-		axis_x = temp*temp;
-		axis_x /= 100;
+		axis_x = (int16)temp;
+		axis_x /= 10;
 
-		pre_axis_x = head_action_var->pre_x_value;
-		head_action_var->pre_x_value = axis_x;
-
+		temp = 0;
 		temp = (uint16)data[2];
 		temp += (uint16)data[3] << 8;
-		axis_y = temp*temp;
-		axis_y /= 100;
+		axis_y = (int16)temp;
+		axis_y /= 10;
+			
 
-		pre_axis_y = head_action_var->pre_y_value;
-		head_action_var->pre_y_value = axis_y;
+		index = head_action_cnt++;
 
+#ifdef ENABLE_LOG
+		{
+			char* log_msg = (char*)mallocPanic(20);
+			sprintf(log_msg , "%3d %3d %ld\n", axis_x, axis_y, index);
+			APP_CORE_LOG((log_msg));
+			freePanic(log_msg);
+			log_msg = NULL;
+		}
+#endif
+
+		/* find the axis_x min value */
+		Koovox_find_max_min_value(index, axis_x, nod_x_var);
+
+		/* find the axis_y max value */
+		Koovox_find_max_min_value(index, axis_y, nod_y_var);
+
+		nod_x_var->pre_value = axis_x;
+		nod_y_var->pre_value = axis_y;
+
+#ifdef ENABLE_LOGx
+		{
+			char* log_msg = (char*)mallocPanic(25);
+			sprintf(log_msg , "index:%ld %ld\n", nod_x_var->min_index, nod_y_var->max_index);
+			APP_CORE_LOG((log_msg));
+			freePanic(log_msg);
+			log_msg = NULL;
+		}
+#endif
+
+		/* check the nod head action */
+		if((nod_x_var->min_flag)&&(nod_y_var->max_flag))
+		{
+			uint32 x_index = nod_x_var->min_index;
+			uint32 y_index = nod_y_var->max_index;
+
+			if((x_index < y_index + HEAD_ACTION_CHECK)
+				||(y_index < x_index + HEAD_ACTION_CHECK))
+			{
+#ifdef ENABLE_LOGx			
+				/* 检测到点头动作 */
+				DEBUG(("**check the nod action**\n"));
+				APP_CORE_LOG(("check the nod action\n"));
+#endif
+
+				/* 接听电话 */
+				/*MessageSend(theSink.task, EventUsrAnswer, 0);*/
+			}
+			else
+			{
+				nod_x_var->min_flag = 0;
+				nod_y_var->max_flag = 0;
+			}
+		}
 
 		
 	}
@@ -832,7 +1029,7 @@ void KoovoxHeadAction(uint8* data, uint8 size_data)
 
 /****************************************************************************
 NAME 
-  	KoovoxResponseHeadAction
+  	KoovoxResponseNodHead
 
 DESCRIPTION
  	response the cmd of the head action
@@ -840,7 +1037,7 @@ DESCRIPTION
 RETURNS
   	void
 */ 
-void KoovoxResponseHeadAction(uint8* data, uint8 size_data)
+void KoovoxResponseNodHead(uint8* data, uint8 size_data)
 {
 	if((data==NULL)||(size_data < SIZE_RESPONSE))
 		return;
@@ -853,7 +1050,7 @@ void KoovoxResponseHeadAction(uint8* data, uint8 size_data)
 			if(result == SUC)
 			{
 				/* init head action variable */
-				Koovox_init_head_action_var();
+				Koovox_init_nod_head_var();
 			}
 		}
 		else if(cmd == STOP)
@@ -861,7 +1058,7 @@ void KoovoxResponseHeadAction(uint8* data, uint8 size_data)
 			if(result == SUC)
 			{
 				/* free head action variable */
-				Koovox_free_head_action_var();
+				Koovox_free_nod_head_var();
 			}
 		}
 	}
