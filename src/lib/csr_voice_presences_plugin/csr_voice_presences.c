@@ -76,8 +76,7 @@ typedef struct
     uint16              prompt_id;   
     /*! If this is a tone, pointer to the ringtone_note */
     ringtone_note       *tone;   
-	/*! The app task to use to communication the audio*/
-	Task				app_task ;
+
 	
 } koovox_phrase_data_T ;
 
@@ -299,7 +298,7 @@ DESCRIPTION
     plays a number phrase using the audio plugin    
 */
 
-void CsrVoicePresencesPluginPlayPhrase (uint16 id , uint16 language, Task codec_task , uint16 prompt_volume , AudioPluginFeatures features, Task app_task)
+void CsrVoicePresencesPluginPlayPhrase (uint16 id , uint16 language, Task codec_task , uint16 prompt_volume , AudioPluginFeatures features)
 {
     if(koovox_phrase_data != NULL)
         Panic();
@@ -318,7 +317,7 @@ void CsrVoicePresencesPluginPlayPhrase (uint16 id , uint16 language, Task codec_
     koovox_phrase_data->prompt_id     = id;
     koovox_phrase_data->mixing        = FALSE; /* currently unknown so set to false */
     koovox_phrase_data->tone          = NULL;  /* not a tone */
-	koovox_phrase_data->app_task	  = app_task;
+
     
     MessageCancelAll((TaskData*) &csr_voice_presences_plugin, MESSAGE_STREAM_DISCONNECT );
     MessageCancelAll((TaskData*) &csr_voice_presences_plugin, MESSAGE_FROM_KALIMBA);

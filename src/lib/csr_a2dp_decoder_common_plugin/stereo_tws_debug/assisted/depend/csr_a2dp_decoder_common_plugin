@@ -42,7 +42,6 @@
   C:/ADK3.5/tools/include/standard/stdio.h \
   C:/ADK3.5/tools/lib/gcc-lib/xap-local-xap-assisted/3.3.3/include/stdarg.h \
   C:/ADK3.5/tools/include/standard/string.h \
-  C:/ADK3.5/tools/include/firmware/kalimba.h \
   C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/audio_plugin_common.h \
   csr_a2dp_decoder_common_plugin/csr_a2dp_decoder_common_plugin.h \
   C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/a2dp.h \

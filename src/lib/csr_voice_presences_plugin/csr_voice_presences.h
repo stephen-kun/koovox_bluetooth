@@ -25,7 +25,7 @@ typedef enum
 } kalimba_state;
 
 void CsrVoicePresencesPluginInit ( uint16 no_prompts, uint16 no_languages );
-void CsrVoicePresencesPluginPlayPhrase(uint16 id , uint16 language, Task codec_task , uint16 prompt_volume , AudioPluginFeatures features, Task app_task);
+void CsrVoicePresencesPluginPlayPhrase(uint16 id , uint16 language, Task codec_task , uint16 prompt_volume , AudioPluginFeatures features);
 void CsrVoicePresencesPluginStopPhrase ( void ) ;
 
 #endif

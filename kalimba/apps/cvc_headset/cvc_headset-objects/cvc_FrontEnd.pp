@@ -4534,8 +4534,6 @@
 .CONST $DAC_PORT_L (($cbuffer.WRITE_PORT_MASK + 0) | $cbuffer.FORCE_PCM_AUDIO);
 .CONST $DAC_PORT_R (($cbuffer.WRITE_PORT_MASK + 2) | $cbuffer.FORCE_PCM_AUDIO);
 .CONST $TONE_PORT (($cbuffer.READ_PORT_MASK + 3) | $cbuffer.FORCE_PCM_AUDIO);
-.CONST $TONE_VP (($cbuffer.READ_PORT_MASK + 5) | $cbuffer.FORCE_PCM_AUDIO);
-
 
 
 
@@ -4556,10 +4554,10 @@
     .VAR/DMCIRC mem3[120]; .VAR cbuffer_struc3[$cbuffer.STRUC_SIZE] = LENGTH(mem3), &mem3, &mem3;
 
 .ENDMODULE;
-.linefile 70 "cvc_FrontEnd.asm"
+.linefile 68 "cvc_FrontEnd.asm"
 .MODULE $adc_in;
    .DATASEGMENT DM;
-.linefile 81 "cvc_FrontEnd.asm"
+.linefile 79 "cvc_FrontEnd.asm"
     .VAR/DMCIRC mem[$BLOCK_SIZE_ADC_DAC * 2]; .VAR cbuffer_struc[$cbuffer.STRUC_SIZE] = LENGTH(mem), &mem, &mem;
     .VAR/DMCIRC sidetone_mem[(4*$SAMPLE_RATE_ADC_DAC)/1000]; .VAR sidetone_cbuffer_struc[$cbuffer.STRUC_SIZE] = LENGTH(sidetone_mem), &sidetone_mem, &sidetone_mem;
 
@@ -4607,7 +4605,7 @@
             8,
             &$cbops.scratch.mem1,
             LENGTH($cbops.scratch.mem1),
-.linefile 138 "cvc_FrontEnd.asm"
+.linefile 136 "cvc_FrontEnd.asm"
             0 ...;
     .ENDBLOCK;
 
@@ -4717,194 +4715,10 @@
     .ENDBLOCK;
 
 .ENDMODULE;
-
-
-.MODULE $vp_in;
-   .DATASEGMENT DM;
-.linefile 260 "cvc_FrontEnd.asm"
-    .VAR/DMCIRC port_mem[$BLOCK_SIZE_ADC_DAC * 2]; .VAR port_cbuffer_struc[$cbuffer.STRUC_SIZE] = LENGTH(port_mem), &port_mem, &port_mem;
-
-    .VAR/DM1CIRC sr_hist[$cbops.rate_adjustment_and_shift.SRA_COEFFS_SIZE];
-
-   .VAR copy_struc[] =
-      $cbops.scratch.BufferTable,
-      &copy_op,
-      &sidetone_copy_op,
-      1,
-      &port_cbuffer_struc,
-      2,
-      $adc_in.cbuffer_struc,
-      $adc_in.sidetone_cbuffer_struc,
-      2,
-      $cbops.scratch.cbuffer_struc2,
-      $cbops.scratch.cbuffer_struc3;
-
-
-    .BLOCK copy_op;
-        .VAR copy_op.mtu_next = $cbops.NO_MORE_OPERATORS;
-        .VAR copy_op.main_next = &second_copy_op;
-        .VAR copy_op.func = $cbops_iir_resamplev2;
-        .VAR copy_op.param[$iir_resamplev2.OBJECT_SIZE] =
-            0,
-            3,
-            0,
-            0,
-            8,
-            &$cbops.scratch.mem1,
-            LENGTH($cbops.scratch.mem1),
-            0 ...;
-    .ENDBLOCK;
-
-
-    .BLOCK second_copy_op;
-        .VAR second_copy_op.mtu_next = &copy_op;
-        .VAR second_copy_op.main_next = &ratematch_switch_op;
-        .VAR second_copy_op.func = $cbops_iir_resamplev2;
-        .VAR second_copy_op.param[$iir_resamplev2.OBJECT_SIZE] =
-            3,
-            4,
-            0,
-           -8,
-            8,
-            &$cbops.scratch.mem1,
-            LENGTH($cbops.scratch.mem1),
-.linefile 316 "cvc_FrontEnd.asm"
-            0 ...;
-    .ENDBLOCK;
-
-
-    .BLOCK ratematch_switch_op;
-        .VAR ratematch_switch_op.mtu_next = 0;
-        .VAR ratematch_switch_op.main_next = 0;
-        .VAR ratematch_switch_op.func = &$cbops.switch_op;
-        .VAR ratematch_switch_op.param[$cbops.switch_op.STRUC_SIZE] =
-            &$sw_ratematching_adc,
-            &sw_copy_op,
-            &hw_rate_op,
-            &sw_rate_op,
-            &hw_copy_op;
-    .ENDBLOCK;
-
-
-    .BLOCK sw_rate_op;
-        .VAR sw_rate_op.mtu_next = &second_copy_op;
-        .VAR sw_rate_op.main_next = &sw_copy_op;
-        .VAR sw_rate_op.func = &$cbops.rate_monitor_op;
-        .VAR sw_rate_op.param[$cbops.rate_monitor_op.STRUC_SIZE] =
-            4,
-            1600,
-            10,
-            0,
-            10,
-            0.5,
-            0,
-            0 ...;
-    .ENDBLOCK;
-
-    .BLOCK sw_copy_op;
-        .VAR sw_copy_op.mtu_next = &sw_rate_op;
-        .VAR sw_copy_op.main_next = &sidetone_copy_op;
-        .VAR sw_copy_op.func = &$cbops.rate_adjustment_and_shift;
-        .VAR sw_copy_op.param[$cbops.rate_adjustment_and_shift.STRUC_SIZE] =
-            4,
-            1,
-            0,
-            0,
-            &$sra_coeffs,
-            &sr_hist,
-            &sr_hist,
-            &sw_rate_op.param + $cbops.rate_monitor_op.WARP_VALUE_FIELD,
-            0,
-            0 ...;
-    .ENDBLOCK;
-
-
-
-    .BLOCK hw_copy_op;
-        .VAR hw_copy_op.mtu_next = &second_copy_op;
-        .VAR hw_copy_op.main_next = &hw_rate_op;
-        .VAR hw_copy_op.func = &$cbops.copy_op;
-        .VAR hw_copy_op.param[$cbops.copy_op.STRUC_SIZE] =
-            4,
-            1;
-    .ENDBLOCK;
-
-
-    .BLOCK hw_rate_op;
-        .VAR hw_rate_op.mtu_next = &hw_copy_op;
-        .VAR hw_rate_op.main_next = &sidetone_copy_op;
-        .VAR hw_rate_op.func = &$cbops.hw_warp_op;
-        .VAR hw_rate_op.param[$cbops.hw_warp_op.STRUC_SIZE] =
-            $ADC_PORT,
-            4,
-            0x33,
-            0,
-            1600,
-            3,
-            1,
-            0 ...;
-    .ENDBLOCK;
-
-
-    .BLOCK sidetone_copy_op;
-        .VAR sidetone_copy_op.mtu_next = &ratematch_switch_op;
-        .VAR sidetone_copy_op.main_next = &auxillary_mix_op;
-        .VAR sidetone_copy_op.func = &$cbops.sidetone_filter_op;
-        .VAR sidetone_copy_op.param[($cbops.sidetone_filter_op.PEQ_START_FIELD + ($audio_proc.peq.STRUC_SIZE + 2*((3)+1) ))] =
-            1,
-            2,
-
-            $M.CVC_HEADSET.CONFIG.SIDETONEENA,
-            &$M.CVC.data.CurParams + $M.CVC_HEADSET.PARAMETERS.OFFSET_ST_CLIP_POINT,
-            0,
-            0.0,
-
-
-            &$M.CVC.data.ndvc_dm1 + $M.NDVC_Alg1_0_0.OFFSET_FILTSUMLPDNZ,
-
-
-
-            0,
-            &$vp_in.auxillary_mix_op.param+$cbops.aux_audio_mix_op.OFFSET_INV_DAC_GAIN,
-            0,
-            0,
-
-
-            0,
-            0,
-            3,
-            &$M.CVC.data.CurParams + $M.CVC_HEADSET.PARAMETERS.OFFSET_ST_PEQ_CONFIG,
-            0 ...;
-    .ENDBLOCK;
-
-
-    .BLOCK auxillary_mix_op;
-        .VAR auxillary_mix_op.mtu_next = $cbops.NO_MORE_OPERATORS;
-        .VAR auxillary_mix_op.main_next = $cbops.NO_MORE_OPERATORS;
-        .VAR auxillary_mix_op.func = &$cbops.aux_audio_mix_op;
-        .VAR auxillary_mix_op.param[$cbops.aux_audio_mix_op.STRUC_SIZE] =
-            1,
-            1,
-            $TONE_VP,
-            $tone_vp.cbuffer_struc,
-            0,
-            -154,
-            0x80000,
-            0x80000,
-            0x008000,
-            1.0,
-            0,
-            0x40000,
-            0,
-            1.0,
-            0;
-    .ENDBLOCK;
-
-.ENDMODULE;
-.linefile 459 "cvc_FrontEnd.asm"
+.linefile 256 "cvc_FrontEnd.asm"
 .MODULE $dac_out;
    .DATASEGMENT DM;
-.linefile 474 "cvc_FrontEnd.asm"
+.linefile 271 "cvc_FrontEnd.asm"
     .VAR RightPortEnabled = 0;
     .VAR spkr_out_pk_dtct = 0;
     .VAR/DM1CIRC sr_hist[$cbops.rate_adjustment_and_shift.SRA_COEFFS_SIZE];
@@ -5140,53 +4954,6 @@
 
 .ENDMODULE;
 
-.MODULE $tone_vp;
-    .DATASEGMENT DM;
-
-
-    .VAR/DMCIRC mem[$BLOCK_SIZE_ADC_DAC*2]; .VAR cbuffer_struc[$cbuffer.STRUC_SIZE] = LENGTH(mem), &mem, &mem;
-
-   .VAR copy_struc[] =
-      $cbops.scratch.BufferTable,
-      deinterleave_mix_op,
-      copy_op,
-      1,
-      $TONE_VP,
-      1,
-      &cbuffer_struc,
-      1,
-      $cbops.scratch.cbuffer_struc2;
-
-
-
-
-
-   .BLOCK deinterleave_mix_op;
-      .VAR deinterleave_mix_op.mtu_next = $cbops.NO_MORE_OPERATORS;
-      .VAR deinterleave_mix_op.main_next = copy_op;
-      .VAR deinterleave_mix_op.func = $cbops.deinterleave_mix;
-      .VAR deinterleave_mix_op.param[$cbops.deinterleave_mix.STRUC_SIZE] =
-         0,
-         2,
-        -1,
-         0 ;
-   .ENDBLOCK;
-
-   .BLOCK copy_op;
-      .VAR copy_op.mtu_next = deinterleave_mix_op;
-      .VAR copy_op.main_next = $cbops.NO_MORE_OPERATORS;
-      .VAR copy_op.func = $cbops_iir_resamplev2;
-      .VAR copy_op.param[$iir_resamplev2.OBJECT_SIZE_SNGL_STAGE] =
-         2,
-         1,
-         &$M.iir_resamplev2.Up_2_Down_1.filter,
-         0,
-         8,
-         0 ...;
-   .ENDBLOCK;
-
-.ENDMODULE;
-
 
 .CONST $RATE_MATCH_DISABLE_MASK 0x0000;
 .CONST $HW_RATE_MATCH_ENABLE_MASK 0x0001;
@@ -5208,9 +4975,7 @@
    .VAR frame_adc_sampling_rate=8000;
    .VAR frame_dac_sampling_rate=8000;
    .VAR current_tone_sampling_rate=8000;
-
-   .VAR mute_status = 0;
-.linefile 796 "cvc_FrontEnd.asm"
+.linefile 544 "cvc_FrontEnd.asm"
     .VAR cvc_rcvout_resampler_lookup[] =
 
         32000, $M.iir_resamplev2.Up_4_Down_1.filter, $M.iir_resamplev2.Up_2_Down_1.filter,
@@ -5242,7 +5007,7 @@ jp_identify:
     r8 = r8 - 2;
     r0 = M[r8 + r6];
     rts;
-.linefile 839 "cvc_FrontEnd.asm"
+.linefile 587 "cvc_FrontEnd.asm"
 $ConfigureFrontEnd:
     push rLink;
 
@@ -5265,24 +5030,6 @@ $ConfigureFrontEnd:
     if NZ r0=NULL;
     r8 = &$tone_in.copy_op.param;
     call $iir_resamplev2.SetFilter;
-
-
-    r1 = 8000;
-    r2 = r1 + r1;
-    Null = r9 - $M.CVC.BANDWIDTH.NB;
-    if NZ r1=r2;
-
-
-    M[frame_adc_sampling_rate]=r1;
-    M[frame_dac_sampling_rate]=r1;
-
-
-    r0 = &$M.iir_resamplev2.Up_2_Down_1.filter;
-    NULL = r1 - r2;
-    if NZ r0=NULL;
-    r8 = &$tone_vp.copy_op.param;
-    call $iir_resamplev2.SetFilter;
-
 
 
     r1 = &$frame.iir_resamplev2.Process;
@@ -5398,7 +5145,7 @@ $DAC_CheckConnectivity:
     M[$dac_out.RightPortEnabled] = r8;
 
     jump $pop_rLink_and_rts;
-.linefile 1010 "cvc_FrontEnd.asm"
+.linefile 740 "cvc_FrontEnd.asm"
    $set_tone_rate_from_vm:
 
    push rLink;
@@ -5407,7 +5154,6 @@ $DAC_CheckConnectivity:
 
    r0 = r2 AND 1;
    M[$tone_in.deinterleave_mix_op.param + $cbops.deinterleave_mix.INPUT_INTERLEAVED_FIELD] = r0;
-   M[$tone_vp.deinterleave_mix_op.param + $cbops.deinterleave_mix.INPUT_INTERLEAVED_FIELD] = r0;
 
 
    r0 = 8 + (-1);
@@ -5415,7 +5161,6 @@ $DAC_CheckConnectivity:
    Null = r2 AND 0x2;
    if Z r0 = r3;
    M[$tone_in.copy_op.param + $iir_resamplev2.OUTPUT_SCALE_FIELD] = r0;
-   M[$tone_vp.copy_op.param + $iir_resamplev2.OUTPUT_SCALE_FIELD] = r0;
 
 
    r1 = r1 AND 0xFFFF;
@@ -5456,8 +5201,6 @@ $DAC_CheckConnectivity:
    exact_tone_found:
    r3 = r2;
    seach_done:
-   r7 = r3;
-
 
    r0 = M[r3 + 1];
    r1 = M[r3 + 2];
@@ -5471,98 +5214,7 @@ $DAC_CheckConnectivity:
    call $iir_resamplev2.SetFilter;
 
 
-   r3 = r7;
-
-
-   r0 = M[r3 + 1];
-   r1 = M[r3 + 2];
-
-
-   r2 = M[frame_dac_sampling_rate];
-   Null = r2 - 8000;
-   if NZ r0 = r1;
-
-   r8 = &$tone_vp.copy_op.param;
-   call $iir_resamplev2.SetFilter;
-
-
-
    r0 = $tone_in.cbuffer_struc;
-   call $cbuffer.empty_buffer;
-
-   r0 = $tone_vp.cbuffer_struc;
-   call $cbuffer.empty_buffer;
-
-
-   jump $pop_rLink_and_rts;
-.linefile 1119 "cvc_FrontEnd.asm"
-$set_mute_mic_from_vm:
-   push rLink;
-
-   call $interrupt.block;
-   r1 = 1;
-   M[mute_status] = r1;
-   call $interrupt.unblock;
-
-   jump $pop_rLink_and_rts;
-.linefile 1142 "cvc_FrontEnd.asm"
-$vee.feed_cbuffer:
-    push rLink;
-
-    r0 = r8;
-
-
-
-
-
- call $cbuffer.get_write_address_and_size;
-
- I0 = r0;
- L0 = r1;
-
-    r1 = 5;
-    r0 = M[frame_adc_sampling_rate];
-    NULL = r0 - 16000;
-    if Z r1 = r1 + r1;
-    r10 = r1;
-    r1 = 0;
-    do feed_zero;
-        M[I0, 1] = r1;
-    feed_zero:
-
-    r0 = r8;
- r1 = I0;
- call $cbuffer.set_write_address;
- L0 = 0;
-
-   jump $pop_rLink_and_rts;
-.linefile 1186 "cvc_FrontEnd.asm"
-$vee.cbops_multirate_copy:
-    push rLink;
-
-
-    r0 = M[mute_status];
-    NULL = r0;
-    if NZ jump cbops_multirate_copy;
-
-    r8 = &$vp_in.port_cbuffer_struc;
-    call $vee.feed_cbuffer;
-
-    r8 = &$vp_in.copy_struc;
-    call $cbops_multirate.copy;
-
-   r8 = &$tone_vp.copy_struc;
-   call $cbops_multirate.copy;
-
-    jump $pop_rLink_and_rts;
-
-cbops_multirate_copy:
-
-    r8 = &$adc_in.copy_struc;
-    call $cbops_multirate.copy;
-
-
-   r0 = $TONE_VP;
    call $cbuffer.empty_buffer;
 
    jump $pop_rLink_and_rts;

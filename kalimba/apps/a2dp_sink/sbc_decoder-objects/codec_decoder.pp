@@ -1916,27 +1916,6 @@
 
 
 
-.linefile 1 "C:/ADK3.5/kalimba/lib_sets/sdk/include/i2c_library.h" 1
-.linefile 11 "C:/ADK3.5/kalimba/lib_sets/sdk/include/i2c_library.h"
-.linefile 1 "C:/ADK3.5/kalimba/lib_sets/sdk/include/i2c.h" 1
-.linefile 12 "C:/ADK3.5/kalimba/lib_sets/sdk/include/i2c.h"
-    .CONST $i2c.default_pio_mask.SDA (1<<6);
-    .CONST $i2c.default_pio_mask.SCLK (1<<7);
-
-
-    .CONST I2C_CLK_PERIOD_ADJUSTMENT 1.0;
-
-
-
-        .CONST CLOCKS_PER_US 80;
-.linefile 29 "C:/ADK3.5/kalimba/lib_sets/sdk/include/i2c.h"
- .CONST $i2c.CLK_LOW_PERIOD_IN_CYCLES round(4.7 * CLOCKS_PER_US * I2C_CLK_PERIOD_ADJUSTMENT);
- .CONST $i2c.CLK_HIGH_PERIOD_IN_CYCLES round(4.0 * CLOCKS_PER_US * I2C_CLK_PERIOD_ADJUSTMENT);
-.linefile 12 "C:/ADK3.5/kalimba/lib_sets/sdk/include/i2c_library.h" 2
-.linefile 23 "codec_decoder.asm" 2
-
-
-
 
 .linefile 1 "C:/ADK3.5/kalimba/lib_sets/sdk/include/usbio.h" 1
 .linefile 12 "C:/ADK3.5/kalimba/lib_sets/sdk/include/usbio.h"
@@ -1994,7 +1973,7 @@
 .CONST $frame_sync.SYNCING_A_STATE 1;
 .CONST $frame_sync.SYNCING_B_STATE 2;
 .CONST $frame_sync.SYNCED_STATE 3;
-.linefile 28 "codec_decoder.asm" 2
+.linefile 24 "codec_decoder.asm" 2
 
 
 
@@ -2007,7 +1986,7 @@
 
 
 .linefile 1 "C:/ADK3.5/kalimba/lib_sets/sdk/include/core_library.h" 1
-.linefile 40 "codec_decoder.asm" 2
+.linefile 36 "codec_decoder.asm" 2
 .linefile 1 "C:/ADK3.5/kalimba/lib_sets/sdk/include/cbops_library.h" 1
 .linefile 9 "C:/ADK3.5/kalimba/lib_sets/sdk/include/cbops_library.h"
 .linefile 1 "C:/ADK3.5/kalimba/lib_sets/sdk/include/cbops.h" 1
@@ -2792,8 +2771,8 @@
     .const $cbops.delay.STRUC_SIZE 5;
 .linefile 132 "C:/ADK3.5/kalimba/lib_sets/sdk/include/cbops.h" 2
 .linefile 10 "C:/ADK3.5/kalimba/lib_sets/sdk/include/cbops_library.h" 2
-.linefile 41 "codec_decoder.asm" 2
-.linefile 49 "codec_decoder.asm"
+.linefile 37 "codec_decoder.asm" 2
+.linefile 45 "codec_decoder.asm"
 .linefile 1 "C:/ADK3.5/kalimba/lib_sets/sdk/include/sbc_library.h" 1
 .linefile 10 "C:/ADK3.5/kalimba/lib_sets/sdk/include/sbc_library.h"
 .linefile 1 "C:/ADK3.5/kalimba/lib_sets/sdk/include/sbc.h" 1
@@ -2890,14 +2869,14 @@
 
     .CONST $sbc.mem.STRUC_SIZE 69;
 .linefile 11 "C:/ADK3.5/kalimba/lib_sets/sdk/include/sbc_library.h" 2
-.linefile 50 "codec_decoder.asm" 2
-.linefile 62 "codec_decoder.asm"
+.linefile 46 "codec_decoder.asm" 2
+.linefile 58 "codec_decoder.asm"
 .MODULE $M.main;
    .CODESEGMENT MAIN_PM;
    .DATASEGMENT DM;
 
    $main:
-.linefile 75 "codec_decoder.asm"
+.linefile 71 "codec_decoder.asm"
    .VAR/DMCIRC $audio_out_left[1500];
    .VAR/DMCIRC $audio_out_right[1500];
    .VAR/DMCIRC $dac_out_left[$OUTPUT_AUDIO_CBUFFER_SIZE];
@@ -3194,7 +3173,7 @@
       $cbops.dither_and_shift.DITHER_TYPE_NONE,
       0 ...;
     .ENDBLOCK;
-.linefile 383 "codec_decoder.asm"
+.linefile 379 "codec_decoder.asm"
    .VAR/DM1CIRC $dither_hist_left[$cbops.dither_and_shift.FILTER_COEFF_SIZE];
    .VAR/DM1CIRC $dither_hist_right[$cbops.dither_and_shift.FILTER_COEFF_SIZE];
 
@@ -3323,7 +3302,7 @@
       $cbops.dither_and_shift.DITHER_TYPE_NONE,
       0 ...;
     .ENDBLOCK;
-.linefile 523 "codec_decoder.asm"
+.linefile 519 "codec_decoder.asm"
     .BLOCK $audio_out_dither_and_shift_op_mono;
       .VAR $audio_out_dither_and_shift_op_mono.next = $cbops.NO_MORE_OPERATORS;
       .VAR $audio_out_dither_and_shift_op_mono.func = &$cbops.dither_and_shift;
@@ -3465,7 +3444,7 @@
       &$music_example.SamplingRate,
       &$current_dac_sampling_rate,
       &$current_codec_sampling_rate;
-.linefile 688 "codec_decoder.asm"
+.linefile 684 "codec_decoder.asm"
    .VAR $usb_stats[$music_example.CODEC_STATS_SIZE] =
       &$music_example.SamplingRate,
       &$M.system_config.data.ZeroValue,
@@ -3505,7 +3484,7 @@
       &$music_example.SamplingRate,
       &$current_dac_sampling_rate,
       &$current_codec_sampling_rate;
-.linefile 775 "codec_decoder.asm"
+.linefile 771 "codec_decoder.asm"
    call $stack.initialise;
 
    call $interrupt.initialise;
@@ -3527,7 +3506,7 @@
 
 
    call $flash.init_dmconst;
-.linefile 815 "codec_decoder.asm"
+.linefile 811 "codec_decoder.asm"
    r1 = &$set_dac_rate_from_vm_message_struc;
    r2 = 0x1070;
    r3 = &$set_dac_rate_from_vm;
@@ -3544,9 +3523,6 @@
    r2 = 0x1072;
    r3 = &$set_tone_rate_from_vm;
    call $message.register_handler;
-
- call $vee.accelerate.start;
-    call $vee.heartrate.start;
 
 
    call $spi_comm.initialize;
@@ -3569,7 +3545,7 @@
 
    r7 = &$encoded_latency_struct;
    call $latency.reset_encoded_latency;
-.linefile 864 "codec_decoder.asm"
+.linefile 857 "codec_decoder.asm"
    call $message.send_ready_wait_for_go;
 
 
@@ -3612,17 +3588,10 @@
     call $timer.schedule_event_in;
 
 
-
-
    frame_loop:
 
 
- call $vee.accelerate.angle_calc;
-    call $vee.heartrate.calc;
-
-
-
- call $spi_comm.polled_service_routine;
+      call $spi_comm.polled_service_routine;
 
 
         r0 = M[$app_config.io];
@@ -3648,14 +3617,14 @@
 
         r5 = &$decoder_codec_stream_struc;
         call $codec.av_decode;
-.linefile 952 "codec_decoder.asm"
+.linefile 938 "codec_decoder.asm"
            r0 = M[$decoder_codec_stream_struc + $codec.av_decode.CURRENT_RUNNING_MODE_FIELD];
            if NZ call $av_audio_out_silence_prime;
 
 
            r0 = M[$decoder_codec_stream_struc + $codec.av_decode.CURRENT_RUNNING_MODE_FIELD];
            if Z call $av_audio_out_silence_insert;
-.linefile 972 "codec_decoder.asm"
+.linefile 958 "codec_decoder.asm"
         call $sra_calcrate;
 
 
@@ -3790,6 +3759,8 @@ mono_process:
 .ENDMODULE;
 
 
+
+
 .module $M.signal_detect_timer_handler;
 
 
@@ -3816,7 +3787,7 @@ mono_process:
     jump $pop_rLink_and_rts;
 
 .endmodule;
-.linefile 1144 "codec_decoder.asm"
+.linefile 1132 "codec_decoder.asm"
 .MODULE $M.audio_out_copy_handler;
    .CODESEGMENT AUDIO_OUT_COPY_HANDLER_PM;
    .DATASEGMENT DM;
@@ -3864,7 +3835,7 @@ mono_process:
    Null = M[$mono_stereo_mode];
    if Z r8 = r7;
    call $cbops.copy;
-.linefile 1204 "codec_decoder.asm"
+.linefile 1192 "codec_decoder.asm"
    call $tone_copy_extra;
 
 
@@ -3873,7 +3844,7 @@ mono_process:
    Null = M[$mono_stereo_mode];
    if Z r8 = r7;
    call $cbops.dac_av_copy;
-.linefile 1248 "codec_decoder.asm"
+.linefile 1236 "codec_decoder.asm"
    r1 = &$audio_out_timer_struc;
    r2 = 1500;
    r3 = &$audio_out_copy_handler;
@@ -3888,7 +3859,7 @@ mono_process:
 
 
 .ENDMODULE;
-.linefile 1270 "codec_decoder.asm"
+.linefile 1258 "codec_decoder.asm"
 .MODULE $M.detect_end_of_aux_stream;
    .CODESEGMENT DETECT_END_OF_AUX_STREAM_PM;
    .DATASEGMENT DM;
@@ -3944,7 +3915,7 @@ mono_process:
 
    jump $pop_rLink_and_rts;
 .ENDMODULE;
-.linefile 1335 "codec_decoder.asm"
+.linefile 1323 "codec_decoder.asm"
 .MODULE $M.tone_copy_handler;
    .CODESEGMENT TONE_COPY_HANDLER_PM;
    .DATASEGMENT DM;
@@ -3972,7 +3943,7 @@ mono_process:
 
 
    jump $pop_rLink_and_rts;
-.linefile 1371 "codec_decoder.asm"
+.linefile 1359 "codec_decoder.asm"
    $tone_copy_extra:
 
    push rLink;
@@ -4006,7 +3977,7 @@ mono_process:
    jump $pop_rLink_and_rts;
 
 .ENDMODULE;
-.linefile 1564 "codec_decoder.asm"
+.linefile 1552 "codec_decoder.asm"
 .MODULE $M.con_in_copy_handler;
    .CODESEGMENT CON_IN_COPY_HANDLER_PM;
    .DATASEGMENT DM;
@@ -4051,19 +4022,19 @@ mono_process:
       jump copy_done;
 
    skip_analogue_copy:
-.linefile 1709 "codec_decoder.asm"
+.linefile 1697 "codec_decoder.asm"
    r8 = &$codec_in_copy_struc;
    call $cbops.copy;
 
 input_read_done:
-.linefile 1752 "codec_decoder.asm"
+.linefile 1740 "codec_decoder.asm"
    .VAR $codec_level;
    r0 = &$codec_in_cbuffer_struc;
    call $cbuffer.calc_amount_data;
    M[$codec_level] = r0;
-.linefile 1771 "codec_decoder.asm"
+.linefile 1759 "codec_decoder.asm"
    copy_done:
-.linefile 1780 "codec_decoder.asm"
+.linefile 1768 "codec_decoder.asm"
    Null = M[$M.configure_latency_reporting.enabled];
    if Z jump skip_packet_detection;
       call $media_packet_boundary_detection;
@@ -4079,7 +4050,7 @@ input_read_done:
    jump $pop_rLink_and_rts;
 
 .ENDMODULE;
-.linefile 1815 "codec_decoder.asm"
+.linefile 1803 "codec_decoder.asm"
 .MODULE $M.set_dac_rate_from_vm;
    .CODESEGMENT SET_DAC_RATE_FROM_VM_PM;
 
@@ -4122,7 +4093,7 @@ $set_dac_rate_from_vm:
 
    rts;
 .ENDMODULE;
-.linefile 1876 "codec_decoder.asm"
+.linefile 1864 "codec_decoder.asm"
 .MODULE $M.set_tone_rate_from_vm;
    .CODESEGMENT SET_TONE_RATE_FROM_VM_PM;
 
@@ -4199,7 +4170,7 @@ $set_dac_rate_from_vm:
 
    rts;
 .ENDMODULE;
-.linefile 1965 "codec_decoder.asm"
+.linefile 1953 "codec_decoder.asm"
 .MODULE $M.set_codec_rate_from_vm;
    .CODESEGMENT SET_CODEC_RATE_FROM_VM_PM;
 
@@ -4225,7 +4196,7 @@ $set_codec_rate_from_vm:
    rts;
 
 .ENDMODULE;
-.linefile 2008 "codec_decoder.asm"
+.linefile 1996 "codec_decoder.asm"
 .MODULE $M.config_rate_matching;
    .CODESEGMENT CONFIG_RATE_MATCHING_PM;
 
@@ -4302,7 +4273,7 @@ $config_rate_matching:
    M[$sra_struct + $sra.HIST_INDEX_FIELD] = r0;
    r0 = 1;
    M[$sra_struct + $sra.LONG_TERM_RATE_DETECTED_FIELD] = r0;
-.linefile 2094 "codec_decoder.asm"
+.linefile 2082 "codec_decoder.asm"
    end:
 
    jump $pop_rLink_and_rts;
@@ -4376,7 +4347,7 @@ $config_rate_matching:
    jump $pop_rLink_and_rts;
 
 .ENDMODULE;
-.linefile 2292 "codec_decoder.asm"
+.linefile 2280 "codec_decoder.asm"
 .MODULE $M.mute_control.Process.func;
 
    .CODESEGMENT MUTE_CONTROL_FUNC_PM;
@@ -4414,7 +4385,7 @@ loop_mute:
    jump jp_save_pointer;
 
 .ENDMODULE;
-.linefile 2347 "codec_decoder.asm"
+.linefile 2335 "codec_decoder.asm"
 .MODULE $M.copy_codec_stats_pointers;
    .CODESEGMENT COPY_CODEC_STATS_POINTERS_PM;
 
@@ -4437,7 +4408,7 @@ $copy_codec_stats_pointers:
    rts;
 
 .ENDMODULE;
-.linefile 2389 "codec_decoder.asm"
+.linefile 2377 "codec_decoder.asm"
 .MODULE $M.conn_init_cbuffers;
    .CODESEGMENT PM;
 
@@ -4464,7 +4435,7 @@ $conn_init_cbuffers:
    jump $pop_rLink_and_rts;
 
 .ENDMODULE;
-.linefile 2447 "codec_decoder.asm"
+.linefile 2435 "codec_decoder.asm"
 .MODULE $M.conn_init;
 
    .CODESEGMENT PM;
@@ -4516,7 +4487,7 @@ $conn_init:
 
       I0 = $usb_stats;
       call $copy_codec_stats_pointers;
-.linefile 2530 "codec_decoder.asm"
+.linefile 2518 "codec_decoder.asm"
       jump exit;
 
    skip_usb_conn_init:
@@ -4556,7 +4527,7 @@ $conn_init:
 
       I0 = $analogue_stats;
       call $copy_codec_stats_pointers;
-.linefile 2581 "codec_decoder.asm"
+.linefile 2569 "codec_decoder.asm"
       jump exit;
 
    skip_analogue_conn_init:
@@ -4627,13 +4598,13 @@ $conn_init:
          jump exit;
 
       skip_sbc:
-.linefile 2758 "codec_decoder.asm"
+.linefile 2746 "codec_decoder.asm"
          jump $error;
    exit:
 
    jump $pop_rLink_and_rts;
 .ENDMODULE;
-.linefile 2936 "codec_decoder.asm"
+.linefile 2924 "codec_decoder.asm"
 .MODULE $M.jitter_buffering;
    .CODESEGMENT PM;
    .DATASEGMENT DM;
@@ -4706,7 +4677,7 @@ done:
     jump $pop_rLink_and_rts;
 
 .ENDMODULE;
-.linefile 3017 "codec_decoder.asm"
+.linefile 3005 "codec_decoder.asm"
 .MODULE $M.usb_sub_esco_process;
    .CODESEGMENT PM;
    .DATASEGMENT DM;
@@ -4723,7 +4694,7 @@ done:
    jump $pop_rLink_and_rts;
 
 .ENDMODULE;
-.linefile 3050 "codec_decoder.asm"
+.linefile 3038 "codec_decoder.asm"
 .MODULE $M.av_audio_out_silence_prime;
    .CODESEGMENT PM;
 
@@ -4738,7 +4709,7 @@ done:
    rts;
 
 .ENDMODULE;
-.linefile 3081 "codec_decoder.asm"
+.linefile 3069 "codec_decoder.asm"
 .MODULE $M.av_audio_out_silence_insert;
     .CODESEGMENT PM;
    .DATASEGMENT DM;
@@ -4764,7 +4735,7 @@ done:
    jump $pop_rLink_and_rts;
 
 .ENDMODULE;
-.linefile 3124 "codec_decoder.asm"
+.linefile 3112 "codec_decoder.asm"
 .MODULE $M.av_insert_silence;
     .CODESEGMENT PM;
 

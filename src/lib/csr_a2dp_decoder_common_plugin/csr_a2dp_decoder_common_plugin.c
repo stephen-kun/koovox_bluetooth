@@ -10,14 +10,10 @@ NOTES
 #include <audio.h>
 #include <codec.h>
 #include <stdlib.h>
-#include <stream.h> /*for the ringtone_note*/
-#ifndef DEBUG_PRINT_ENABLED
-#define DEBUG_PRINT_ENABLEDx
-#endif
 #include <print.h>
+#include <stream.h> /*for the ringtone_note*/
 #include <string.h>
 #include <panic.h>
-#include <kalimba.h>
 
 #include "audio_plugin_if.h" /*the messaging interface*/
 #include "audio_plugin_common.h"
@@ -26,7 +22,6 @@ NOTES
 #include "csr_a2dp_decoder_common_if.h"
 #include "csr_a2dp_decoder_common_subwoofer.h"
 #include "csr_a2dp_decoder_common_sharing.h"
-
 
 
 	/*the task message handler*/
@@ -983,37 +978,7 @@ static void handleAudioMessage ( Task task , MessageId id, Message message )
 			PRINT(("A2DP: Set volume not used in this plugin\n"));	
 		}
 		break;
-
-#ifndef KOOVOX
-		case (AUDIO_PLUGIN_SPORT_MODE_PLAY_PROMPT_MSG):
-		{
-            AUDIO_PLUGIN_SPORT_MODE_PLAY_PROMPT_MSG_T* sport_message = (AUDIO_PLUGIN_SPORT_MODE_PLAY_PROMPT_MSG_T *)message ;
-            if(GetCurrentDspStatus() == DSP_RUNNING)
-            {    
-            	KoovoxStartSportKalimba(sport_message->sensor_sample, sport_message->sensor_value);
-            }
-            else
-            {
-
-				MAKE_AUDIO_MESSAGE(AUDIO_PLUGIN_SPORT_MODE_PLAY_PROMPT_MSG) ; 
-				
-				message->sensor_sample		= sport_message->sensor_sample ;
-				message->sensor_value		= sport_message->sensor_value ;
-				message->app_task			= sport_message->app_task;
-				MessageSendLater( task, AUDIO_PLUGIN_SPORT_MODE_PLAY_PROMPT_MSG, message, MSG_DELAY);
-            } 
-		}
-		break;
-
-        case (AUDIO_PLUGIN_SPORT_MODE_STOP_PROMPT_MSG ):
-        {
-			PRINT(("AUDIO_PLUGIN_SPORT_MODE_STOP_PROMPT_MSG\n"));
-
-			KoovoxStopSportKalimba();
-        }
-        break;
-#endif
-       
+        
 		default:
 		{
 		}

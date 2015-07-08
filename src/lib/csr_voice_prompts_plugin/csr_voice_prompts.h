@@ -27,7 +27,7 @@ typedef enum
 
 void CsrVoicePromptPluginPlayDsp(kalimba_state state);
 
-void CsrVoicePromptsPluginPlayPhrase(uint16 id , uint16 language, Task codec_task , uint16 prompt_volume , AudioPluginFeatures features, Task app_task);
+void CsrVoicePromptsPluginPlayPhrase(uint16 id , uint16 language, Task codec_task , uint16 prompt_volume , AudioPluginFeatures features);
 void CsrVoicePromptsPluginStopPhrase ( void ) ;
 void CsrVoicePromptsPluginPlayTone ( TaskData *task, ringtone_note * tone, Task codec_task, uint16 tone_volume, AudioPluginFeatures features);
 void CsrVoicePromptsPluginSetVolume (int16 volume, bool minus_6_db) ;

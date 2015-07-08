@@ -16,15 +16,9 @@ DESCRIPTION
 #include <stream.h>
 #include <csr_tone_plugin.h> /*allows tones to be played while no other plugin is in use*/
 #include <csr_voice_prompts_plugin.h>
-#define DEBUG_PRINT_ENABLEDx
 #include <print.h>
 #include <string.h>
 #include <csr_a2dp_decoder_common_plugin.h>
-#include <kalimba.h>
-
-#ifndef KOOVOX
-#include <koovox_sport_common_plugin.h>
-#endif
 
 #ifdef RESAMPLE_TONES
 /* If tone resampling is needed the csr_voice_prompts_plugin_resample plugin variant should be used */
@@ -96,14 +90,6 @@ bool AudioConnect (  Task audio_plugin,
 	message->params     = params ;
 	message->app_task	= app_task ;
 	message->power	    = power ;
-
-#ifndef KOOVOX
-	if(AUDIO->plugin == &koovox_sport_common_plugin)
-	{
-		SetAudioBusy((TaskData*)&koovox_sport_common_plugin);
-		MessageSend((TaskData*)&koovox_sport_common_plugin, AUDIO_PLUGIN_SPORT_MODE_STOP_PROMPT_MSG, 0 ) ;
-	}
-#endif
     
     AUDIO->plugin = audio_plugin ;
     AUDIO->message = *message;
@@ -413,105 +399,6 @@ void AudioStopTone ( void )
 	}
 }
 
-
-#ifndef KOOVOX
-void KoovoxStartSportKalimba(uint8 sensor_sample, uint16 sensor_value)
-{
-    PRINT(("KoovoxStartSportKalimba: sample:%d, value:%d\n", sensor_sample, sensor_value));
-
-	if(sensor_value&STEP_VALUE)
-		KalimbaSendMessage(STEP_VALUE_ENABLE_CMD_TO_DSP, 0, 0, 0, 0);
-	if(sensor_value&NECK_EVENT)
-		KalimbaSendMessage(NECK_PROTECT_ENABLE_CMD_TO_DSP, 0, 0, 0, 0);
-	if(sensor_value&DRIVER_EVENT)
-		KalimbaSendMessage(SAFE_DRIVER_ENABLE_CMD_TO_DSP, 0, 0, 0, 0);
-	if(sensor_value&SEAT_EVENT)
-		KalimbaSendMessage(CONST_SEAT_ENABLE_CMD_TO_DSP, 0, 0, 0, 0);
-	if(sensor_value&TIME_VALUE)
-		KalimbaSendMessage(TIME_VALUE_ENABLE_CMD_TO_DSP, 0, 0, 0, 0);
-	if(sensor_sample&HB_SENSOR)
-		KalimbaSendMessage(HB_SAMPLE_ENABLE_CMD_TO_DSP, 0, 0, 0, 0);
-	if(sensor_sample&ACC_SENSOR)
-		KalimbaSendMessage(ACC_SAMPLE_ENABLE_CMD_TO_DSP, 0, 0, 0, 0);
-	
-}
-
-void KoovoxStopSportKalimba(void)
-{
-    PRINT(("KoovoxStopSportKalimba\n"));
-
-	KalimbaSendMessage(HB_SAMPLE_DISABLE_CMD_TO_DSP, 0, 0, 0, 0);
-	
-	KalimbaSendMessage(ACC_SAMPLE_DISABLE_CMD_TO_DSP, 0, 0, 0, 0);
-}
-
-/****************************************************************************
-NAME	
-	AudioSportModePlayPrompt
-    
-DESCRIPTION
-
-    . 
-
-RETURNS
-    
-*/
-void AudioSportModePlayPrompt ( Task plugin , uint8 sensor_sample, uint16 sensor_value , Task app_task )
-{	
-	if (AUDIO->plugin) 
-	{
-		if(GetCurrentDspStatus() == DSP_RUNNING)
-			KoovoxStartSportKalimba(sensor_sample, sensor_value);
-		else
-		{
-		
-			MAKE_AUDIO_MESSAGE(AUDIO_PLUGIN_SPORT_MODE_PLAY_PROMPT_MSG) ; 
-			
-			message->sensor_sample		= sensor_sample ;
-			message->sensor_value		= sensor_value ;
-			message->app_task			= app_task;
-			MessageSendLater(AUDIO->plugin, AUDIO_PLUGIN_SPORT_MODE_PLAY_PROMPT_MSG, message, MSG_DELAY);
-			PRINT(("***AudioSportModePlayPrompt have plugin\n"));						
-		}
-	}
-	else
-	{
-		MAKE_AUDIO_MESSAGE(AUDIO_PLUGIN_SPORT_MODE_PLAY_PROMPT_MSG) ; 
-		
-		message->sensor_sample		= sensor_sample ;
-		message->sensor_value		= sensor_value ;
-		message->app_task			= app_task;
-
-		AUDIO->plugin = plugin;
-		PRINT(("***AudioSportModePlayPrompt have no plugin\n"));						
-		MessageSendConditionally ( plugin, AUDIO_PLUGIN_SPORT_MODE_PLAY_PROMPT_MSG , message , (const uint16 *)AudioBusyPtr() ) ;
-	}	
-}
-
-/****************************************************************************
-NAME	
-	AudioSportModeStopPrompt
-
-DESCRIPTION
-
-RETURNS
-*/
-void AudioSportModeStopPrompt ( TaskData * plugin )
-{
-	PRINT(("AudioSportModeStopPrompt\n"));
-	if(AUDIO->plugin == plugin)
-	{
-    	MessageSend ((TaskData*)plugin, AUDIO_PLUGIN_SPORT_MODE_STOP_PROMPT_MSG, 0 ) ;
-		AUDIO->plugin = NULL;
-	}
-	else if(AUDIO->plugin)
-	{
-    	MessageSend (AUDIO->plugin, AUDIO_PLUGIN_SPORT_MODE_STOP_PROMPT_MSG, 0 ) ;
-	}
-}
-
-#endif
-
 /****************************************************************************
 NAME	
 	AudioPlayAudioPrompt
@@ -525,7 +412,7 @@ RETURNS
 */
 void AudioPlayAudioPrompt ( Task plugin , uint16 id , uint16 language , bool can_queue , Task codec_task, uint16 ap_volume , AudioPluginFeatures features, bool override, Task app_task )
 {   
-	MAKE_AUDIO_MESSAGE( AUDIO_PLUGIN_PLAY_AUDIO_PROMPT_MSG) ; 
+	MAKE_AUDIO_MESSAGE( AUDIO_PLUGIN_PLAY_AUDIO_PROMPT_MSG ) ; 
 	
 	message->id          = id ;
 	message->language    = language ;
@@ -533,29 +420,9 @@ void AudioPlayAudioPrompt ( Task plugin , uint16 id , uint16 language , bool can
 	message->codec_task  = codec_task ;
 	message->ap_volume   = ap_volume  ;
 	message->features    = features ;
-	message->app_task    = app_task;
-
-#ifndef KOOVOX
-	if(AUDIO->plugin == &koovox_sport_common_plugin)
-	{	
-		if(GetCurrentDspStatus()==DSP_RUNNING)
-		{
-			PRINT(("***AudioPlayAudioPrompt:SPORT_DATA_CMD_TO_DSP\n"));
-			SetAudioBusy((TaskData*)&koovox_sport_common_plugin);
-			MessageSend((TaskData*)&koovox_sport_common_plugin, AUDIO_PLUGIN_SPORT_MODE_STOP_PROMPT_MSG, 0 ) ;
-		}
-		else
-		{
-			PRINT(("***MessageCancelAll:AUDIO_PLUGIN_SPORT_MODE_PLAY_PROMPT_MSG\n"));
-			MessageCancelAll((TaskData*)&koovox_sport_common_plugin, AUDIO_PLUGIN_SPORT_MODE_PLAY_PROMPT_MSG);
-			MessageCancelAll((TaskData*)&koovox_sport_common_plugin, AUDIO_PLUGIN_SPORT_MODE_STOP_PROMPT_MSG);
-		}
-		AUDIO->plugin = NULL;
-	}
-#endif
 	
     if (AUDIO->plugin) 
-	{	
+	{
         /* if this voice prompt is set to play immediately, cancel any queued prompts */
         if(override)
         {
@@ -984,36 +851,4 @@ void AudioSetVolumeA2DP(AUDIO_PLUGIN_SET_VOLUME_A2DP_MSG_T *volumeDspA2DP )
 	}
 }
 
-#ifndef KOOVOX
-/****************************************************************************
-NAME
-	IsSportRunning
-
-DESCRIPTION
-	
-
-RETURNS
-
-*/
-bool IsSportRunning(void)
-{
-	return AUDIO->sport_running;
-}
-
-void SetSportStatus(bool status)
-{
-	AUDIO->sport_running = status;
-}
-
-void SetAudioDisconnectStatus(bool status)
-{
-	AUDIO->audio_disconnecting = status;
-}
-
-bool IsAudioDisconnecting(void)
-{
-	return AUDIO->audio_disconnecting;
-}
-
-#endif
 

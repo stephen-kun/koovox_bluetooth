@@ -38,4 +38,3 @@ sbc_decoder-objects/subwoofer.o
 sbc_decoder-objects/user_eq.o
 sbc_decoder-objects/latency_reporting.o
 sbc_decoder-objects/relay_conn.o
-sbc_decoder-objects/vee_heartrate.o

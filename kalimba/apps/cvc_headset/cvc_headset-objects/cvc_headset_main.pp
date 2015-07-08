@@ -5244,10 +5244,9 @@
       &$set_variant_from_vm,
       &$M.CVC.data.StatisticsPtrs,
       &$dac_out.auxillary_mix_op.param,
-      &$vp_in.auxillary_mix_op.param,
       &$M.CVC.data.CurParams + $M.CVC_HEADSET.PARAMETERS.OFFSET_INV_DAC_GAIN_TABLE;
 .ENDMODULE;
-.linefile 156 "cvc_headset_main.asm"
+.linefile 155 "cvc_headset_main.asm"
 .MODULE $M.CVC.app.scheduler;
    .DATASEGMENT DM;
 
@@ -5269,7 +5268,7 @@
 
 
 .ENDMODULE;
-.linefile 189 "cvc_headset_main.asm"
+.linefile 188 "cvc_headset_main.asm"
 .MODULE $M.main;
    .CODESEGMENT MAIN_PM;
 
@@ -5311,7 +5310,7 @@ $main:
 
    r2 = $MESSAGE_KALIMBA_READY;
    call $message.send_short;
-.linefile 262 "cvc_headset_main.asm"
+.linefile 261 "cvc_headset_main.asm"
    call $CVC.Start;
 
 
@@ -5347,7 +5346,7 @@ $main_housekeeping:
     r3 = M[$M.CVC_SYS.FrameCounter];
     r3 = r3 + 1;
     M[$M.CVC_SYS.FrameCounter] = r3;
-.linefile 305 "cvc_headset_main.asm"
+.linefile 304 "cvc_headset_main.asm"
     r3 = M[$far_end.in.usb_copy_struc + $frame_sync.USB_IN_MONO_COPY_PACKET_LENGTH_FIELD];
     r2 = M[&$sco_data.object + $sco_pkt_handler.PACKET_IN_LEN_FIELD];
     null = M[$M.BackEnd.sco_streaming];
@@ -5437,7 +5436,7 @@ $main_send:
       jump $pop_rLink_and_rts;
 
 .ENDMODULE;
-.linefile 414 "cvc_headset_main.asm"
+.linefile 411 "cvc_headset_main.asm"
 .MODULE $M.audio_config;
    .CODESEGMENT AUDIO_CONFIG_PM;
    .DATASEGMENT DM;
@@ -5446,7 +5445,6 @@ $main_send:
    .VAR set_port_type_message_struc[$message.STRUC_SIZE];
    .VAR set_adcdac_rate_from_vm_message_struc[$message.STRUC_SIZE];
    .VAR set_tone_rate_from_vm_message_struc[$message.STRUC_SIZE];
-   .VAR set_mute_mic_from_vm_message_struc[$message.STRUC_SIZE];
 
 
    .VAR $audio_copy_timer_struc[$timer.STRUC_SIZE];
@@ -5488,12 +5486,6 @@ $audio_config.initialise:
    call $message.register_handler;
 
 
-   r1 = &set_mute_mic_from_vm_message_struc;
-   r2 = 0x4f04;
-   r3 = &$set_mute_mic_from_vm;
-   call $message.register_handler;
-
-
    r1 = &$audio_copy_timer_struc;
    r2 = $TIMER_PERIOD_AUDIO_COPY_MICROS;
    r3 = &$audio_copy_handler;
@@ -5506,14 +5498,14 @@ $audio_config.initialise:
 
    call $ConfigureSystem;
    jump $pop_rLink_and_rts;
-.linefile 498 "cvc_headset_main.asm"
+.linefile 488 "cvc_headset_main.asm"
 $set_backend_from_vm:
 
    M[encoding_mode] = r1;
    M[encoding_config] = r2;
 
    jump Signal_system_reconfig;
-.linefile 521 "cvc_headset_main.asm"
+.linefile 511 "cvc_headset_main.asm"
 $set_front_end_from_vm:
 
    r1 = r1 AND 0xffff;
@@ -5531,7 +5523,7 @@ $set_front_end_from_vm:
 
 
    jump Signal_system_reconfig;
-.linefile 553 "cvc_headset_main.asm"
+.linefile 543 "cvc_headset_main.asm"
 $set_variant_from_vm:
 
    r6 = &$M.CVC.data.DefaultParameters_nb;
@@ -5549,7 +5541,7 @@ Signal_system_reconfig:
     M[$M.audio_config.SysReConfigure]=r3;
     M[$M.CVC_SYS.AlgReInit]=r3;
     rts;
-.linefile 578 "cvc_headset_main.asm"
+.linefile 568 "cvc_headset_main.asm"
 $CVC_AppHandleConfig:
 
    r1 = M[$M.CVC_MODULES_STAMP.CompConfig];
@@ -5560,7 +5552,7 @@ $CVC_AppHandleConfig:
    M[$M.CVC_MODULES_STAMP.CompConfig] = r1;
    rts;
 .ENDMODULE;
-.linefile 598 "cvc_headset_main.asm"
+.linefile 588 "cvc_headset_main.asm"
 .MODULE $M.audio_copy_handler;
    .CODESEGMENT AUDIO_COPY_HANDLER_PM;
    .DATASEGMENT DM;
@@ -5569,7 +5561,8 @@ $audio_copy_handler:
    push rLink;
 
 
-   call $vee.cbops_multirate_copy;
+   r8 = &$adc_in.copy_struc;
+   call $cbops_multirate.copy;
 
 
    call $DAC_CheckConnectivity;
@@ -5628,14 +5621,14 @@ irq_sco:
         jump $pop_rLink_and_rts;
 
 .ENDMODULE;
-.linefile 695 "cvc_headset_main.asm"
+.linefile 686 "cvc_headset_main.asm"
 .MODULE $M.App.Codec.Apply;
    .CODESEGMENT CODEC_APPLY_PM;
    .DATASEGMENT DM;
 
 $App.Codec.Apply:
    push rLink;
-.linefile 709 "cvc_headset_main.asm"
+.linefile 700 "cvc_headset_main.asm"
    r0 = $M.CVC_HEADSET.SYSMODE.HFK;
    r7 = $M.CVC_HEADSET.SYSMODE.LOWVOLUME;
    r2 = M[$M.CVC.data.CurParams + $M.CVC_HEADSET.PARAMETERS.OFFSET_LVMODE_THRES];
@@ -5649,12 +5642,12 @@ $App.Codec.Apply:
    r7 = M[$M.CVC_SYS.cur_mode];
    r7 = r7 - $M.CVC_HEADSET.SYSMODE.SSR;
    if Z r4 = r0;
-.linefile 730 "cvc_headset_main.asm"
+.linefile 721 "cvc_headset_main.asm"
    r2 = $M.CVC.VMMSG.CODEC;
    call $message.send_short;
    jump $pop_rLink_and_rts;
 .ENDMODULE;
-.linefile 744 "cvc_headset_main.asm"
+.linefile 735 "cvc_headset_main.asm"
 .MODULE $M.cvc.wbs_utility;
    .CODESEGMENT CVC_BANDWIDTH_PM;
    .DATASEGMENT DM;
@@ -5684,7 +5677,7 @@ $cvc.wb.wbs_sco_encode:
    jump $frame_sync.sco_encode;
 
 .ENDMODULE;
-.linefile 794 "cvc_headset_main.asm"
+.linefile 785 "cvc_headset_main.asm"
 .MODULE $M.ConfigureSystem;
    .CODESEGMENT CVC_BANDWIDTH_PM;
    .DATASEGMENT DM;
@@ -5772,7 +5765,7 @@ $cvc.wb.wbs_sco_encode:
             $filter_bank.config.frame120_proto240_fft256,
             $M.CVC.BANDWIDTH.WB_FS/2000,
             0;
-.linefile 894 "cvc_headset_main.asm"
+.linefile 885 "cvc_headset_main.asm"
 $ConfigureSystem:
    push rLink;
 

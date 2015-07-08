@@ -108,7 +108,7 @@ static void handleAudioMessage ( Task task , MessageId id, Message message )
             else
             {
                 CsrVoicePresencesPluginPlayPhrase ( prompt_message->id, prompt_message->language, 
-                                                  prompt_message->codec_task, prompt_message->ap_volume, prompt_message->features, prompt_message->app_task);
+                                                  prompt_message->codec_task, prompt_message->ap_volume, prompt_message->features);
                 PRINT(("PRESENT:start\n"));
             } 
         }

@@ -574,6 +574,20 @@ void stateManagerEnterA2dpStreamingState(void)
 	}
 }
 
+/****************************************************************************
+NAME	
+	stateManagerEnterAutomaticSpeechRecognitionState
+
+DESCRIPTION
+    enter automatic speech recognition states
+RETURNS
+	void
+    
+*/
+void stateManagerEnterAutomaticSpeechRecognitionState(void)
+{
+	stateManagerSetState(  deviceAutomaticSpeechRecognition );
+}
 
 /****************************************************************************
 NAME	
@@ -965,6 +979,8 @@ void stateManagerEnterIncomingCallOnHoldState ( void )
     	/*if we enter this state directly*/
     MessageCancelAll ( &theSink.task , EventSysPairingFail ) ;
 }
+
+
 
 static void stateManagerResetPIOs ( void )
 {

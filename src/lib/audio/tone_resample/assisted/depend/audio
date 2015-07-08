@@ -42,6 +42,4 @@ audio/tone_resample/assisted/audio.o: audio/audio.c audio/audio.h \
   C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/csr_a2dp_decoder_common_plugin.h \
   C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/a2dp.h \
   C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/connection.h \
-  C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/connection_no_ble.h \
-  C:/ADK3.5/tools/include/firmware/kalimba.h \
-  C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/koovox_sport_common_plugin.h
+  C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/connection_no_ble.h

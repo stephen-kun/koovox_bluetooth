@@ -35,8 +35,6 @@
 .CONST  $DAC_PORT_L           (($cbuffer.WRITE_PORT_MASK + 0) | $cbuffer.FORCE_PCM_AUDIO);
 .CONST  $DAC_PORT_R           (($cbuffer.WRITE_PORT_MASK + 2) | $cbuffer.FORCE_PCM_AUDIO);   
 .CONST  $TONE_PORT            (($cbuffer.READ_PORT_MASK  + 3) | $cbuffer.FORCE_PCM_AUDIO);
-.CONST  $TONE_VP              (($cbuffer.READ_PORT_MASK  + 5) | $cbuffer.FORCE_PCM_AUDIO);
-
 
 #define $TONE_EXTRA_BOOST_BITS   2
 #define $PROMPT_EXTRA_BOOST_BITS (-1)
@@ -242,207 +240,6 @@
             &$M.CVC.data.CurParams + $M.CVC_HEADSET.PARAMETERS.OFFSET_ST_PEQ_CONFIG,       // Pointer to PEQ parameters
             0 ...;
     .ENDBLOCK;
-            
-.ENDMODULE;
-        
-
-.MODULE $vp_in;
-   .DATASEGMENT DM;
-
-//                                         (cBuffer)
-//   port_cbuffer_struc ----------------------- RATEMATCH ---+---->
-//                                         |
-//                                       
-//                                         |
-//                                      (tone vp)
-//
-
-    DeclareCBuffer (port_cbuffer_struc,port_mem,$BLOCK_SIZE_ADC_DAC * 2);
-
-    .VAR/DM1CIRC    sr_hist[$cbops.rate_adjustment_and_shift.SRA_COEFFS_SIZE];
-
-   .VAR copy_struc[] =
-      $cbops.scratch.BufferTable,     // BUFFER_TABLE_FIELD
-      &copy_op,                       // MAIN_FIRST_OPERATOR_FIELD
-      &sidetone_copy_op,              // MTU_FIRST_OPERATOR_FIELD
-      1,                              // NUM_INPUTS_FIELD
-      &port_cbuffer_struc,            // port->scratch2 (resample)
-      2,                              // NUM_OUTPUTS_FIELD
-      $adc_in.cbuffer_struc,          // scratch3->cbuffer (rate adjust->cbuffer)
-      $adc_in.sidetone_cbuffer_struc,        // cbuffer->sidetone cbuffer
-      2,                              // NUM_INTERNAL_FIELD
-      $cbops.scratch.cbuffer_struc2,  // from port
-      $cbops.scratch.cbuffer_struc3;  // scratch2->scratch3 (resample1->resample2)
-
-    // Port Copy/Resampler Operator
-    .BLOCK copy_op;
-        .VAR copy_op.mtu_next  = $cbops.NO_MORE_OPERATORS;
-        .VAR copy_op.main_next = &second_copy_op;
-        .VAR copy_op.func = $cbops_iir_resamplev2;
-        .VAR copy_op.param[$iir_resamplev2.OBJECT_SIZE] =
-            ADCINDEX_PORT,                      // Input index
-            ADCINDEX_INTERNAL,                  // Output index
-            0,                                  // FILTER_DEFINITION_PTR_FIELD  [---CONFIG---]
-            0,                                  // INPUT_SCALE_FIELD   (input Q15)
-            8,                                  // OUTPUT_SCALE_FIELD  (output Q23)
-            &$cbops.scratch.mem1,               // INTERMEDIATE_CBUF_PTR_FIELD
-            LENGTH($cbops.scratch.mem1),        // INTERMEDIATE_CBUF_LEN_FIELD
-            0 ...;
-    .ENDBLOCK;
-
-    // Copy/Resampler Operator 
-    .BLOCK second_copy_op;
-        .VAR second_copy_op.mtu_next  = &copy_op;
-        .VAR second_copy_op.main_next = &ratematch_switch_op;
-        .VAR second_copy_op.func = $cbops_iir_resamplev2;
-        .VAR second_copy_op.param[$iir_resamplev2.OBJECT_SIZE] =
-            ADCINDEX_INTERNAL,                  // Input index
-            ADCINDEX_INTERNAL_TEMP,             // Output index
-            0,                                  // FILTER_DEFINITION_PTR_FIELD  [---CONFIG---]
-           -8,                                  // INPUT_SCALE_FIELD   (input Q15)
-            8,                                  // OUTPUT_SCALE_FIELD  (output Q23)
-            &$cbops.scratch.mem1,               // INTERMEDIATE_CBUF_PTR_FIELD
-            LENGTH($cbops.scratch.mem1),        // INTERMEDIATE_CBUF_LEN_FIELD
-#ifdef KAL_ARCH2
-            0,                                  // PARTIAL1_FIELD
-            0,                                  // SAMPLE_COUNT1_FIELD
-            &fir_buf1,                          // FIR_HISTORY_BUF_PTR_FIELD
-            &iir_buf1,                          // IIR_HISTORY_BUF_PTR_FIELD,
-            0,                                  // PARTIAL1_FIELD
-            0,                                  // SAMPLE_COUNT1_FIELD
-            &fir_buf2,                          // FIR_HISTORY_BUF_PTR_FIELD
-            &iir_buf2,                          // IIR_HISTORY_BUF_PTR_FIELD,
-#endif
-            0 ...;
-    .ENDBLOCK;
-
-    // Conditionally insert HW or software rate match
-    .BLOCK ratematch_switch_op;
-        .VAR ratematch_switch_op.mtu_next  = 0; // Set by switch
-        .VAR ratematch_switch_op.main_next = 0; // Set by switch
-        .VAR ratematch_switch_op.func = &$cbops.switch_op;
-        .VAR ratematch_switch_op.param[$cbops.switch_op.STRUC_SIZE] =
-            &$sw_ratematching_adc,      // PTR_STATE_FIELD
-            &sw_copy_op,                // MTU_NEXT_TRUE_FIELD
-            &hw_rate_op,                // MTU_NEXT_FALSE_FIELD
-            &sw_rate_op,                // MAIN_NEXT_TRUE_FIELD
-            &hw_copy_op;                // MAIN_NEXT_FALSE_FIELD
-    .ENDBLOCK;
-
-    // Software rate matching uses internal buffers
-    .BLOCK sw_rate_op;
-        .VAR sw_rate_op.mtu_next  = &second_copy_op;
-        .VAR sw_rate_op.main_next = &sw_copy_op;
-        .VAR sw_rate_op.func = &$cbops.rate_monitor_op;
-        .VAR sw_rate_op.param[$cbops.rate_monitor_op.STRUC_SIZE] =
-            ADCINDEX_INTERNAL_TEMP,     // MONITOR_INDEX_FIELD
-            1600,                       // PERIODS_PER_SECOND_FIELD
-            10,                         // SECONDS_TRACKED_FIELD
-            0,                          // TARGET_RATE_FIELD    [---CONFIG---]
-            10,                         // ALPHA_LIMIT_FIELD (controls the size of the averaging window)
-            0.5,                        // AVERAGE_IO_RATIO_FIELD - initialize to 1.0 in q.22
-            0,                          // WARP_MSG_LIMIT_FIELD
-            0 ...;
-    .ENDBLOCK;
-
-    .BLOCK sw_copy_op;
-        .VAR sw_copy_op.mtu_next  = &sw_rate_op;
-        .VAR sw_copy_op.main_next = &sidetone_copy_op;
-        .VAR sw_copy_op.func = &$cbops.rate_adjustment_and_shift;
-        .VAR sw_copy_op.param[$cbops.rate_adjustment_and_shift.STRUC_SIZE] =
-            ADCINDEX_INTERNAL_TEMP,     // INPUT1_START_INDEX_FIELD
-            ADCINDEX_CBUFFER,           // OUTPUT1_START_INDEX_FIELD
-            0,                          // SHIFT_AMOUNT_FIELD
-            0,                          // MASTER_OP_FIELD
-            &$sra_coeffs,               // FILTER_COEFFS_FIELD
-            &sr_hist,                   // HIST1_BUF_FIELD
-            &sr_hist,                   // HIST1_BUF_START_FIELD
-            &sw_rate_op.param + $cbops.rate_monitor_op.WARP_VALUE_FIELD, // SRA_TARGET_RATE_ADDR_FIELD
-            0,                          // ENABLE_COMPRESSOR_FIELD
-            0 ...;
-    .ENDBLOCK;
-
-    // Hardware Rate matching uses copy_op to simplify routing
-    //  Otherwise output of copy_op and input to sidetone would need to change
-    .BLOCK hw_copy_op;
-        .VAR hw_copy_op.mtu_next  = &second_copy_op;
-        .VAR hw_copy_op.main_next = &hw_rate_op;
-        .VAR hw_copy_op.func = &$cbops.copy_op;
-        .VAR hw_copy_op.param[$cbops.copy_op.STRUC_SIZE] =
-            ADCINDEX_INTERNAL_TEMP,      // INPUT_START_INDEX_FIELD
-            ADCINDEX_CBUFFER;            // OUTPUT_START_INDEX_FIELD
-    .ENDBLOCK;
-
-    // Hardware Rate matching monitors cBuffer
-    .BLOCK hw_rate_op;
-        .VAR hw_rate_op.mtu_next  = &hw_copy_op;
-        .VAR hw_rate_op.main_next = &sidetone_copy_op;
-        .VAR hw_rate_op.func = &$cbops.hw_warp_op;
-        .VAR hw_rate_op.param[$cbops.hw_warp_op.STRUC_SIZE] =
-            $ADC_PORT,         // PORT_OFFSET - Tracks Connectivity
-            ADCINDEX_INTERNAL_TEMP,// MONITOR_INDEX_OFFSET - Monitors throughput
-            0x33,              // WHICH_PORTS_OFFSET
-            0,                 // TARGET_RATE_OFFSET    [---CONFIG---]
-            1600,              // PERIODS_PER_SECOND_OFFSET
-            3,                 // COLLECT_SECONDS_OFFSET
-            1,                 // ENABLE_DITHER_OFFSET  [---CONFIG---]
-            0 ...;
-    .ENDBLOCK;
-
-        // sidetone PEQ
-    .BLOCK sidetone_copy_op;
-        .VAR sidetone_copy_op.mtu_next  = &ratematch_switch_op;
-        .VAR sidetone_copy_op.main_next = &auxillary_mix_op;
-        .VAR sidetone_copy_op.func = &$cbops.sidetone_filter_op;
-        .VAR sidetone_copy_op.param[CBOPS_SIDETONE_FILTER_OBJECT_SIZE(SIDETONE_PEQ_STAGES)] =
-            ADCINDEX_CBUFFER,                   // Input index field
-            ADCINDEX_SIDETONE,                  // Output index field
-
-            $M.CVC_HEADSET.CONFIG.SIDETONEENA,  // SideTone Enable Mask
-            &$M.CVC.data.CurParams + $M.CVC_HEADSET.PARAMETERS.OFFSET_ST_CLIP_POINT, // Pointer to Sidetone Parameters
-            0,                                  // Apply Filter-Filter
-            0.0,                                // APPLY_GAIN
-            // SP - noise switching is never enabled by UFE
-#if uses_NSVOLUME                            // NOISE_LEVEL_PTR_FIELD
-            &$M.CVC.data.ndvc_dm1 + $M.NDVC_Alg1_0_0.OFFSET_FILTSUMLPDNZ,
-#else
-            &$M.CVC.data.ZeroValue,
-#endif
-            0,                                  // Config
-            &$vp_in.auxillary_mix_op.param+$cbops.aux_audio_mix_op.OFFSET_INV_DAC_GAIN,// OFFSET_PTR_INV_DAC_GAIN
-            0,                                  // OFFSET_CURRENT_SIDETONE_GAIN
-            0,                                  // OFFSET_PTR_PEAK_ST
-
-            // Below starts sidetone PEQ fields
-            0,                                  // PTR_INPUT_DATA_BUFF_FIELD  - Not Used
-            0,                                  // PTR_OUTPUT_DATA_BUFF_FIELD - Not Used
-            SIDETONE_PEQ_STAGES,                // MAX_STAGES_FIELD
-            &$M.CVC.data.CurParams + $M.CVC_HEADSET.PARAMETERS.OFFSET_ST_PEQ_CONFIG,       // Pointer to PEQ parameters
-            0 ...;
-    .ENDBLOCK;
-
-    // Mix in Auxillary Audio
-    .BLOCK auxillary_mix_op;
-        .VAR auxillary_mix_op.mtu_next = $cbops.NO_MORE_OPERATORS;
-        .VAR auxillary_mix_op.main_next = $cbops.NO_MORE_OPERATORS;
-        .VAR auxillary_mix_op.func = &$cbops.aux_audio_mix_op;
-        .VAR auxillary_mix_op.param[$cbops.aux_audio_mix_op.STRUC_SIZE] =
-            ADCINDEX_CBUFFER,                /* Input index (Output cbuffer) */
-            ADCINDEX_CBUFFER,                /* Output index (Output cbuffer) */
-            $TONE_VP,                      /* Auxillary Audio Port */
-            $tone_vp.cbuffer_struc,          /* Auxillary Audio CBuffer */
-            0,                               /* Hold Timer */
-            -154,                            /* Hold count.  0.625 msec (ISR rate) * 154 = ~ 96 msec */
-            0x80000,   /*(0db) */            /* Auxillary Gain   */
-            0x80000,   /*(0db) */            /* Main Gain            (Q5.18) */
-            0x008000,  /*(0db) */            /* OFFSET_INV_DAC_GAIN  (Q8.15) */
-            1.0,                             /* Volume Independent Clip Point (Q23)*/
-            0,                               /* Absolute Clip Point  (Q23)*/
-            0x40000,                         /* Boost (Q4.19)*/
-            0,                               /* Auxillary Audio Peak Statistic */
-            1.0,                             /* Inverse gain difference between Main & Tone Volume (Q23) */
-            0;                               /* Internal Data */
-    .ENDBLOCK;
 
 .ENDMODULE;
 
@@ -488,7 +285,7 @@
         3,                              // NUM_OUTPUTS_FIELD
         $DAC_PORT_L,                    
         $DAC_PORT_R,
-        reference_cbuffer_struc,        // Index 4
+        reference_cbuffer_struc,        // Index 3
         1,                              // NUM_INTERNAL_FIELD
         $cbops.scratch.cbuffer_struc2;  
 
@@ -706,53 +503,6 @@
    
 .ENDMODULE;
 
-.MODULE $tone_vp;
-    .DATASEGMENT DM;
-    // Need to add a little headroom above a frame to
-    //      handle conversion ratio plus maximum fill is size-1
-    DeclareCBuffer(cbuffer_struc,mem, $BLOCK_SIZE_ADC_DAC*2 );
-
-   .VAR copy_struc[] =
-      $cbops.scratch.BufferTable,      // BUFFER_TABLE_FIELD
-      deinterleave_mix_op,             // MAIN_FIRST_OPERATOR_FIELD
-      copy_op,                         // MTU_FIRST_OPERATOR_FIELD
-      1,                               // NUM_INPUTS_FIELD
-      $TONE_VP,
-      1,                               // NUM_OUTPUTS_FIELD
-      &cbuffer_struc,
-      1,                               // NUM_INTERNAL_FIELD
-      $cbops.scratch.cbuffer_struc2;
-
-    // for mono tone/voice prompt this is just a copy operator
-    // for stereo voice prompts this operator extracts L and R voice
-    // prompt samples from interleaved input stream and then mixes
-    // them into one mono stream
-   .BLOCK deinterleave_mix_op;
-      .VAR deinterleave_mix_op.mtu_next  = $cbops.NO_MORE_OPERATORS;
-      .VAR deinterleave_mix_op.main_next = copy_op;
-      .VAR deinterleave_mix_op.func = $cbops.deinterleave_mix;
-      .VAR deinterleave_mix_op.param[$cbops.deinterleave_mix.STRUC_SIZE] =
-         0,                                  // Input index
-         2,                                  // Output1 index
-        -1,                                  // Output2 index
-         0 ;                                 // de-interleave enabled flag
-   .ENDBLOCK;
-
-   .BLOCK copy_op;
-      .VAR copy_op.mtu_next  = deinterleave_mix_op;
-      .VAR copy_op.main_next = $cbops.NO_MORE_OPERATORS;
-      .VAR copy_op.func = $cbops_iir_resamplev2;
-      .VAR copy_op.param[$iir_resamplev2.OBJECT_SIZE_SNGL_STAGE] =
-         2,                                  // Input index
-         1,                                  // Output index
-         &$M.iir_resamplev2.Up_2_Down_1.filter,    // FILTER_DEFINITION_PTR_FIELD
-         0,                                  // INPUT_SCALE_FIELD
-         8,                                  // OUTPUT_SCALE_FIELD,
-         0 ...;
-   .ENDBLOCK;
-   
-.ENDMODULE;
-
 // Rate match enable masks
 .CONST $RATE_MATCH_DISABLE_MASK              0x0000;
 .CONST $HW_RATE_MATCH_ENABLE_MASK            0x0001;
@@ -774,8 +524,6 @@
    .VAR frame_adc_sampling_rate=8000;
    .VAR frame_dac_sampling_rate=8000;
    .VAR current_tone_sampling_rate=8000;
-
-   .VAR mute_status = 0;
 
 // *****************************************************************************
 // MODULE:
@@ -859,24 +607,6 @@ $ConfigureFrontEnd:
     r8 = &$tone_in.copy_op.param;
     call $iir_resamplev2.SetFilter;
 
-    // Setup sample rates based on variant
-    r1 = 8000;      // 8  kHz
-    r2 = r1 + r1;   // 16 kHz
-    Null = r9 - $M.CVC.BANDWIDTH.NB;
-    if NZ r1=r2;
-    // SP.  for 1-mic ADC/DAC into frame process always the same sample rate
-    //      This is not the case for 2-mic
-    M[frame_adc_sampling_rate]=r1;
-    M[frame_dac_sampling_rate]=r1;
-
-    // Setup Aux Tone sample rate 8kHz or 16kHz
-    r0 = &$M.iir_resamplev2.Up_2_Down_1.filter;
-    NULL = r1 - r2;
-    if NZ r0=NULL;
-    r8 = &$tone_vp.copy_op.param;
-    call $iir_resamplev2.SetFilter;
-
-    
     // FE/BEX functions
     r1 = &$frame.iir_resamplev2.Process;
     Null = r9 - $M.CVC.BANDWIDTH.FE;
@@ -950,7 +680,7 @@ its_not_441_to_8:
     //  periods seem to work well.
     r3 = r2 + r2;
     M[&$M.CVC.data.stream_map_sndin  + $framesync_ind.JITTER_FIELD]   = r3;
-    //  The reference is sync d to the MIC inputs.   Drop/Inserts on the MIC
+    //  The reference is sync'd to the MIC inputs.   Drop/Inserts on the MIC
     //       input are detected at the reference but not visa-versa.  Give the
     //       reference a little more jitter to ensure that the drops/inserts occur
     //       at the MIC first
@@ -1015,7 +745,6 @@ $DAC_CheckConnectivity:
    // coverts streo voice prompts to mono
    r0 = r2 AND 1;
    M[$tone_in.deinterleave_mix_op.param + $cbops.deinterleave_mix.INPUT_INTERLEAVED_FIELD] = r0;
-   M[$tone_vp.deinterleave_mix_op.param + $cbops.deinterleave_mix.INPUT_INTERLEAVED_FIELD] = r0;
 
    // firmware tones are boosted by 3 bits, voice promts expected to be normalised
    r0 = 8 + $PROMPT_EXTRA_BOOST_BITS;
@@ -1023,7 +752,6 @@ $DAC_CheckConnectivity:
    Null = r2 AND 0x2;
    if Z r0 = r3;
    M[$tone_in.copy_op.param + $iir_resamplev2.OUTPUT_SCALE_FIELD] = r0;
-   M[$tone_vp.copy_op.param + $iir_resamplev2.OUTPUT_SCALE_FIELD] = r0;
 
    // extract tone rate
    r1 = r1 AND 0xFFFF;
@@ -1064,8 +792,6 @@ $DAC_CheckConnectivity:
    exact_tone_found:
    r3 = r2;
    seach_done:
-   r7 = r3;
-   
    // r3 = exact or nearest entry
    r0 = M[r3 + 1];
    r1 = M[r3 + 2];
@@ -1078,141 +804,10 @@ $DAC_CheckConnectivity:
    r8 = &$tone_in.copy_op.param;
    call $iir_resamplev2.SetFilter;
 
-
-   r3 = r7;
-   
-   // r3 = exact or nearest entry
-   r0 = M[r3 + 1];
-   r1 = M[r3 + 2];
-   // r0 = rate -> 8khz coeffs
-   // r1 = rate -> 16khz coeffs
-   r2 = M[frame_dac_sampling_rate];
-   Null = r2 - 8000;
-   if NZ r0 = r1;
-   // set operator filter coeffs
-   r8 = &$tone_vp.copy_op.param;
-   call $iir_resamplev2.SetFilter;
-
-
    // clear tone buffer
    r0 = $tone_in.cbuffer_struc;
    call $cbuffer.empty_buffer;
-
-   r0 = $tone_vp.cbuffer_struc;
-   call $cbuffer.empty_buffer;
-
-
-   jump $pop_rLink_and_rts;
-
-// *****************************************************************************
-// MODULE:
-//    $set_mute_mic_from_vm
-//
-// DESCRIPTION: message handler for receiving mute micphone from VM
-//
-// INPUTS:
-//    none
-//  
-// OUTPUTS:
-//    none
-// *****************************************************************************
-$set_mute_mic_from_vm:
-   $push_rLink_macro;
-
-   call $interrupt.block;
-   r1 = 1;
-   M[mute_status] = r1;
-   call $interrupt.unblock;
-
-   jump $pop_rLink_and_rts;
-
    
-// *****************************************************************************
-// MODULE:
-//    $vee.feed_cbuffer
-//
-// DESCRIPTION:
-//
-// INPUTS:
-//    r8 : cbuffer address
-//
-// OUTPUTS:
-//    none
-// *****************************************************************************
-$vee.feed_cbuffer:
-    $push_rLink_macro;
-
-    r0 = r8;
-#ifdef BASE_REGISTER_MODE
-	call $cbuffer.get_write_address_and_size_and_start_address;
-	push r2;
-	pop B4;
-#else
-	call $cbuffer.get_write_address_and_size;
-#endif
-	I0 = r0;
-	L0 = r1;
-
-    r1 = 5;
-    r0 =  M[frame_adc_sampling_rate];
-    NULL = r0 - 16000;
-    if Z r1 = r1 + r1;
-    r10 = r1;
-    r1 = 0;
-    do feed_zero;    
-        M[I0, 1] = r1;
-    feed_zero:
-
-    r0 = r8;
-	r1 = I0;
-	call $cbuffer.set_write_address;
-	L0 = 0;
-
-   jump $pop_rLink_and_rts;
-
-
-// *****************************************************************************
-// MODULE:
-//    $vee.cbops_multirate_copy
-//
-// DESCRIPTION:
-//
-// INPUTS:
-//    none
-//
-// OUTPUTS:
-//    none
-// *****************************************************************************
-$vee.cbops_multirate_copy:
-    $push_rLink_macro;
-
-
-    r0 = M[mute_status];
-    NULL = r0;
-    if NZ jump cbops_multirate_copy;
-    
-    r8 = &$vp_in.port_cbuffer_struc;
-    call $vee.feed_cbuffer;
-
-    r8 = &$vp_in.copy_struc;
-    call $cbops_multirate.copy;
-
-   r8 = &$tone_vp.copy_struc;
-   call $cbops_multirate.copy;
-
-    jump $pop_rLink_and_rts;
-
-cbops_multirate_copy:
-
-    r8 = &$adc_in.copy_struc;
-    call $cbops_multirate.copy;
-
-   // clear tone vp buffer
-   r0 = $TONE_VP;
-   call $cbuffer.empty_buffer;
-    
    jump $pop_rLink_and_rts;
 
 .ENDMODULE;
-
-

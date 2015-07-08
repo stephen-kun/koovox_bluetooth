@@ -3591,7 +3591,7 @@ _handleUEMessage:
 	cmp	AH,#H'0000
 	beq	?L174
 	ld	X,@$_theSink+H'0003
-	tst	@(H'00BD,X)
+	tst	@(H'00C2,X)
 	beq	?L175
 	bsr	$_LedManagerIndicateQueuedEvent
 	bra	(?L56)
@@ -4010,9 +4010,9 @@ _handleUEMessage:
 	ld	AL,@(H'0008,Y)
 	bsr	$_LEDManagerIndicateState
 	ld	X,@$_theSink+H'0003
-	ld	AL,@(H'00BA,X)
+	ld	AL,@(H'00BF,X)
 	and	AL,#-H'0002
-	st	AL,@(H'00BA,X)
+	st	AL,@(H'00BF,X)
 	bra	(?L56)
 ?L282:
 	ld	AL,@$_theSink+H'0035
@@ -8675,101 +8675,32 @@ _KoovoxConfirmPhoneNumber:
 ;.stabn	192,0,0,?LBB5
 ;.stabn	224,0,0,?LBE5
 $_KoovoxRestartDsp:
-	enterl	#6
+	enterl	#2
 ?LBB_KoovoxRestartDsp:
-?LBB6:
 	bsr	$_GetSampleStatus
-	cmp	AL,#H'0000
-	beq	?L44
-?LBB7:
-	ld	AL,#H'0000
-	st	AL,@(H'0002,Y)
-	st	AL,@(H'0003,Y)
-	bsr	$_GetSampleStatus
-	cmp	AL,#(H'0001+H'0005)
-	bcc	?L46
-	ld	X,@$XAP_AL
-	ld	X,@(?JTBASE53,X)
-	brxl
-	.SEG	CONST
-?JTBASE53:
-	.CODE
-?L53:
-	.SEG	CONST
-	dc	lwrd(?L46-?L53)
-	dc	lwrd(?L47-?L53)
-	dc	lwrd(?L49-?L53)
-	dc	lwrd(?L50-?L53)
-	dc	lwrd(?L51-?L53)
-	dc	lwrd(?L52-?L53)
-	.CODE
-?L47:
-	ld	AL,#H'0003
-	st	AL,@(H'0002,Y)
-	ld	X,#H'0001
-	st	X,@(H'0003,Y)
-	bsr	$_isOnlineState
-	cmp	AL,#H'0000
-	bne	?L46
-	ld	AL,#H'0003
-	st	AL,@(H'0003,Y)
-	bra	(?L46)
-?L49:
-	ld	X,#H'0001
-	st	X,@(H'0002,Y)
-	bra	(?L46)
-?L50:
-	ld	AL,#H'0002
-	st	AL,@(H'0002,Y)
-	ld	X,#H'0004
-	bra	(?L55)
-?L51:
-	ld	AL,#H'0002
-	st	AL,@(H'0002,Y)
-	ld	X,#H'0008
-	bra	(?L55)
-?L52:
-	ld	AL,#H'0002
-	st	AL,@(H'0002,Y)
-	ld	X,#H'0010
-?L55:
-	st	X,@(H'0003,Y)
-?L46:
-	ld	AL,@(H'0003,Y)
-	st	AL,@(0,Y)
-	ld	AL,#($_theSink)
-	st	AL,@(H'0001,Y)
-	ld	AL,#($_koovox_sport_common_plugin)
-	ld	AH,@(H'0002,Y)
-	bsr	$_AudioSportModePlayPrompt
-?L44:
-?LBE7:
-?LBE6:
 ?LBE_KoovoxRestartDsp:
-	leavel	#6
-;.stabn	192,0,0,?LBB7
-;.stabn	224,0,0,?LBE7
+	leavel	#2
 _KoovoxMuteMicrophone:
 	enterl	#3
 ?LBB_KoovoxMuteMicrophone:
 	bsr	$_isMuteEnable
 	cmp	AL,#H'0000
-	beq	?L57
+	beq	?L47
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'4019
 	bsr	$_MessageSend
 	ld	AL,#H'0001
-	bra	(?L59)
-?L57:
+	bra	(?L49)
+?L47:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'401A
 	bsr	$_MessageSend
 	ld	AL,#H'0000
-?L59:
+?L49:
 	bsr	$_SetMuteStatus
 ?LBE_KoovoxMuteMicrophone:
 	leavel	#3
@@ -8803,7 +8734,7 @@ $_KoovoxResultI2cTest:
 	enterl	#6
 ?LBB_KoovoxResultI2cTest:
 	st	AL,@(H'0003,Y)
-?LBB8:
+?LBB6:
 	ld	AL,#H'0000
 	st	AL,@(H'0002,Y)
 	ld	AL,#H'0001
@@ -8815,16 +8746,16 @@ $_KoovoxResultI2cTest:
 	ld	AL,@(H'0002,Y)
 	ld	X,@(H'0003,Y)
 	cmp	AL,@(0,X)
-	beq	?L63
+	beq	?L53
 	ld	AL,#H'0001
 	st	AL,@(0,Y)
 	ld	AL,#H'002D
 	ld	AH,@$XAP_UXL
 	bsr	$_ConfigStore
-?L63:
+?L53:
 	ld	X,@(H'0003,Y)
 	tst	@(0,X)
-	beq	?L64
+	beq	?L54
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	st	AL,@(H'0001,Y)
@@ -8832,12 +8763,12 @@ $_KoovoxResultI2cTest:
 	ld	AH,#H'0020
 	bsr	$_KoovoxFillAndSendUartPacket
 	ld	AL,#(?LC4)
-	bra	(?L66)
-?L64:
+	bra	(?L56)
+?L54:
 	ld	AL,#(?LC5)
-?L66:
+?L56:
 	bsr	$_KoovoxLog
-?LBE8:
+?LBE6:
 ?LBE_KoovoxResultI2cTest:
 	leavel	#6
 	.SEG	CONST
@@ -8865,8 +8796,8 @@ $_KoovoxResultI2cTest:
 	dc	H'0A
 	dc	H'00
 	.CODE
-;.stabn	192,0,0,?LBB8
-;.stabn	224,0,0,?LBE8
+;.stabn	192,0,0,?LBB6
+;.stabn	224,0,0,?LBE6
 $_KoovoxStartConstSeatPrompt:
 	enterl	#4
 ?LBB_KoovoxStartConstSeatPrompt:
@@ -8892,38 +8823,15 @@ $_KoovoxStopConstSeatPrompt:
 ?LBE_KoovoxStopConstSeatPrompt:
 	leavel	#4
 $_KoovoxStartSafeDriver:
-	enterl	#4
+; leaf function with empty stack frame
 ?LBB_KoovoxStartSafeDriver:
-?LBB9:
-	ld	AL,#H'0004
-	bsr	$_SetSampleStatus
-	ld	AL,#H'0004
-?LBB10:
-	st	AL,@(0,Y)
-	ld	AL,#($_theSink)
-	st	AL,@(H'0001,Y)
-	ld	AL,#($_koovox_sport_common_plugin)
-	ld	AH,#H'0002
-	bsr	$_AudioSportModePlayPrompt
-?LBE10:
-?LBE9:
 ?LBE_KoovoxStartSafeDriver:
-	leavel	#4
-;.stabn	192,0,0,?LBB10
-;.stabn	224,0,0,?LBE10
+	rts
 $_KoovoxStopSafeDriver:
-	enterl	#2
+; leaf function with empty stack frame
 ?LBB_KoovoxStopSafeDriver:
-?LBB11:
-	ld	AL,#H'0000
-	bsr	$_SetSampleStatus
-?LBB12:
-	ld	AL,#($_koovox_sport_common_plugin)
-	bsr	$_AudioSportModeStopPrompt
-?LBE12:
-?LBE11:
 ?LBE_KoovoxStopSafeDriver:
-	leavel	#2
+	rts
 _KoovoxRssiPairMode:
 	enterl	#3
 ?LBB_KoovoxRssiPairMode:
@@ -8937,7 +8845,7 @@ _KoovoxRssiPairMode:
 _KoovoxAsrCall:
 	enterl	#17
 ?LBB_KoovoxAsrCall:
-?LBB13:
+?LBB7:
 	bsr	$_RecoverPreviousMode
 	ld	AL,#H'000C
 	st	AL,@(0,Y)
@@ -8947,25 +8855,25 @@ _KoovoxAsrCall:
 	bsr	$_ConfigRetrieve
 	st	AL,@(H'000E,Y)
 	cmp	AL,#H'0000
-	beq	?L73
+	beq	?L63
 	ld	AL,#H'0001
 	ld	AH,@$XAP_UY
 	add	AH,#H'000D
 	bsr	$_HfpLinkGetSlcSink
 	cmp	AL,#H'0000
-	beq	?L75
+	beq	?L65
 	ld	AL,@(H'000D,Y)
 	bsr	$_SinkIsValid
 	cmp	AL,#H'0000
-	beq	?L75
+	beq	?L65
 	ld	AL,@$XAP_UY
 	add	AL,#H'0001
 	st	AL,@(0,Y)
 	ld	AL,#H'0001
 	ld	AH,@(H'000E,Y)
 	bsr	$_HfpDialNumberRequest
-	bra	(?L73)
-?L75:
+	bra	(?L63)
+?L65:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
@@ -8973,25 +8881,25 @@ _KoovoxAsrCall:
 	bsr	$_MessageSend
 	ld	AL,#H'40D1
 	bsr	$_sinkQueueEvent
-?L73:
-?LBE13:
+?L63:
+?LBE7:
 ?LBE_KoovoxAsrCall:
 	leavel	#17
-;.stabn	192,0,0,?LBB13
-;.stabn	224,0,0,?LBE13
+;.stabn	192,0,0,?LBB7
+;.stabn	224,0,0,?LBE7
 _KoovoxStartStopSportMode:
 	enterl	#11
 ?LBB_KoovoxStartStopSportMode:
-?LBB14:
+?LBB8:
 	ld	AL,#H'0000
 	st	AL,@(H'0002,Y)
 	bsr	$_GetSampleStatus
 	st	AL,@(H'0005,Y)
 	cmp	AL,#H'0001
-	bne	?L78
+	bne	?L68
 	bsr	$_isOnlineState
 	cmp	AL,#H'0000
-	beq	?L79
+	beq	?L69
 	ld	AL,#H'0002
 	st	AL,@(H'0002,Y)
 	ld	AL,@$XAP_UY
@@ -9002,9 +8910,9 @@ _KoovoxStartStopSportMode:
 	ld	AL,#H'0002
 	ld	AH,#H'0005
 	bsr	$_SendNotifyToDevice
-	bra	(?L80)
-?L79:
-?LBB15:
+	bra	(?L70)
+?L69:
+?LBB9:
 	ld	AL,#H'0000
 	st	AL,@(H'0006,Y)
 	ld	X,@$XAP_UY
@@ -9056,19 +8964,19 @@ _KoovoxStartStopSportMode:
 	ld	AH,@$XAP_UY
 	add	AH,#H'0003
 	bsr	$_ConfigStore
-?L80:
-?LBE15:
+?L70:
+?LBE9:
 	bsr	$_KoovoxStopSportMode
 	ld	AL,#H'4798
 	bsr	$_AudioPromptPlayEvent
-	bra	(?L77)
-?L78:
+	bra	(?L67)
+?L68:
 	ld	AL,#H'4797
 	bsr	$_AudioPromptPlayEvent
 	bsr	$_KoovoxStartSportMode
 	bsr	$_isOnlineState
 	cmp	AL,#H'0000
-	beq	?L77
+	beq	?L67
 	ld	AH,#H'0001
 	st	AH,@(H'0002,Y)
 	ld	AL,@$XAP_UY
@@ -9078,57 +8986,57 @@ _KoovoxStartStopSportMode:
 	ld	AL,#H'0002
 	ld	AH,#H'0005
 	bsr	$_SendNotifyToDevice
-?L77:
-?LBE14:
+?L67:
+?LBE8:
 ?LBE_KoovoxStartStopSportMode:
 	leavel	#11
-;.stabn	192,0,0,?LBB14
-;.stabn	192,0,0,?LBB15
-;.stabn	224,0,0,?LBE15
-;.stabn	224,0,0,?LBE14
+;.stabn	192,0,0,?LBB8
+;.stabn	192,0,0,?LBB9
+;.stabn	224,0,0,?LBE9
+;.stabn	224,0,0,?LBE8
 _KoovoxSwitchToNextMode:
 	enterl	#5
 ?LBB_KoovoxSwitchToNextMode:
-?LBB16:
+?LBB10:
 	ld	AL,#H'0000
 	st	AL,@(H'0002,Y)
 	bsr	$_GetCurrMode
 	cmp	AL,#H'0001
-	beq	?L89
+	beq	?L79
 	cmp	AL,#H'0001
-	bcs	?L86
+	bcs	?L76
 	cmp	AL,#H'0002
-	beq	?L91
+	beq	?L81
 	cmp	AL,#H'0004
-	beq	?L91
-	bra	(?L85)
-?L86:
+	beq	?L81
+	bra	(?L75)
+?L76:
 	bsr	$_isConnectedState
 	cmp	AL,#H'0000
-	beq	?L87
+	beq	?L77
 	ld	AL,#H'0001
 	st	AL,@(H'0002,Y)
-	bra	(?L96)
-?L87:
+	bra	(?L86)
+?L77:
 	ld	AL,#H'0002
-	bra	(?L95)
-?L89:
-	ld	AL,#H'0002
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'0000
-?L96:
-	bsr	$_SetMusicStatus
 	bra	(?L85)
-?L91:
-	ld	AL,#H'0000
-?L95:
+?L79:
+	ld	AL,#H'0002
 	st	AL,@(H'0002,Y)
+	ld	AL,#H'0000
+?L86:
+	bsr	$_SetMusicStatus
+	bra	(?L75)
+?L81:
+	ld	AL,#H'0000
 ?L85:
+	st	AL,@(H'0002,Y)
+?L75:
 	ld	AL,@(H'0002,Y)
 	bsr	$_KoovoxSetModePrompt
 	bsr	$_isOnlineState
 	cmp	AL,#H'0000
-	beq	?L84
+	beq	?L74
 	ld	AL,@$XAP_UY
 	add	AL,#H'0002
 	st	AL,@(0,Y)
@@ -9137,23 +9045,23 @@ _KoovoxSwitchToNextMode:
 	ld	AL,#H'0003
 	ld	AH,#H'0003
 	bsr	$_SendNotifyToDevice
-?L84:
-?LBE16:
+?L74:
+?LBE10:
 ?LBE_KoovoxSwitchToNextMode:
 	leavel	#5
-;.stabn	192,0,0,?LBB16
-;.stabn	224,0,0,?LBE16
+;.stabn	192,0,0,?LBB10
+;.stabn	224,0,0,?LBE10
 _KoovoxSmartAudioPrompt:
 	enterl	#6
 ?LBB_KoovoxSmartAudioPrompt:
-?LBB17:
+?LBB11:
 	bsr	$_get_battery_level_as_percentage
 	bsr	$_UpdateBatteryValue
 	bsr	$_isOnlineState
 	cmp	AL,#H'0000
-	beq	?L102
+	beq	?L92
 	ld	AL,#H'0000
-?LBB18:
+?LBB12:
 	st	AL,@(H'0002,Y)
 	ld	AL,@$_koovox+H'0022
 	st	AL,@(H'0003,Y)
@@ -9164,38 +9072,38 @@ _KoovoxSmartAudioPrompt:
 	st	AL,@(H'0001,Y)
 	ld	AH,#H'0003
 	bsr	$_SendNotifyToDevice
-?LBE18:
-	bra	(?L101)
-?L102:
+?LBE12:
+	bra	(?L91)
+?L92:
 	bsr	$_isConnectableState
 	cmp	AL,#H'0000
-	bne	?L104
+	bne	?L94
 	ld	AL,#H'4788
 	bsr	$_AudioPromptPlayEvent
 	ld	AL,#H'478C
-	bra	(?L106)
-?L104:
+	bra	(?L96)
+?L94:
 	ld	AL,#H'4789
-?L106:
+?L96:
 	bsr	$_AudioPromptPlayEvent
 	ld	AH,#H'0000
 	ld	AL,@$_koovox+H'0022
 	bsr	$_KoovoxPromptPlayBattery
-?L101:
-?LBE17:
+?L91:
+?LBE11:
 ?LBE_KoovoxSmartAudioPrompt:
 	leavel	#6
-;.stabn	192,0,0,?LBB18
-;.stabn	224,0,0,?LBE18
+;.stabn	192,0,0,?LBB12
+;.stabn	224,0,0,?LBE12
 _KoovoxSportAudioPrompt:
 	enterl	#5
 ?LBB_KoovoxSportAudioPrompt:
-?LBB19:
+?LBB13:
 	ld	AL,#H'0000
 	st	AL,@(H'0002,Y)
 	bsr	$_isOnlineState
 	cmp	AL,#H'0000
-	beq	?L108
+	beq	?L98
 	ld	AL,#H'0002
 	st	AL,@(H'0002,Y)
 	ld	AL,@$XAP_UY
@@ -9206,33 +9114,33 @@ _KoovoxSportAudioPrompt:
 	ld	AL,#H'0002
 	ld	AH,#H'0003
 	bsr	$_SendNotifyToDevice
-	bra	(?L107)
-?L108:
+	bra	(?L97)
+?L98:
 	ld	AH,#H'0000
 	ld	AL,@$_koovox+H'0021
 	bsr	$_KoovoPromptPlayHeartRate
-?L107:
-?LBE19:
+?L97:
+?LBE13:
 ?LBE_KoovoxSportAudioPrompt:
 	leavel	#5
-;.stabn	192,0,0,?LBB19
-;.stabn	224,0,0,?LBE19
+;.stabn	192,0,0,?LBB13
+;.stabn	224,0,0,?LBE13
 _KoovoxStartAutoSpeechRecognition:
 	enterl	#4
 ?LBB_KoovoxStartAutoSpeechRecognition:
 	bsr	$_isOnlineState
 	cmp	AL,#H'0000
-	beq	?L111
+	beq	?L101
 	ld	AL,#H'0001
 	bsr	$_SetAsrStatus
 	bsr	$_GetCurrMode
 	cmp	AL,#H'0004
-	beq	?L112
+	beq	?L102
 	bsr	$_GetCurrMode
 	bsr	$_StorePreviousMode
 	ld	AL,#H'0004
 	bsr	$_SetCurrMode
-?L112:
+?L102:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#H'0001
@@ -9240,11 +9148,11 @@ _KoovoxStartAutoSpeechRecognition:
 	ld	AL,#H'0003
 	ld	AH,#H'0006
 	bsr	$_SendNotifyToDevice
-	bra	(?L110)
-?L111:
+	bra	(?L100)
+?L101:
 	ld	AL,#H'478C
 	bsr	$_AudioPromptPlayEvent
-?L110:
+?L100:
 ?LBE_KoovoxStartAutoSpeechRecognition:
 	leavel	#4
 _KoovoxStopAutoSpeechRecognition:
@@ -9254,7 +9162,7 @@ _KoovoxStopAutoSpeechRecognition:
 	bsr	$_SetAsrStatus
 	bsr	$_isOnlineState
 	cmp	AL,#H'0000
-	beq	?L115
+	beq	?L105
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#H'0001
@@ -9274,7 +9182,7 @@ _KoovoxStopAutoSpeechRecognition:
 	ld	AL,#($_theSink)
 	ld	AH,#H'40CF
 	bsr	$_MessageSendLater
-?L115:
+?L105:
 ?LBE_KoovoxStopAutoSpeechRecognition:
 	leavel	#5
 _KoovoxPlayPauseMusic:
@@ -9310,26 +9218,26 @@ _KoovoxPlayPrevious:
 $_KoovoxSwitchToCallMode:
 	enterl	#3
 ?LBB_KoovoxSwitchToCallMode:
-?LBB20:
+?LBB14:
 	bsr	$_GetCurrMode
 	st	AL,@(0,Y)
 	bsr	$_StorePreviousMode
 	ld	AL,@(0,Y)
 	cmp	AL,#H'0002
-	bne	?L121
+	bne	?L111
 	bsr	$_isOnlineState
 	cmp	AL,#H'0000
-	bne	?L121
+	bne	?L111
 	ld	AL,#H'0000
 	bsr	$_SetPromptStatus
-?L121:
+?L111:
 	ld	AL,#H'0003
 	bsr	$_SetCurrMode
-?LBE20:
+?LBE14:
 ?LBE_KoovoxSwitchToCallMode:
 	leavel	#3
-;.stabn	192,0,0,?LBB20
-;.stabn	224,0,0,?LBE20
+;.stabn	192,0,0,?LBB14
+;.stabn	224,0,0,?LBE14
 _KoovoxAnswerCall:
 	enterl	#3
 ?LBB_KoovoxAnswerCall:
@@ -9373,16 +9281,16 @@ _KoovoxHangOffCall:
 _KoovoxRecordCall:
 	enterl	#5
 ?LBB_KoovoxRecordCall:
-?LBB21:
+?LBB15:
 	bsr	$_isOnlineState
 	cmp	AL,#H'0000
-	beq	?L132
-?LBB22:
+	beq	?L122
+?LBB16:
 	ld	AL,#H'0000
 	st	AL,@(H'0002,Y)
 	bsr	$_isRecordBusy
 	cmp	AL,#H'0000
-	beq	?L133
+	beq	?L123
 	ld	AL,#H'0000
 	bsr	$_SetRecordStatus
 	ld	AL,#H'0002
@@ -9396,8 +9304,8 @@ _KoovoxRecordCall:
 	ld	AH,#H'0005
 	bsr	$_SendNotifyToDevice
 	ld	AL,#H'478F
-	bra	(?L136)
-?L133:
+	bra	(?L126)
+?L123:
 	ld	AL,#H'0001
 	bsr	$_SetRecordStatus
 	ld	AH,#H'0001
@@ -9410,27 +9318,27 @@ _KoovoxRecordCall:
 	ld	AH,#H'0005
 	bsr	$_SendNotifyToDevice
 	ld	AL,#H'478E
-	bra	(?L136)
-?L132:
-?LBE22:
+	bra	(?L126)
+?L122:
+?LBE16:
 	ld	AL,#H'478C
-?L136:
+?L126:
 	bsr	$_AudioPromptPlayEvent
-?LBE21:
+?LBE15:
 ?LBE_KoovoxRecordCall:
 	leavel	#5
-;.stabn	192,0,0,?LBB22
-;.stabn	224,0,0,?LBE22
+;.stabn	192,0,0,?LBB16
+;.stabn	224,0,0,?LBE16
 _KoovoxPresetCall:
 	enterl	#4
 ?LBB_KoovoxPresetCall:
 	bsr	$_isPresentBusy
 	st	AL,@(H'0001,Y)
 	cmp	AL,#H'0000
-	bne	?L137
+	bne	?L127
 	bsr	$_isPresentEnable
 	cmp	AL,#H'0000
-	beq	?L137
+	beq	?L127
 	ld	AL,#H'0001
 	bsr	$_SetPresentStatus
 	ld	AL,#($_theSink)
@@ -9441,17 +9349,17 @@ _KoovoxPresetCall:
 	ld	AL,#($_theSink)
 	ld	AH,#H'4008
 	bsr	$_MessageSend
-?L137:
+?L127:
 ?LBE_KoovoxPresetCall:
 	leavel	#4
 _KoovoxPromptPrecence:
 	enterl	#5
 ?LBB_KoovoxPromptPrecence:
-?LBB23:
+?LBB17:
 	bsr	$_isVoiceMessageEnable
 	cmp	AL,#H'0000
-	beq	?L140
-?LBB24:
+	beq	?L130
+?LBB18:
 	ld	AL,#H'0001
 	st	AL,@(H'0002,Y)
 	ld	AH,@$XAP_UY
@@ -9464,19 +9372,19 @@ _KoovoxPromptPrecence:
 	bsr	$_GetPresentScenceEvent
 	bsr	$_KoovoxAudioPresencePlayEvent
 	ld	AL,#H'4796
-	bra	(?L142)
-?L140:
-?LBE24:
+	bra	(?L132)
+?L130:
+?LBE18:
 	bsr	$_GetPresentScenceEvent
 	bsr	$_KoovoxAudioPresencePlayEvent
 	ld	AL,#H'4790
-?L142:
+?L132:
 	bsr	$_KoovoxAudioPresencePlayEvent
-?LBE23:
+?LBE17:
 ?LBE_KoovoxPromptPrecence:
 	leavel	#5
-;.stabn	192,0,0,?LBB24
-;.stabn	224,0,0,?LBE24
+;.stabn	192,0,0,?LBB18
+;.stabn	224,0,0,?LBE18
 _KoovoxRecoverPreviousMode:
 	enterl	#2
 ?LBB_KoovoxRecoverPreviousMode:
@@ -9488,7 +9396,7 @@ _KoovoxPeriodPromptHeartRate:
 ?LBB_KoovoxPeriodPromptHeartRate:
 	bsr	$_isPromptEnable
 	cmp	AL,#H'0000
-	beq	?L144
+	beq	?L134
 	ld	AH,#H'0000
 	st	AH,@(0,Y)
 	ld	AL,#H'7530
@@ -9498,11 +9406,11 @@ _KoovoxPeriodPromptHeartRate:
 	ld	AH,#H'40CC
 	bsr	$_MessageSendLater
 	tst	@$_koovox+H'0021
-	beq	?L144
+	beq	?L134
 	ld	AH,#H'0000
 	ld	AL,@$_koovox+H'0021
 	bsr	$_KoovoPromptPlayHeartRate
-?L144:
+?L134:
 ?LBE_KoovoxPeriodPromptHeartRate:
 	leavel	#5
 $_KoovoxStopHeartRateMeasure:
@@ -9552,17 +9460,17 @@ _KoovoxEmergencyCall:
 ?LBB_KoovoxEmergencyCall:
 	bsr	$_stateManagerGetState
 	cmp	AL,#H'0002
-	bcz	?L152
+	bcz	?L142
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'4026
 	bsr	$_MessageSend
-	bra	(?L151)
-?L152:
+	bra	(?L141)
+?L142:
 	ld	AL,#H'4789
 	bsr	$_AudioPromptPlayEvent
-?L151:
+?L141:
 ?LBE_KoovoxEmergencyCall:
 	leavel	#3
 _KoovoxEventEngine:
@@ -9570,27 +9478,27 @@ _KoovoxEventEngine:
 ?LBB_KoovoxEventEngine:
 	st	AL,@(0,Y)
 	st	AH,@(H'0001,Y)
-?LBB25:
+?LBB19:
 	ld	AL,#H'0000
 	st	AL,@(H'0002,Y)
 	cmp	AL,@(H'0005,Y)
-	bcc	?L157
-?L163:
+	bcc	?L147
+?L153:
 	ld	AL,@(H'0002,Y)
 	smult	#H'0005
 	ld	X,@(H'0001,Y)
 	add	X,@$XAP_AL
 	ld	AL,@(0,Y)
 	cmp	AL,@(0,X)
-	bne	?L158
+	bne	?L148
 	tst	@(H'0002,X)
-	beq	?L161
+	beq	?L151
 	ld	AH,@(H'0001,X)
 	ld	AL,@(H'0002,X)
 	st	AH,@(-1,Y)
 	st	AL,@(-2,Y)
-	bsr	?L167
-?L167:
+	bsr	?L157
+?L157:
 	add	X,@(-2,Y)
 	st	X,@H'ffff
 	ld	X,@$XAP_UXH
@@ -9598,10 +9506,10 @@ _KoovoxEventEngine:
 	st	X,@(-1,Y)
 	ld	XH,@(-1,Y)
 	ld	X,@H'ffff
-	bsr	-?L167,X
+	bsr	-?L157,X
 	cmp	AL,#H'0000
-	beq	?L158
-?L161:
+	beq	?L148
+?L151:
 	ld	AL,@(H'0002,Y)
 	smult	#H'0005
 	ld	X,@(H'0001,Y)
@@ -9609,14 +9517,14 @@ _KoovoxEventEngine:
 	ld	AH,@(H'0003,X)
 	ld	AL,@(H'0004,X)
 	cmp	AH,#H'0000
-	bne	?L168
+	bne	?L158
 	cmp	AL,#H'0000
-	beq	?L158
-?L168:
+	beq	?L148
+?L158:
 	st	AH,@(-1,Y)
 	st	AL,@(-2,Y)
-	bsr	?L169
-?L169:
+	bsr	?L159
+?L159:
 	add	X,@(-2,Y)
 	st	X,@H'ffff
 	ld	X,@$XAP_UXH
@@ -9624,124 +9532,124 @@ _KoovoxEventEngine:
 	st	X,@(-1,Y)
 	ld	XH,@(-1,Y)
 	ld	X,@H'ffff
-	bsr	-?L169,X
-	bra	(?L157)
-?L158:
+	bsr	-?L159,X
+	bra	(?L147)
+?L148:
 	ld	AL,@(H'0002,Y)
 	add	AL,#H'0001
 	st	AL,@(H'0002,Y)
 	cmp	AL,@(H'0005,Y)
-	bcs	?L163
-?L157:
-?LBE25:
+	bcs	?L153
+?L147:
+?LBE19:
 ?LBE_KoovoxEventEngine:
 	leavel	#5
-;.stabn	192,0,0,?LBB25
-;.stabn	224,0,0,?LBE25
+;.stabn	192,0,0,?LBB19
+;.stabn	224,0,0,?LBE19
 $_KoovoxEventHandler:
 	enterl	#4
 ?LBB_KoovoxEventHandler:
 	st	AL,@(H'0001,Y)
-?LBB26:
+?LBB20:
 	bsr	$_GetCurrMode
 	cmp	AL,#(H'0001+H'0004)
-	bcc	?L171
+	bcc	?L161
 	ld	X,@$XAP_AL
-	ld	X,@(?JTBASE179,X)
+	ld	X,@(?JTBASE169,X)
 	brxl
 	.SEG	CONST
-?JTBASE179:
+?JTBASE169:
 	.CODE
-?L179:
+?L169:
 	.SEG	CONST
-	dc	lwrd(?L173-?L179)
-	dc	lwrd(?L174-?L179)
-	dc	lwrd(?L175-?L179)
-	dc	lwrd(?L176-?L179)
-	dc	lwrd(?L177-?L179)
+	dc	lwrd(?L163-?L169)
+	dc	lwrd(?L164-?L169)
+	dc	lwrd(?L165-?L169)
+	dc	lwrd(?L166-?L169)
+	dc	lwrd(?L167-?L169)
 	.CODE
-?L173:
+?L163:
 	ld	AL,#H'0006
 	st	AL,@(0,Y)
 	ld	AL,@(H'0001,Y)
 	ld	AH,#(_businessMode)
-	bra	(?L180)
-?L174:
+	bra	(?L170)
+?L164:
 	ld	AL,#H'0007
 	st	AL,@(0,Y)
 	ld	AL,@(H'0001,Y)
 	ld	AH,#(_musicMode)
-	bra	(?L180)
-?L175:
+	bra	(?L170)
+?L165:
 	ld	AL,#H'0006
 	st	AL,@(0,Y)
 	ld	AL,@(H'0001,Y)
 	ld	AH,#(_sportMode)
-	bra	(?L180)
-?L176:
+	bra	(?L170)
+?L166:
 	ld	AL,#H'0009
 	st	AL,@(0,Y)
 	ld	AL,@(H'0001,Y)
 	ld	AH,#(_callMode)
-	bra	(?L180)
-?L177:
+	bra	(?L170)
+?L167:
 	ld	AL,#H'0005
 	st	AL,@(0,Y)
 	ld	AL,@(H'0001,Y)
 	ld	AH,#(_asrMode)
-?L180:
+?L170:
 	bsr	_KoovoxEventEngine
-?L171:
-?LBE26:
+?L161:
+?LBE20:
 ?LBE_KoovoxEventHandler:
 	leavel	#4
-;.stabn	192,0,0,?LBB26
-;.stabn	224,0,0,?LBE26
+;.stabn	192,0,0,?LBB20
+;.stabn	224,0,0,?LBE20
 $_KoovoxRcvShortKalimbaMsg:
 	enterl	#13
 ?LBB_KoovoxRcvShortKalimbaMsg:
 	st	AL,@(H'0009,Y)
 	ld	X,@$XAP_AL
-?LBB27:
+?LBB21:
 	ld	AL,@(0,X)
 	add	AL,#-H'4F20
 	cmp	AL,#(H'0001+H'0008)
-	bcc	?L181
+	bcc	?L171
 	ld	X,@$XAP_AL
-	ld	X,@(?JTBASE200,X)
+	ld	X,@(?JTBASE190,X)
 	brxl
 	.SEG	CONST
-?JTBASE200:
+?JTBASE190:
 	.CODE
-?L200:
+?L190:
 	.SEG	CONST
-	dc	lwrd(?L183-?L200)
-	dc	lwrd(?L192-?L200)
-	dc	lwrd(?L189-?L200)
-	dc	lwrd(?L191-?L200)
-	dc	lwrd(?L185-?L200)
-	dc	lwrd(?L187-?L200)
-	dc	lwrd(?L191-?L200)
-	dc	lwrd(?L194-?L200)
-	dc	lwrd(?L195-?L200)
+	dc	lwrd(?L173-?L190)
+	dc	lwrd(?L182-?L190)
+	dc	lwrd(?L179-?L190)
+	dc	lwrd(?L181-?L190)
+	dc	lwrd(?L175-?L190)
+	dc	lwrd(?L177-?L190)
+	dc	lwrd(?L181-?L190)
+	dc	lwrd(?L184-?L190)
+	dc	lwrd(?L185-?L190)
 	.CODE
-?L183:
+?L173:
 	ld	X,@(H'0009,Y)
 	ld	AL,@(H'0001,X)
 	and	AL,#H'00FF
 	bsr	$_UpdateHeartRateValue
 	bsr	$_isOnlineState
 	cmp	AL,#H'0000
-	beq	?L181
+	beq	?L171
 	ld	AL,#($_koovox+H'0021)
 	st	AL,@(0,Y)
 	ld	AL,#H'0001
 	st	AL,@(H'0001,Y)
 	ld	AL,#H'0500
 	ld	AH,#H'0001
-	bra	(?L204)
-?L185:
-?LBB28:
+	bra	(?L194)
+?L175:
+?LBB22:
 	ld	AL,#H'0000
 	st	AL,@(H'0007,Y)
 	ld	AL,#H'0001
@@ -9753,16 +9661,16 @@ $_KoovoxRcvShortKalimbaMsg:
 	ld	AL,@(H'0007,Y)
 	ld	X,@(H'0009,Y)
 	cmp	AL,@(H'0001,X)
-	beq	?L181
+	beq	?L171
 	ld	AH,@$XAP_UXL
 	add	AH,#H'0001
 	ld	AL,#H'0001
 	st	AL,@(0,Y)
 	ld	AL,#H'002C
-	bra	(?L203)
-?L187:
-?LBE28:
-?LBB29:
+	bra	(?L193)
+?L177:
+?LBE22:
+?LBB23:
 	ld	AL,#H'0000
 	st	AL,@(H'0008,Y)
 	ld	X,#H'0001
@@ -9774,25 +9682,25 @@ $_KoovoxRcvShortKalimbaMsg:
 	ld	AL,@(H'0008,Y)
 	ld	X,@(H'0009,Y)
 	cmp	AL,@(H'0001,X)
-	beq	?L181
+	beq	?L171
 	ld	AH,@$XAP_UXL
 	add	AH,#H'0001
 	ld	AL,#H'0001
 	st	AL,@(0,Y)
 	ld	AL,#H'002D
-?L203:
+?L193:
 	bsr	$_ConfigStore
-?LBE29:
-	bra	(?L181)
-?L189:
+?LBE23:
+	bra	(?L171)
+?L179:
 	ld	AL,#H'47A4
-	bra	(?L202)
-?L191:
+	bra	(?L192)
+?L181:
 	ld	AL,#H'47A1
-?L202:
-	bsr	$_AudioPromptPlayEvent
-	bra	(?L181)
 ?L192:
+	bsr	$_AudioPromptPlayEvent
+	bra	(?L171)
+?L182:
 	ld	X,@(H'0009,Y)
 	ld	AL,@(H'0001,X)
 	and	AL,#H'00FF
@@ -9807,9 +9715,9 @@ $_KoovoxRcvShortKalimbaMsg:
 	bsr	$_UpdateTimeValue
 	bsr	$_isOnlineState
 	cmp	AL,#H'0000
-	beq	?L181
+	beq	?L171
 	ld	AL,#H'0005
-?LBB30:
+?LBB24:
 	st	AL,@(0,Y)
 	ld	AL,@$XAP_UY
 	add	AL,#H'0002
@@ -9847,54 +9755,54 @@ $_KoovoxRcvShortKalimbaMsg:
 	st	AL,@(H'0001,Y)
 	ld	AL,#H'1400
 	ld	AH,#H'0000
-?L204:
-	bsr	$_SendNotifyToDevice
-?LBE30:
-	bra	(?L181)
 ?L194:
+	bsr	$_SendNotifyToDevice
+?LBE24:
+	bra	(?L171)
+?L184:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'4008
-	bra	(?L201)
-?L195:
+	bra	(?L191)
+?L185:
 	bsr	$_isActiveState
 	cmp	AL,#H'0000
-	beq	?L196
+	beq	?L186
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'400A
-	bra	(?L201)
-?L196:
+	bra	(?L191)
+?L186:
 	bsr	$_isIncomingState
 	cmp	AL,#H'0000
-	beq	?L181
+	beq	?L171
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'4009
-?L201:
+?L191:
 	bsr	$_MessageSend
-?L181:
-?LBE27:
+?L171:
+?LBE21:
 ?LBE_KoovoxRcvShortKalimbaMsg:
 	leavel	#13
-;.stabn	192,0,0,?LBB27
-;.stabn	192,0,0,?LBB28
-;.stabn	224,0,0,?LBE28
-;.stabn	192,0,0,?LBB29
-;.stabn	224,0,0,?LBE29
-;.stabn	192,0,0,?LBB30
-;.stabn	224,0,0,?LBE30
-;.stabn	224,0,0,?LBE27
+;.stabn	192,0,0,?LBB21
+;.stabn	192,0,0,?LBB22
+;.stabn	224,0,0,?LBE22
+;.stabn	192,0,0,?LBB23
+;.stabn	224,0,0,?LBE23
+;.stabn	192,0,0,?LBB24
+;.stabn	224,0,0,?LBE24
+;.stabn	224,0,0,?LBE21
 $_KoovoxRcvLongKalimbaMsg:
 	enterl	#7
 ?LBB_KoovoxRcvLongKalimbaMsg:
 	st	AL,@(H'0002,Y)
 	ld	X,@$XAP_AL
-?LBB31:
-?LBB32:
+?LBB25:
+?LBB26:
 	ld	AL,@(H'0001,X)
 	smult	#H'0005
 	add	AL,#H'0005
@@ -9904,8 +9812,8 @@ $_KoovoxRcvLongKalimbaMsg:
 	st	AH,@(H'0004,Y)
 	ld	X,@(H'0002,Y)
 	cmp	AH,@(H'0001,X)
-	bcc	?L217
-?L214:
+	bcc	?L207
+?L204:
 	ld	AL,@(H'0004,Y)
 	smult	#H'0005
 	ld	AH,@(H'0003,Y)
@@ -9922,8 +9830,8 @@ $_KoovoxRcvLongKalimbaMsg:
 	st	AL,@(H'0004,Y)
 	ld	X,@(H'0002,Y)
 	cmp	AL,@(H'0001,X)
-	bcs	?L214
-?L217:
+	bcs	?L204
+?L207:
 	ld	AL,@(H'0004,Y)
 	smult	#H'0005
 	ld	AH,@(H'0003,Y)
@@ -9935,8 +9843,8 @@ $_KoovoxRcvLongKalimbaMsg:
 	bsr	$_KoovoxLog
 	ld	AL,@(H'0003,Y)
 	bsr	$_free
-?LBE32:
-?LBE31:
+?LBE26:
+?LBE25:
 ?LBE_KoovoxRcvLongKalimbaMsg:
 	leavel	#7
 	.SEG	CONST
@@ -9947,16 +9855,16 @@ $_KoovoxRcvLongKalimbaMsg:
 	dc	H'20
 	dc	H'00
 	.CODE
-;.stabn	192,0,0,?LBB31
-;.stabn	192,0,0,?LBB32
-;.stabn	224,0,0,?LBE32
-;.stabn	224,0,0,?LBE31
+;.stabn	192,0,0,?LBB25
+;.stabn	192,0,0,?LBB26
+;.stabn	224,0,0,?LBE26
+;.stabn	224,0,0,?LBE25
 $_KoovoPromptPlayNumber:
 	enterl	#16
 ?LBB_KoovoPromptPlayNumber:
 	st	AH,@(H'0006,Y)
 	st	AL,@(H'0007,Y)
-?LBB33:
+?LBB27:
 	ld	AL,#(?LC7)
 	st	AL,@(0,Y)
 	ld	AH,@(H'0006,Y)
@@ -9970,20 +9878,20 @@ $_KoovoPromptPlayNumber:
 	add	AL,#H'0003
 	bsr	$_strlen
 	cmp	AL,#H'0002
-	beq	?L223
+	beq	?L213
 	cmp	AL,#(H'0001+H'0002)
-	bcc	?L233
+	bcc	?L223
 	cmp	AL,#H'0001
-	beq	?L222
-	bra	(?L220)
-?L233:
-	cmp	AL,#H'0003
-	beq	?L226
-	bra	(?L220)
-?L222:
-	ld	AL,@(H'0007,Y)
-	bra	(?L235)
+	beq	?L212
+	bra	(?L210)
 ?L223:
+	cmp	AL,#H'0003
+	beq	?L216
+	bra	(?L210)
+?L212:
+	ld	AL,@(H'0007,Y)
+	bra	(?L225)
+?L213:
 	ld	AH,#H'000A
 	st	AH,@(H'0001,Y)
 	ld	AL,#H'0000
@@ -10005,26 +9913,26 @@ $_KoovoPromptPlayNumber:
 	ld	AH,@(H'0008,Y)
 	ld	AL,@(H'0009,Y)
 	cmp	AH,#hwrd(H'0001+H'0001)
-	bcs	?L224
-	bne	?L239
+	bcs	?L214
+	bne	?L229
 	cmp	AL,#lwrd(H'0001+H'0001)
-	bcs	?L224
-?L239:
+	bcs	?L214
+?L229:
 	ld	AL,@(H'0009,Y)
 	add	AL,#H'476D
 	bsr	$_AudioPromptPlayEvent
-?L224:
+?L214:
 	ld	AL,#H'47A7
 	bsr	$_AudioPromptPlayEvent
 	ld	AH,@(H'000C,Y)
 	ld	AL,@(H'000D,Y)
 	cmp	AH,#H'0000
-	bne	?L240
+	bne	?L230
 	cmp	AL,#H'0000
-	beq	?L220
-?L240:
-	bra	(?L234)
-?L226:
+	beq	?L210
+?L230:
+	bra	(?L224)
+?L216:
 	ld	AL,#H'0064
 	st	AL,@(H'0001,Y)
 	ld	AH,#H'0000
@@ -10046,24 +9954,24 @@ $_KoovoPromptPlayNumber:
 	ld	AH,@(H'000A,Y)
 	ld	AL,@(H'000B,Y)
 	cmp	AH,#hwrd(H'0001+H'0001)
-	bcs	?L227
-	bne	?L241
+	bcs	?L217
+	bne	?L231
 	cmp	AL,#lwrd(H'0001+H'0001)
-	bcs	?L227
-?L241:
+	bcs	?L217
+?L231:
 	ld	AL,@(H'000B,Y)
 	add	AL,#H'476D
 	bsr	$_AudioPromptPlayEvent
-?L227:
+?L217:
 	ld	AL,#H'47A8
 	bsr	$_AudioPromptPlayEvent
 	ld	AH,@(H'000C,Y)
 	ld	AL,@(H'000D,Y)
 	cmp	AH,#H'0000
-	bne	?L242
+	bne	?L232
 	cmp	AL,#H'0000
-	beq	?L220
-?L242:
+	beq	?L210
+?L232:
 	ld	AL,#H'000A
 	st	AL,@(H'0001,Y)
 	ld	AH,#H'0000
@@ -10085,31 +9993,31 @@ $_KoovoPromptPlayNumber:
 	ld	AH,@(H'0008,Y)
 	ld	AL,@(H'0009,Y)
 	cmp	AH,#hwrd(H'0001+H'0001)
-	bcs	?L229
-	bne	?L243
+	bcs	?L219
+	bne	?L233
 	cmp	AL,#lwrd(H'0001+H'0001)
-	bcs	?L229
-?L243:
+	bcs	?L219
+?L233:
 	ld	AL,@(H'0009,Y)
 	add	AL,#H'476D
 	bsr	$_AudioPromptPlayEvent
-?L229:
+?L219:
 	ld	AL,#H'47A7
 	bsr	$_AudioPromptPlayEvent
 	ld	AH,@(H'000C,Y)
 	ld	AL,@(H'000D,Y)
 	cmp	AH,#H'0000
-	bne	?L244
+	bne	?L234
 	cmp	AL,#H'0000
-	beq	?L220
-?L244:
+	beq	?L210
 ?L234:
+?L224:
 	ld	AL,@(H'000D,Y)
-?L235:
+?L225:
 	add	AL,#H'476D
 	bsr	$_AudioPromptPlayEvent
-?L220:
-?LBE33:
+?L210:
+?LBE27:
 ?LBE_KoovoPromptPlayNumber:
 	leavel	#16
 	.SEG	CONST
@@ -10119,8 +10027,8 @@ $_KoovoPromptPlayNumber:
 	dc	H'64
 	dc	H'00
 	.CODE
-;.stabn	192,0,0,?LBB33
-;.stabn	224,0,0,?LBE33
+;.stabn	192,0,0,?LBB27
+;.stabn	224,0,0,?LBE27
 $_KoovoPromptPlayHeartRate:
 	enterl	#4
 ?LBB_KoovoPromptPlayHeartRate:
@@ -10138,18 +10046,18 @@ $_KoovoxPromptPlayBattery:
 ?LBB_KoovoxPromptPlayBattery:
 	st	AH,@(H'0002,Y)
 	st	AL,@(H'0003,Y)
-?LBB34:
+?LBB28:
 	cmp	AH,#hwrd(H'0001+H'0064)
-	bcs	?L251
-	bne	?L246
+	bcs	?L241
+	bne	?L236
 	cmp	AL,#lwrd(H'0001+H'0064)
-	bcc	?L246
-?L251:
+	bcc	?L236
+?L241:
 	cmp	AH,#H'0000
-	bne	?L252
+	bne	?L242
 	cmp	AL,#H'0000
-	beq	?L246
-?L252:
+	beq	?L236
+?L242:
 	ld	AL,#H'4787
 	bsr	$_AudioPromptPlayEvent
 	ld	AH,#H'000A
@@ -10181,51 +10089,51 @@ $_KoovoxPromptPlayBattery:
 	ld	AH,@(H'0004,Y)
 	ld	AL,@(H'0005,Y)
 	cmp	AH,#H'0000
-	bne	?L253
+	bne	?L243
 	cmp	AL,#H'0000
-	beq	?L249
-?L253:
+	beq	?L239
+?L243:
 	bsr	$_KoovoPromptPlayNumber
 	ld	AL,#H'47A9
 	bsr	$_AudioPromptPlayEvent
-?L249:
+?L239:
 	ld	AH,@(H'0006,Y)
 	ld	AL,@(H'0007,Y)
 	cmp	AH,#H'0000
-	bne	?L254
+	bne	?L244
 	cmp	AL,#H'0000
-	beq	?L246
-?L254:
+	beq	?L236
+?L244:
 	bsr	$_KoovoPromptPlayNumber
 	ld	AL,#H'47AA
 	bsr	$_AudioPromptPlayEvent
-?L246:
-?LBE34:
+?L236:
+?LBE28:
 ?LBE_KoovoxPromptPlayBattery:
 	leavel	#10
-;.stabn	192,0,0,?LBB34
-;.stabn	224,0,0,?LBE34
+;.stabn	192,0,0,?LBB28
+;.stabn	224,0,0,?LBE28
 $_KoovoxCurrentModePrompt:
 	enterl	#2
 ?LBB_KoovoxCurrentModePrompt:
 	cmp	AL,#H'0001
-	beq	?L258
+	beq	?L248
 	cmp	AL,#H'0001
-	bcs	?L257
+	bcs	?L247
 	cmp	AL,#H'0002
-	beq	?L259
-	bra	(?L255)
-?L257:
+	beq	?L249
+	bra	(?L245)
+?L247:
 	ld	AL,#H'479B
-	bra	(?L262)
-?L258:
+	bra	(?L252)
+?L248:
 	ld	AL,#H'479C
-	bra	(?L262)
-?L259:
+	bra	(?L252)
+?L249:
 	ld	AL,#H'479D
-?L262:
+?L252:
 	bsr	$_AudioPromptPlayEvent
-?L255:
+?L245:
 ?LBE_KoovoxCurrentModePrompt:
 	leavel	#2
 $_KoovoxSetModePrompt:
@@ -10241,7 +10149,7 @@ $_KoovoxAudioPresencePlayEvent:
 	enterl	#14
 ?LBB_KoovoxAudioPresencePlayEvent:
 	st	AL,@(H'0007,Y)
-?LBB35:
+?LBB29:
 	st	AL,@(H'0008,Y)
 	bsr	$_stateManagerGetState
 	ld	X,@$XAP_AL
@@ -10251,34 +10159,34 @@ $_KoovoxAudioPresencePlayEvent:
 	ld	AH,#H'0000
 	st	AH,@(H'000B,Y)
 	tst	@$_theSink+H'0008
-	beq	?L268
+	beq	?L258
 	ld	AL,@$_theSink+H'0008
-	bra	(?L277)
-?L268:
-	ld	AL,#H'0000
 	bra	(?L267)
-?L276:
+?L258:
+	ld	AL,#H'0000
+	bra	(?L257)
+?L266:
 	ld	X,@(H'000A,Y)
 	ld	AL,@(0,X)
 	cmp	AL,@(H'0008,Y)
-	bne	?L273
+	bne	?L263
 	ld	AH,@(H'0002,X)
 	ld	AL,@$XAP_AH
 	and	AL,#H'3FFF
 	and	AL,@(H'0009,Y)
 	cmp	AL,#H'0000
-	beq	?L273
+	beq	?L263
 	lsr	#H'000E
 	and	AH,#H'0001
 	cmp	AH,#H'0000
-	beq	?L274
+	beq	?L264
 	tst	@$_theSink+H'0022
-	beq	?L274
+	beq	?L264
 	ld	AL,@(H'0009,Y)
 	and	AL,#H'2000
 	cmp	AL,#H'0000
-	beq	?L273
-?L274:
+	beq	?L263
+?L264:
 	ld	AH,#H'0001
 	st	AH,@(H'000B,Y)
 	ld	X,@$_theSink+H'0005
@@ -10326,48 +10234,48 @@ $_KoovoxAudioPresencePlayEvent:
 	bsr	$_AudioPlayAudioPrompt
 	bsr	$_GetAudioPlugin
 	cmp	AL,#($_csr_voice_presences_plugin)
-	beq	?L273
+	beq	?L263
 	ld	AH,@(H'0007,Y)
 	cmp	AH,#H'4002
-	bne	?L273
+	bne	?L263
 	bsr	$_GetAudioPlugin
 	ld	AH,#H'7000
 	bsr	$_MessageCancelAll
-?L273:
+?L263:
 	ld	AL,@(H'000A,Y)
 	add	AL,#H'0003
-?L277:
+?L267:
 	st	AL,@(H'000A,Y)
 	ld	X,@(H'000A,Y)
 	ld	AL,@(H'0001,X)
 	and	AL,#H'00FF
 	cmp	AL,#H'00FF
-	bne	?L276
+	bne	?L266
 	ld	AL,@(H'000B,Y)
-?L267:
-?LBE35:
+?L257:
+?LBE29:
 ?LBE_KoovoxAudioPresencePlayEvent:
 	leavel	#14
-;.stabn	192,0,0,?LBB35
-;.stabn	224,0,0,?LBE35
+;.stabn	192,0,0,?LBB29
+;.stabn	224,0,0,?LBE29
 $_KoovoxAutoSwitchToMusicMode:
 	enterl	#2
 ?LBB_KoovoxAutoSwitchToMusicMode:
 	bsr	$_GetCurrMode
 	cmp	AL,#H'0000
-	bne	?L283
+	bne	?L273
 	ld	AL,#H'0000
 	bsr	$_StorePreviousMode
 	ld	AL,#H'0001
 	bsr	$_SetCurrMode
-	bra	(?L282)
-?L283:
+	bra	(?L272)
+?L273:
 	bsr	$_GetCurrMode
 	cmp	AL,#H'0001
-	bne	?L282
+	bne	?L272
 	ld	AL,#H'0001
 	bsr	$_StorePreviousMode
-?L282:
+?L272:
 ?LBE_KoovoxAutoSwitchToMusicMode:
 	leavel	#2
 $_KoovoxAutoLeaveToMusicMode:
@@ -10375,12 +10283,12 @@ $_KoovoxAutoLeaveToMusicMode:
 ?LBB_KoovoxAutoLeaveToMusicMode:
 	bsr	$_GetCurrMode
 	cmp	AL,#H'0001
-	bne	?L287
+	bne	?L277
 	bsr	$_isAutoMusic
 	cmp	AL,#H'0000
-	beq	?L287
+	beq	?L277
 	bsr	$_RecoverPreviousMode
-?L287:
+?L277:
 ?LBE_KoovoxAutoLeaveToMusicMode:
 	leavel	#2
 $_KoovoxPowerOnPrompt:
@@ -10391,46 +10299,16 @@ $_KoovoxPowerOnPrompt:
 ?LBE_KoovoxPowerOnPrompt:
 	leavel	#2
 $_KoovoxHandleEventCvcKalimbaLoaded:
-	enterl	#6
+; leaf function with empty stack frame
 ?LBB_KoovoxHandleEventCvcKalimbaLoaded:
-	bsr	$_isPresentBusy
-	cmp	AL,#H'0000
-	beq	?L292
-	ld	AL,@$_theSink+H'0022
-	bsr	$_StreamSourceFromSink
-	st	AL,@(H'0003,Y)
-	ld	AL,#H'0001
-	bsr	$_StreamKalimbaSink
-	ld	AH,@$XAP_AL
-	ld	AL,@(H'0003,Y)
-	bsr	$_StreamDisconnect
-	bra	(?L293)
-?L292:
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'4F04
-	ld	AH,#H'0000
-	bsr	$_KalimbaSendMessage
-?L293:
-	bsr	$_isGattConnected
-	cmp	AL,#H'0000
-	beq	?L291
-	bsr	$_isAsrBusy
-	cmp	AL,#H'0000
-	beq	?L291
-	ld	AL,#H'4795
-	bsr	$_TonesPlayEvent
-?L291:
 ?LBE_KoovoxHandleEventCvcKalimbaLoaded:
-	leavel	#6
+	rts
 $_KoovoxHandleEventCodecKalimbaLoaded:
 	enterl	#5
 ?LBB_KoovoxHandleEventCodecKalimbaLoaded:
-?LBB36:
+?LBB30:
 	bsr	$_KoovoxRestartDsp
-?LBB37:
+?LBB31:
 	bsr	$_GetHeartRateValue
 	ld	AH,@$XAP_AL
 	ld	AL,#H'0000
@@ -10439,16 +10317,16 @@ $_KoovoxHandleEventCodecKalimbaLoaded:
 	st	AL,@(H'0002,Y)
 	ld	AL,#H'4F09
 	bsr	$_KalimbaSendMessage
-?LBE37:
-?LBE36:
+?LBE31:
+?LBE30:
 ?LBE_KoovoxHandleEventCodecKalimbaLoaded:
 	leavel	#5
-;.stabn	192,0,0,?LBB37
-;.stabn	224,0,0,?LBE37
+;.stabn	192,0,0,?LBB31
+;.stabn	224,0,0,?LBE31
 $_KoovoxHandleEventSportKalimbaLoaded:
 	enterl	#5
 ?LBB_KoovoxHandleEventSportKalimbaLoaded:
-?LBB38:
+?LBB32:
 	bsr	$_GetHeartRateValue
 	ld	AH,@$XAP_AL
 	ld	AL,#H'0000
@@ -10457,30 +10335,30 @@ $_KoovoxHandleEventSportKalimbaLoaded:
 	st	AL,@(H'0002,Y)
 	ld	AL,#H'4F09
 	bsr	$_KalimbaSendMessage
-?LBE38:
+?LBE32:
 ?LBE_KoovoxHandleEventSportKalimbaLoaded:
 	leavel	#5
-;.stabn	192,0,0,?LBB38
-;.stabn	224,0,0,?LBE38
+;.stabn	192,0,0,?LBB32
+;.stabn	224,0,0,?LBE32
 $_KoovoxAudioPromptTime:
 	enterl	#3
 ?LBB_KoovoxAudioPromptTime:
 	st	AH,@(0,Y)
 	cmp	AL,#H'0000
-	beq	?L298
+	beq	?L285
 	ld	AH,#H'0000
 	bsr	$_KoovoPromptPlayNumber
 	ld	AL,#H'47A9
 	bsr	$_AudioPromptPlayEvent
-?L298:
+?L285:
 	tst	@(0,Y)
-	beq	?L299
+	beq	?L286
 	ld	AH,#H'0000
 	ld	AL,@(0,Y)
 	bsr	$_KoovoPromptPlayNumber
 	ld	AL,#H'47AA
 	bsr	$_AudioPromptPlayEvent
-?L299:
+?L286:
 	bsr	$_get_battery_level_as_percentage
 	bsr	$_UpdateBatteryValue
 	ld	AH,#H'0000
@@ -10493,27 +10371,27 @@ $_KoovoxAudioPromptSportData:
 ?LBB_KoovoxAudioPromptSportData:
 	st	AL,@(0,Y)
 	cmp	AH,#H'0000
-	beq	?L301
+	beq	?L288
 	ld	AL,@$XAP_AH
 	ld	AH,#H'0000
 	bsr	$_KoovoPromptPlayNumber
 	ld	AL,#H'47A9
 	bsr	$_AudioPromptPlayEvent
-?L301:
+?L288:
 	tst	@(H'0003,Y)
-	beq	?L302
+	beq	?L289
 	ld	AH,#H'0000
 	ld	AL,@(H'0003,Y)
 	bsr	$_KoovoPromptPlayNumber
 	ld	AL,#H'47AA
 	bsr	$_AudioPromptPlayEvent
-?L302:
+?L289:
 	tst	@(0,Y)
-	beq	?L300
+	beq	?L287
 	ld	AH,#H'0000
 	ld	AL,@(0,Y)
 	bsr	$_KoovoPromptPlayNumber
-?L300:
+?L287:
 ?LBE_KoovoxAudioPromptSportData:
 	leavel	#3
 $_HeartRateSensorEnable:
@@ -10539,24 +10417,24 @@ $_HeartRateSensorDisable:
 $_get_battery_level_as_percentage:
 	enterl	#6
 ?LBB_get_battery_level_as_percentage:
-?LBB39:
+?LBB33:
 	ld	AL,@$XAP_UY
 	add	AL,#H'0002
 	bsr	$_PowerBatteryGetVoltage
 	ld	X,@$_theSink+H'0004
 	ld	AL,@(H'0007,X)
 	cmp	AL,@(H'0008,X)
-	bcz	?L307
+	bcz	?L294
 	ld	AL,@(H'0002,Y)
 	cmp	AL,@(H'0008,X)
-	bcs	?L307
+	bcs	?L294
 	ld	X,@$_theSink+H'0004
 	ld	AL,@(H'0002,Y)
 	cmp	AL,@(H'0007,X)
-	bcz	?L310
+	bcz	?L297
 	ld	AL,#H'0064
-	bra	(?L306)
-?L310:
+	bra	(?L293)
+?L297:
 	ld	X,@$_theSink+H'0004
 	ld	AL,@(H'0002,Y)
 	sub	AL,@(H'0008,X)
@@ -10571,19 +10449,19 @@ $_get_battery_level_as_percentage:
 	ld	AH,@H'fff8
 	ld	AL,@H'fff9
 	bsr	$___udivhi3
-	bra	(?L306)
-?L307:
+	bra	(?L293)
+?L294:
 	ld	AL,#H'0000
-?L306:
-?LBE39:
+?L293:
+?LBE33:
 ?LBE_get_battery_level_as_percentage:
 	leavel	#6
-;.stabn	192,0,0,?LBB39
-;.stabn	224,0,0,?LBE39
+;.stabn	192,0,0,?LBB33
+;.stabn	224,0,0,?LBE33
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 234 used[1] = 34 used[3] = 2 total = 270
-;# Function pattern *movqi3 used[0] = 393 total = 393
+;# Function pattern *movqi2 used[0] = 214 used[1] = 32 used[3] = 2 total = 248
+;# Function pattern *movqi3 used[0] = 366 total = 366
 ;# Function pattern *movqi8 used[0] = 4 total = 4
 ;# Function pattern *movhi used[0] = 2 used[2] = 25 used[3] = 19 total = 46
 ;# Function pattern *addhi3 used[0] = 2 total = 2
@@ -10599,16 +10477,16 @@ $_get_battery_level_as_percentage:
 ;# Function pattern *lshrhi3 used[0] = 4 total = 4
 ;# Function pattern *zero_extendqihi2 used[0] = 5 total = 5
 ;# Function pattern *zero_extendqihi2_1 used[0] = 3 used[1] = 3 total = 6
-;# Function pattern jump used[0] = 54 total = 54
-;# Function pattern *call1 used[0] = 107 total = 107
+;# Function pattern jump used[0] = 49 total = 49
+;# Function pattern *call1 used[0] = 100 total = 100
 ;# Function pattern *call4 used[0] = 1 total = 1
-;# Function pattern *call_value1 used[0] = 134 total = 134
+;# Function pattern *call_value1 used[0] = 126 total = 126
 ;# Function pattern *call_value4 used[0] = 1 total = 1
-;# Function pattern tablejump_1 used[0] = 3 total = 3
+;# Function pattern tablejump_1 used[0] = 2 total = 2
 ;# Function pattern zero_extendqihi2+1 used[0] = 1 total = 1
 ;# Function pattern movstrqi+2 used[0] = 3 total = 3
-;# Function pattern movstrqi+3 used[0] = 40 used[1] = 10 total = 50
-;# Function pattern movstrqi+4 used[1] = 5 total = 5
+;# Function pattern movstrqi+3 used[0] = 35 used[1] = 10 total = 45
+;# Function pattern movstrqi+4 used[1] = 4 total = 4
 ;# Function pattern movstrqi+5 used[0] = 38 total = 38
 ;# Function pattern movstrqi+6 used[0] = 7 total = 7
 ;# Function pattern movstrqi+7 used[0] = 4 total = 4
@@ -20553,7 +20431,7 @@ _BMCheckForButtonMatch:
 	cmp	AH,#H'0000
 	beq	?L48
 	ld	X,@$_theSink+H'0003
-	ld	AL,@(H'00BA,X)
+	ld	AL,@(H'00BF,X)
 	and	AL,#H'0001
 	cmp	AL,#H'0000
 	beq	?L54
@@ -22666,10 +22544,10 @@ _configManagerKeyLengths:
 	ld	AL,@(H'0004,X)
 	asl	#H'000B
 	ld	X,@(H'0002,Y)
-	ld	AH,@(H'00BA,X)
+	ld	AH,@(H'00BF,X)
 	and	AH,#H'07FF
 	or	AH,@$XAP_AL
-	st	AH,@(H'00BA,X)
+	st	AH,@(H'00BF,X)
 	ld	AL,@$_theSink+H'0003
 	st	AL,@(H'0002,Y)
 	ld	X,@(H'0001,Y)
@@ -22677,10 +22555,10 @@ _configManagerKeyLengths:
 	and	AL,#H'001F
 	asl	#H'0006
 	ld	X,@(H'0002,Y)
-	ld	AH,@(H'00BA,X)
+	ld	AH,@(H'00BF,X)
 	and	AH,#-H'07C1
 	or	AH,@$XAP_AL
-	st	AH,@(H'00BA,X)
+	st	AH,@(H'00BF,X)
 	ld	AL,@$_theSink+H'0003
 	st	AL,@(H'0002,Y)
 	ld	X,@(H'0001,Y)
@@ -22688,10 +22566,10 @@ _configManagerKeyLengths:
 	and	AL,#H'001F
 	asl	#H'0001
 	ld	X,@(H'0002,Y)
-	ld	AH,@(H'00BA,X)
+	ld	AH,@(H'00BF,X)
 	and	AH,#-H'003F
 	or	AH,@$XAP_AL
-	st	AH,@(H'00BA,X)
+	st	AH,@(H'00BF,X)
 	ld	AH,@$_theSink+H'0004
 	ld	X,@(H'0001,Y)
 	ld	AL,@(H'000A,X)
@@ -22865,11 +22743,11 @@ _configManagerLEDS:
 	enterl	#3
 ?LBB_configManagerLEDS:
 	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00BA,X)
+	ld	AH,@(H'00BF,X)
 	lsr	#H'000B
 	ld	AL,#-H'0001
 	add	AL,@$XAP_AH
-	cmp	AL,#(H'0001+H'000D)
+	cmp	AL,#(H'0001+H'000E)
 	bcc	?L29
 	add	X,#H'0002
 	ld	AL,@$XAP_AH
@@ -22880,7 +22758,7 @@ _configManagerLEDS:
 	bsr	$_ConfigRetrieve
 ?L29:
 	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00BA,X)
+	ld	AH,@(H'00BF,X)
 	lsr	#H'0006
 	ld	AL,@$XAP_AH
 	and	AL,#H'001F
@@ -22892,18 +22770,18 @@ _configManagerLEDS:
 	smult	#H'0005
 	st	AL,@(0,Y)
 	ld	AL,#H'0017
-	ld	AH,@(H'004D,X)
+	ld	AH,@(H'0052,X)
 	bsr	$_ConfigRetrieve
 ?L30:
 	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00BA,X)
+	ld	AH,@(H'00BF,X)
 	lsr	#H'0001
 	ld	AL,@$XAP_AH
 	and	AL,#H'001F
 	add	AL,#-H'0001
 	cmp	AL,#(H'0001+H'0012)
 	bcc	?L31
-	add	X,#H'004E
+	add	X,#H'0053
 	ld	AL,@$XAP_AH
 	and	AL,#H'001F
 	smult	#H'0003
@@ -22913,7 +22791,7 @@ _configManagerLEDS:
 	bsr	$_ConfigRetrieve
 ?L31:
 	ld	AH,@$_theSink+H'0003
-	add	AH,#H'00C1
+	add	AH,#H'00C6
 	ld	AL,#H'0001
 	st	AL,@(0,Y)
 	ld	AL,#H'0016
@@ -23491,16 +23369,16 @@ _configManagerReadSessionData:
 	ld	AL,@$XAP_AH
 	and	AL,#H'0001
 	asl	#H'000C
-	ld	AH,@(H'00BB,X)
+	ld	AH,@(H'00C0,X)
 	and	AH,#-H'1001
 	or	AH,@$XAP_AL
-	st	AH,@(H'00BB,X)
+	st	AH,@(H'00C0,X)
 	bra	(?L101)
 ?L100:
 	ld	X,@$_theSink+H'0003
-	ld	AL,@(H'00BB,X)
+	ld	AL,@(H'00C0,X)
 	or	AL,#H'1000
-	st	AL,@(H'00BB,X)
+	st	AL,@(H'00C0,X)
 ?L101:
 	ld	AH,@(H'0001,Y)
 	lsr	#H'000A
@@ -23600,7 +23478,7 @@ $_configManagerWriteSessionData:
 	st	AL,@(H'0001,Y)
 	ld	AL,@$_theSink+H'0003
 	ld	X,@$XAP_AL
-	ld	AH,@(H'00BB,X)
+	ld	AH,@(H'00C0,X)
 	lsr	#H'000C
 	ld	AL,@$XAP_AH
 	and	AL,#H'0001
@@ -23714,7 +23592,7 @@ $_configManagerRestoreDefaults:
 	ld	AL,#H'0000
 	bsr	$_ConnectionSmDeleteAllAuthDevices
 	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00BB,X)
+	ld	AH,@(H'00C0,X)
 	lsr	#H'000C
 	and	AH,#H'0001
 	cmp	AH,#H'0000
@@ -26214,13 +26092,13 @@ _gaia_alert_leds:
 	ld	AH,#H'0000
 	st	AH,@(-1,Y)
 	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00BA,X)
+	ld	AH,@(H'00BF,X)
 	lsr	#H'0006
 	and	AH,#H'001F
 	ld	AL,@(-1,Y)
 	cmp	AL,@$XAP_AH
 	bcc	?L38
-	ld	X,@(H'004D,X)
+	ld	X,@(H'0052,X)
 	ld	AL,@(0,X)
 	cmp	AL,#H'4726
 	beq	?L38
@@ -26231,21 +26109,21 @@ _gaia_alert_leds:
 	add	AH,@(-1,Y)
 	st	AH,@(-1,Y)
 	ld	X,@(H'0004,Y)
-	ld	AH,@(H'00BA,X)
+	ld	AH,@(H'00BF,X)
 	lsr	#H'0006
 	and	AH,#H'001F
 	ld	AL,@(-1,Y)
 	cmp	AL,@$XAP_AH
 	bcc	?L38
 	smult	#H'0005
-	add	AL,@(H'004D,X)
+	add	AL,@(H'0052,X)
 	ld	X,@$XAP_AL
 	ld	AL,@(0,X)
 	cmp	AL,#H'4726
 	bne	?L41
 ?L38:
 	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00BA,X)
+	ld	AH,@(H'00BF,X)
 	lsr	#H'0006
 	and	AH,#H'001F
 	ld	AL,@(-1,Y)
@@ -26259,7 +26137,7 @@ _gaia_alert_leds:
 	ld	X,@$_theSink+H'0003
 	ld	AL,@(-1,Y)
 	smult	#H'0005
-	add	AL,@(H'004D,X)
+	add	AL,@(H'0052,X)
 	st	AL,@(H'0003,Y)
 	ld	X,@H'fffa
 	ld	AL,@(0,X)
@@ -26658,7 +26536,7 @@ _gaia_set_led_config:
 ?L99:
 	ld	AH,@(H'0007,Y)
 	st	AH,@(H'0018,Y)
-	ld	AL,#H'000F
+	ld	AL,#H'0010
 	st	AL,@(H'0019,Y)
 	ld	X,#H'0015
 	bra	(?L158)
@@ -30577,7 +30455,7 @@ _gaia_handle_control_command:
 	bra	(?L841)
 ?L740:
 	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00BB,X)
+	ld	AH,@(H'00C0,X)
 	lsr	#H'000C
 	and	AH,#H'0001
 	st	AH,@(H'0003,Y)
@@ -36019,7 +35897,7 @@ $_InitUserFeatures:
 	bsr	$_MessageSend
 ?L28:
 	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00BB,X)
+	ld	AH,@(H'00C0,X)
 	lsr	#H'000C
 	and	AH,#H'0001
 	cmp	AH,#H'0000
@@ -37533,10 +37411,10 @@ $_theUARTStreamTask:
 $_LedManagerMemoryInit:
 	enterl	#4
 ?LBB_LedManagerMemoryInit:
-	ld	AL,#H'00C2
+	ld	AL,#H'00C7
 	bsr	$_malloc
 	st	AL,@$_theSink+H'0003
-	ld	AH,#H'00C2
+	ld	AH,#H'00C7
 	st	AH,@(0,Y)
 	ld	AH,#H'0000
 	bsr	$_memset
@@ -37545,9 +37423,9 @@ $_LedManagerMemoryInit:
 	ld	AL,#H'0064
 	bsr	$_malloc
 	ld	X,@(H'0001,Y)
-	st	AL,@(H'004D,X)
+	st	AL,@(H'0052,X)
 	ld	X,@$_theSink+H'0003
-	ld	AL,@(H'004D,X)
+	ld	AL,@(H'0052,X)
 	ld	AH,#H'0064
 	st	AH,@(0,Y)
 	ld	AH,#H'0000
@@ -37558,18 +37436,18 @@ $_LEDManagerInit:
 	enterl	#2
 ?LBB_LEDManagerInit:
 	ld	X,@$_theSink+H'0003
-	ld	AL,@(H'00BB,X)
+	ld	AL,@(H'00C0,X)
 	and	AL,#-H'0801
-	st	AL,@(H'00BB,X)
+	st	AL,@(H'00C0,X)
 	bsr	_LEDManagerInitStatePatterns
 	bsr	_LEDManagerInitActiveLEDS
 	bsr	_LEDManagerInitEventPatterns
 	ld	X,@$_theSink+H'0003
 	ld	AL,#H'0000
-	st	AL,@(H'00BE,X)
-	st	AL,@(H'00BD,X)
-	st	AL,@(H'00C0,X)
-	st	AL,@(H'00BF,X)
+	st	AL,@(H'00C3,X)
+	st	AL,@(H'00C2,X)
+	st	AL,@(H'00C5,X)
+	st	AL,@(H'00C4,X)
 	bsr	_LEDManagerCreateFilterPatterns
 	bsr	$_LedsInit
 ?LBE_LEDManagerInit:
@@ -37584,7 +37462,7 @@ _LEDManagerInitActiveLEDS:
 	ld	AL,@(H'0002,Y)
 	smult	#H'0003
 	add	AL,@$_theSink+H'0003
-	add	AL,#H'008A
+	add	AL,#H'008F
 	ld	AH,#H'0000
 	st	AH,@(0,Y)
 	st	AH,@(H'0001,Y)
@@ -37626,7 +37504,7 @@ _LEDManagerInitStatePatterns:
 ?LBE4:
 	add	AL,#H'0001
 	st	AL,@(H'0001,Y)
-	cmp	AL,#H'000E
+	cmp	AL,#H'000F
 	bcz	?L17
 ?LBE3:
 ?LBE_LEDManagerInitStatePatterns:
@@ -37646,7 +37524,7 @@ _LEDManagerInitEventPatterns:
 	ld	X,@$_theSink+H'0003
 	ld	AL,@(H'0001,Y)
 	smult	#H'0005
-	add	AL,@(H'004D,X)
+	add	AL,@(H'0052,X)
 	st	AL,@(H'0002,Y)
 	ld	AL,#H'0005
 	st	AL,@(0,Y)
@@ -37683,13 +37561,13 @@ _LEDManagerCreateFilterPatterns:
 	smult	#H'0003
 	add	AL,@$_theSink+H'0003
 	st	AL,@(-1,Y)
-	ld	AH,#H'004E
+	ld	AH,#H'0053
 	add	AH,@$XAP_AL
 	ld	AL,#H'0000
 	ld	X,@$XAP_AH
 	st	AL,@(H'0001,X)
 	ld	X,@(-1,Y)
-	st	AL,@(H'004E,X)
+	st	AL,@(H'0053,X)
 	ld	X,@$XAP_AH
 	st	AL,@(H'0002,X)
 ?LBE8:
@@ -37699,16 +37577,16 @@ _LEDManagerCreateFilterPatterns:
 	cmp	AL,#H'0013
 	bcz	?L35
 	ld	X,@$_theSink+H'0003
-	ld	AL,@(H'00BA,X)
+	ld	AL,@(H'00BF,X)
 	and	AL,#-H'003F
-	st	AL,@(H'00BA,X)
+	st	AL,@(H'00BF,X)
 	ld	X,@$_theSink+H'0003
-	ld	AL,@(H'00BB,X)
+	ld	AL,@(H'00C0,X)
 	and	AL,#-H'0010
-	st	AL,@(H'00BB,X)
+	st	AL,@(H'00C0,X)
 	ld	X,@$_theSink+H'0003
 	ld	AL,#H'0000
-	st	AL,@(H'00BC,X)
+	st	AL,@(H'00C1,X)
 ?LBE7:
 ?LBE_LEDManagerCreateFilterPatterns:
 	leavel	#2
@@ -37721,7 +37599,7 @@ _ledManagerCanPlayPattern:
 ?LBB_ledManagerCanPlayPattern:
 	st	AL,@H'fff8
 	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00BB,X)
+	ld	AH,@(H'00C0,X)
 	lsr	#H'000B
 	and	AH,#H'0001
 	cmp	AH,#H'0000
@@ -37732,7 +37610,7 @@ _ledManagerCanPlayPattern:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00BB,X)
+	ld	AH,@(H'00C0,X)
 	lsr	#H'000C
 	and	AH,#H'0001
 	cmp	AH,#H'0000
@@ -37767,7 +37645,7 @@ $_LEDManagerIndicateEvent:
 	st	AH,@(-2,Y)
 	ld	X,@$_theSink+H'0003
 	st	X,@(-1,Y)
-	ld	AH,@(H'00BA,X)
+	ld	AH,@(H'00BF,X)
 	lsr	#H'0006
 	and	AH,#H'001F
 	ld	X,#H'0000
@@ -37778,7 +37656,7 @@ $_LEDManagerIndicateEvent:
 	smult	#H'0005
 	ld	AH,@$XAP_AL
 	ld	X,@(-1,Y)
-	add	AL,@(H'004D,X)
+	add	AL,@(H'0052,X)
 	ld	X,@$XAP_AL
 	ld	AL,@(0,X)
 	cmp	AL,@H'fff9
@@ -37789,7 +37667,7 @@ $_LEDManagerIndicateEvent:
 	ld	AL,@$_theSink+H'0003
 	st	AL,@(-1,Y)
 	ld	X,@$XAP_AL
-	ld	AH,@(H'00BA,X)
+	ld	AH,@(H'00BF,X)
 	lsr	#H'0006
 	and	AH,#H'001F
 	ld	AL,@(-2,Y)
@@ -37804,7 +37682,7 @@ $_LEDManagerIndicateEvent:
 	cmp	AL,#H'0000
 	beq	?L62
 	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00BB,X)
+	ld	AH,@(H'00C0,X)
 	lsr	#H'000A
 	and	AH,#H'0001
 	cmp	AH,#H'0000
@@ -37819,13 +37697,13 @@ $_LEDManagerIndicateEvent:
 	ld	AL,@(-2,Y)
 	st	AL,@(H'0002,Y)
 	ld	X,@(-1,Y)
-	add	AH,@(H'004D,X)
+	add	AH,@(H'0052,X)
 	st	AH,@(H'0003,Y)
 	bra	(?L45)
 ?L66:
 	ld	AH,@(H'0001,Y)
 ?LBB10:
-	st	AH,@(H'00BD,X)
+	st	AH,@(H'00C2,X)
 	bra	(?L62)
 ?L52:
 ?LBE10:
@@ -37841,7 +37719,7 @@ $_LEDManagerIndicateEvent:
 ?L60:
 	ld	X,@$XAP_AL
 	add	X,@(-1,Y)
-	tst	@(H'00BD,X)
+	tst	@(H'00C2,X)
 	beq	?L66
 	add	AL,#H'0001
 	cmp	AL,#H'0003
@@ -37864,20 +37742,20 @@ $_LedManagerIndicateQueuedEvent:
 ?LBB_LedManagerIndicateQueuedEvent:
 ?LBB12:
 	ld	X,@$_theSink+H'0003
-	ld	AL,@(H'00BD,X)
+	ld	AL,@(H'00C2,X)
 	bsr	$_LEDManagerIndicateEvent
 	ld	AH,#H'0001
 ?L77:
 	ld	X,@$_theSink+H'0003
 	add	X,@$XAP_AH
-	ld	AL,@(H'00BD,X)
-	st	AL,@(H'00BC,X)
+	ld	AL,@(H'00C2,X)
+	st	AL,@(H'00C1,X)
 	add	AH,#H'0001
 	cmp	AH,#H'0003
 	bcz	?L77
 	ld	X,@$_theSink+H'0003
 	ld	AL,#H'0000
-	st	AL,@(H'00C0,X)
+	st	AL,@(H'00C5,X)
 ?LBE12:
 ?LBE_LedManagerIndicateQueuedEvent:
 	leavel	#2
@@ -37900,7 +37778,7 @@ $_LEDManagerIndicateState:
 	ld	X,@$_theSink+H'0003
 	st	X,@(-2,Y)
 	st	X,@(H'0006,Y)
-	ld	AH,@(H'00BA,X)
+	ld	AH,@(H'00BF,X)
 	lsr	#H'000B
 	ld	AL,#H'0000
 	cmp	AL,@$XAP_AH
@@ -37930,7 +37808,7 @@ $_LEDManagerIndicateState:
 	ld	X,@H'fff9
 	add	X,@$XAP_AL
 	ld	AL,@(H'0002,X)
-	cmp	AL,#H'000E
+	cmp	AL,#H'000F
 	bne	?L84
 	ld	X,@(-1,Y)
 	st	X,@(H'0003,Y)
@@ -37946,7 +37824,7 @@ $_LEDManagerIndicateState:
 	st	AL,@(H'0006,Y)
 	ld	AL,@H'ffff
 	ld	X,@H'fff8
-	ld	AH,@(H'00BA,X)
+	ld	AH,@(H'00BF,X)
 	lsr	#H'000B
 	ld	AL,@(-1,Y)
 	cmp	AL,@$XAP_AH
@@ -37988,10 +37866,10 @@ $_LEDManagerIndicateState:
 	and	AL,#H'0001
 	asl	#H'0008
 	ld	X,@(H'0006,Y)
-	ld	AH,@(H'00BB,X)
+	ld	AH,@(H'00C0,X)
 	and	AH,#-H'0101
 	or	AH,@$XAP_AL
-	st	AH,@(H'00BB,X)
+	st	AH,@(H'00C0,X)
 	ld	AL,@(H'0005,Y)
 	bsr	_ledManagerCanPlayPattern
 	cmp	AL,#H'0000
@@ -38006,7 +37884,7 @@ $_LEDManagerIndicateState:
 	smult	#H'0003
 	ld	X,@H'fff8
 	add	X,@$XAP_AL
-	ld	AH,@(H'008B,X)
+	ld	AH,@(H'0090,X)
 	lsr	#H'000A
 	and	AH,#H'0003
 	cmp	AH,#H'0002
@@ -38019,7 +37897,7 @@ $_LEDManagerIndicateState:
 	smult	#H'0003
 	ld	X,@H'fff8
 	add	X,@$XAP_AL
-	ld	AH,@(H'008B,X)
+	ld	AH,@(H'0090,X)
 	lsr	#H'000A
 	and	AH,#H'0003
 	cmp	AH,#H'0002
@@ -38041,10 +37919,10 @@ $_LEDManagerIndicateState:
 	and	AL,#H'0001
 	asl	#H'0008
 	ld	X,@(H'0006,Y)
-	ld	AH,@(H'00BB,X)
+	ld	AH,@(H'00C0,X)
 	and	AH,#-H'0101
 	or	AH,@$XAP_AL
-	st	AH,@(H'00BB,X)
+	st	AH,@(H'00C0,X)
 	ld	AL,@(H'0004,Y)
 	bsr	_ledManagerCanPlayPattern
 	cmp	AL,#H'0000
@@ -38059,7 +37937,7 @@ $_LEDManagerIndicateState:
 	smult	#H'0003
 	ld	X,@H'fff8
 	add	X,@$XAP_AL
-	ld	AH,@(H'008B,X)
+	ld	AH,@(H'0090,X)
 	lsr	#H'000A
 	and	AH,#H'0003
 	cmp	AH,#H'0002
@@ -38072,7 +37950,7 @@ $_LEDManagerIndicateState:
 	smult	#H'0003
 	ld	X,@H'fff8
 	add	X,@$XAP_AL
-	ld	AH,@(H'008B,X)
+	ld	AH,@(H'0090,X)
 	lsr	#H'000A
 	and	AH,#H'0003
 	cmp	AH,#H'0002
@@ -38096,7 +37974,7 @@ $_LedManagerDisableLEDS:
 	enterl	#2
 ?LBB_LedManagerDisableLEDS:
 	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00BB,X)
+	ld	AH,@(H'00C0,X)
 	lsr	#H'0008
 	and	AH,#H'0001
 	cmp	AH,#H'0000
@@ -38107,18 +37985,18 @@ $_LedManagerDisableLEDS:
 	bsr	$_LedsIndicateNoState
 ?L123:
 	ld	X,@$_theSink+H'0003
-	ld	AL,@(H'00BB,X)
+	ld	AL,@(H'00C0,X)
 	and	AL,#-H'1001
-	st	AL,@(H'00BB,X)
+	st	AL,@(H'00C0,X)
 ?LBE_LedManagerDisableLEDS:
 	leavel	#2
 $_LedManagerEnableLEDS:
 	enterl	#2
 ?LBB_LedManagerEnableLEDS:
 	ld	X,@$_theSink+H'0003
-	ld	AL,@(H'00BB,X)
+	ld	AL,@(H'00C0,X)
 	or	AL,#H'1000
-	st	AL,@(H'00BB,X)
+	st	AL,@(H'00C0,X)
 	bsr	$_stateManagerGetState
 	bsr	$_LEDManagerIndicateState
 ?LBE_LedManagerEnableLEDS:
@@ -38127,7 +38005,7 @@ $_LedManagerToggleLEDS:
 	enterl	#3
 ?LBB_LedManagerToggleLEDS:
 	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00BB,X)
+	ld	AH,@(H'00C0,X)
 	lsr	#H'000C
 	and	AH,#H'0001
 	cmp	AH,#H'0000
@@ -38151,9 +38029,9 @@ $_LedManagerResetLEDIndications:
 ?LBB_LedManagerResetLEDIndications:
 	bsr	$_LedsResetAllLeds
 	ld	X,@$_theSink+H'0003
-	ld	AL,@(H'00BB,X)
+	ld	AL,@(H'00C0,X)
 	and	AL,#-H'0401
-	st	AL,@(H'00BB,X)
+	st	AL,@(H'00C0,X)
 	bsr	$_stateManagerGetState
 	bsr	$_LEDManagerIndicateState
 ?LBE_LedManagerResetLEDIndications:
@@ -38172,7 +38050,7 @@ $_LEDManagerResetStateIndNumRepeatsComplete:
 	st	AL,@(-1,Y)
 	st	AL,@H'fff9
 	ld	X,@$XAP_AL
-	ld	AH,@(H'00BA,X)
+	ld	AH,@(H'00BF,X)
 	lsr	#H'000B
 	ld	AL,@(0,Y)
 	cmp	AL,@$XAP_AH
@@ -38199,7 +38077,7 @@ $_LEDManagerResetStateIndNumRepeatsComplete:
 	ld	AL,@(-1,Y)
 	st	AL,@H'fff9
 	ld	X,@$XAP_AL
-	ld	AH,@(H'00BA,X)
+	ld	AH,@(H'00BF,X)
 	lsr	#H'000B
 	ld	AL,@(-2,Y)
 	cmp	AL,@$XAP_AH
@@ -38216,7 +38094,7 @@ $_LEDManagerResetStateIndNumRepeatsComplete:
 	smult	#H'0003
 	ld	X,@$_theSink+H'0003
 	add	X,@$XAP_AL
-	add	X,#H'008A
+	add	X,#H'008F
 	cmp	X,#H'0000
 	beq	?L130
 	ld	AL,@(H'0001,X)
@@ -38235,7 +38113,7 @@ $_LEDManagerCheckTimeoutState:
 	enterl	#3
 ?LBB_LEDManagerCheckTimeoutState:
 	ld	X,@$_theSink+H'0003
-	ld	AL,@(H'00BA,X)
+	ld	AL,@(H'00BF,X)
 	and	AL,#H'0001
 	cmp	AL,#H'0000
 	beq	?L144
@@ -38255,7 +38133,7 @@ $_LedManagerForceDisable:
 ?LBB_LedManagerForceDisable:
 	st	AL,@H'fff8
 	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00BB,X)
+	ld	AH,@(H'00C0,X)
 	lsr	#H'000B
 	and	AH,#H'0001
 	ld	AL,@H'fff8
@@ -38265,20 +38143,20 @@ $_LedManagerForceDisable:
 	beq	?L148
 	bsr	$_LedsResetAllLeds
 	ld	X,@$_theSink+H'0003
-	ld	AL,@(H'00BB,X)
+	ld	AL,@(H'00C0,X)
 	and	AL,#-H'0401
-	st	AL,@(H'00BB,X)
+	st	AL,@(H'00C0,X)
 	ld	X,@$_theSink+H'0003
-	ld	AL,@(H'00BB,X)
+	ld	AL,@(H'00C0,X)
 	or	AL,#H'0800
-	st	AL,@(H'00BB,X)
+	st	AL,@(H'00C0,X)
 	ld	AL,#H'0000
 	bra	(?L150)
 ?L148:
 	ld	X,@$_theSink+H'0003
-	ld	AL,@(H'00BB,X)
+	ld	AL,@(H'00C0,X)
 	and	AL,#-H'0801
-	st	AL,@(H'00BB,X)
+	st	AL,@(H'00C0,X)
 	bsr	$_stateManagerGetState
 	bsr	$_LEDManagerIndicateState
 	ld	AL,#H'0001
@@ -38348,25 +38226,25 @@ $_PioSetLedPin:
 	bra	(?L6)
 ?L3:
 	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00C1,X)
+	ld	AH,@(H'00C6,X)
 	lsr	#H'000C
 	ld	AL,@$XAP_AH
 	ld	AH,@(0,Y)
 	bsr	_PioSetLed
 	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00C1,X)
+	ld	AH,@(H'00C6,X)
 	lsr	#H'0008
 	bra	(?L9)
 ?L4:
 	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00C1,X)
+	ld	AH,@(H'00C6,X)
 	lsr	#H'0008
 	ld	AL,@$XAP_AH
 	and	AL,#H'000F
 	ld	AH,@(0,Y)
 	bsr	_PioSetLed
 	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00C1,X)
+	ld	AH,@(H'00C6,X)
 	lsr	#H'0004
 ?L9:
 	ld	AL,@$XAP_AH
@@ -38374,14 +38252,14 @@ $_PioSetLedPin:
 	bra	(?L6)
 ?L5:
 	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00C1,X)
+	ld	AH,@(H'00C6,X)
 	lsr	#H'0004
 	ld	AL,@$XAP_AH
 	and	AL,#H'000F
 	ld	AH,@(0,Y)
 	bsr	_PioSetLed
 	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00C1,X)
+	ld	AH,@(H'00C6,X)
 	lsr	#H'000C
 	ld	AL,@$XAP_AH
 ?L6:
@@ -38397,7 +38275,7 @@ _PioSetLed:
 ?LBB2:
 	smult	#H'0003
 	add	AL,@$_theSink+H'0003
-	add	AL,#H'008A
+	add	AL,#H'008F
 	st	AL,@(H'0005,Y)
 	ld	AL,@(H'0003,Y)
 	cmp	AL,#H'000E
@@ -38409,7 +38287,7 @@ _PioSetLed:
 	bmi	?L15
 	beq	?L15
 	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00BB,X)
+	ld	AH,@(H'00C0,X)
 	lsr	#H'000F
 	cmp	AH,@(H'0004,Y)
 	beq	?L13
@@ -38488,7 +38366,7 @@ _PioSetLed:
 	ld	X,@$_theSink+H'0003
 	ld	AL,@(H'0004,Y)
 	asl	#H'000F
-	ld	AH,@(H'00BB,X)
+	ld	AH,@(H'00C0,X)
 	and	AH,#H'7FFF
 	bra	(?L36)
 ?L14:
@@ -38502,7 +38380,7 @@ _PioSetLed:
 	bmi	?L22
 	beq	?L22
 	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00BB,X)
+	ld	AH,@(H'00C0,X)
 	lsr	#H'000E
 	and	AH,#H'0001
 	cmp	AH,@(H'0004,Y)
@@ -38584,7 +38462,7 @@ _PioSetLed:
 	ld	AL,@(H'0004,Y)
 	and	AL,#H'0001
 	asl	#H'000E
-	ld	AH,@(H'00BB,X)
+	ld	AH,@(H'00C0,X)
 	and	AH,#-H'4001
 	bra	(?L36)
 ?L21:
@@ -38598,7 +38476,7 @@ _PioSetLed:
 	bmi	?L29
 	beq	?L29
 	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00BB,X)
+	ld	AH,@(H'00C0,X)
 	lsr	#H'000D
 	and	AH,#H'0001
 	cmp	AH,@(H'0004,Y)
@@ -38681,11 +38559,11 @@ _PioSetLed:
 	ld	AL,@(H'0004,Y)
 	and	AL,#H'0001
 	asl	#H'000D
-	ld	AH,@(H'00BB,X)
+	ld	AH,@(H'00C0,X)
 	and	AH,#-H'2001
 ?L36:
 	or	AH,@$XAP_AL
-	st	AH,@(H'00BB,X)
+	st	AH,@(H'00C0,X)
 	bra	(?L13)
 ?L28:
 	ld	AL,@(H'0004,Y)
@@ -38706,7 +38584,7 @@ $_PioSetDimState:
 ?LBB3:
 	smult	#H'0003
 	add	AL,@$_theSink+H'0003
-	add	AL,#H'008A
+	add	AL,#H'008F
 	st	AL,@(H'0005,Y)
 	ld	X,@$XAP_AL
 	ld	AH,@(H'0002,X)
@@ -38847,25 +38725,25 @@ $_LedsInit:
 	st	AH,@(0,X)
 	st	AL,@(1,X)
 	ld	X,@$_theSink+H'0003
-	ld	AL,@(H'00BB,X)
+	ld	AL,@(H'00C0,X)
 	and	AL,#-H'0401
-	st	AL,@(H'00BB,X)
+	st	AL,@(H'00C0,X)
 	ld	X,@$_theSink+H'0003
-	ld	AL,@(H'00C1,X)
+	ld	AL,@(H'00C6,X)
 	and	AL,#H'0FFF
-	st	AL,@(H'00C1,X)
+	st	AL,@(H'00C6,X)
 	ld	X,@$_theSink+H'0003
-	ld	AL,@(H'00C1,X)
+	ld	AL,@(H'00C6,X)
 	and	AL,#-H'0F01
-	st	AL,@(H'00C1,X)
+	st	AL,@(H'00C6,X)
 	ld	X,@$_theSink+H'0003
-	ld	AL,@(H'00C1,X)
+	ld	AL,@(H'00C6,X)
 	and	AL,#-H'00F1
-	st	AL,@(H'00C1,X)
+	st	AL,@(H'00C6,X)
 	ld	X,@$_theSink+H'0003
-	ld	AL,@(H'00BB,X)
+	ld	AL,@(H'00C0,X)
 	and	AL,#-H'0201
-	st	AL,@(H'00BB,X)
+	st	AL,@(H'00C0,X)
 ?LBE_LedsInit:
 	leavel	#2
 $_LedsCheckForFilter:
@@ -38876,7 +38754,7 @@ $_LedsCheckForFilter:
 	ld	AL,#H'0000
 	st	AL,@(H'0001,Y)
 	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00BA,X)
+	ld	AH,@(H'00BF,X)
 	lsr	#H'0001
 	and	AH,#H'001F
 	ld	X,#H'0000
@@ -38887,7 +38765,7 @@ $_LedsCheckForFilter:
 	ld	AL,@(H'0001,Y)
 	smult	#H'0003
 	add	AL,@$_theSink+H'0003
-	add	AL,#H'004E
+	add	AL,#H'0053
 	st	AL,@(H'0002,Y)
 	ld	X,@$XAP_AL
 	ld	AL,@(0,X)
@@ -38920,7 +38798,7 @@ $_LedsCheckForFilter:
 	smult	#H'0003
 	ld	X,@$_theSink+H'0003
 	add	X,@$XAP_AL
-	ld	AL,@(H'008A,X)
+	ld	AL,@(H'008F,X)
 	and	AL,#H'0001
 	cmp	AL,#H'0000
 	bne	?L68
@@ -38943,7 +38821,7 @@ $_LedsCheckForFilter:
 	ld	AL,@$XAP_AH
 	smult	#H'0003
 	add	AL,@$_theSink+H'0003
-	add	AL,#H'004E
+	add	AL,#H'0053
 	st	AL,@(H'0003,Y)
 	ld	X,@$XAP_AL
 	ld	AH,@(H'0001,X)
@@ -38958,7 +38836,7 @@ $_LedsCheckForFilter:
 	smult	#H'0003
 	ld	X,@$_theSink+H'0003
 	add	X,@$XAP_AL
-	ld	AL,@(H'008A,X)
+	ld	AL,@(H'008F,X)
 	and	AL,#H'0001
 	cmp	AL,#H'0000
 	bne	?L68
@@ -38980,7 +38858,7 @@ $_LedsCheckForFilter:
 	add	AL,#H'0001
 	st	AL,@(H'0001,Y)
 	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00BA,X)
+	ld	AH,@(H'00BF,X)
 	lsr	#H'0001
 	and	AH,#H'001F
 	ld	X,@(H'0001,Y)
@@ -39008,7 +38886,7 @@ $_LedsEnableFilterOverrides:
 	ld	AL,#H'0000
 	st	AL,@(H'0001,Y)
 	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00BA,X)
+	ld	AH,@(H'00BF,X)
 	lsr	#H'0001
 	and	AH,#H'001F
 	ld	X,#H'0000
@@ -39019,7 +38897,7 @@ $_LedsEnableFilterOverrides:
 	ld	AL,@(H'0001,Y)
 	smult	#H'0003
 	add	AL,@$_theSink+H'0003
-	add	AL,#H'004E
+	add	AL,#H'0053
 	st	AL,@(H'0002,Y)
 	ld	AL,@(H'0001,Y)
 	bsr	_LedsIsFilterEnabled
@@ -39047,7 +38925,7 @@ $_LedsEnableFilterOverrides:
 	add	AL,#H'0001
 	st	AL,@(H'0001,Y)
 	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00BA,X)
+	ld	AH,@(H'00BF,X)
 	lsr	#H'0001
 	and	AH,#H'001F
 	ld	X,@(H'0001,Y)
@@ -39096,7 +38974,7 @@ $_ledsIndicateLedsPattern:
 	st	AL,@(H'0007,Y)
 	ld	X,@$XAP_AL
 	add	X,@$_theSink+H'0003
-	add	X,#H'008A
+	add	X,#H'008F
 	st	X,@(-1,Y)
 	ld	AL,@(H'0004,Y)
 	st	AL,@(0,Y)
@@ -39111,7 +38989,7 @@ $_ledsIndicateLedsPattern:
 	smult	#H'0003
 	ld	X,@$XAP_AL
 	add	X,@$_theSink+H'0003
-	add	X,#H'008A
+	add	X,#H'008F
 	st	X,@(-1,Y)
 	ld	AL,@(H'0004,Y)
 	st	AL,@(0,Y)
@@ -39144,7 +39022,7 @@ $_ledsIndicateLedsPattern:
 	beq	?L105
 	ld	AH,@(H'0007,Y)
 	add	AH,@$_theSink+H'0003
-	add	AH,#H'008A
+	add	AH,#H'008F
 	ld	AL,@(H'0003,Y)
 	bsr	_LedsTurnOnLEDPair
 	bra	(?L102)
@@ -39174,12 +39052,12 @@ $_ledsIndicateLedsPattern:
 	smult	#H'0003
 	ld	X,@$XAP_AL
 	add	X,@$_theSink+H'0003
-	add	X,#H'008A
+	add	X,#H'008F
 	ld	AL,@(H'0006,Y)
 	smult	#H'0003
 	ld	AH,@$XAP_AL
 	add	AH,@$_theSink+H'0003
-	add	AH,#H'008A
+	add	AH,#H'008F
 	ld	AL,@$XAP_UXL
 	bsr	_LedsEventComplete
 	bra	(?L102)
@@ -39193,9 +39071,9 @@ $_ledsIndicateLedsPattern:
 	ld	AH,@(H'0005,Y)
 	bsr	$_MessageSend
 	ld	X,@$_theSink+H'0003
-	ld	AL,@(H'00BB,X)
+	ld	AL,@(H'00C0,X)
 	or	AL,#H'0400
-	st	AL,@(H'00BB,X)
+	st	AL,@(H'00C0,X)
 	bra	(?L102)
 ?L109:
 	ld	AH,#H'0000
@@ -39224,7 +39102,7 @@ $_LedsIndicateNoState:
 	smult	#H'0003
 	add	AL,@$_theSink+H'0003
 	st	AL,@(H'0002,Y)
-	add	AL,#H'008A
+	add	AL,#H'008F
 	st	AL,@(H'0001,Y)
 	ld	X,@$XAP_AL
 	ld	AH,@(H'0001,X)
@@ -39240,7 +39118,7 @@ $_LedsIndicateNoState:
 	and	AL,#-H'0C01
 	st	AL,@(H'0001,X)
 	ld	X,@(H'0002,Y)
-	ld	AH,@(H'008A,X)
+	ld	AH,@(H'008F,X)
 	lsr	#H'0009
 	ld	AL,@$XAP_AH
 	smult	#H'0005
@@ -39277,7 +39155,7 @@ $_LedActiveFiltersCanOverideDisable:
 	smult	#H'0003
 	ld	X,@$_theSink+H'0003
 	add	X,@$XAP_AL
-	ld	AL,@(H'004F,X)
+	ld	AL,@(H'0054,X)
 	and	AL,#H'0001
 	cmp	AL,#H'0000
 	beq	?L127
@@ -39304,7 +39182,7 @@ _LedsMessageHandler:
 	ld	AL,@$XAP_AH
 	smult	#H'0003
 	add	AL,@$_theSink+H'0003
-	add	AL,#H'008A
+	add	AL,#H'008F
 	st	AL,@(H'0006,Y)
 	ld	AL,#H'0000
 	st	AL,@(H'0008,Y)
@@ -39333,7 +39211,7 @@ _LedsMessageHandler:
 	ld	AL,@$XAP_AH
 	smult	#H'0005
 	ld	X,@(H'0009,Y)
-	add	AL,@(H'004D,X)
+	add	AL,@(H'0052,X)
 ?L160:
 	st	AL,@(H'0007,Y)
 	ld	AL,@(H'0007,Y)
@@ -39347,7 +39225,7 @@ _LedsMessageHandler:
 	smult	#H'0003
 	ld	X,@$_theSink+H'0003
 	add	X,@$XAP_AL
-	ld	AL,@(H'008A,X)
+	ld	AL,@(H'008F,X)
 	and	AL,#H'0001
 	cmp	AL,#H'0000
 	bne	?L139
@@ -39445,14 +39323,14 @@ _LedsMessageHandler:
 	st	AL,@(H'0008,Y)
 ?L143:
 	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00BB,X)
+	ld	AH,@(H'00C0,X)
 	lsr	#H'0009
 	and	AH,#H'0001
 	cmp	AH,#H'0000
 	beq	?L144
-	ld	AL,@(H'00BB,X)
+	ld	AL,@(H'00C0,X)
 	and	AL,#-H'0201
-	st	AL,@(H'00BB,X)
+	st	AL,@(H'00C0,X)
 	ld	AL,@(H'0007,Y)
 	bsr	_LedsGetLedFollowerRepeatTimeLeft
 	bra	(?L161)
@@ -39469,9 +39347,9 @@ _LedsMessageHandler:
 	bsr	_LedsGetLedFollowerStartDelay
 	st	AL,@(H'0004,Y)
 	ld	X,@$_theSink+H'0003
-	ld	AL,@(H'00BB,X)
+	ld	AL,@(H'00C0,X)
 	or	AL,#H'0200
-	st	AL,@(H'00BB,X)
+	st	AL,@(H'00C0,X)
 	bra	(?L148)
 ?L141:
 	ld	X,@(H'0007,Y)
@@ -39516,9 +39394,9 @@ _LedsMessageHandler:
 	smult	#H'0003
 	ld	X,@$_theSink+H'0003
 	add	X,@$XAP_AL
-	ld	AL,@(H'008A,X)
+	ld	AL,@(H'008F,X)
 	and	AL,#-H'0002
-	st	AL,@(H'008A,X)
+	st	AL,@(H'008F,X)
 ?L140:
 	tst	@(H'0008,Y)
 	beq	?L153
@@ -39526,7 +39404,7 @@ _LedsMessageHandler:
 	smult	#H'0003
 	ld	X,@$_theSink+H'0003
 	add	X,@$XAP_AL
-	ld	AH,@(H'008B,X)
+	ld	AH,@(H'0090,X)
 	lsr	#H'000A
 	and	AH,#H'0003
 	cmp	AH,#H'0002
@@ -39543,7 +39421,7 @@ _LedsMessageHandler:
 	smult	#H'0003
 	ld	AH,@$XAP_AL
 	add	AH,@$_theSink+H'0003
-	add	AH,#H'008A
+	add	AH,#H'008F
 	ld	AL,@(H'0006,Y)
 	bsr	_LedsEventComplete
 	bra	(?L155)
@@ -39554,15 +39432,15 @@ _LedsMessageHandler:
 	smult	#H'0003
 	ld	X,@H'fff8
 	add	X,@$XAP_AL
-	ld	AH,@(H'008B,X)
+	ld	AH,@(H'0090,X)
 	lsr	#H'000A
 	and	AH,#H'0003
 	cmp	AH,#H'0001
 	bne	?L155
 	ld	X,@H'fff8
-	ld	AL,@(H'00BA,X)
+	ld	AL,@(H'00BF,X)
 	or	AL,#H'0001
-	st	AL,@(H'00BA,X)
+	st	AL,@(H'00BF,X)
 ?L155:
 	ld	AL,@(H'0005,Y)
 	cmp	AL,#H'0003
@@ -39602,15 +39480,15 @@ _ledsTurnOnAltLeds:
 	st	AH,@H'fff8
 ?LBB16:
 	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00C1,X)
+	ld	AH,@(H'00C6,X)
 	lsr	#H'000C
 	st	AH,@(H'0001,Y)
-	ld	AH,@(H'00C1,X)
+	ld	AH,@(H'00C6,X)
 	lsr	#H'0008
 	ld	AL,@$XAP_AH
 	and	AL,#H'000F
 	st	AL,@(H'0002,Y)
-	ld	AH,@(H'00C1,X)
+	ld	AH,@(H'00C6,X)
 	lsr	#H'0004
 	ld	AL,@$XAP_AH
 	and	AL,#H'000F
@@ -39735,13 +39613,13 @@ _LedsTurnOnLEDPair:
 	and	AL,#H'000F
 	st	AL,@(H'0004,Y)
 	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00BB,X)
+	ld	AH,@(H'00C0,X)
 	lsr	#H'0009
 	and	AH,#H'0001
 	cmp	AH,#H'0000
 	beq	?L214
 ?LBB18:
-	ld	AH,@(H'00BB,X)
+	ld	AH,@(H'00C0,X)
 	lsr	#H'0004
 	ld	AL,@$XAP_AH
 	and	AL,#H'000F
@@ -39905,9 +39783,9 @@ _LedsTurnOffLEDPair:
 	smult	#H'0003
 	ld	X,@$_theSink+H'0003
 	add	X,@$XAP_AL
-	ld	AL,@(H'008A,X)
+	ld	AL,@(H'008F,X)
 	and	AL,#-H'0002
-	st	AL,@(H'008A,X)
+	st	AL,@(H'008F,X)
 	ld	AL,#H'0000
 	bsr	_LedsSetEnablePin
 ?LBE_LedsTurnOffLEDPair:
@@ -39928,11 +39806,11 @@ _LedsHandleOverideLED:
 	smult	#H'0003
 	ld	X,@$_theSink+H'0003
 	add	X,@$XAP_AL
-	ld	AH,@(H'004F,X)
+	ld	AH,@(H'0054,X)
 	lsr	#H'000D
 	cmp	AH,#H'0003
 	bne	?L252
-	ld	AH,@(H'004F,X)
+	ld	AH,@(H'0054,X)
 	lsr	#H'0001
 	ld	AL,@$XAP_AH
 	and	AL,#H'000F
@@ -39969,7 +39847,7 @@ _LedsGetPatternColour:
 	smult	#H'0003
 	ld	X,@$_theSink+H'0003
 	add	X,@$XAP_AL
-	ld	AH,@(H'004F,X)
+	ld	AH,@(H'0054,X)
 	lsr	#H'000A
 	ld	AL,@$XAP_AH
 	and	AL,#H'0007
@@ -40006,7 +39884,7 @@ _LedsApplyFilterToTime:
 	smult	#H'0003
 	ld	X,@$_theSink+H'0003
 	add	X,@$XAP_AL
-	add	X,#H'004E
+	add	X,#H'0053
 	ld	AH,@(H'0002,X)
 	ld	AL,@$XAP_AH
 	and	AL,#H'00FF
@@ -40084,9 +39962,9 @@ _LedsEventComplete:
 	and	AL,#-H'0C01
 	st	AL,@(H'0001,X)
 	ld	X,@$_theSink+H'0003
-	ld	AL,@(H'00BB,X)
+	ld	AL,@(H'00C0,X)
 	and	AL,#-H'0401
-	st	AL,@(H'00BB,X)
+	st	AL,@(H'00C0,X)
 ?LBE_LedsEventComplete:
 	leavel	#2
 _LedsEnableFilter:
@@ -40098,7 +39976,7 @@ _LedsEnableFilter:
 	ld	AH,@$_theSink+H'0003
 	st	AH,@(H'0001,Y)
 	ld	X,@$XAP_AH
-	ld	X,@(H'00BB,X)
+	ld	X,@(H'00C0,X)
 	st	X,@(H'0002,Y)
 	and	X,#H'000F
 	ld	AH,@$XAP_UXL
@@ -40107,7 +39985,7 @@ _LedsEnableFilter:
 	st	AL,@H'fffb
 	ld	X,@(H'0001,Y)
 	ld	AH,#H'0000
-	ld	AL,@(H'00BC,X)
+	ld	AL,@(H'00C1,X)
 	or	AL,@H'fffb
 	or	AH,@H'fffa
 	st	AH,@H'fffa
@@ -40129,7 +40007,7 @@ _LedsEnableFilter:
 	ld	AL,@(H'0002,Y)
 	and	AL,#-H'0010
 	or	AL,@$XAP_AH
-	st	AL,@(H'00BB,X)
+	st	AL,@(H'00C0,X)
 	ld	X,@$_theSink+H'0003
 	ld	AL,@H'fffb
 	or	AL,@H'fff9
@@ -40150,35 +40028,35 @@ _LedsEnableFilter:
 	ld	AH,@$XAP_UXL
 	and	AH,#H'000F
 	ld	X,@(H'0003,Y)
-	ld	AL,@(H'00BB,X)
+	ld	AL,@(H'00C0,X)
 	and	AL,#-H'0010
 	or	AL,@$XAP_AH
-	st	AL,@(H'00BB,X)
+	st	AL,@(H'00C0,X)
 	ld	X,@$_theSink+H'0003
 	ld	AL,@H'fff9
 	xor	AL,#-H'0001
 	and	AL,@H'fffb
 ?L294:
-	st	AL,@(H'00BC,X)
+	st	AL,@(H'00C1,X)
 	ld	AH,@$_theSink+H'0003
 	st	AH,@H'fff8
 	ld	AL,@(0,Y)
 	smult	#H'0003
 	ld	X,@H'fff8
 	add	X,@$XAP_AL
-	ld	AL,@(H'004F,X)
+	ld	AL,@(H'0054,X)
 	and	AL,#H'0001
 	cmp	AL,#H'0000
 	beq	?L290
 	ld	X,@H'fff8
-	ld	AL,@(H'00BB,X)
+	ld	AL,@(H'00C0,X)
 	and	AL,#H'000F
 	ld	AH,@$XAP_AL
 	ld	AL,#H'0000
 	st	AH,@(H'0004,Y)
 	st	AL,@(H'0005,Y)
 	ld	AH,#H'0000
-	ld	AL,@(H'00BC,X)
+	ld	AL,@(H'00C1,X)
 	st	AH,@H'fff8
 	st	AL,@H'fff9
 	ld	AH,@(H'0004,Y)
@@ -40210,14 +40088,14 @@ _LedsIsFilterEnabled:
 	ld	AH,#H'0000
 	st	AH,@(-1,Y)
 	ld	X,@$_theSink+H'0003
-	ld	AL,@(H'00BB,X)
+	ld	AL,@(H'00C0,X)
 	and	AL,#H'000F
 	ld	AH,@$XAP_AL
 	ld	AL,#H'0000
 	st	AH,@(0,Y)
 	st	AL,@(1,Y)
 	ld	AH,#H'0000
-	ld	AL,@(H'00BC,X)
+	ld	AL,@(H'00C1,X)
 	st	AH,@H'fff8
 	st	AL,@H'fff9
 	ld	AH,@(0,Y)
@@ -40278,7 +40156,7 @@ _LedsCheckFiltersForLEDFollower:
 	ld	AL,@(H'0001,Y)
 	smult	#H'0003
 	add	AL,@$_theSink+H'0003
-	ld	X,#H'004E
+	ld	X,#H'0053
 	add	X,@$XAP_AL
 	ld	AH,@(H'0001,X)
 	lsr	#H'000D
@@ -40292,10 +40170,10 @@ _LedsCheckFiltersForLEDFollower:
 	and	AL,#H'000F
 	asl	#H'0004
 	ld	X,@(H'0002,Y)
-	ld	AH,@(H'00BB,X)
+	ld	AH,@(H'00C0,X)
 	and	AH,#-H'00F1
 	or	AH,@$XAP_AL
-	st	AH,@(H'00BB,X)
+	st	AH,@(H'00C0,X)
 	ld	AL,#H'0001
 	st	AL,@(0,Y)
 ?L302:
@@ -40387,11 +40265,11 @@ _LedsGetLedFollowerStartDelay:
 	smult	#H'0003
 	ld	X,@(H'0002,Y)
 	add	X,@$XAP_AL
-	ld	AH,@(H'004F,X)
+	ld	AH,@(H'0054,X)
 	lsr	#H'000D
 	cmp	AH,#H'0005
 	bne	?L317
-	ld	AH,@(H'0050,X)
+	ld	AH,@(H'0055,X)
 	lsr	#H'0009
 	ld	X,@$XAP_AH
 	ld	AH,@$_theSink+H'0016
@@ -40430,7 +40308,7 @@ $_LedsResetAllLeds:
 	st	AL,@(H'0001,Y)
 	ld	X,@$XAP_AL
 	add	X,@H'fff8
-	ld	AH,@(H'008B,X)
+	ld	AH,@(H'0090,X)
 	lsr	#H'000A
 	and	AH,#H'0003
 	cmp	AH,#H'0002
@@ -40440,19 +40318,19 @@ $_LedsResetAllLeds:
 	bsr	$_MessageCancelAll
 	ld	X,@(H'0001,Y)
 	add	X,@$_theSink+H'0003
-	ld	AL,@(H'008B,X)
+	ld	AL,@(H'0090,X)
 	and	AL,#-H'0C01
-	st	AL,@(H'008B,X)
+	st	AL,@(H'0090,X)
 	ld	AL,@$_theSink+H'0003
 	st	AL,@H'fff8
 	ld	X,@(H'0001,Y)
 	add	X,@$XAP_AL
-	ld	AH,@(H'008A,X)
+	ld	AH,@(H'008F,X)
 	lsr	#H'0009
 	ld	AL,@$XAP_AH
 	smult	#H'0005
 	ld	X,@H'fff8
-	add	AL,@(H'004D,X)
+	add	AL,@(H'0052,X)
 	ld	AH,#H'0001
 	bsr	_LedsTurnOffLEDPair
 ?L329:
@@ -40505,11 +40383,11 @@ $_isOverideFilterActive:
 	smult	#H'0003
 	ld	X,@(H'0002,Y)
 	add	X,@$XAP_AL
-	ld	AH,@(H'004F,X)
+	ld	AH,@(H'0054,X)
 	lsr	#H'000D
 	cmp	AH,#H'0003
 	bne	?L344
-	ld	AH,@(H'004F,X)
+	ld	AH,@(H'0054,X)
 	lsr	#H'0001
 	and	AH,#H'000F
 	cmp	AH,#H'0000
@@ -45358,7 +45236,7 @@ _stateManagerSetState:
 	enterl	#4
 ?LBB_stateManagerSetState:
 	st	AL,@(H'0001,Y)
-	cmp	AL,#(H'0001+H'000E)
+	cmp	AL,#(H'0001+H'000F)
 	bcc	?L5
 	cmp	AL,@_gTheSinkState
 	beq	?L4
@@ -45784,13 +45662,20 @@ $_stateManagerEnterA2dpStreamingState:
 ?L84:
 ?LBE_stateManagerEnterA2dpStreamingState:
 	leavel	#2
+$_stateManagerEnterAutomaticSpeechRecognitionState:
+	enterl	#2
+?LBB_stateManagerEnterAutomaticSpeechRecognitionState:
+	ld	AL,#H'000E
+	bsr	_stateManagerSetState
+?LBE_stateManagerEnterAutomaticSpeechRecognitionState:
+	leavel	#2
 $_stateManagerPowerOn:
 	enterl	#4
 ?LBB_stateManagerPowerOn:
 ?LBB6:
 	bsr	$_checkForDUTModeEntry
 	cmp	AL,#H'0000
-	bne	?L87
+	bne	?L88
 	ld	AL,@$_theSink+H'0034
 	or	AL,#H'0002
 	st	AL,@$_theSink+H'0034
@@ -45806,31 +45691,31 @@ $_stateManagerPowerOn:
 	ld	AH,@(H'0051,X)
 	lsr	#H'0008
 	cmp	AH,#H'00FF
-	beq	?L89
+	beq	?L90
 	ld	AL,#H'0001
 	st	AL,@(0,Y)
 	ld	AL,@$XAP_AH
 	ld	AH,#H'0001
 	bsr	$_PioSetPio
-?L89:
+?L90:
 	ld	AL,#H'0001
 	bsr	$_stateManagerEnterConnectableState
 	ld	AH,@$_theSink+H'0019
 	lsr	#H'0004
 	and	AH,#H'0003
 	cmp	AH,#H'0000
-	bne	?L91
+	bne	?L92
 	ld	AH,@$_theSink+H'0016
 	lsr	#H'000D
 	and	AH,#H'0001
 	cmp	AH,#H'0000
-	bne	?L91
+	bne	?L92
 	ld	AH,@$_theSink+H'0034
 	lsr	#H'0007
 	and	AH,#H'0001
 	cmp	AH,#H'0000
-	beq	?L90
-?L91:
+	beq	?L91
+?L92:
 ?LBB7:
 	bsr	$_ConnectionTrustedDeviceListSize
 	ld	X,@$XAP_AL
@@ -45838,7 +45723,7 @@ $_stateManagerPowerOn:
 	lsr	#H'0004
 	and	AH,#H'0003
 	cmp	X,@$XAP_AH
-	bcc	?L92
+	bcc	?L93
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
@@ -45848,19 +45733,19 @@ $_stateManagerPowerOn:
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'4034
-	bra	(?L108)
-?L92:
+	bra	(?L109)
+?L93:
 	ld	AH,@$_theSink+H'0016
 	lsr	#H'000D
 	and	AH,#H'0001
 	cmp	AH,#H'0000
-	bne	?L95
+	bne	?L96
 	ld	AH,@$_theSink+H'0034
 	lsr	#H'0007
 	and	AH,#H'0001
 	cmp	AH,#H'0000
-	beq	?L90
-?L95:
+	beq	?L91
+?L96:
 ?LBB8:
 	ld	AL,#H'4018
 	st	AL,@(H'0001,Y)
@@ -45868,49 +45753,49 @@ $_stateManagerPowerOn:
 	lsr	#H'0006
 	and	AH,#H'0001
 	cmp	AH,#H'0000
-	beq	?L96
+	beq	?L97
 	ld	AL,#H'0000
 	bsr	$_sinkAvrcpCheckManualConnectReset
-?L96:
+?L97:
 	ld	AH,@$_theSink+H'0034
 	lsr	#H'0007
 	and	AH,#H'0001
 	cmp	AH,#H'0000
-	beq	?L97
+	beq	?L98
 	ld	X,@$_theSink+H'0004
 	ld	AL,@(H'000A,X)
 	cmp	AL,#H'0002
-	bcz	?L102
+	bcz	?L103
 	cmp	AL,#H'0007
-	bne	?L103
-?L102:
-	ld	AL,#H'4000
-	bra	(?L107)
+	bne	?L104
 ?L103:
+	ld	AL,#H'4000
+	bra	(?L108)
+?L104:
 	ld	AL,#H'472E
-?L107:
+?L108:
 	st	AL,@(H'0001,Y)
-?L97:
+?L98:
 	ld	AL,@(H'0001,Y)
 	cmp	AL,#H'4000
-	beq	?L105
+	beq	?L106
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
 	ld	AH,@(H'0001,Y)
-?L108:
+?L109:
 	bsr	$_MessageSend
-	bra	(?L90)
-?L105:
+	bra	(?L91)
+?L106:
 	ld	AL,@$_theSink+H'0034
 	and	AL,#-H'0081
 	st	AL,@$_theSink+H'0034
-?L90:
+?L91:
 ?LBE8:
 ?LBE7:
 	ld	AL,#H'0000
 	bsr	$_audioHandleRouting
-?L87:
+?L88:
 ?LBE6:
 ?LBE_stateManagerPowerOn:
 	leavel	#4
@@ -45924,15 +45809,15 @@ $_stateManagerIsConnected:
 ?LBB9:
 	bsr	$_stateManagerGetState
 	cmp	AL,#H'0002
-	bcz	?L119
+	bcz	?L120
 	cmp	AL,#H'0007
-	bne	?L120
-?L119:
-	ld	AL,#H'0000
-	bra	(?L115)
+	bne	?L121
 ?L120:
+	ld	AL,#H'0000
+	bra	(?L116)
+?L121:
 	ld	AL,#H'0001
-?L115:
+?L116:
 ?LBE9:
 ?LBE_stateManagerIsConnected:
 	leavel	#2
@@ -45986,57 +45871,57 @@ $_stateManagerAmpPowerControl:
 ?LBB_stateManagerAmpPowerControl:
 	st	AL,@(H'0001,Y)
 	cmp	AL,#(H'0001+H'0001)
-	bcc	?L125
+	bcc	?L126
 	ld	X,@$_theSink+H'0005
 	ld	AL,@(H'0052,X)
 	ld	AH,@$XAP_AL
 	and	AH,#H'00FF
 	cmp	AH,#H'00FF
-	beq	?L127
+	beq	?L128
 	ld	AL,#H'0001
 	st	AL,@(0,Y)
 	ld	AL,@$XAP_AH
 	ld	AH,#H'0001
 	bsr	$_PioSetPio
-?L127:
+?L128:
 	ld	X,@$_theSink+H'0005
 	ld	AH,@(H'0051,X)
 	lsr	#H'0008
 	cmp	AH,#H'00FF
-	beq	?L128
-	ld	AL,#H'0000
-	tst	@(H'0001,Y)
 	beq	?L129
-	ld	AL,#H'0001
-?L129:
-	st	AL,@(0,Y)
-	ld	AL,@$XAP_AH
-	ld	AH,#H'0001
-	bsr	$_PioSetPio
 	ld	AL,#H'0000
 	tst	@(H'0001,Y)
 	beq	?L130
 	ld	AL,#H'0001
 ?L130:
+	st	AL,@(0,Y)
+	ld	AL,@$XAP_AH
+	ld	AH,#H'0001
+	bsr	$_PioSetPio
+	ld	AL,#H'0000
+	tst	@(H'0001,Y)
+	beq	?L131
+	ld	AL,#H'0001
+?L131:
 	and	AL,#H'0001
 	asl	#H'0004
 	ld	AH,@$_theSink+H'0035
 	and	AH,#-H'0011
 	or	AH,@$XAP_AL
 	st	AH,@$_theSink+H'0035
-?L128:
+?L129:
 	ld	X,@$_theSink+H'0005
 	ld	AL,@(H'0052,X)
 	ld	AH,@$XAP_AL
 	and	AH,#H'00FF
 	cmp	AH,#H'00FF
-	beq	?L125
+	beq	?L126
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,@$XAP_AH
 	ld	AH,#H'0001
 	bsr	$_PioSetPio
-?L125:
+?L126:
 ?LBE_stateManagerAmpPowerControl:
 	leavel	#4
 $_stateManagerUpdateLimboState:
@@ -46047,39 +45932,39 @@ $_stateManagerUpdateLimboState:
 	st	AL,@(H'0003,Y)
 	bsr	$_powerManagerIsChargerConnected
 	cmp	AL,#H'0000
-	bne	?L136
+	bne	?L137
 	ld	AH,@$_theSink+H'0035
 	lsr	#H'0001
 	and	AH,#H'0007
 	cmp	AH,#H'0000
-	beq	?L141
+	beq	?L142
 	bsr	$_powerManagerIsVthmCritical
 	cmp	AL,#H'0000
-	bne	?L141
+	bne	?L142
 	ld	AH,@$_theSink+H'0015
 	lsr	#H'0002
 	and	AH,#H'0001
 	cmp	AH,#H'0000
-	beq	?L141
+	beq	?L142
 	bsr	$_PsuGetVregEn
 	cmp	AL,#H'0000
-	bne	?L136
-?L141:
+	bne	?L137
+?L142:
 	ld	AL,#H'0001
 	st	AL,@(H'0003,Y)
-?L136:
+?L137:
 	tst	@(H'0003,Y)
-	beq	?L142
+	beq	?L143
 	ld	AH,#hwrd($_configManagerDefragCheck)
 	ld	AL,#lwrd($_configManagerDefragCheck)
 	cmp	AH,#H'0000
-	bne	?L145
+	bne	?L146
 	cmp	AL,#H'0000
-	beq	?L143
-?L145:
+	beq	?L144
+?L146:
 	ld	AL,#H'0000
 	bsr	$_configManagerDefrag
-?L143:
+?L144:
 	ld	X,@$_theSink+H'0005
 	ld	AH,@(H'0051,X)
 	lsr	#H'0008
@@ -46090,8 +45975,8 @@ $_stateManagerUpdateLimboState:
 	bsr	$_PioSetPio
 	ld	AL,#H'0000
 	bsr	$_PioSetPowerPin
-	bra	(?L135)
-?L142:
+	bra	(?L136)
+?L143:
 	ld	AL,#($_theSink)
 	ld	AH,#H'4718
 	bsr	$_MessageCancelAll
@@ -46105,7 +45990,7 @@ $_stateManagerUpdateLimboState:
 	ld	AL,#($_theSink)
 	ld	AH,#H'4718
 	bsr	$_MessageSendLater
-?L135:
+?L136:
 ?LBE10:
 ?LBE_stateManagerUpdateLimboState:
 	leavel	#6
@@ -46153,13 +46038,13 @@ $_stateManagerEnterIncomingCallOnHoldState:
 ?LBB_stateManagerEnterIncomingCallOnHoldState:
 	bsr	$_stateManagerGetState
 	cmp	AL,#H'0005
-	bne	?L151
+	bne	?L152
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'473A
 	bsr	$_MessageSend
-?L151:
+?L152:
 	ld	AL,#H'000B
 	bsr	_stateManagerSetState
 	ld	AL,#($_theSink)
@@ -46201,7 +46086,7 @@ _gTheSinkState:
 	ENDMOD
 
 ;# Function pattern *movqi2 used[0] = 60 used[1] = 2 total = 62
-;# Function pattern *movqi3 used[0] = 224 total = 224
+;# Function pattern *movqi3 used[0] = 225 total = 225
 ;# Function pattern *movhi used[2] = 1 used[3] = 4 total = 5
 ;# Function pattern *addqi2 used[0] = 1 total = 1
 ;# Function pattern *andqi3 used[0] = 30 total = 30
@@ -46210,7 +46095,7 @@ _gTheSinkState:
 ;# Function pattern *lshrqi3 used[0] = 25 total = 25
 ;# Function pattern *ashlqi3 used[0] = 2 total = 2
 ;# Function pattern jump used[0] = 12 total = 12
-;# Function pattern *call1 used[0] = 69 total = 69
+;# Function pattern *call1 used[0] = 70 total = 70
 ;# Function pattern *call_value1 used[0] = 42 total = 42
 ;# Function pattern tablejump_1 used[0] = 1 total = 1
 ;# Function pattern movstrqi+2 used[0] = 1 total = 1
@@ -109544,7 +109429,7 @@ $_AudioLibraryInit:
 ?LBE_AudioLibraryInit:
 	leavel	#3
 $_AudioConnect:
-	enterl	#8
+	enterl	#7
 ?LBB_AudioConnect:
 	st	AL,@(H'0002,Y)
 	st	AH,@(H'0003,Y)
@@ -109555,45 +109440,32 @@ $_AudioConnect:
 	ld	AH,@(H'0003,Y)
 	ld	X,@$XAP_AL
 	st	AH,@(0,X)
-	ld	AL,@(H'0008,Y)
+	ld	AL,@(H'0007,Y)
 	st	AL,@(H'0001,X)
-	ld	AH,@(H'0009,Y)
+	ld	AH,@(H'0008,Y)
 	st	AH,@(H'0002,X)
-	ld	AL,@(H'000A,Y)
+	ld	AL,@(H'0009,Y)
 	st	AL,@(H'0003,X)
-	ld	AH,@(H'000B,Y)
-	ld	AL,@(H'000C,Y)
+	ld	AH,@(H'000A,Y)
+	ld	AL,@(H'000B,Y)
 	ld	X,@(H'0004,Y)
 	st	AH,@(H'0004,X)
 	st	AL,@(H'0005,X)
-	ld	AH,@(H'000E,Y)
-	st	AH,@(H'0007,X)
-	ld	AL,@(H'000F,Y)
-	st	AL,@(H'0008,X)
 	ld	AH,@(H'000D,Y)
+	st	AH,@(H'0007,X)
+	ld	AL,@(H'000E,Y)
+	st	AL,@(H'0008,X)
+	ld	AH,@(H'000C,Y)
 	st	AH,@(H'0006,X)
-	ld	AL,@(H'0011,Y)
-	st	AL,@(H'000A,X)
-	ld	AH,@(H'0012,Y)
-	st	AH,@(H'000B,X)
 	ld	AL,@(H'0010,Y)
+	st	AL,@(H'000A,X)
+	ld	AH,@(H'0011,Y)
+	st	AH,@(H'000B,X)
+	ld	AL,@(H'000F,Y)
 	st	AL,@(H'0009,X)
 	ld	X,@_AUDIO
-	ld	AH,@(0,X)
-	st	AH,@(H'0005,Y)
-	cmp	AH,#($_koovox_sport_common_plugin)
-	bne	?L4
-	ld	AL,@(0,X)
-	bsr	$_SetAudioBusy
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	ld	AL,@(H'0005,Y)
-	ld	AH,#H'7018
-	bsr	$_MessageSend
-?L4:
-	ld	X,@_AUDIO
-	ld	AL,@(H'0002,Y)
-	st	AL,@(0,X)
+	ld	AH,@(H'0002,Y)
+	st	AH,@(0,X)
 	ld	AL,@_AUDIO
 	add	AL,#H'0003
 	ld	AH,#H'000C
@@ -109610,7 +109482,7 @@ $_AudioConnect:
 ?LBE2:
 	ld	AL,#H'0001
 ?LBE_AudioConnect:
-	leavel	#8
+	leavel	#7
 ;.stabn	192,0,0,?LBB2
 ;.stabn	224,0,0,?LBE2
 $_AudioDisconnect:
@@ -109618,7 +109490,7 @@ $_AudioDisconnect:
 ?LBB_AudioDisconnect:
 	ld	X,@_AUDIO
 	tst	@(0,X)
-	beq	?L8
+	beq	?L6
 	bsr	$_AudioBusyPtr
 	ld	X,@_AUDIO
 	ld	AH,#H'0000
@@ -109627,7 +109499,7 @@ $_AudioDisconnect:
 	ld	AL,@(0,X)
 	ld	AH,#H'7001
 	bsr	$_MessageSendConditionally
-?L8:
+?L6:
 	ld	X,@_AUDIO
 	ld	AL,#H'0000
 	st	AL,@(0,X)
@@ -109643,7 +109515,7 @@ $_AudioSetVolume:
 ?LBB3:
 	ld	X,@_AUDIO
 	tst	@(0,X)
-	beq	?L9
+	beq	?L7
 ?LBB4:
 	ld	AL,#H'0003
 	bsr	$_PanicUnlessMalloc
@@ -109666,7 +109538,7 @@ $_AudioSetVolume:
 	ld	X,@_AUDIO
 	ld	AL,@(H'0002,Y)
 	st	AL,@(H'0006,X)
-?L9:
+?L7:
 ?LBE4:
 ?LBE3:
 ?LBE_AudioSetVolume:
@@ -109682,7 +109554,7 @@ $_AudioSetMode:
 	ld	AL,#H'0000
 	ld	X,@_AUDIO
 	tst	@(0,X)
-	beq	?L12
+	beq	?L10
 ?LBB6:
 	ld	AL,#H'0002
 	bsr	$_PanicUnlessMalloc
@@ -109704,7 +109576,7 @@ $_AudioSetMode:
 	ld	X,@_AUDIO
 	ld	AH,@(H'0002,Y)
 	st	AH,@(H'000A,X)
-?L12:
+?L10:
 ?LBE6:
 ?LBE5:
 ?LBE_AudioSetMode:
@@ -109722,7 +109594,7 @@ $_AudioConfigureSubWoofer:
 	ld	AL,#H'0000
 	ld	X,@_AUDIO
 	tst	@(0,X)
-	beq	?L14
+	beq	?L12
 ?LBB8:
 	ld	AL,#H'0002
 	bsr	$_PanicUnlessMalloc
@@ -109741,7 +109613,7 @@ $_AudioConfigureSubWoofer:
 	ld	AH,#H'700F
 	bsr	$_MessageSendConditionally
 	ld	AL,#H'0001
-?L14:
+?L12:
 ?LBE8:
 ?LBE7:
 ?LBE_AudioConfigureSubWoofer:
@@ -109758,7 +109630,7 @@ $_AudioSetSoftMute:
 	ld	AL,#H'0000
 	ld	X,@_AUDIO
 	tst	@(0,X)
-	beq	?L16
+	beq	?L14
 ?LBB10:
 	ld	AL,#H'0001
 	bsr	$_PanicUnlessMalloc
@@ -109775,7 +109647,7 @@ $_AudioSetSoftMute:
 	ld	AH,#H'7013
 	bsr	$_MessageSendConditionally
 	ld	AL,#H'0001
-?L16:
+?L14:
 ?LBE10:
 ?LBE9:
 ?LBE_AudioSetSoftMute:
@@ -109793,7 +109665,7 @@ $_AudioSetRoute:
 	ld	AL,#H'0000
 	ld	X,@_AUDIO
 	tst	@(0,X)
-	beq	?L18
+	beq	?L16
 ?LBB12:
 	ld	AL,#H'0002
 	bsr	$_PanicUnlessMalloc
@@ -109815,7 +109687,7 @@ $_AudioSetRoute:
 	ld	X,@_AUDIO
 	ld	AH,@(H'0002,Y)
 	st	AH,@(H'000B,X)
-?L18:
+?L16:
 ?LBE12:
 ?LBE11:
 ?LBE_AudioSetRoute:
@@ -109833,13 +109705,13 @@ $_AudioStartForwarding:
 	ld	AH,#H'0000
 	ld	X,@_AUDIO
 	tst	@(0,X)
-	beq	?L20
+	beq	?L18
 	tst	@(H'0001,X)
-	beq	?L21
+	beq	?L19
 	ld	AL,@(H'0001,X)
 	cmp	AL,@(H'0002,Y)
-	bne	?L20
-?L21:
+	bne	?L18
+?L19:
 ?LBB14:
 	ld	AL,#H'0002
 	bsr	$_PanicUnlessMalloc
@@ -109861,7 +109733,7 @@ $_AudioStartForwarding:
 	ld	AH,#H'7005
 	bsr	$_MessageSendConditionally
 	ld	AH,#H'0001
-?L20:
+?L18:
 ?LBE14:
 ?LBE13:
 	ld	AL,@$XAP_AH
@@ -109876,12 +109748,12 @@ $_IsAudioRelaying:
 ?LBB_IsAudioRelaying:
 	ld	X,@_AUDIO
 	tst	@(H'0001,X)
-	beq	?L24
+	beq	?L22
 	ld	AL,#H'0001
-	bra	(?L23)
-?L24:
+	bra	(?L21)
+?L22:
 	ld	AL,#H'0000
-?L23:
+?L21:
 ?LBE_IsAudioRelaying:
 	leavel	#2
 $_AudioStopForwarding:
@@ -109889,9 +109761,9 @@ $_AudioStopForwarding:
 ?LBB_AudioStopForwarding:
 	ld	X,@_AUDIO
 	tst	@(0,X)
-	beq	?L26
+	beq	?L24
 	tst	@(H'0001,X)
-	beq	?L26
+	beq	?L24
 	bsr	$_AudioBusyPtr
 	ld	X,@_AUDIO
 	ld	AH,#H'0000
@@ -109903,7 +109775,7 @@ $_AudioStopForwarding:
 	ld	X,@_AUDIO
 	ld	AL,#H'0000
 	st	AL,@(H'0001,X)
-?L26:
+?L24:
 ?LBE_AudioStopForwarding:
 	leavel	#4
 $_AudioPlayTone:
@@ -109914,10 +109786,10 @@ $_AudioPlayTone:
 ?LBB15:
 	ld	X,@_AUDIO
 	tst	@(H'0002,X)
-	beq	?L30
-	cmp	AH,#H'0000
 	beq	?L28
-?L30:
+	cmp	AH,#H'0000
+	beq	?L26
+?L28:
 ?LBB16:
 	ld	AL,#H'0006
 	bsr	$_PanicUnlessMalloc
@@ -109935,24 +109807,24 @@ $_AudioPlayTone:
 	st	AH,@(H'0004,X)
 	ld	X,@_AUDIO
 	tst	@(0,X)
-	beq	?L31
+	beq	?L29
 	bsr	$_AudioBusyPtr
 	ld	X,@_AUDIO
 	ld	AH,@(H'0004,Y)
 	st	AH,@(0,Y)
 	st	AL,@(H'0001,Y)
 	ld	AL,@(0,X)
-	bra	(?L34)
-?L31:
+	bra	(?L32)
+?L29:
 	bsr	$_AudioBusyPtr
 	ld	X,@(H'0004,Y)
 	st	X,@(0,Y)
 	st	AL,@(H'0001,Y)
 	ld	AL,#($_csr_tone_plugin)
-?L34:
+?L32:
 	ld	AH,#H'7007
 	bsr	$_MessageSendConditionally
-?L28:
+?L26:
 ?LBE16:
 ?LBE15:
 ?LBE_AudioPlayTone:
@@ -109964,7 +109836,7 @@ $_AudioStopTone:
 ?LBB_AudioStopTone:
 	ld	X,@_AUDIO
 	tst	@(H'0002,X)
-	beq	?L35
+	beq	?L33
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,@(H'0002,X)
@@ -109977,308 +109849,69 @@ $_AudioStopTone:
 	ld	AL,@(H'0002,X)
 	ld	AH,#H'7007
 	bsr	$_MessageCancelAll
-?L35:
+?L33:
 ?LBE_AudioStopTone:
 	leavel	#3
-$_KoovoxStartSportKalimba:
-	enterl	#7
-?LBB_KoovoxStartSportKalimba:
-	st	AL,@(H'0003,Y)
-	st	AH,@(H'0004,Y)
-	ld	AL,@$XAP_AH
-	and	AL,#H'0001
-	cmp	AL,#H'0000
-	beq	?L38
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'4F05
-	ld	AH,#H'0000
-	bsr	$_KalimbaSendMessage
-?L38:
-	ld	AL,@(H'0004,Y)
-	and	AL,#H'0004
-	cmp	AL,#H'0000
-	beq	?L39
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'4F07
-	ld	AH,#H'0000
-	bsr	$_KalimbaSendMessage
-?L39:
-	ld	AL,@(H'0004,Y)
-	and	AL,#H'0008
-	cmp	AL,#H'0000
-	beq	?L40
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'4F08
-	ld	AH,#H'0000
-	bsr	$_KalimbaSendMessage
-?L40:
-	ld	AL,@(H'0004,Y)
-	and	AL,#H'0010
-	cmp	AL,#H'0000
-	beq	?L41
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'4F0A
-	ld	AH,#H'0000
-	bsr	$_KalimbaSendMessage
-?L41:
-	ld	AL,@(H'0004,Y)
-	and	AL,#H'0002
-	cmp	AL,#H'0000
-	beq	?L42
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'4F06
-	ld	AH,#H'0000
-	bsr	$_KalimbaSendMessage
-?L42:
-	ld	AL,@(H'0003,Y)
-	and	AL,#H'0001
-	cmp	AL,#H'0000
-	beq	?L43
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'4F00
-	ld	AH,#H'0000
-	bsr	$_KalimbaSendMessage
-?L43:
-	ld	AL,@(H'0003,Y)
-	and	AL,#H'0002
-	cmp	AL,#H'0000
-	beq	?L37
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'4F02
-	ld	AH,#H'0000
-	bsr	$_KalimbaSendMessage
-?L37:
-?LBE_KoovoxStartSportKalimba:
-	leavel	#7
-$_KoovoxStopSportKalimba:
-	enterl	#5
-?LBB_KoovoxStopSportKalimba:
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'4F01
-	ld	AH,#H'0000
-	bsr	$_KalimbaSendMessage
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'4F03
-	ld	AH,#H'0000
-	bsr	$_KalimbaSendMessage
-?LBE_KoovoxStopSportKalimba:
-	leavel	#5
-$_AudioSportModePlayPrompt:
-	enterl	#8
-?LBB_AudioSportModePlayPrompt:
-	st	AL,@(H'0003,Y)
-	st	AH,@(H'0004,Y)
-?LBB17:
-	ld	X,@_AUDIO
-	tst	@(0,X)
-	beq	?L47
-	bsr	$_GetCurrentDspStatus
-	cmp	AL,#H'0003
-	bne	?L48
-	ld	AL,@(H'0004,Y)
-	ld	AH,@(H'0008,Y)
-	bsr	$_KoovoxStartSportKalimba
-	bra	(?L46)
-?L48:
-?LBB18:
-	ld	AL,#H'0003
-	bsr	$_PanicUnlessMalloc
-	ld	X,@$XAP_AL
-	ld	AH,@(H'0004,Y)
-	st	AH,@(0,X)
-	ld	AL,@(H'0008,Y)
-	st	AL,@(H'0001,X)
-	ld	AH,@(H'0009,Y)
-	st	AH,@(H'0002,X)
-	ld	AH,@_AUDIO
-	st	X,@(0,Y)
-	ld	AL,#H'03E8
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	ld	X,@$XAP_AH
-	ld	AL,@(0,X)
-	ld	AH,#H'7017
-	bsr	$_MessageSendLater
-?LBE18:
-	bra	(?L46)
-?L47:
-?LBB19:
-	ld	AL,#H'0003
-	bsr	$_PanicUnlessMalloc
-	st	AL,@(H'0005,Y)
-	ld	AH,@(H'0004,Y)
-	ld	X,@$XAP_AL
-	st	AH,@(0,X)
-	ld	AL,@(H'0008,Y)
-	st	AL,@(H'0001,X)
-	ld	AH,@(H'0009,Y)
-	st	AH,@(H'0002,X)
-	ld	X,@_AUDIO
-	ld	AL,@(H'0003,Y)
-	st	AL,@(0,X)
-	bsr	$_AudioBusyPtr
-	ld	X,@(H'0005,Y)
-	st	X,@(0,Y)
-	st	AL,@(H'0001,Y)
-	ld	AL,@(H'0003,Y)
-	ld	AH,#H'7017
-	bsr	$_MessageSendConditionally
-?L46:
-?LBE19:
-?LBE17:
-?LBE_AudioSportModePlayPrompt:
-	leavel	#8
-;.stabn	192,0,0,?LBB18
-;.stabn	224,0,0,?LBE18
-;.stabn	192,0,0,?LBB19
-;.stabn	224,0,0,?LBE19
-$_AudioSportModeStopPrompt:
-	enterl	#3
-?LBB_AudioSportModeStopPrompt:
-	ld	X,@_AUDIO
-	ld	AH,@(0,X)
-	cmp	AH,@$XAP_AL
-	bne	?L53
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	ld	AL,@$XAP_AH
-	ld	AH,#H'7018
-	bsr	$_MessageSend
-	ld	X,@_AUDIO
-	ld	AL,#H'0000
-	st	AL,@(0,X)
-	bra	(?L52)
-?L53:
-	ld	X,@_AUDIO
-	tst	@(0,X)
-	beq	?L52
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	ld	AL,@(0,X)
-	ld	AH,#H'7018
-	bsr	$_MessageSend
-?L52:
-?LBE_AudioSportModeStopPrompt:
-	leavel	#3
 $_AudioPlayAudioPrompt:
-	enterl	#10
+	enterl	#9
 ?LBB_AudioPlayAudioPrompt:
 	st	AL,@(H'0002,Y)
 	st	AH,@(H'0003,Y)
-?LBB20:
-	ld	AL,#H'0008
+?LBB17:
+	ld	AL,#H'0007
 	bsr	$_PanicUnlessMalloc
 	st	AL,@(H'0004,Y)
 	ld	AH,@(H'0003,Y)
 	ld	X,@$XAP_AL
 	st	AH,@(0,X)
-	ld	AL,@(H'000A,Y)
+	ld	AL,@(H'0009,Y)
 	st	AL,@(H'0001,X)
-	ld	AH,@(H'000B,Y)
+	ld	AH,@(H'000A,Y)
 	st	AH,@(H'0002,X)
-	ld	AL,@(H'000C,Y)
+	ld	AL,@(H'000B,Y)
 	st	AL,@(H'0003,X)
-	ld	AH,@(H'000D,Y)
+	ld	AH,@(H'000C,Y)
 	st	AH,@(H'0004,X)
-	ld	AL,@(H'000E,Y)
+	ld	AL,@(H'000D,Y)
 	st	AL,@(H'0005,X)
-	ld	AH,@(H'0010,Y)
-	st	AH,@(H'0007,X)
-	ld	X,@_AUDIO
-	ld	X,@(0,X)
-	st	X,@(H'0005,Y)
-	cmp	X,#($_koovox_sport_common_plugin)
-	bne	?L58
-	bsr	$_GetCurrentDspStatus
-	cmp	AL,#H'0003
-	bne	?L59
-	ld	AL,@(H'0005,Y)
-	bsr	$_SetAudioBusy
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	ld	AL,@(H'0005,Y)
-	ld	AH,#H'7018
-	bsr	$_MessageSend
-	bra	(?L60)
-?L59:
-	ld	AL,#($_koovox_sport_common_plugin)
-	ld	AH,#H'7017
-	bsr	$_MessageCancelAll
-	ld	AL,#($_koovox_sport_common_plugin)
-	ld	AH,#H'7018
-	bsr	$_MessageCancelAll
-?L60:
-	ld	X,@_AUDIO
-	ld	AL,#H'0000
-	st	AL,@(0,X)
-?L58:
 	ld	X,@_AUDIO
 	tst	@(0,X)
-	beq	?L61
-	tst	@(H'000F,Y)
-	beq	?L62
+	beq	?L36
+	tst	@(H'000E,Y)
+	beq	?L37
 	ld	AL,@(H'0002,Y)
 	ld	AH,#H'7009
 	bsr	$_MessageCancelAll
 	ld	AL,@(H'0002,Y)
 	ld	AH,#H'7000
 	bsr	$_MessageCancelAll
-?L62:
+?L37:
 	bsr	$_GetCurrentDspStatus
 	cmp	AL,#H'0000
-	beq	?L63
-	ld	AL,@(H'000C,Y)
-	st	AL,@(0,Y)
+	beq	?L38
+	ld	X,@(H'000B,Y)
+	st	X,@(0,Y)
 	ld	AL,@(H'0003,Y)
-	ld	AH,@(H'000A,Y)
+	ld	AH,@(H'0009,Y)
 	bsr	$_CsrVoicePromptsIsMixable
 	cmp	AL,#H'0000
-	bne	?L71
-?L63:
+	bne	?L43
+?L38:
 	bsr	$_IsAudioInUse
 	cmp	AL,#H'0000
-	bne	?L65
-	ld	AH,@(H'000C,Y)
-	st	AH,@(0,Y)
+	bne	?L40
+	ld	AL,@(H'000B,Y)
+	st	AL,@(0,Y)
 	ld	AL,@(H'0003,Y)
-	ld	AH,@(H'000A,Y)
+	ld	AH,@(H'0009,Y)
 	bsr	$_CsrVoicePromptsIsMixable
 	cmp	AL,#H'0000
-	beq	?L65
-?L71:
+	beq	?L40
 	bsr	$_AudioBusyPtr
 	ld	X,@(H'0004,Y)
 	st	X,@(0,Y)
-	bra	(?L70)
-?L65:
+	bra	(?L45)
+?L40:
 	bsr	$_AudioBusyPtr
 	ld	X,@_AUDIO
 	ld	AH,#H'0000
@@ -110294,80 +109927,80 @@ $_AudioPlayAudioPrompt:
 	ld	AL,@(H'0002,Y)
 	ld	AH,#H'7009
 	bsr	$_MessageSendConditionally
-?LBB21:
+?LBB18:
 	ld	AL,#H'000C
 	bsr	$_PanicUnlessMalloc
-	st	AL,@(H'0006,Y)
+	st	AL,@(H'0005,Y)
 	ld	AH,@_AUDIO
 	add	AH,#H'0003
 	ld	AL,#H'000C
 	st	AL,@(0,Y)
-	ld	AL,@(H'0006,Y)
+	ld	AL,@(H'0005,Y)
 	bsr	$_memcpy
 	bsr	$_AudioBusyPtr
 	ld	X,@_AUDIO
-	ld	AH,@(H'0006,Y)
+	ld	AH,@(H'0005,Y)
 	st	AH,@(0,Y)
 	st	AL,@(H'0001,Y)
 	ld	AL,@(0,X)
 	ld	AH,#H'7000
 	bsr	$_MessageSendConditionally
-?LBE21:
-?LBB22:
+?LBE18:
+?LBB19:
 	ld	AL,#H'0001
 	bsr	$_PanicUnlessMalloc
-	st	AL,@(H'0007,Y)
-	ld	AH,@(H'000C,Y)
+	st	AL,@(H'0006,Y)
+	ld	AH,@(H'000B,Y)
 	ld	X,@$XAP_AL
 	st	AH,@(0,X)
 	bsr	$_AudioBusyPtr
-	ld	X,@(H'0007,Y)
+	ld	X,@(H'0006,Y)
 	st	X,@(0,Y)
 	st	AL,@(H'0001,Y)
-	ld	AL,@(H'0010,Y)
+	ld	AL,@(H'000F,Y)
 	ld	AH,#H'7305
-	bra	(?L69)
-?L61:
-?LBE22:
-	tst	@(H'000F,Y)
-	beq	?L68
+	bra	(?L44)
+?L36:
+?LBE19:
+	tst	@(H'000E,Y)
+	beq	?L43
 	ld	AL,@(H'0002,Y)
 	ld	AH,#H'7009
 	bsr	$_MessageCancelAll
-?L68:
+?L43:
 	bsr	$_AudioBusyPtr
 	ld	AH,@(H'0004,Y)
 	st	AH,@(0,Y)
-?L70:
+?L45:
 	st	AL,@(H'0001,Y)
 	ld	AL,@(H'0002,Y)
 	ld	AH,#H'7009
-?L69:
+?L44:
 	bsr	$_MessageSendConditionally
-?LBE20:
+?LBE17:
 ?LBE_AudioPlayAudioPrompt:
-	leavel	#10
-;.stabn	192,0,0,?LBB20
-;.stabn	192,0,0,?LBB21
-;.stabn	224,0,0,?LBE21
-;.stabn	192,0,0,?LBB22
-;.stabn	224,0,0,?LBE22
-;.stabn	224,0,0,?LBE20
+	leavel	#9
+;.stabn	192,0,0,?LBB17
+;.stabn	192,0,0,?LBB18
+;.stabn	224,0,0,?LBE18
+;.stabn	192,0,0,?LBB19
+;.stabn	224,0,0,?LBE19
+;.stabn	224,0,0,?LBE17
 $_AudioStopAudioPrompt:
 	enterl	#3
 ?LBB_AudioStopAudioPrompt:
 	ld	X,@_AUDIO
 	tst	@(H'0002,X)
-	beq	?L74
+	beq	?L46
 	ld	AH,@(H'0002,X)
 	cmp	AH,@$XAP_AL
-	bne	?L74
+	bne	?L46
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,@$XAP_AH
 	ld	AH,#H'700A
 	bsr	$_MessageSend
-?L74:
+?L46:
 ?LBE_AudioStopAudioPrompt:
 	leavel	#3
 $_AudioVoicePromptsInit:
@@ -110375,7 +110008,7 @@ $_AudioVoicePromptsInit:
 ?LBB_AudioVoicePromptsInit:
 	st	AL,@(H'0001,Y)
 	st	AH,@(H'0002,Y)
-?LBB23:
+?LBB20:
 	ld	AL,#H'0002
 	bsr	$_PanicUnlessMalloc
 	ld	X,@$XAP_AL
@@ -110387,20 +110020,20 @@ $_AudioVoicePromptsInit:
 	ld	AL,@(H'0001,Y)
 	ld	AH,#H'700B
 	bsr	$_MessageSend
-?LBE23:
+?LBE20:
 ?LBE_AudioVoicePromptsInit:
 	leavel	#5
-;.stabn	192,0,0,?LBB23
-;.stabn	224,0,0,?LBE23
+;.stabn	192,0,0,?LBB20
+;.stabn	224,0,0,?LBE20
 $_AudioSetPower:
 	enterl	#4
 ?LBB_AudioSetPower:
 	st	AL,@(H'0001,Y)
-?LBB24:
+?LBB21:
 	ld	X,@_AUDIO
 	tst	@(0,X)
-	beq	?L78
-?LBB25:
+	beq	?L50
+?LBB22:
 	ld	AL,#H'0001
 	bsr	$_PanicUnlessMalloc
 	ld	X,@$XAP_AL
@@ -110412,19 +110045,19 @@ $_AudioSetPower:
 	ld	AL,@(0,X)
 	ld	AH,#H'700D
 	bsr	$_MessageSend
-?L78:
-?LBE25:
-?LBE24:
+?L50:
+?LBE22:
+?LBE21:
 ?LBE_AudioSetPower:
 	leavel	#4
-;.stabn	192,0,0,?LBB25
-;.stabn	224,0,0,?LBE25
+;.stabn	192,0,0,?LBB22
+;.stabn	224,0,0,?LBE22
 $_AudioMicSwitch:
 	enterl	#4
 ?LBB_AudioMicSwitch:
 	ld	X,@_AUDIO
 	tst	@(0,X)
-	beq	?L80
+	beq	?L52
 	bsr	$_AudioBusyPtr
 	ld	X,@_AUDIO
 	ld	AH,#H'0000
@@ -110433,19 +110066,19 @@ $_AudioMicSwitch:
 	ld	AL,@(0,X)
 	ld	AH,#H'700C
 	bsr	$_MessageSendConditionally
-?L80:
+?L52:
 ?LBE_AudioMicSwitch:
 	leavel	#4
 $_AudioStartASR:
 	enterl	#6
 ?LBB_AudioStartASR:
 	st	AL,@(H'0002,Y)
-?LBB26:
+?LBB23:
 	ld	AL,#H'0000
 	ld	X,@_AUDIO
 	tst	@(0,X)
-	beq	?L83
-?LBB27:
+	beq	?L55
+?LBB24:
 	ld	AL,#H'0001
 	bsr	$_PanicUnlessMalloc
 	st	AL,@(H'0003,Y)
@@ -110461,15 +110094,15 @@ $_AudioStartASR:
 	ld	AH,#H'7010
 	bsr	$_MessageSendConditionally
 	ld	AL,#H'0001
-?L83:
-?LBE27:
-?LBE26:
+?L55:
+?LBE24:
+?LBE23:
 ?LBE_AudioStartASR:
 	leavel	#6
-;.stabn	192,0,0,?LBB26
-;.stabn	192,0,0,?LBB27
-;.stabn	224,0,0,?LBE27
-;.stabn	224,0,0,?LBE26
+;.stabn	192,0,0,?LBB23
+;.stabn	192,0,0,?LBB24
+;.stabn	224,0,0,?LBE24
+;.stabn	224,0,0,?LBE23
 $_IsAudioBusy:
 	enterl	#2
 ?LBB_IsAudioBusy:
@@ -110602,11 +110235,11 @@ $_AudioSetVolumeA2DP:
 	enterl	#6
 ?LBB_AudioSetVolumeA2DP:
 	st	AL,@(H'0002,Y)
-?LBB28:
+?LBB25:
 	ld	X,@_AUDIO
 	tst	@(0,X)
-	beq	?L98
-?LBB29:
+	beq	?L70
+?LBB26:
 	ld	AL,#H'000A
 	bsr	$_PanicUnlessMalloc
 	st	AL,@(H'0003,Y)
@@ -110628,75 +110261,32 @@ $_AudioSetVolumeA2DP:
 	ld	AL,@(H'0001,X)
 	ld	X,@$XAP_AH
 	st	AL,@(H'0006,X)
-?L98:
-?LBE29:
-?LBE28:
+?L70:
+?LBE26:
+?LBE25:
 ?LBE_AudioSetVolumeA2DP:
 	leavel	#6
-;.stabn	192,0,0,?LBB29
-;.stabn	224,0,0,?LBE29
-$_IsSportRunning:
-	enterl	#2
-?LBB_IsSportRunning:
-	ld	X,@_AUDIO
-	ld	AH,@(H'0010,X)
-	lsr	#H'000A
-	ld	AL,@$XAP_AH
-	and	AL,#H'0001
-?LBE_IsSportRunning:
-	leavel	#2
-$_SetSportStatus:
-	enterl	#2
-?LBB_SetSportStatus:
-	ld	X,@_AUDIO
-	and	AL,#H'0001
-	asl	#H'000A
-	ld	AH,@(H'0010,X)
-	and	AH,#-H'0401
-	or	AH,@$XAP_AL
-	st	AH,@(H'0010,X)
-?LBE_SetSportStatus:
-	leavel	#2
-$_SetAudioDisconnectStatus:
-	enterl	#2
-?LBB_SetAudioDisconnectStatus:
-	ld	X,@_AUDIO
-	and	AL,#H'0001
-	asl	#H'000B
-	ld	AH,@(H'0010,X)
-	and	AH,#-H'0801
-	or	AH,@$XAP_AL
-	st	AH,@(H'0010,X)
-?LBE_SetAudioDisconnectStatus:
-	leavel	#2
-$_IsAudioDisconnecting:
-	enterl	#2
-?LBB_IsAudioDisconnecting:
-	ld	X,@_AUDIO
-	ld	AH,@(H'0010,X)
-	lsr	#H'000B
-	ld	AL,@$XAP_AH
-	and	AL,#H'0001
-?LBE_IsAudioDisconnecting:
-	leavel	#2
+;.stabn	192,0,0,?LBB26
+;.stabn	224,0,0,?LBE26
 	.SEG	VAR
 _AUDIO:
 	DS	1
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 221 used[1] = 22 total = 243
-;# Function pattern *movqi3 used[0] = 311 total = 311
+;# Function pattern *movqi2 used[0] = 158 used[1] = 15 total = 173
+;# Function pattern *movqi3 used[0] = 225 total = 225
 ;# Function pattern *movhi used[2] = 1 used[3] = 1 total = 2
 ;# Function pattern *addqi2 used[0] = 3 total = 3
-;# Function pattern *andqi3 used[0] = 23 total = 23
-;# Function pattern *iorqi3 used[0] = 6 total = 6
-;# Function pattern *lshrqi3 used[0] = 6 total = 6
-;# Function pattern *ashlqi3 used[0] = 6 total = 6
-;# Function pattern jump used[0] = 8 total = 8
-;# Function pattern *call1 used[0] = 30 total = 30
-;# Function pattern *call_value1 used[0] = 65 total = 65
-;# Function pattern movstrqi+3 used[0] = 12 used[1] = 25 total = 37
-;# Function pattern movstrqi+5 used[0] = 7 total = 7
+;# Function pattern *andqi3 used[0] = 10 total = 10
+;# Function pattern *iorqi3 used[0] = 4 total = 4
+;# Function pattern *lshrqi3 used[0] = 4 total = 4
+;# Function pattern *ashlqi3 used[0] = 4 total = 4
+;# Function pattern jump used[0] = 4 total = 4
+;# Function pattern *call1 used[0] = 21 total = 21
+;# Function pattern *call_value1 used[0] = 49 total = 49
+;# Function pattern movstrqi+2 used[0] = 1 total = 1
+;# Function pattern movstrqi+3 used[0] = 5 used[1] = 23 total = 28
+;# Function pattern movstrqi+5 used[0] = 2 total = 2
 	MODULE	csr_tone_plugin
 	.LARGE
 ; GNU C version 3.3.3 (CSR version 30 for xapnative)
@@ -110733,7 +110323,7 @@ _message_handler:
 	ld	X,@(H'0003,Y)
 	ld	AL,#-H'7000
 	add	AL,@$XAP_AH
-	cmp	AL,#(H'0001+H'0019)
+	cmp	AL,#(H'0001+H'0017)
 	bcc	?L2
 	st	X,@(0,Y)
 	ld	AL,@H'fff8
@@ -111268,7 +110858,7 @@ _message_handler:
 	ld	X,@(H'0003,Y)
 	ld	AL,#-H'7000
 	add	AL,@$XAP_AH
-	cmp	AL,#(H'0001+H'0019)
+	cmp	AL,#(H'0001+H'0017)
 	bcc	?L2
 	st	X,@(0,Y)
 	ld	AL,@H'fff8
@@ -112233,9 +111823,6 @@ $_CsrCvcPluginConnect:
 	ld	AH,#-H'7FDC
 	bsr	$_MessageCancelAll
 	ld	AL,@(H'0002,Y)
-	ld	AH,#-H'7FD6
-	bsr	$_MessageCancelAll
-	ld	AL,@(H'0002,Y)
 	bsr	$_MessageKalimbaTask
 	ld	X,@(H'0002,Y)
 	ld	AH,@(H'0002,X)
@@ -112493,9 +112080,6 @@ $_CsrCvcPluginDisconnect:
 	ld	AH,#-H'7FDC
 	bsr	$_MessageCancelAll
 	ld	AL,@(H'0001,Y)
-	ld	AH,#-H'7FD6
-	bsr	$_MessageCancelAll
-	ld	AL,@(H'0001,Y)
 	ld	AH,#-H'7FDA
 	bsr	$_MessageCancelAll
 	ld	X,@_CVC?
@@ -112535,17 +112119,11 @@ $_CsrCvcPluginDisconnect:
 	ld	AH,#H'0000
 	bsr	$_AudioPluginSetMicPio
 ?L63:
-	bsr	$_KalimbaPowerOff
-	ld	X,@_CVC?
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	ld	AL,@(0,X)
-	ld	AH,#H'40C6
-	bsr	$_MessageSend
 	ld	AL,@_CVC?
 	bsr	$_free
-	ld	X,#H'0000
-	st	X,@_CVC?
+	ld	AL,#H'0000
+	st	AL,@_CVC?
+	bsr	$_KalimbaPowerOff
 	ld	AL,#H'0000
 	bsr	$_SetCurrentDspStatus
 	ld	AL,#H'0000
@@ -114677,8 +114255,8 @@ $_CsrCvcPluginSetAsr:
 	leavel	#5
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 327 used[1] = 104 used[3] = 2 total = 433
-;# Function pattern *movqi3 used[0] = 768 total = 768
+;# Function pattern *movqi2 used[0] = 326 used[1] = 102 used[3] = 2 total = 430
+;# Function pattern *movqi3 used[0] = 762 total = 762
 ;# Function pattern *movqi8 used[0] = 3 total = 3
 ;# Function pattern *movhi used[2] = 26 used[3] = 22 total = 48
 ;# Function pattern *addqi0 used[0] = 2 total = 2
@@ -114690,8 +114268,8 @@ $_CsrCvcPluginSetAsr:
 ;# Function pattern *ashlqi3 used[0] = 10 total = 10
 ;# Function pattern *zero_extendqihi2_1 used[0] = 7 total = 7
 ;# Function pattern jump used[0] = 83 total = 83
-;# Function pattern *call1 used[0] = 108 total = 108
-;# Function pattern *call_value1 used[0] = 193 total = 193
+;# Function pattern *call1 used[0] = 107 total = 107
+;# Function pattern *call_value1 used[0] = 191 total = 191
 ;# Function pattern tablejump_1 used[0] = 2 total = 2
 ;# Function pattern movstrqi+2 used[0] = 2 total = 2
 ;# Function pattern movstrqi+3 used[0] = 51 used[1] = 26 total = 77
@@ -114734,7 +114312,7 @@ $_CsrVoicePromptsIsMixable:
 ?LBB2:
 	ld	AL,#H'0000
 	st	AL,@(H'0007,Y)
-	ld	AL,#H'000C
+	ld	AL,#H'000B
 	bsr	$_PanicUnlessMalloc
 	st	AL,@(H'0008,Y)
 	ld	AL,@(H'0006,Y)
@@ -115915,10 +115493,10 @@ $_CsrVoicePromptsPluginPlayPhrase:
 	beq	?L142
 	bsr	$_Panic
 ?L142:
-	ld	AL,#H'000C
+	ld	AL,#H'000B
 	bsr	$_PanicUnlessMalloc
 	st	AL,@_phrase_data
-	ld	AH,#H'000C
+	ld	AH,#H'000B
 	st	AH,@(0,Y)
 	ld	AH,#H'0000
 	bsr	$_memset
@@ -115942,9 +115520,6 @@ $_CsrVoicePromptsPluginPlayPhrase:
 	st	AL,@(H'0008,X)
 	ld	X,@_phrase_data
 	st	AL,@(H'000A,X)
-	ld	X,@_phrase_data
-	ld	AL,@(H'0008,Y)
-	st	AL,@(H'000B,X)
 	ld	AL,#($_csr_voice_prompts_plugin)
 	ld	AH,#-H'7FDA
 	bsr	$_MessageCancelAll
@@ -115964,10 +115539,10 @@ $_CsrVoicePromptsPluginPlayTone:
 	bne	?L144
 	bsr	$_Panic
 ?L144:
-	ld	AL,#H'000C
+	ld	AL,#H'000B
 	bsr	$_PanicUnlessMalloc
 	st	AL,@_phrase_data
-	ld	AH,#H'000C
+	ld	AH,#H'000B
 	st	AH,@(0,Y)
 	ld	AH,#H'0000
 	bsr	$_memset
@@ -116113,9 +115688,6 @@ $_CsrVoicePromptsPluginStopPhraseDsp:
 	ld	AL,#($_csr_voice_prompts_plugin)
 	ld	AH,#-H'7FDC
 	bsr	$_MessageCancelAll
-	ld	AL,#($_csr_voice_prompts_plugin)
-	ld	AH,#-H'7FD6
-	bsr	$_MessageCancelAll
 	ld	X,@_phrase_data
 	ld	AH,@(H'0001,X)
 	lsr	#H'000E
@@ -116193,12 +115765,6 @@ $_CsrVoicePromptsPluginStopPhraseDsp:
 	ld	AH,#H'0000
 	bsr	$_StreamDisconnect
 	bsr	$_KalimbaPowerOff
-	ld	X,@_phrase_data
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	ld	AL,@(H'000B,X)
-	ld	AH,#H'40C6
-	bsr	$_MessageSend
 ?LBE15:
 ?LBE_CsrVoicePromptsPluginStopPhraseDsp:
 	leavel	#5
@@ -116412,8 +115978,8 @@ _header:
 	DS	2
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 229 used[1] = 79 used[3] = 3 total = 311
-;# Function pattern *movqi3 used[0] = 409 total = 409
+;# Function pattern *movqi2 used[0] = 227 used[1] = 79 used[3] = 3 total = 309
+;# Function pattern *movqi3 used[0] = 401 total = 401
 ;# Function pattern *movhi used[2] = 3 used[3] = 9 total = 12
 ;# Function pattern *iorhi3 used[0] = 3 total = 3
 ;# Function pattern *addqi0 used[0] = 11 total = 11
@@ -116434,8 +116000,8 @@ _header:
 ;# Function pattern *zero_extendqihi2 used[0] = 7 total = 7
 ;# Function pattern *zero_extendqihi2_1 used[0] = 4 total = 4
 ;# Function pattern jump used[0] = 45 total = 45
-;# Function pattern *call1 used[0] = 46 total = 46
-;# Function pattern *call_value1 used[0] = 161 total = 161
+;# Function pattern *call1 used[0] = 45 total = 45
+;# Function pattern *call_value1 used[0] = 160 total = 160
 ;# Function pattern tablejump_1 used[0] = 3 total = 3
 ;# Function pattern zero_extendqihi2+1 used[0] = 1 total = 1
 ;# Function pattern movstrqi+2 used[0] = 1 total = 1
@@ -116479,7 +116045,7 @@ _message_handler:
 	ld	X,@(H'0003,Y)
 	ld	AL,#-H'7000
 	add	AL,@$XAP_AH
-	cmp	AL,#(H'0001+H'0019)
+	cmp	AL,#(H'0001+H'0017)
 	bcc	?L2
 	st	X,@(0,Y)
 	ld	AL,@H'fff8
@@ -116500,19 +116066,19 @@ _message_handler:
 ?LBE_message_handler:
 	leavel	#3
 _handleAudioMessage:
-	enterl	#9
+	enterl	#8
 ?LBB_handleAudioMessage:
-	st	AL,@(H'0004,Y)
-	ld	X,@(H'0009,Y)
+	st	AL,@(H'0003,Y)
+	ld	X,@(H'0008,Y)
 ?LBB2:
 	cmp	AH,#H'700A
-	beq	?L16
+	beq	?L15
 	cmp	AH,#(H'0001+H'700A)
-	bcc	?L20
+	bcc	?L19
 	cmp	AH,#H'7009
 	beq	?L10
 	bra	(?L7)
-?L20:
+?L19:
 	cmp	AH,#H'700B
 	bne	?L7
 ?LBB3:
@@ -116523,58 +116089,52 @@ _handleAudioMessage:
 	bra	(?L7)
 ?L10:
 ?LBB4:
-	st	X,@(H'0005,Y)
+	st	X,@(H'0004,Y)
 	bsr	$_IsAudioBusy
 	cmp	AL,#H'0000
 	bne	?L12
 	bsr	$_GetCurrentDspStatus
 	cmp	AL,#H'0000
-	beq	?L13
+	beq	?L11
 	bsr	$_GetCurrentDspStatus
 	cmp	AL,#H'0003
-	bne	?L12
-?L13:
-	bsr	$_IsAudioDisconnecting
-	cmp	AL,#H'0000
 	beq	?L11
 ?L12:
-	ld	X,@(H'0005,Y)
+	ld	X,@(H'0004,Y)
 	tst	@(H'0002,X)
 	beq	?L7
 ?LBB5:
-	ld	AL,#H'0008
+	ld	AL,#H'0007
 	bsr	$_PanicUnlessMalloc
-	st	AL,@(H'0006,Y)
-	ld	AL,#H'0008
+	st	AL,@(H'0005,Y)
+	ld	AL,#H'0007
 	st	AL,@(0,Y)
-	ld	AL,@(H'0006,Y)
-	ld	AH,@(H'0005,Y)
+	ld	AL,@(H'0005,Y)
+	ld	AH,@(H'0004,Y)
 	bsr	$_memmove
 	bsr	$_AudioBusyPtr
-	ld	AH,@(H'0006,Y)
+	ld	AH,@(H'0005,Y)
 	st	AH,@(0,Y)
 	st	AL,@(H'0001,Y)
-	ld	AL,@(H'0004,Y)
+	ld	AL,@(H'0003,Y)
 	ld	AH,#H'7009
 	bsr	$_MessageSendConditionally
 ?LBE5:
 	bra	(?L7)
 ?L11:
-	ld	X,@(H'0005,Y)
+	ld	X,@(H'0004,Y)
 	ld	AL,@(H'0003,X)
 	st	AL,@(0,Y)
 	ld	AL,@(H'0004,X)
 	st	AL,@(H'0001,Y)
 	ld	AL,@(H'0005,X)
 	st	AL,@(H'0002,Y)
-	ld	AL,@(H'0007,X)
-	st	AL,@(H'0003,Y)
 	ld	AL,@(0,X)
 	ld	AH,@(H'0001,X)
 	bsr	$_CsrVoicePromptsPluginPlayPhrase
 ?LBE4:
 	bra	(?L7)
-?L16:
+?L15:
 	bsr	$_IsAudioBusy
 	cmp	AL,#H'0000
 	beq	?L7
@@ -116582,7 +116142,7 @@ _handleAudioMessage:
 ?L7:
 ?LBE2:
 ?LBE_handleAudioMessage:
-	leavel	#9
+	leavel	#8
 ;.stabn	192,0,0,?LBB4
 ;.stabn	192,0,0,?LBB5
 ;.stabn	224,0,0,?LBE5
@@ -116594,28 +116154,28 @@ _handleKalimbaMessage:
 ?LBB6:
 	ld	AL,@(0,X)
 	cmp	AL,#H'1006
-	beq	?L25
+	beq	?L24
 	cmp	AL,#(H'0001+H'1006)
-	bcc	?L33
+	bcc	?L32
 	cmp	AL,#H'1000
-	beq	?L27
-	bra	(?L25)
-?L33:
+	beq	?L26
+	bra	(?L24)
+?L32:
 	cmp	AL,#H'1080
-	beq	?L29
-	bra	(?L25)
-?L27:
+	beq	?L28
+	bra	(?L24)
+?L26:
 	ld	AL,#H'0001
 	bsr	$_CsrVoicePromptPluginPlayDsp
-	bra	(?L25)
-?L29:
+	bra	(?L24)
+?L28:
 	bsr	$_IsAudioBusy
 	cmp	AL,#H'0000
-	beq	?L25
+	beq	?L24
 	bsr	$_IsAudioBusy
 	st	AL,@(H'0001,Y)
 	cmp	AL,#($_csr_voice_prompts_plugin)
-	bne	?L25
+	bne	?L24
 	bsr	$_IsAudioBusy
 	ld	AH,#H'700A
 	bsr	$_MessageCancelAll
@@ -116624,7 +116184,7 @@ _handleKalimbaMessage:
 	ld	AL,@(H'0001,Y)
 	ld	AH,#H'700A
 	bsr	$_MessageSend
-?L25:
+?L24:
 ?LBE6:
 ?LBE_handleKalimbaMessage:
 	leavel	#4
@@ -116632,16 +116192,16 @@ _handleInternalMessage:
 	enterl	#4
 ?LBB_handleInternalMessage:
 	cmp	AH,#-H'7FDE
-	beq	?L38
+	beq	?L37
 	cmp	AH,#-H'7FDA
-	bne	?L43
+	bne	?L42
 	bsr	$_IsAudioBusy
 	cmp	AL,#H'0000
-	beq	?L38
+	beq	?L37
 	bsr	$_IsAudioBusy
 	st	AL,@(H'0001,Y)
 	cmp	AL,#($_csr_voice_prompts_plugin)
-	bne	?L38
+	bne	?L37
 	bsr	$_IsAudioBusy
 	ld	AH,#H'700A
 	bsr	$_MessageCancelAll
@@ -116650,21 +116210,21 @@ _handleInternalMessage:
 	ld	AL,@(H'0001,Y)
 	ld	AH,#H'700A
 	bsr	$_MessageSend
-	bra	(?L38)
-?L43:
+	bra	(?L37)
+?L42:
 	bsr	$_Panic
-?L38:
+?L37:
 ?LBE_handleInternalMessage:
 	leavel	#4
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 19 used[1] = 8 total = 27
-;# Function pattern *movqi3 used[0] = 24 total = 24
+;# Function pattern *movqi2 used[0] = 18 used[1] = 8 total = 26
+;# Function pattern *movqi3 used[0] = 23 total = 23
 ;# Function pattern *addqi2 used[2] = 1 total = 1
 ;# Function pattern jump used[0] = 10 total = 10
 ;# Function pattern *call1 used[0] = 11 total = 11
-;# Function pattern *call_value1 used[0] = 16 total = 16
-;# Function pattern movstrqi+3 used[0] = 6 used[1] = 1 total = 7
+;# Function pattern *call_value1 used[0] = 15 total = 15
+;# Function pattern movstrqi+3 used[0] = 5 used[1] = 1 total = 6
 ;# Function pattern movstrqi+4 used[1] = 3 total = 3
 ;# Function pattern movstrqi+5 used[0] = 12 total = 12
 	MODULE	csr_a2dp_decoder_common_plugin
@@ -116979,7 +116539,7 @@ _message_handler:
 	ld	X,@(H'0003,Y)
 	ld	AL,#-H'7000
 	add	AL,@$XAP_AH
-	cmp	AL,#(H'0001+H'0019)
+	cmp	AL,#(H'0001+H'0017)
 	bcc	?L2
 	st	X,@(0,Y)
 	ld	AL,@H'fff8
@@ -116993,50 +116553,48 @@ _message_handler:
 ?LBE_message_handler:
 	leavel	#3
 _handleAudioMessage:
-	enterl	#27
+	enterl	#26
 ?LBB_handleAudioMessage:
 	st	AL,@(H'0009,Y)
 ?LBB2:
 	ld	AL,#-H'7000
 	add	AL,@$XAP_AH
-	cmp	AL,#(H'0001+H'0018)
+	cmp	AL,#(H'0001+H'0016)
 	bcc	?L4
 	ld	X,@$XAP_AL
-	ld	X,@(?JTBASE53,X)
+	ld	X,@(?JTBASE49,X)
 	brxl
 	.SEG	CONST
-?JTBASE53:
+?JTBASE49:
 	.CODE
-?L53:
+?L49:
 	.SEG	CONST
-	dc	lwrd(?L6-?L53)
-	dc	lwrd(?L9-?L53)
-	dc	lwrd(?L13-?L53)
-	dc	lwrd(?L4-?L53)
-	dc	lwrd(?L4-?L53)
-	dc	lwrd(?L34-?L53)
-	dc	lwrd(?L37-?L53)
-	dc	lwrd(?L40-?L53)
-	dc	lwrd(?L44-?L53)
-	dc	lwrd(?L4-?L53)
-	dc	lwrd(?L4-?L53)
-	dc	lwrd(?L4-?L53)
-	dc	lwrd(?L4-?L53)
-	dc	lwrd(?L4-?L53)
-	dc	lwrd(?L30-?L53)
-	dc	lwrd(?L18-?L53)
-	dc	lwrd(?L4-?L53)
-	dc	lwrd(?L27-?L53)
-	dc	lwrd(?L46-?L53)
-	dc	lwrd(?L22-?L53)
-	dc	lwrd(?L12-?L53)
-	dc	lwrd(?L25-?L53)
-	dc	lwrd(?L26-?L53)
-	dc	lwrd(?L48-?L53)
-	dc	lwrd(?L51-?L53)
+	dc	lwrd(?L6-?L49)
+	dc	lwrd(?L9-?L49)
+	dc	lwrd(?L13-?L49)
+	dc	lwrd(?L4-?L49)
+	dc	lwrd(?L4-?L49)
+	dc	lwrd(?L34-?L49)
+	dc	lwrd(?L37-?L49)
+	dc	lwrd(?L40-?L49)
+	dc	lwrd(?L44-?L49)
+	dc	lwrd(?L4-?L49)
+	dc	lwrd(?L4-?L49)
+	dc	lwrd(?L4-?L49)
+	dc	lwrd(?L4-?L49)
+	dc	lwrd(?L4-?L49)
+	dc	lwrd(?L30-?L49)
+	dc	lwrd(?L18-?L49)
+	dc	lwrd(?L4-?L49)
+	dc	lwrd(?L27-?L49)
+	dc	lwrd(?L46-?L49)
+	dc	lwrd(?L22-?L49)
+	dc	lwrd(?L12-?L49)
+	dc	lwrd(?L25-?L49)
+	dc	lwrd(?L26-?L49)
 	.CODE
 ?L6:
-	ld	AH,@(H'001B,Y)
+	ld	AH,@(H'001A,Y)
 ?LBB3:
 	st	AH,@(H'000A,Y)
 	bsr	$_IsAudioBusy
@@ -117046,45 +116604,45 @@ _handleAudioMessage:
 	ld	AL,#H'000C
 	bsr	$_PanicUnlessMalloc
 	st	AL,@(H'000B,Y)
-	ld	X,@(H'001B,Y)
+	ld	X,@(H'001A,Y)
 	ld	AL,@(0,X)
 	ld	X,@(H'000B,Y)
 	st	AL,@(0,X)
-	ld	X,@(H'001B,Y)
+	ld	X,@(H'001A,Y)
 	ld	AL,@(H'0001,X)
 	ld	X,@(H'000B,Y)
 	st	AL,@(H'0001,X)
-	ld	X,@(H'001B,Y)
+	ld	X,@(H'001A,Y)
 	ld	AL,@(H'0002,X)
 	ld	X,@(H'000B,Y)
 	st	AL,@(H'0002,X)
-	ld	X,@(H'001B,Y)
+	ld	X,@(H'001A,Y)
 	ld	AL,@(H'0003,X)
 	ld	X,@(H'000B,Y)
 	st	AL,@(H'0003,X)
-	ld	X,@(H'001B,Y)
+	ld	X,@(H'001A,Y)
 	ld	AH,@(H'0004,X)
 	ld	AL,@(H'0005,X)
 	ld	X,@(H'000B,Y)
 	st	AH,@(H'0004,X)
 	st	AL,@(H'0005,X)
-	ld	X,@(H'001B,Y)
+	ld	X,@(H'001A,Y)
 	ld	AL,@(H'0007,X)
 	ld	X,@(H'000B,Y)
 	st	AL,@(H'0007,X)
-	ld	X,@(H'001B,Y)
+	ld	X,@(H'001A,Y)
 	ld	AL,@(H'0008,X)
 	ld	X,@(H'000B,Y)
 	st	AL,@(H'0008,X)
-	ld	X,@(H'001B,Y)
+	ld	X,@(H'001A,Y)
 	ld	AL,@(H'0006,X)
 	ld	X,@(H'000B,Y)
 	st	AL,@(H'0006,X)
-	ld	X,@(H'001B,Y)
+	ld	X,@(H'001A,Y)
 	ld	AL,@(H'000A,X)
 	ld	X,@(H'000B,Y)
 	st	AL,@(H'000A,X)
-	ld	X,@(H'001B,Y)
+	ld	X,@(H'001A,Y)
 	ld	AL,@(H'000B,X)
 	ld	X,@(H'000B,Y)
 	st	AL,@(H'000B,X)
@@ -117094,7 +116652,7 @@ _handleAudioMessage:
 	st	AL,@(H'0001,Y)
 	ld	AL,@(H'0009,Y)
 	ld	AH,#H'7000
-	bra	(?L55)
+	bra	(?L51)
 ?L7:
 	ld	X,@(H'000A,Y)
 ?LBE4:
@@ -117131,7 +116689,7 @@ _handleAudioMessage:
 	st	AL,@(H'0001,Y)
 	ld	AL,@(H'0009,Y)
 	ld	AH,#H'7001
-	bra	(?L55)
+	bra	(?L51)
 ?L10:
 	ld	AL,@(H'0009,Y)
 	bsr	$_CsrA2dpDecoderPluginStartDisconnect
@@ -117141,7 +116699,7 @@ _handleAudioMessage:
 	bsr	$_CsrA2dpDecoderPluginDisconnect
 	bra	(?L4)
 ?L13:
-	ld	AL,@(H'001B,Y)
+	ld	AL,@(H'001A,Y)
 ?LBB5:
 	st	AL,@(H'000C,Y)
 	bsr	$_IsAudioBusy
@@ -117151,22 +116709,22 @@ _handleAudioMessage:
 	ld	AL,#H'0002
 	bsr	$_PanicUnlessMalloc
 	st	AL,@(H'000D,Y)
-	tst	@(H'001B,Y)
+	tst	@(H'001A,Y)
 	beq	?L15
-	ld	X,@(H'001B,Y)
+	ld	X,@(H'001A,Y)
 	ld	AL,@(0,X)
 	ld	X,@(H'000D,Y)
 	st	AL,@(0,X)
-	ld	X,@(H'001B,Y)
+	ld	X,@(H'001A,Y)
 	ld	AL,@(H'0001,X)
 	ld	X,@(H'000D,Y)
-	bra	(?L54)
+	bra	(?L50)
 ?L15:
 	ld	AL,#H'0004
 	ld	X,@(H'000D,Y)
 	st	AL,@(0,X)
 	ld	AL,#H'0000
-?L54:
+?L50:
 	st	AL,@(H'0001,X)
 	bsr	$_AudioBusyPtr
 	ld	AH,@(H'000D,Y)
@@ -117174,7 +116732,7 @@ _handleAudioMessage:
 	st	AL,@(H'0001,Y)
 	ld	AL,@(H'0009,Y)
 	ld	AH,#H'7002
-	bra	(?L55)
+	bra	(?L51)
 ?L14:
 	ld	X,@(H'000C,Y)
 ?LBE6:
@@ -117186,7 +116744,7 @@ _handleAudioMessage:
 ?LBE5:
 	bra	(?L4)
 ?L18:
-	ld	AH,@(H'001B,Y)
+	ld	AH,@(H'001A,Y)
 ?LBB7:
 	st	AH,@(H'000E,Y)
 	bsr	$_IsAudioBusy
@@ -117214,7 +116772,7 @@ _handleAudioMessage:
 	st	AL,@(H'0001,Y)
 	ld	AL,@(H'0009,Y)
 	ld	AH,#H'700F
-	bra	(?L55)
+	bra	(?L51)
 ?L19:
 	ld	X,@(H'000E,Y)
 ?LBE8:
@@ -117224,7 +116782,7 @@ _handleAudioMessage:
 ?LBE7:
 	bra	(?L4)
 ?L22:
-	ld	AH,@(H'001B,Y)
+	ld	AH,@(H'001A,Y)
 ?LBB9:
 	st	AH,@(H'0010,Y)
 	bsr	$_IsAudioBusy
@@ -117234,7 +116792,7 @@ _handleAudioMessage:
 	ld	AL,#H'0001
 	bsr	$_PanicUnlessMalloc
 	st	AL,@(H'0011,Y)
-	ld	X,@(H'001B,Y)
+	ld	X,@(H'001A,Y)
 	ld	AL,@(0,X)
 	ld	X,@(H'0011,Y)
 	st	AL,@(0,X)
@@ -117244,7 +116802,7 @@ _handleAudioMessage:
 	st	AL,@(H'0001,Y)
 	ld	AL,@(H'0009,Y)
 	ld	AH,#H'7013
-	bra	(?L55)
+	bra	(?L51)
 ?L23:
 	ld	X,@(H'0010,Y)
 ?LBE10:
@@ -117259,7 +116817,7 @@ _handleAudioMessage:
 	bsr	$_CsrA2dpDecoderPluginSubCheckForConnectionFailure
 	bra	(?L4)
 ?L27:
-	ld	AH,@(H'001B,Y)
+	ld	AH,@(H'001A,Y)
 ?LBB11:
 	st	AH,@(H'0012,Y)
 	bsr	$_IsAudioBusy
@@ -117272,7 +116830,7 @@ _handleAudioMessage:
 	ld	AL,#H'000A
 	st	AL,@(0,Y)
 	ld	AL,@(H'0013,Y)
-	ld	AH,@(H'001B,Y)
+	ld	AH,@(H'001A,Y)
 	bsr	$_memcpy
 	bsr	$_AudioBusyPtr
 	ld	AH,@(H'0013,Y)
@@ -117280,7 +116838,7 @@ _handleAudioMessage:
 	st	AL,@(H'0001,Y)
 	ld	AL,@(H'0009,Y)
 	ld	AH,#H'7011
-	bra	(?L55)
+	bra	(?L51)
 ?L28:
 ?LBE12:
 	ld	AL,@(H'0012,Y)
@@ -117297,12 +116855,12 @@ _handleAudioMessage:
 	st	AL,@(H'0001,Y)
 	ld	AL,@(H'0009,Y)
 	ld	AH,#H'700E
-	bra	(?L55)
+	bra	(?L51)
 ?L31:
 	bsr	$_CsrA2dpDecoderPluginResetVolume
 	bra	(?L4)
 ?L34:
-	ld	AL,@(H'001B,Y)
+	ld	AL,@(H'001A,Y)
 ?LBB13:
 	st	AL,@(H'0014,Y)
 	bsr	$_IsAudioBusy
@@ -117312,11 +116870,11 @@ _handleAudioMessage:
 	ld	AL,#H'0002
 	bsr	$_PanicUnlessMalloc
 	st	AL,@(H'0015,Y)
-	ld	X,@(H'001B,Y)
+	ld	X,@(H'001A,Y)
 	ld	AL,@(0,X)
 	ld	X,@(H'0015,Y)
 	st	AL,@(0,X)
-	ld	X,@(H'001B,Y)
+	ld	X,@(H'001A,Y)
 	ld	AL,@(H'0001,X)
 	ld	X,@(H'0015,Y)
 	st	AL,@(H'0001,X)
@@ -117326,7 +116884,7 @@ _handleAudioMessage:
 	st	AL,@(H'0001,Y)
 	ld	AL,@(H'0009,Y)
 	ld	AH,#H'7005
-	bra	(?L55)
+	bra	(?L51)
 ?L35:
 	ld	X,@(H'0014,Y)
 ?LBE14:
@@ -117336,7 +116894,7 @@ _handleAudioMessage:
 	st	AL,@(H'0001,Y)
 	ld	AL,@(H'0009,Y)
 	ld	AH,#H'0001
-	bra	(?L56)
+	bra	(?L52)
 ?L37:
 ?LBE13:
 	bsr	$_IsAudioBusy
@@ -117348,47 +116906,47 @@ _handleAudioMessage:
 	st	AL,@(H'0001,Y)
 	ld	AL,@(H'0009,Y)
 	ld	AH,#H'7006
-	bra	(?L55)
+	bra	(?L51)
 ?L38:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	st	AL,@(H'0001,Y)
 	ld	AL,@(H'0009,Y)
 	ld	AH,#H'0000
-?L56:
+?L52:
 	bsr	$_CsrA2dpDecoderPluginForwardUndecoded
 	bra	(?L4)
 ?L40:
-	ld	AH,@(H'001B,Y)
+	ld	AH,@(H'001A,Y)
 ?LBB15:
 	st	AH,@(H'0016,Y)
 	bsr	$_IsAudioBusy
 	cmp	AL,#H'0000
 	beq	?L41
-	ld	X,@(H'001B,Y)
+	ld	X,@(H'001A,Y)
 	tst	@(H'0001,X)
 	beq	?L4
 ?LBB16:
 	ld	AL,#H'0006
 	bsr	$_PanicUnlessMalloc
 	st	AL,@(H'0017,Y)
-	ld	X,@(H'001B,Y)
+	ld	X,@(H'001A,Y)
 	ld	AL,@(0,X)
 	ld	X,@(H'0017,Y)
 	st	AL,@(0,X)
-	ld	X,@(H'001B,Y)
+	ld	X,@(H'001A,Y)
 	ld	AL,@(H'0001,X)
 	ld	X,@(H'0017,Y)
 	st	AL,@(H'0001,X)
-	ld	X,@(H'001B,Y)
+	ld	X,@(H'001A,Y)
 	ld	AL,@(H'0002,X)
 	ld	X,@(H'0017,Y)
 	st	AL,@(H'0002,X)
-	ld	X,@(H'001B,Y)
+	ld	X,@(H'001A,Y)
 	ld	AL,@(H'0003,X)
 	ld	X,@(H'0017,Y)
 	st	AL,@(H'0003,X)
-	ld	X,@(H'001B,Y)
+	ld	X,@(H'001A,Y)
 	ld	AL,@(H'0004,X)
 	ld	X,@(H'0017,Y)
 	st	AL,@(H'0004,X)
@@ -117398,7 +116956,7 @@ _handleAudioMessage:
 	st	AL,@(H'0001,Y)
 	ld	AL,@(H'0009,Y)
 	ld	AH,#H'7007
-?L55:
+?L51:
 	bsr	$_MessageSendConditionally
 ?LBE16:
 	bra	(?L4)
@@ -117427,59 +116985,13 @@ _handleAudioMessage:
 	bra	(?L4)
 ?L46:
 ?LBB17:
-	ld	AL,@(H'001B,Y)
+	ld	AL,@(H'001A,Y)
 	bsr	$_CsrA2dpDecoderPluginSetDspLevels
-?LBE17:
-	bra	(?L4)
-?L48:
-	ld	AH,@(H'001B,Y)
-?LBB18:
-	st	AH,@(H'0018,Y)
-	bsr	$_GetCurrentDspStatus
-	cmp	AL,#H'0003
-	bne	?L49
-	ld	X,@(H'0018,Y)
-	ld	AL,@(0,X)
-	ld	AH,@(H'0001,X)
-	bsr	$_KoovoxStartSportKalimba
-	bra	(?L4)
-?L49:
-?LBB19:
-	ld	AL,#H'0003
-	bsr	$_PanicUnlessMalloc
-	st	AL,@H'fff8
-	ld	X,@(H'0018,Y)
-	ld	AL,@(0,X)
-	ld	X,@H'fff8
-	st	AL,@(0,X)
-	ld	X,@(H'0018,Y)
-	ld	AL,@(H'0001,X)
-	ld	X,@H'fff8
-	st	AL,@(H'0001,X)
-	ld	X,@(H'0018,Y)
-	ld	AL,@(H'0002,X)
-	ld	X,@H'fff8
-	st	AL,@(H'0002,X)
-	st	AL,@H'ffff
-	ld	AL,@H'fff8
-	st	AL,@(0,Y)
-	ld	AL,@H'ffff
-	ld	AL,#H'03E8
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	ld	AL,@(H'0009,Y)
-	ld	AH,#H'7017
-	bsr	$_MessageSendLater
-?LBE19:
-?LBE18:
-	bra	(?L4)
-?L51:
-	bsr	$_KoovoxStopSportKalimba
 ?L4:
+?LBE17:
 ?LBE2:
 ?LBE_handleAudioMessage:
-	leavel	#27
+	leavel	#26
 ;.stabn	192,0,0,?LBB3
 ;.stabn	192,0,0,?LBB4
 ;.stabn	224,0,0,?LBE4
@@ -117508,19 +117020,15 @@ _handleAudioMessage:
 ;.stabn	192,0,0,?LBB16
 ;.stabn	224,0,0,?LBE16
 ;.stabn	224,0,0,?LBE15
-;.stabn	192,0,0,?LBB18
-;.stabn	192,0,0,?LBB19
-;.stabn	224,0,0,?LBE19
-;.stabn	224,0,0,?LBE18
 _handleInternalMessage:
 	enterl	#3
 ?LBB_handleInternalMessage:
 	ld	X,@(H'0003,Y)
 	cmp	AH,#-H'7FDA
-	beq	?L58
+	beq	?L53
 	st	X,@(0,Y)
 	bsr	$_CsrA2dpDecoderPluginInternalMessage
-?L58:
+?L53:
 ?LBE_handleInternalMessage:
 	leavel	#3
 $_AudioGetA2DPSampleRate:
@@ -117545,19 +117053,19 @@ $_AudioGetLatency:
 	leavel	#3
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 86 used[1] = 28 used[3] = 1 total = 115
-;# Function pattern *movqi3 used[0] = 149 total = 149
+;# Function pattern *movqi2 used[0] = 79 used[1] = 24 total = 103
+;# Function pattern *movqi3 used[0] = 135 total = 135
 ;# Function pattern *movhi used[2] = 2 used[3] = 2 total = 4
 ;# Function pattern *addqi2 used[2] = 2 total = 2
 ;# Function pattern *andqi3 used[0] = 1 total = 1
 ;# Function pattern *lshrqi3 used[0] = 1 total = 1
-;# Function pattern jump used[0] = 29 total = 29
-;# Function pattern *call1 used[0] = 22 total = 22
-;# Function pattern *call_value1 used[0] = 35 total = 35
+;# Function pattern jump used[0] = 26 total = 26
+;# Function pattern *call1 used[0] = 19 total = 19
+;# Function pattern *call_value1 used[0] = 33 total = 33
 ;# Function pattern tablejump_1 used[0] = 1 total = 1
 ;# Function pattern movstrqi+3 used[0] = 12 used[1] = 2 total = 14
 ;# Function pattern movstrqi+4 used[1] = 2 total = 2
-;# Function pattern movstrqi+5 used[0] = 2 total = 2
+;# Function pattern movstrqi+5 used[0] = 1 total = 1
 	MODULE	csr_a2dp_decoder_common
 	.LARGE
 ; GNU C version 3.3.3 (CSR version 30 for xapnative)
@@ -118756,9 +118264,6 @@ $_CsrA2dpDecoderPluginConnect:
 	ld	AH,#-H'7FDC
 	bsr	$_MessageCancelAll
 	ld	AL,@(H'0001,Y)
-	ld	AH,#-H'7FD6
-	bsr	$_MessageCancelAll
-	ld	AL,@(H'0001,Y)
 	bsr	$_MessageKalimbaTask
 	ld	AL,@(H'0001,Y)
 	bsr	$_SetAudioBusy
@@ -118802,8 +118307,6 @@ $_CsrA2dpDecoderPluginConnect:
 	bsr	$_StreamDisconnect
 	ld	AL,#H'0000
 	bsr	$_CsrA2DPDecoderSetDACGain
-	ld	AL,#H'0000
-	bsr	$_SetAudioDisconnectStatus
 ?LBE10:
 ?LBE_CsrA2dpDecoderPluginConnect:
 	leavel	#6
@@ -118813,8 +118316,6 @@ $_CsrA2dpDecoderPluginStartDisconnect:
 	enterl	#6
 ?LBB_CsrA2dpDecoderPluginStartDisconnect:
 	st	AL,@(H'0003,Y)
-	ld	AL,#H'0001
-	bsr	$_SetAudioDisconnectStatus
 	ld	X,@_DECODER
 	ld	AL,#H'0000
 	st	AL,@(H'0017,X)
@@ -119116,18 +118617,9 @@ $_CsrA2dpDecoderPluginDisconnect:
 	ld	AL,@(H'0002,Y)
 	ld	AH,#-H'7FDC
 	bsr	$_MessageCancelAll
-	ld	AL,@(H'0002,Y)
-	ld	AH,#-H'7FD6
-	bsr	$_MessageCancelAll
 	ld	AL,#H'0000
 	bsr	$_MessageKalimbaTask
 	bsr	$_KalimbaPowerOff
-	ld	X,@_DECODER
-	ld	AH,#H'0000
-	st	AH,@(0,Y)
-	ld	AL,@(H'0018,X)
-	ld	AH,#H'40C6
-	bsr	$_MessageSend
 	ld	AL,#H'0000
 	bsr	$_SetCurrentDspStatus
 	ld	AL,#H'0000
@@ -119138,7 +118630,6 @@ $_CsrA2dpDecoderPluginDisconnect:
 	bsr	$_free
 	ld	AL,#H'0000
 	st	AL,@_DECODER
-	bsr	$_SetAudioDisconnectStatus
 ?L103:
 ?LBE11:
 ?LBE_CsrA2dpDecoderPluginDisconnect:
@@ -119839,124 +119330,102 @@ $_CsrA2dpDecoderPluginInternalMessage:
 	cmp	AL,#-H'7FDC
 	beq	?L231
 	cmp	AL,#-H'7FD6
-	beq	?L300
+	beq	?L292
 	bra	(?L227)
 ?L231:
 	ld	X,@(H'001A,Y)
 ?LBB25:
 	st	X,@(H'000F,Y)
 	ld	AL,@(0,X)
-	cmp	AL,#H'1023
-	beq	?L282
-	cmp	AL,#(H'0001+H'1023)
-	bcc	?L294
-	cmp	AL,#H'100F
-	beq	?L274
-	cmp	AL,#(H'0001+H'100F)
-	bcc	?L295
-	cmp	AL,#H'1006
-	beq	?L261
-	cmp	AL,#(H'0001+H'1006)
-	bcc	?L296
-	cmp	AL,#H'1000
-	beq	?L242
-	bra	(?L227)
-?L296:
-	cmp	AL,#H'100C
-	beq	?L276
-	bra	(?L227)
-?L295:
-	cmp	AL,#H'1014
-	beq	?L272
-	cmp	AL,#(H'0001+H'1014)
-	bcc	?L297
-	cmp	AL,#H'1013
-	beq	?L277
-	bra	(?L227)
-?L297:
-	cmp	AL,#H'1015
-	beq	?L257
 	cmp	AL,#H'1019
-	beq	?L278
+	beq	?L269
+	cmp	AL,#(H'0001+H'1019)
+	bcc	?L285
+	cmp	AL,#H'100F
+	beq	?L265
+	cmp	AL,#(H'0001+H'100F)
+	bcc	?L286
+	cmp	AL,#H'1006
+	beq	?L252
+	cmp	AL,#(H'0001+H'1006)
+	bcc	?L287
+	cmp	AL,#H'1000
+	beq	?L233
 	bra	(?L227)
-?L294:
-	cmp	AL,#(H'0001+H'4F28)
-	bcc	?L298
-	cmp	AL,#H'4F20
-	bcc	?L241
-	cmp	AL,#H'1075
-	beq	?L227
-	cmp	AL,#(H'0001+H'1075)
-	bcc	?L299
-	cmp	AL,#H'1024
-	beq	?L284
+?L287:
+	cmp	AL,#H'100C
+	beq	?L267
 	bra	(?L227)
-?L299:
+?L286:
+	cmp	AL,#H'1014
+	beq	?L263
+	cmp	AL,#(H'0001+H'1014)
+	bcc	?L288
+	cmp	AL,#H'1013
+	beq	?L268
+	bra	(?L227)
+?L288:
+	cmp	AL,#H'1015
+	beq	?L248
+	bra	(?L227)
+?L285:
 	cmp	AL,#H'1080
-	beq	?L291
-	cmp	AL,#H'329A
-	beq	?L290
+	beq	?L282
+	cmp	AL,#(H'0001+H'1080)
+	bcc	?L289
+	cmp	AL,#H'1024
+	beq	?L275
+	cmp	AL,#(H'0001+H'1024)
+	bcc	?L227
+	cmp	AL,#H'1023
+	beq	?L273
 	bra	(?L227)
-?L298:
+?L289:
 	cmp	AL,#H'7070
-	beq	?L270
+	beq	?L261
+	cmp	AL,#(H'0001+H'7070)
+	bcc	?L227
+	cmp	AL,#H'329A
+	beq	?L281
 	bra	(?L227)
-?L241:
-?LBB26:
-	ld	AL,#H'0005
-	bsr	$_PanicUnlessMalloc
-	st	AL,@(H'0010,Y)
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,@(H'0010,Y)
-	ld	AH,@(H'000F,Y)
-	bsr	$_memcpy
-	ld	AL,@_DECODER
-	ld	AH,@(H'0010,Y)
-	st	AH,@(0,Y)
-	ld	X,@$XAP_AL
-	ld	AL,@(H'0018,X)
-	ld	AH,#H'40C3
-	bra	(?L330)
-?L242:
-?LBE26:
+?L233:
 	tst	@_DECODER
-	beq	?L258
-?LBB27:
+	beq	?L249
+?LBB26:
 	ld	AL,@_DECODER
 	ld	X,@$XAP_AL
 	ld	X,@(H'0015,X)
-	st	X,@(H'0011,Y)
+	st	X,@(H'0010,Y)
 	ld	X,@$XAP_AL
 	ld	AH,@(H'0005,X)
 	lsr	#H'0008
 	cmp	AH,#H'0005
-	beq	?L247
+	beq	?L238
 	cmp	AH,#(H'0001+H'0005)
-	bcc	?L251
+	bcc	?L242
 	cmp	AH,#H'0004
-	beq	?L245
-	bra	(?L249)
-?L251:
+	beq	?L236
+	bra	(?L240)
+?L242:
 	cmp	AH,#H'0006
-	beq	?L248
+	beq	?L239
 	cmp	AH,#H'0007
-	beq	?L247
-	bra	(?L249)
-?L245:
+	beq	?L238
+	bra	(?L240)
+?L236:
 	ld	AH,#H'0005
-	bra	(?L244)
-?L247:
+	bra	(?L235)
+?L238:
 	ld	AH,#H'0008
-	bra	(?L244)
-?L248:
+	bra	(?L235)
+?L239:
 	ld	AH,#H'0009
-	bra	(?L244)
-?L249:
+	bra	(?L235)
+?L240:
 	ld	X,@(H'000D,Y)
 	ld	AH,@(H'0002,X)
 	lsr	#H'000C
-?L244:
+?L235:
 	ld	AL,@$XAP_AH
 	bsr	_getDspVariant
 	ld	AH,@$XAP_AL
@@ -119967,9 +119436,9 @@ $_CsrA2dpDecoderPluginInternalMessage:
 	ld	AL,#H'1020
 	bsr	$_KalimbaSendMessage
 	cmp	AL,#H'0000
-	bne	?L252
+	bne	?L243
 	bsr	$_Panic
-?L252:
+?L243:
 	ld	AH,#H'0000
 	st	AH,@(0,Y)
 	st	AH,@(H'0001,Y)
@@ -119977,12 +119446,12 @@ $_CsrA2dpDecoderPluginInternalMessage:
 	ld	AL,#H'1012
 	ld	AH,#H'2270
 	bsr	$_KalimbaSendMessage
-	ld	X,@(H'0011,Y)
+	ld	X,@(H'0010,Y)
 	ld	AH,@(H'000E,X)
 	lsr	#H'0003
 	and	AH,#H'0001
 	cmp	AH,#H'0000
-	beq	?L253
+	beq	?L244
 	ld	AL,@(H'0005,X)
 	st	AL,@(0,Y)
 	ld	AH,#H'0000
@@ -119991,7 +119460,7 @@ $_CsrA2dpDecoderPluginInternalMessage:
 	ld	AL,#H'1018
 	ld	AH,@(H'0004,X)
 	bsr	$_KalimbaSendMessage
-?L253:
+?L244:
 	ld	AL,#H'0002
 	bsr	$_SetCurrentDspStatus
 	ld	AL,@_DECODER
@@ -120001,43 +119470,43 @@ $_CsrA2dpDecoderPluginInternalMessage:
 	and	AH,#H'0003
 	add	AH,#-H'0002
 	cmp	AH,#H'0001
-	bcz	?L254
-	ld	X,@(H'0011,Y)
+	bcz	?L245
+	ld	X,@(H'0010,Y)
 	ld	AL,@(H'000E,X)
 	or	AL,#H'0200
-	bra	(?L329)
-?L254:
-	ld	X,@(H'0011,Y)
+	bra	(?L311)
+?L245:
+	ld	X,@(H'0010,Y)
 	ld	AL,@(H'000E,X)
 	and	AL,#-H'0201
-?L329:
+?L311:
 	st	AL,@(H'000E,X)
-	ld	X,@(H'0011,Y)
+	ld	X,@(H'0010,Y)
 	ld	AL,@(H'000E,X)
 	and	AL,#-H'00F1
 	st	AL,@(H'000E,X)
-?LBE27:
+?LBE26:
 	bra	(?L227)
-?L257:
+?L248:
 	tst	@_DECODER
-	beq	?L258
-?LBB28:
+	beq	?L249
+?LBB27:
 	ld	AL,#H'0004
 	bsr	$_PanicUnlessMalloc
-	st	AL,@(H'0012,Y)
+	st	AL,@(H'0011,Y)
 	ld	AH,@(H'000D,Y)
 	ld	X,@$XAP_AL
 	st	AH,@(0,X)
 	bsr	$_IsAudioBusy
-	ld	X,@(H'0012,Y)
+	ld	X,@(H'0011,Y)
 	st	AL,@(H'0001,X)
 	bsr	$_GetCurrentDspStatus
-	ld	X,@(H'0012,Y)
+	ld	X,@(H'0011,Y)
 	st	AL,@(H'0002,X)
 	ld	AL,@_DECODER
 	ld	X,@$XAP_AL
 	ld	AL,@(H'0001,X)
-	ld	X,@(H'0012,Y)
+	ld	X,@(H'0011,Y)
 	st	AL,@(H'0003,X)
 	ld	AL,@_DECODER
 	st	X,@(0,Y)
@@ -120088,24 +119557,24 @@ $_CsrA2dpDecoderPluginInternalMessage:
 	ld	AL,@(0,X)
 	ld	AH,#H'7016
 	bsr	$_MessageSendLater
-?LBE28:
+?LBE27:
 	bra	(?L227)
-?L258:
+?L249:
 	ld	AL,#H'0004
 	bsr	$_SetCurrentDspStatus
 	bra	(?L227)
-?L261:
+?L252:
 	ld	X,@(H'000F,Y)
-?LBB29:
+?LBB28:
 	ld	X,@(H'0001,X)
 	st	X,@(-1,Y)
 	ld	X,@(H'000F,Y)
 	ld	X,@(H'0002,X)
-	st	X,@(H'0013,Y)
+	st	X,@(H'0012,Y)
 	tst	@_DECODER
 	beq	?L227
 	ld	AH,@_DECODER
-	st	AH,@(H'0014,Y)
+	st	AH,@(H'0013,Y)
 	ld	X,@$XAP_AH
 	ld	AH,@(H'0006,X)
 	lsr	#H'0009
@@ -120115,7 +119584,7 @@ $_CsrA2dpDecoderPluginInternalMessage:
 	bcc	?L227
 	ld	AL,@(H'0010,X)
 	cmp	AL,#H'0003
-	bne	?L264
+	bne	?L255
 	ld	AH,@(H'0004,X)
 	ld	AL,@$XAP_AH
 	and	AL,#-H'4000
@@ -120128,8 +119597,8 @@ $_CsrA2dpDecoderPluginInternalMessage:
 	add	AH,@(H'000D,X)
 	ld	X,@(H'000E,X)
 	add	X,@(-1,Y)
-	bra	(?L334)
-?L264:
+	bra	(?L316)
+?L255:
 	ld	X,@_DECODER
 	ld	AL,@(H'0010,X)
 	cmp	AL,#H'0002
@@ -120144,13 +119613,13 @@ $_CsrA2dpDecoderPluginInternalMessage:
 	st	AL,@(0,Y)
 	ld	X,@$XAP_AH
 	ld	AL,@(H'0003,X)
-	ld	AH,@(H'0013,Y)
-	bra	(?L333)
-?L270:
-?LBE29:
+	ld	AH,@(H'0012,Y)
+	bra	(?L315)
+?L261:
+?LBE28:
 	tst	@_DECODER
 	beq	?L227
-?LBB30:
+?LBB29:
 	ld	AL,#H'0004
 	bsr	$_PanicUnlessMalloc
 	st	AL,@H'fff8
@@ -120158,25 +119627,25 @@ $_CsrA2dpDecoderPluginInternalMessage:
 	ld	X,@H'fff8
 	st	AL,@(0,X)
 	ld	AL,#H'0001
-	bra	(?L335)
-?L272:
-?LBE30:
+	bra	(?L317)
+?L263:
+?LBE29:
 	tst	@_DECODER
 	beq	?L227
-?LBB31:
+?LBB30:
 	ld	AL,#H'0004
 	bsr	$_PanicUnlessMalloc
 	st	AL,@H'fff8
 	ld	AL,#H'0001
 	ld	X,@H'fff8
 	st	AL,@(0,X)
-?L335:
+?L317:
 	st	AL,@(H'0001,X)
 	ld	X,@(H'000F,Y)
 	ld	AL,@(H'0001,X)
 	ld	X,@H'fff8
 	st	AL,@(H'0002,X)
-?L336:
+?L318:
 	ld	AL,@_DECODER
 	st	AL,@H'ffff
 	ld	AL,@H'fff8
@@ -120185,12 +119654,12 @@ $_CsrA2dpDecoderPluginInternalMessage:
 	ld	X,@$XAP_AL
 	ld	AL,@(H'0018,X)
 	ld	AH,#H'7300
-	bra	(?L330)
-?L274:
-?LBE31:
+	bra	(?L312)
+?L265:
+?LBE30:
 	tst	@_DECODER
 	beq	?L227
-?LBB32:
+?LBB31:
 	ld	AL,#H'0005
 	bsr	$_PanicUnlessMalloc
 	st	AL,@H'fff8
@@ -120206,51 +119675,51 @@ $_CsrA2dpDecoderPluginInternalMessage:
 	ld	AL,@(H'0002,X)
 	ld	X,@H'fff8
 	st	AL,@(H'0003,X)
-	bra	(?L336)
-?L276:
-?LBE32:
+	bra	(?L318)
+?L267:
+?LBE31:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	st	AL,@(H'0001,Y)
 	st	AL,@(H'0002,Y)
 	ld	AL,#H'1017
 	ld	AH,#H'0001
-	bra	(?L332)
-?L277:
+	bra	(?L314)
+?L268:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	st	AL,@(H'0001,Y)
 	st	AL,@(H'0002,Y)
 	ld	AL,#H'1017
 	ld	AH,#H'0000
-?L332:
+?L314:
 	bsr	$_KalimbaSendMessage
 	bra	(?L227)
-?L278:
-?LBB33:
-	ld	AL,@_DECODER
-	ld	X,@$XAP_AL
-	ld	AL,@(H'0015,X)
-	st	AL,@(H'0017,Y)
+?L269:
+?LBB32:
+	ld	AH,@_DECODER
+	ld	X,@$XAP_AH
+	ld	X,@(H'0015,X)
+	st	X,@(H'0017,Y)
 	ld	X,@(H'000F,Y)
 	ld	X,@(H'0001,X)
 	st	X,@H'fff8
-	ld	X,@$XAP_AL
+	ld	X,@(H'0017,Y)
 	ld	AH,@(H'000E,X)
 	lsr	#H'0003
 	and	AH,#H'0001
 	cmp	AH,#H'0000
 	beq	?L227
 	tst	@H'fff8
-	beq	?L280
+	beq	?L271
 	ld	AL,#H'0001
 	st	AL,@(0,Y)
 	ld	AL,@(H'0006,X)
 	ld	AH,#H'0001
 	bsr	$_PioCommonSetPin
 	ld	AL,#H'0000
-	bra	(?L331)
-?L280:
+	bra	(?L313)
+?L271:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	X,@(H'0017,Y)
@@ -120258,11 +119727,11 @@ $_CsrA2dpDecoderPluginInternalMessage:
 	ld	AH,#H'0001
 	bsr	$_PioCommonSetPin
 	ld	AL,#H'0003
-?L331:
+?L313:
 	bsr	$_CsrA2dpDecoderPluginSetSoftMute
-?LBE33:
+?LBE32:
 	bra	(?L227)
-?L282:
+?L273:
 	tst	@_DECODER
 	beq	?L227
 	ld	AL,@(H'000D,Y)
@@ -120270,13 +119739,13 @@ $_CsrA2dpDecoderPluginInternalMessage:
 	ld	AH,@(H'0001,X)
 	bsr	$_CsrA2dpDecoderPluginSetAudioLatency
 	bra	(?L227)
-?L284:
+?L275:
 	ld	X,@(H'000F,Y)
 	ld	AL,@(H'0001,X)
 	bsr	_streamRelayModeUpdated
 	bra	(?L227)
-?L290:
-?LBB34:
+?L281:
+?LBB33:
 	ld	AL,#H'0005
 	bsr	$_PanicUnlessMalloc
 	st	AL,@H'fff8
@@ -120299,42 +119768,32 @@ $_CsrA2dpDecoderPluginInternalMessage:
 	ld	X,@$XAP_AL
 	ld	AL,@(H'0018,X)
 	ld	AH,#H'7303
-	bra	(?L330)
-?L291:
-?LBE34:
+	bra	(?L312)
+?L282:
+?LBE33:
 	ld	AL,#H'0000
 	bsr	$_SetAudioBusy
 	bsr	$_CsrA2dpDecoderPluginToneComplete
 ?LBE25:
 	bra	(?L227)
-?L300:
+?L292:
 	ld	AH,@(H'001A,Y)
-?LBB35:
+?LBB34:
 	st	AH,@(H'0015,Y)
 	ld	X,@$XAP_AH
 	ld	AL,@(0,X)
-	cmp	AL,#(H'0001+H'4088)
-	bcc	?L322
-	cmp	AL,#H'4087
-	bcc	?L303
 	cmp	AL,#H'329B
-	beq	?L309
-	bra	(?L227)
-?L322:
+	beq	?L294
 	cmp	AL,#H'715A
-	beq	?L315
+	beq	?L300
 	bra	(?L227)
-?L303:
+?L294:
 	ld	X,@(H'0015,Y)
-?LBB36:
+?LBB35:
 	ld	AL,@(H'0001,X)
 	add	AL,#H'0003
 	bsr	$_PanicUnlessMalloc
 	st	AL,@(-1,Y)
-	ld	X,@(H'0015,Y)
-	ld	AL,@(0,X)
-	ld	X,@(-1,Y)
-	st	AL,@(0,X)
 	ld	X,@(H'0015,Y)
 	ld	AL,@(H'0001,X)
 	ld	X,@(-1,Y)
@@ -120342,8 +119801,8 @@ $_CsrA2dpDecoderPluginInternalMessage:
 	ld	AH,#H'0000
 	ld	X,@(H'0015,Y)
 	cmp	AH,@(H'0001,X)
-	bcc	?L326
-?L308:
+	bcc	?L310
+?L299:
 	ld	AL,@$XAP_AH
 	add	AL,@(-1,Y)
 	st	AL,@(H'0016,Y)
@@ -120356,60 +119815,20 @@ $_CsrA2dpDecoderPluginInternalMessage:
 	add	AH,#H'0001
 	ld	X,@(H'0015,Y)
 	cmp	AH,@(H'0001,X)
-	bcs	?L308
-?L326:
-	ld	AL,@_DECODER
-	ld	AH,@(-1,Y)
-	st	AH,@(0,Y)
-	ld	X,@$XAP_AL
-	ld	AL,@(H'0018,X)
-	ld	AH,#H'40C4
-	bra	(?L330)
-?L309:
-	ld	X,@(H'0015,Y)
-?LBE36:
-?LBB37:
-	ld	AL,@(H'0001,X)
-	add	AL,#H'0003
-	bsr	$_PanicUnlessMalloc
-	st	AL,@(-1,Y)
-	ld	X,@(H'0015,Y)
-	ld	AL,@(H'0001,X)
-	ld	X,@(-1,Y)
-	st	AL,@(H'0001,X)
-	ld	AH,#H'0000
-	st	AH,@H'fff8
-	ld	X,@(H'0015,Y)
-	cmp	AH,@(H'0001,X)
-	bcc	?L328
-?L314:
-	ld	AH,@H'fff8
-	add	AH,@(-1,Y)
-	ld	AL,@(H'0015,Y)
-	add	AL,@H'fff8
-	ld	X,@$XAP_AL
-	ld	AL,@(H'0002,X)
-	ld	X,@$XAP_AH
-	st	AL,@(H'0002,X)
-	ld	AH,#H'0001
-	add	AH,@H'fff8
-	st	AH,@H'fff8
-	ld	X,@(H'0015,Y)
-	cmp	AH,@(H'0001,X)
-	bcs	?L314
-?L328:
+	bcs	?L299
+?L310:
 	ld	AL,@_DECODER
 	ld	AH,@(-1,Y)
 	st	AH,@(0,Y)
 	ld	X,@$XAP_AL
 	ld	AL,@(H'0018,X)
 	ld	AH,#H'7304
-?L330:
+?L312:
 	bsr	$_MessageSend
-?LBE37:
+?LBE35:
 	bra	(?L227)
-?L315:
-?LBB38:
+?L300:
+?LBB36:
 	ld	AL,#H'000A
 	st	AL,@(0,Y)
 	ld	AL,@$XAP_UY
@@ -120436,21 +119855,21 @@ $_CsrA2dpDecoderPluginInternalMessage:
 	ld	AL,@$XAP_AH
 	and	AL,#-H'4000
 	cmp	AL,#-H'8000
-	bne	?L317
+	bne	?L302
 	lsr	#H'0007
 	ld	AL,@$XAP_AH
 	ld	AH,@(H'0006,Y)
 	add	AH,@(-1,Y)
 	ld	X,@(H'0007,Y)
 	add	X,@(-1,Y)
-?L334:
+?L316:
 	st	X,@(0,Y)
 	ld	X,#H'0001
 	st	X,@(H'0001,Y)
 	and	AL,#H'0001
 	bsr	$_CsrI2SAudioOutputSetVolume
 	bra	(?L227)
-?L317:
+?L302:
 	ld	X,@_DECODER
 	ld	AL,@(H'0004,X)
 	and	AL,#-H'4000
@@ -120460,11 +119879,11 @@ $_CsrA2dpDecoderPluginInternalMessage:
 	st	AL,@(0,Y)
 	ld	AL,@(H'0003,X)
 	ld	AH,@(H'0003,Y)
-?L333:
+?L315:
 	bsr	$_CodecSetOutputGainNow
 ?L227:
-?LBE38:
-?LBE35:
+?LBE36:
+?LBE34:
 ?LBE24:
 ?LBE_CsrA2dpDecoderPluginInternalMessage:
 	leavel	#26
@@ -120485,22 +119904,18 @@ $_CsrA2dpDecoderPluginInternalMessage:
 ;.stabn	224,0,0,?LBE32
 ;.stabn	192,0,0,?LBB33
 ;.stabn	224,0,0,?LBE33
-;.stabn	192,0,0,?LBB34
-;.stabn	224,0,0,?LBE34
 ;.stabn	224,0,0,?LBE25
+;.stabn	192,0,0,?LBB34
 ;.stabn	192,0,0,?LBB35
+;.stabn	224,0,0,?LBE35
 ;.stabn	192,0,0,?LBB36
 ;.stabn	224,0,0,?LBE36
-;.stabn	192,0,0,?LBB37
-;.stabn	224,0,0,?LBE37
-;.stabn	192,0,0,?LBB38
-;.stabn	224,0,0,?LBE38
-;.stabn	224,0,0,?LBE35
+;.stabn	224,0,0,?LBE34
 $_MusicConnectAudio:
 	enterl	#34
 ?LBB_MusicConnectAudio:
 	st	AL,@(H'0003,Y)
-?LBB39:
+?LBB37:
 	ld	AH,@_DECODER
 	st	AH,@(H'001E,Y)
 	ld	X,@$XAP_AH
@@ -120513,7 +119928,7 @@ $_MusicConnectAudio:
 	ld	AL,@_val_pskey_max_mismatch
 	st	AL,@(H'000A,Y)
 	cmp	X,#H'0000
-	beq	?L373
+	beq	?L350
 	ld	AL,@(H'0003,X)
 	asl	#H'0006
 	ld	X,@(H'001E,Y)
@@ -120529,49 +119944,49 @@ $_MusicConnectAudio:
 	and	AH,#H'0001
 	st	AH,@(H'0006,Y)
 	tst	@(H'0007,X)
-	beq	?L375
+	beq	?L352
 	ld	AL,@(H'0007,X)
 	st	AL,@(H'0005,Y)
-	bra	(?L375)
-?L373:
+	bra	(?L352)
+?L350:
 	ld	AL,#H'0000
 	st	AL,@_val_clock_mismatch
 	st	AL,@(H'0006,Y)
-?L375:
+?L352:
 	ld	X,@_DECODER
 	ld	AH,@(H'0005,X)
 	lsr	#H'0008
 	ld	AL,#-H'0003
 	add	AL,@$XAP_AH
 	cmp	AL,#(H'0001+H'0004)
-	bcc	?L420
+	bcc	?L397
 	ld	X,@$XAP_AL
-	ld	X,@(?JTBASE421,X)
+	ld	X,@(?JTBASE398,X)
 	brxl
 	.SEG	CONST
-?JTBASE421:
+?JTBASE398:
 	.CODE
-?L421:
+?L398:
 	.SEG	CONST
-	dc	lwrd(?L401-?L421)
-	dc	lwrd(?L377-?L421)
-	dc	lwrd(?L388-?L421)
-	dc	lwrd(?L396-?L421)
-	dc	lwrd(?L418-?L421)
+	dc	lwrd(?L378-?L398)
+	dc	lwrd(?L354-?L398)
+	dc	lwrd(?L365-?L398)
+	dc	lwrd(?L373-?L398)
+	dc	lwrd(?L395-?L398)
 	.CODE
-?L377:
+?L354:
 	ld	X,@_DECODER
 	ld	AH,@(H'0004,X)
 	lsr	#H'000C
 	and	AH,#H'0003
 	cmp	AH,#(H'0001+H'0002)
-	bcc	?L387
+	bcc	?L364
 	cmp	AH,#H'0001
-	bcc	?L459
-	bra	(?L380)
-?L387:
+	bcc	?L436
+	bra	(?L357)
+?L364:
 	cmp	AH,#H'0003
-	bne	?L459
+	bne	?L436
 	ld	X,@(H'0004,Y)
 	ld	AH,@(H'000F,X)
 	ld	X,@$XAP_AH
@@ -120579,7 +119994,7 @@ $_MusicConnectAudio:
 	lsr	#H'0008
 	ld	AL,@$XAP_UXL
 	bsr	$_csrA2dpDecoderSetSbcEncoderParams
-?L380:
+?L357:
 	ld	X,@_DECODER
 	ld	AL,@(H'0001,X)
 	bsr	$_StreamSourceFromSink
@@ -120591,13 +120006,13 @@ $_MusicConnectAudio:
 	bsr	$_StreamConnect
 	bsr	$_PanicNull
 	tst	@(H'0004,Y)
-	beq	?L459
+	beq	?L436
 	ld	AL,#H'0000
 	st	AL,@_val_clock_mismatch
 	st	AL,@(H'0006,Y)
 	ld	X,@(H'0004,Y)
 	tst	@(H'0009,X)
-	beq	?L459
+	beq	?L436
 	ld	AH,@(H'0008,X)
 	st	AH,@(H'001F,Y)
 	ld	X,@_DECODER
@@ -120625,18 +120040,18 @@ $_MusicConnectAudio:
 	ld	AH,@(0,X)
 	bsr	$_StreamConnect
 	bsr	$_PanicNull
-	bra	(?L459)
-?L388:
+	bra	(?L436)
+?L365:
 	ld	X,@_DECODER
 	ld	AH,@(H'0004,X)
 	lsr	#H'000C
 	and	AH,#H'0003
 	cmp	AH,#H'0001
-	beq	?L393
+	beq	?L370
 	cmp	AH,#H'0001
-	bcs	?L391
+	bcs	?L368
 	cmp	AH,#H'0003
-	bne	?L389
+	bne	?L366
 	ld	X,@(H'0004,Y)
 	ld	AH,@(H'000F,X)
 	ld	X,@$XAP_AH
@@ -120644,7 +120059,7 @@ $_MusicConnectAudio:
 	lsr	#H'0008
 	ld	AL,@$XAP_UXL
 	bsr	$_csrA2dpDecoderSetSbcEncoderParams
-?L391:
+?L368:
 	ld	X,@(H'0004,Y)
 	ld	X,@(H'0008,X)
 	st	X,@(H'001F,Y)
@@ -120665,9 +120080,9 @@ $_MusicConnectAudio:
 	lsr	#H'0007
 	and	AH,#H'0001
 	cmp	AH,#H'0000
-	beq	?L392
+	beq	?L369
 	ld	X,@(H'0004,Y)
-?LBB40:
+?LBB38:
 	ld	X,@(H'0008,X)
 	st	X,@(H'001E,Y)
 	ld	X,@(H'000D,Y)
@@ -120690,16 +120105,16 @@ $_MusicConnectAudio:
 	ld	AL,@(H'000E,Y)
 	bsr	$_StreamConnect
 	bsr	$_PanicNull
-?L392:
-?LBE40:
+?L369:
+?LBE38:
 	ld	AL,#H'0000
 	bsr	$_StreamKalimbaSink
 	ld	AH,@$XAP_AL
 	ld	AL,@(H'000B,Y)
 	bsr	$_StreamConnect
 	bsr	$_PanicNull
-	bra	(?L389)
-?L393:
+	bra	(?L366)
+?L370:
 	ld	AL,#H'0000
 	bsr	$_StreamKalimbaSink
 	st	AL,@(H'000F,Y)
@@ -120720,19 +120135,19 @@ $_MusicConnectAudio:
 	ld	AH,@(H'0016,X)
 	ld	AL,@(H'0017,X)
 	bsr	$_CsrI2SAudioInputConnect
-?L389:
+?L366:
 	ld	AL,#H'0000
 	st	AL,@_val_clock_mismatch
 	st	AL,@(H'0006,Y)
-?L463:
+?L440:
 	ld	AL,@(H'000A,Y)
 	or	AL,#H'0080
 	st	AL,@(H'000A,Y)
-?L459:
+?L436:
 	ld	AL,#H'0000
-	bra	(?L454)
-?L396:
-?LBB41:
+	bra	(?L431)
+?L373:
+?LBB39:
 	ld	AL,#H'0001
 	st	AL,@(0,Y)
 	ld	AL,#H'0002
@@ -120750,7 +120165,7 @@ $_MusicConnectAudio:
 	lsr	#H'000C
 	and	AH,#H'0003
 	cmp	AH,#H'0003
-	bne	?L397
+	bne	?L374
 	ld	X,@(H'0004,Y)
 	ld	AH,@(H'000F,X)
 	ld	X,@$XAP_AH
@@ -120758,7 +120173,7 @@ $_MusicConnectAudio:
 	lsr	#H'0008
 	ld	AL,@$XAP_UXL
 	bsr	$_csrA2dpDecoderSetSbcEncoderParams
-?L397:
+?L374:
 	ld	AH,#H'0001
 	st	AH,@(H'0001,Y)
 	ld	AL,#H'0000
@@ -120811,38 +120226,38 @@ $_MusicConnectAudio:
 	st	X,@_val_clock_mismatch
 	ld	AH,#H'0000
 	st	AH,@(H'0006,Y)
-	bra	(?L463)
-?L401:
+	bra	(?L440)
+?L378:
 	ld	X,@(H'0003,Y)
-?LBE41:
+?LBE39:
 	ld	AH,@(H'0002,X)
 	lsr	#H'000C
 	cmp	AH,#(H'0001+H'000D)
-	bcc	?L376
+	bcc	?L353
 	ld	X,@$XAP_AH
-	ld	X,@(?JTBASE417,X)
+	ld	X,@(?JTBASE394,X)
 	brxl
 	.SEG	CONST
-?JTBASE417:
+?JTBASE394:
 	.CODE
-?L417:
+?L394:
 	.SEG	CONST
-	dc	lwrd(?L376-?L417)
-	dc	lwrd(?L403-?L417)
-	dc	lwrd(?L404-?L417)
-	dc	lwrd(?L405-?L417)
-	dc	lwrd(?L406-?L417)
-	dc	lwrd(?L376-?L417)
-	dc	lwrd(?L408-?L417)
-	dc	lwrd(?L410-?L417)
-	dc	lwrd(?L376-?L417)
-	dc	lwrd(?L376-?L417)
-	dc	lwrd(?L415-?L417)
-	dc	lwrd(?L415-?L417)
-	dc	lwrd(?L415-?L417)
-	dc	lwrd(?L415-?L417)
+	dc	lwrd(?L353-?L394)
+	dc	lwrd(?L380-?L394)
+	dc	lwrd(?L381-?L394)
+	dc	lwrd(?L382-?L394)
+	dc	lwrd(?L383-?L394)
+	dc	lwrd(?L353-?L394)
+	dc	lwrd(?L385-?L394)
+	dc	lwrd(?L387-?L394)
+	dc	lwrd(?L353-?L394)
+	dc	lwrd(?L353-?L394)
+	dc	lwrd(?L392-?L394)
+	dc	lwrd(?L392-?L394)
+	dc	lwrd(?L392-?L394)
+	dc	lwrd(?L392-?L394)
 	.CODE
-?L403:
+?L380:
 	ld	X,@_DECODER
 	ld	AL,@(H'0001,X)
 	bsr	$_StreamSourceFromSink
@@ -120852,8 +120267,8 @@ $_MusicConnectAudio:
 	ld	AH,@$XAP_AL
 	ld	AL,@(H'0011,Y)
 	bsr	$_TransformRtpSbcDecode
-	bra	(?L462)
-?L404:
+	bra	(?L439)
+?L381:
 	ld	X,@_DECODER
 	ld	AL,@(H'0001,X)
 	bsr	$_StreamSourceFromSink
@@ -120863,8 +120278,8 @@ $_MusicConnectAudio:
 	ld	AH,@$XAP_AL
 	ld	AL,@(H'0012,Y)
 	bsr	$_TransformRtpMp3Decode
-	bra	(?L462)
-?L405:
+	bra	(?L439)
+?L382:
 	ld	X,@_DECODER
 	ld	AL,@(H'0001,X)
 	bsr	$_StreamSourceFromSink
@@ -120874,30 +120289,30 @@ $_MusicConnectAudio:
 	ld	AH,@$XAP_AL
 	ld	AL,@(H'0013,Y)
 	bsr	$_TransformRtpAacDecode
-?L462:
+?L439:
 	st	AL,@(H'0008,Y)
-	bra	(?L459)
-?L406:
+	bra	(?L436)
+?L383:
 	tst	@(H'0004,Y)
-	beq	?L459
+	beq	?L436
 	ld	AL,@(H'0004,Y)
 	bsr	$_MusicConnectFaststream
-	bra	(?L459)
-?L408:
+	bra	(?L436)
+?L385:
 	tst	@(H'0004,Y)
-	beq	?L459
+	beq	?L436
 	ld	AL,@(H'0004,Y)
 	ld	AH,@(H'0006,Y)
 	bsr	$_MusicConnectAptx
-	bra	(?L459)
-?L410:
+	bra	(?L436)
+?L387:
 	tst	@(H'0004,Y)
-	beq	?L459
+	beq	?L436
 	ld	AL,@(H'0004,Y)
 	ld	AH,@(H'0006,Y)
 	bsr	$_MusicConnectAptxLowLatency
-	bra	(?L459)
-?L415:
+	bra	(?L436)
+?L392:
 	ld	X,@_DECODER
 	ld	AL,@(H'0001,X)
 	bsr	$_StreamSourceFromSink
@@ -120908,15 +120323,15 @@ $_MusicConnectAudio:
 	ld	AL,@(H'0014,Y)
 	bsr	$_StreamConnect
 	ld	AL,#H'0003
-?L454:
+?L431:
 	bsr	$_csrA2dpDecoderSetStreamRelayMode
-	bra	(?L376)
-?L418:
+	bra	(?L353)
+?L395:
 	tst	@(H'0004,Y)
-	beq	?L419
+	beq	?L396
 	ld	AL,@(H'0004,Y)
 	bsr	$_MusicConnectFM
-?L419:
+?L396:
 	ld	AL,#H'0000
 	bsr	$_csrA2dpDecoderSetStreamRelayMode
 	ld	AL,#H'0000
@@ -120925,39 +120340,39 @@ $_MusicConnectAudio:
 	ld	AH,@(H'000A,Y)
 	or	AH,#H'0080
 	st	AH,@(H'000A,Y)
-	bra	(?L376)
-?L420:
+	bra	(?L353)
+?L397:
 	bsr	$_Panic
-?L376:
+?L353:
 	ld	X,@(H'0003,Y)
 	ld	AL,@(H'0002,X)
 	and	AL,#-H'1000
 	cmp	AL,#H'4000
-	beq	?L422
+	beq	?L399
 	cmp	AL,#-H'2000
-	beq	?L422
+	beq	?L399
 	cmp	AL,#H'6000
-	beq	?L422
+	beq	?L399
 	cmp	AL,#H'7000
-	beq	?L422
+	beq	?L399
 	ld	X,@_DECODER
 	ld	AL,@(H'0005,X)
 	and	AL,#-H'0100
 	cmp	AL,#H'0400
-	beq	?L423
+	beq	?L400
 	cmp	AL,#H'0600
-	beq	?L423
+	beq	?L400
 	cmp	AL,#H'0500
-	beq	?L423
+	beq	?L400
 	cmp	AL,#H'0700
-	beq	?L423
+	beq	?L400
 	tst	@(H'0008,Y)
-	beq	?L423
+	beq	?L400
 	tst	@(H'0006,Y)
-	beq	?L424
+	beq	?L401
 	ld	AH,#H'0001
 	st	AH,@(H'0007,Y)
-?L424:
+?L401:
 	ld	AL,@(H'0007,Y)
 	st	AL,@(0,Y)
 	ld	AL,@(H'0008,Y)
@@ -120965,18 +120380,18 @@ $_MusicConnectAudio:
 	bsr	$_TransformConfigure
 	ld	AL,@(H'0008,Y)
 	bsr	$_TransformStart
-?L423:
+?L400:
 	ld	X,@_DECODER
 	ld	AH,@(H'0004,X)
 	lsr	#H'000E
 	cmp	AH,#H'0002
-	beq	?L431
+	beq	?L408
 	cmp	AH,#H'0002
-	bcs	?L427
+	bcs	?L404
 	cmp	AH,#H'0003
-	beq	?L430
-	bra	(?L436)
-?L427:
+	beq	?L407
+	bra	(?L413)
+?L404:
 	ld	X,#H'0000
 	st	X,@(0,Y)
 	ld	AL,#H'0003
@@ -121005,9 +120420,9 @@ $_MusicConnectAudio:
 	lsr	#H'0007
 	and	AH,#H'0001
 	cmp	AH,#H'0000
-	beq	?L428
+	beq	?L405
 	ld	AH,#H'0001
-?LBB42:
+?LBB40:
 	st	AH,@(0,Y)
 	ld	AL,#H'0003
 	ld	AH,#H'0000
@@ -121057,9 +120472,9 @@ $_MusicConnectAudio:
 	st	AL,@(H'0001,Y)
 	st	AL,@(0,Y)
 	ld	AL,@(H'0015,Y)
-	bra	(?L456)
-?L428:
-?LBE42:
+	bra	(?L433)
+?L405:
+?LBE40:
 	ld	AL,#H'0000
 	bsr	$_StreamKalimbaSink
 	bsr	$_StreamSourceFromSink
@@ -121070,9 +120485,9 @@ $_MusicConnectAudio:
 	st	AL,@(H'0001,Y)
 	st	AL,@(0,Y)
 	ld	AL,@(H'0009,Y)
-	bra	(?L456)
-?L430:
-?LBB43:
+	bra	(?L433)
+?L407:
+?LBB41:
 	ld	AH,#H'0000
 	st	AH,@(0,Y)
 	ld	AL,#H'0002
@@ -121145,16 +120560,16 @@ $_MusicConnectAudio:
 	st	X,@(H'0001,Y)
 	st	X,@(0,Y)
 	ld	AL,@(H'0016,Y)
-?L456:
+?L433:
 	ld	AH,#H'0700
 	bsr	$_SinkConfigure
 	bsr	$_PanicNull
-?LBE43:
-	bra	(?L436)
-?L431:
+?LBE41:
+	bra	(?L413)
+?L408:
 	bsr	$_CsrI2SMusicResamplingFrequency
 	cmp	AL,#H'0000
-	beq	?L432
+	beq	?L409
 	bsr	$_CsrI2SMusicResamplingFrequency
 	ld	AH,#H'0000
 	st	AH,@(H'0017,Y)
@@ -121180,8 +120595,8 @@ $_MusicConnectAudio:
 	ld	AL,@H'ffff
 	ld	AH,@(H'0017,Y)
 	ld	AL,@(H'0018,Y)
-	bra	(?L455)
-?L432:
+	bra	(?L432)
+?L409:
 	ld	AL,#H'0000
 	bsr	$_StreamKalimbaSink
 	bsr	$_StreamSourceFromSink
@@ -121203,19 +120618,19 @@ $_MusicConnectAudio:
 	ld	AL,@H'ffff
 	ld	AH,@(H'0016,X)
 	ld	AL,@(H'0017,X)
-?L455:
+?L432:
 	bsr	$_CsrI2SAudioOutputConnect
-	bra	(?L436)
-?L422:
+	bra	(?L413)
+?L399:
 	bsr	$_isCodecLowLatencyBackChannel
 	cmp	AL,#H'0000
-	beq	?L436
+	beq	?L413
 	ld	X,@_DECODER
 	ld	AH,@(H'0004,X)
 	ld	AL,@(H'0004,Y)
 	and	AH,#H'0001
 	bsr	$_CsrA2dpDecoderConnectBackChannel
-?L436:
+?L413:
 	ld	AL,@(H'0004,Y)
 	bsr	$_CsrA2dpDecoderPluginConnectSubwoofer
 	ld	X,@_DECODER
@@ -121236,20 +120651,20 @@ $_MusicConnectAudio:
 	ld	AL,@(H'0005,X)
 	and	AL,#-H'0100
 	cmp	AL,#H'0600
-	bne	?L438
-?LBB44:
+	bne	?L415
+?LBB42:
 	ld	AH,#H'0000
 	st	AH,@(H'001B,Y)
 	ld	AL,@(H'0004,X)
 	and	AL,#-H'4000
 	cmp	AL,#-H'8000
-	bne	?L439
+	bne	?L416
 	bsr	$_CsrI2SMusicResamplingFrequency
 	cmp	AL,#H'0000
-	beq	?L439
+	beq	?L416
 	ld	AL,#H'0001
 	st	AL,@(H'001B,Y)
-?L439:
+?L416:
 	ld	X,@_DECODER
 	ld	AH,@(H'0004,X)
 	lsr	#H'0008
@@ -121283,15 +120698,15 @@ $_MusicConnectAudio:
 	ld	AH,@H'fff8
 	bsr	$_KalimbaSendMessage
 	cmp	AL,#H'0000
-	bne	?L441
+	bne	?L418
 	bsr	$_Panic
-?L441:
+?L418:
 	ld	X,@_DECODER
 	ld	AH,@(H'0004,X)
 	lsr	#H'0008
 	and	AH,#H'0001
 	cmp	AH,#H'0000
-	beq	?L444
+	beq	?L421
 	ld	X,@(H'0004,Y)
 	ld	AH,@(H'0017,X)
 	ld	X,@$XAP_AH
@@ -121302,17 +120717,17 @@ $_MusicConnectAudio:
 	st	AL,@(H'0002,Y)
 	ld	AL,#H'1074
 	ld	AH,@(0,X)
-	bra	(?L461)
-?L438:
-?LBE44:
+	bra	(?L438)
+?L415:
+?LBE42:
 	ld	X,@_DECODER
 	ld	AL,@(H'0004,X)
 	and	AL,#-H'4000
 	cmp	AL,#-H'8000
-	bne	?L445
+	bne	?L422
 	bsr	$_CsrI2SMusicResamplingFrequency
 	cmp	AL,#H'0000
-	beq	?L446
+	beq	?L423
 	bsr	$_CsrI2SMusicResamplingFrequency
 	ld	AH,#H'0000
 	udiv	#H'000A
@@ -121327,8 +120742,8 @@ $_MusicConnectAudio:
 	st	AH,@(H'0002,Y)
 	ld	AL,#H'1070
 	ld	AH,@H'fff8
-	bra	(?L460)
-?L446:
+	bra	(?L437)
+?L423:
 	ld	AL,@_DECODER
 	st	AL,@(H'001C,Y)
 	ld	X,@$XAP_AL
@@ -121346,8 +120761,8 @@ $_MusicConnectAudio:
 	ld	AL,@_val_clock_mismatch
 	st	AL,@(H'0001,Y)
 	ld	X,@(H'001C,Y)
-	bra	(?L464)
-?L445:
+	bra	(?L441)
+?L422:
 	ld	AH,@_DECODER
 	st	AH,@(H'001D,Y)
 	ld	X,@$XAP_AH
@@ -121365,18 +120780,18 @@ $_MusicConnectAudio:
 	ld	AL,@_val_clock_mismatch
 	st	AL,@(H'0001,Y)
 	ld	X,@(H'001D,Y)
-?L464:
+?L441:
 	ld	AH,@(H'0004,X)
 	lsr	#H'000E
 	st	AH,@(H'0002,Y)
 	ld	AL,#H'1070
 	ld	AH,@H'fff9
-?L460:
+?L437:
 	bsr	$_KalimbaSendMessage
 	cmp	AL,#H'0000
-	bne	?L450
+	bne	?L427
 	bsr	$_Panic
-?L450:
+?L427:
 	ld	X,@_DECODER
 	ld	AH,@(H'0016,X)
 	ld	AL,@(H'0017,X)
@@ -121394,12 +120809,12 @@ $_MusicConnectAudio:
 	st	AH,@(H'0002,Y)
 	ld	AL,#H'1071
 	ld	AH,@H'fff9
-?L461:
+?L438:
 	bsr	$_KalimbaSendMessage
 	cmp	AL,#H'0000
-	bne	?L444
+	bne	?L421
 	bsr	$_Panic
-?L444:
+?L421:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	st	AL,@(H'0001,Y)
@@ -121408,57 +120823,51 @@ $_MusicConnectAudio:
 	ld	AH,#H'0000
 	bsr	$_KalimbaSendMessage
 	cmp	AL,#H'0000
-	bne	?L453
+	bne	?L430
 	bsr	$_Panic
-?L453:
+?L430:
 	ld	AL,#H'0001
 	bsr	$_SetAudioInUse
-	ld	X,@_DECODER
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	ld	AL,@(H'0018,X)
-	ld	AH,#H'40C7
-	bsr	$_MessageSend
-?LBE39:
+?LBE37:
 ?LBE_MusicConnectAudio:
 	leavel	#34
+;.stabn	192,0,0,?LBB37
+;.stabn	192,0,0,?LBB38
+;.stabn	224,0,0,?LBE38
 ;.stabn	192,0,0,?LBB39
+;.stabn	224,0,0,?LBE39
 ;.stabn	192,0,0,?LBB40
 ;.stabn	224,0,0,?LBE40
 ;.stabn	192,0,0,?LBB41
 ;.stabn	224,0,0,?LBE41
 ;.stabn	192,0,0,?LBB42
 ;.stabn	224,0,0,?LBE42
-;.stabn	192,0,0,?LBB43
-;.stabn	224,0,0,?LBE43
-;.stabn	192,0,0,?LBB44
-;.stabn	224,0,0,?LBE44
-;.stabn	224,0,0,?LBE39
+;.stabn	224,0,0,?LBE37
 $_MicMuteUnmute:
 	enterl	#5
 ?LBB_MicMuteUnmute:
 	st	AL,@H'fff8
 	st	AH,@(H'0002,Y)
-?LBB45:
+?LBB43:
 	ld	X,@_DECODER
 	ld	AL,@(H'0005,X)
 	and	AL,#-H'0100
 	cmp	AL,#H'0500
-	beq	?L486
+	beq	?L463
 	ld	X,@H'fff8
 	ld	AL,@(H'0008,X)
 	ld	X,@$XAP_AL
 	ld	AH,@(0,X)
 	lsr	#H'000F
-	bra	(?L487)
-?L486:
+	bra	(?L464)
+?L463:
 	ld	AH,#H'0000
-?L487:
+?L464:
 	ld	AL,#H'0000
 	bsr	$_AudioPluginGetMic
 	ld	X,@$XAP_AL
 	cmp	AL,#H'0000
-	beq	?L488
+	beq	?L465
 	ld	AH,#H'0000
 	ld	AL,@(H'0002,Y)
 	st	AH,@(0,Y)
@@ -121466,19 +120875,19 @@ $_MicMuteUnmute:
 	ld	AL,@$XAP_UXL
 	ld	AH,#H'0700
 	bsr	$_SourceConfigure
-?L488:
+?L465:
 	ld	X,@_DECODER
 	ld	AH,@(H'0004,X)
 	lsr	#H'0007
 	and	AH,#H'0001
 	cmp	AH,#H'0000
-	beq	?L485
+	beq	?L462
 	ld	AL,#H'0001
 	ld	AH,#H'0000
 	bsr	$_AudioPluginGetMic
 	ld	X,@$XAP_AL
 	cmp	AL,#H'0000
-	beq	?L485
+	beq	?L462
 	ld	AH,#H'0000
 	ld	AL,@(H'0002,Y)
 	st	AH,@(0,Y)
@@ -121486,48 +120895,48 @@ $_MicMuteUnmute:
 	ld	AL,@$XAP_UXL
 	ld	AH,#H'0700
 	bsr	$_SourceConfigure
-?L485:
-?LBE45:
+?L462:
+?LBE43:
 ?LBE_MicMuteUnmute:
 	leavel	#5
-;.stabn	192,0,0,?LBB45
-;.stabn	224,0,0,?LBE45
+;.stabn	192,0,0,?LBB43
+;.stabn	224,0,0,?LBE43
 $_CsrA2DPGetDecoderSampleRate:
 	enterl	#2
 ?LBB_CsrA2DPGetDecoderSampleRate:
 	tst	@_DECODER
-	beq	?L493
+	beq	?L470
 	ld	X,@_DECODER
 	ld	AH,@(H'0016,X)
 	ld	AL,@(H'0017,X)
 	cmp	AH,#H'0000
-	bne	?L492
+	bne	?L469
 	cmp	AL,#H'0000
-	bne	?L492
-?L493:
+	bne	?L469
+?L470:
 	ld	AL,#H'0000
 	ld	AH,#H'0000
-?L492:
+?L469:
 ?LBE_CsrA2DPGetDecoderSampleRate:
 	leavel	#2
 $_CsrA2DPGetDecoderSubwooferSampleRate:
 	enterl	#2
 ?LBB_CsrA2DPGetDecoderSubwooferSampleRate:
 	tst	@_DECODER
-	beq	?L497
+	beq	?L474
 	ld	X,@_DECODER
 	ld	AH,@(H'0016,X)
 	ld	AL,@(H'0017,X)
 	cmp	AH,#H'0000
-	bne	?L500
+	bne	?L477
 	cmp	AL,#H'0000
-	beq	?L497
-?L500:
+	beq	?L474
+?L477:
 	ld	AL,#-H'4480
-	bra	(?L499)
-?L497:
+	bra	(?L476)
+?L474:
 	ld	AL,#H'0000
-?L499:
+?L476:
 	ld	AH,#H'0000
 ?LBE_CsrA2DPGetDecoderSubwooferSampleRate:
 	leavel	#2
@@ -121536,27 +120945,27 @@ $_CsrA2dpDecoderPluginSetEqMode:
 ?LBB_CsrA2dpDecoderPluginSetEqMode:
 	st	AL,@H'fff8
 	cmp	AH,#(H'0001+H'0009)
-	bcc	?L501
+	bcc	?L478
 	ld	X,@$XAP_AH
-	ld	X,@(?JTBASE514,X)
+	ld	X,@(?JTBASE491,X)
 	brxl
 	.SEG	CONST
-?JTBASE514:
+?JTBASE491:
 	.CODE
-?L514:
+?L491:
 	.SEG	CONST
-	dc	lwrd(?L503-?L514)
-	dc	lwrd(?L504-?L514)
-	dc	lwrd(?L505-?L514)
-	dc	lwrd(?L506-?L514)
-	dc	lwrd(?L507-?L514)
-	dc	lwrd(?L508-?L514)
-	dc	lwrd(?L509-?L514)
-	dc	lwrd(?L510-?L514)
-	dc	lwrd(?L511-?L514)
-	dc	lwrd(?L512-?L514)
+	dc	lwrd(?L480-?L491)
+	dc	lwrd(?L481-?L491)
+	dc	lwrd(?L482-?L491)
+	dc	lwrd(?L483-?L491)
+	dc	lwrd(?L484-?L491)
+	dc	lwrd(?L485-?L491)
+	dc	lwrd(?L486-?L491)
+	dc	lwrd(?L487-?L491)
+	dc	lwrd(?L488-?L491)
+	dc	lwrd(?L489-?L491)
 	.CODE
-?L503:
+?L480:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	st	AL,@(H'0001,Y)
@@ -121572,49 +120981,49 @@ $_CsrA2dpDecoderPluginSetEqMode:
 	st	AL,@(H'0002,Y)
 	ld	AL,#H'1001
 	ld	AH,#H'0001
-	bra	(?L516)
-?L504:
+	bra	(?L493)
+?L481:
 	ld	AL,#H'0000
-	bra	(?L517)
-?L505:
+	bra	(?L494)
+?L482:
 	ld	AL,#H'0001
-	bra	(?L518)
-?L506:
+	bra	(?L495)
+?L483:
 	ld	AL,#H'0002
-?L518:
+?L495:
 	st	AL,@(0,Y)
 	ld	AL,#H'0000
-	bra	(?L515)
-?L507:
+	bra	(?L492)
+?L484:
 	ld	AL,#H'0002
 	st	AL,@(0,Y)
 	ld	AL,#H'0001
-	bra	(?L515)
-?L508:
+	bra	(?L492)
+?L485:
 	ld	AL,#H'0002
-?L517:
+?L494:
 	st	AL,@(0,Y)
-	bra	(?L515)
-?L509:
+	bra	(?L492)
+?L486:
 	ld	AL,#H'0002
 	st	AL,@(0,Y)
 	ld	AL,#H'0003
-	bra	(?L515)
-?L510:
+	bra	(?L492)
+?L487:
 	ld	AL,#H'0002
 	st	AL,@(0,Y)
 	ld	AL,#H'0004
-	bra	(?L515)
-?L511:
+	bra	(?L492)
+?L488:
 	ld	AL,#H'0002
 	st	AL,@(0,Y)
 	ld	AL,#H'0005
-	bra	(?L515)
-?L512:
+	bra	(?L492)
+?L489:
 	ld	AL,#H'0002
 	st	AL,@(0,Y)
 	ld	AL,#H'0006
-?L515:
+?L492:
 	st	AL,@(H'0001,Y)
 	ld	X,@(H'0005,Y)
 	ld	AH,@(H'0002,X)
@@ -121628,9 +121037,9 @@ $_CsrA2dpDecoderPluginSetEqMode:
 	st	AL,@(H'0002,Y)
 	ld	AL,#H'1001
 	ld	AH,@H'fff8
-?L516:
+?L493:
 	bsr	$_KalimbaSendMessage
-?L501:
+?L478:
 ?LBE_CsrA2dpDecoderPluginSetEqMode:
 	leavel	#5
 $_CsrA2dpDecoderPluginUpdateEnhancements:
@@ -121638,14 +121047,14 @@ $_CsrA2dpDecoderPluginUpdateEnhancements:
 ?LBB_CsrA2dpDecoderPluginUpdateEnhancements:
 	ld	X,@$XAP_AL
 	cmp	AL,#H'0000
-	beq	?L519
+	beq	?L496
 	tst	@(H'0001,X)
-	bpl	?L521
+	bpl	?L498
 	ld	AL,#H'09C0
-	bra	(?L523)
-?L521:
+	bra	(?L500)
+?L498:
 	ld	AL,#H'0800
-?L523:
+?L500:
 	st	AL,@(0,Y)
 	ld	AL,#H'0000
 	st	AL,@(H'0001,Y)
@@ -121655,47 +121064,47 @@ $_CsrA2dpDecoderPluginUpdateEnhancements:
 	ld	AL,#H'100E
 	ld	AH,#H'0000
 	bsr	$_KalimbaSendMessage
-?L519:
+?L496:
 ?LBE_CsrA2dpDecoderPluginUpdateEnhancements:
 	leavel	#5
 $_CsrA2dpDecoderPluginAllowVolChanges:
 	enterl	#3
 ?LBB_CsrA2dpDecoderPluginAllowVolChanges:
-?LBB46:
+?LBB44:
 	ld	X,@_DECODER
 	ld	AL,@(H'0015,X)
 	st	AL,@(0,Y)
 	cmp	X,#H'0000
-	beq	?L524
+	beq	?L501
 	ld	X,@$XAP_AL
 	ld	AH,@(H'000E,X)
 	ld	AL,@$XAP_AH
 	and	AL,#H'0100
 	cmp	AL,#H'0000
-	bne	?L524
+	bne	?L501
 	ld	AL,@$XAP_AH
 	and	AL,#-H'0201
 	st	AL,@(H'000E,X)
-?L524:
-?LBE46:
+?L501:
+?LBE44:
 ?LBE_CsrA2dpDecoderPluginAllowVolChanges:
 	leavel	#3
-;.stabn	192,0,0,?LBB46
-;.stabn	224,0,0,?LBE46
+;.stabn	192,0,0,?LBB44
+;.stabn	224,0,0,?LBE44
 $_CsrA2dpDecoderPluginSubCheckForConnectionFailure:
 	enterl	#3
 ?LBB_CsrA2dpDecoderPluginSubCheckForConnectionFailure:
-?LBB47:
+?LBB45:
 	tst	@_DECODER
-	beq	?L526
-?LBB48:
+	beq	?L503
+?LBB46:
 	ld	X,@_DECODER
 	ld	X,@(H'0015,X)
 	ld	AH,@(H'000E,X)
 	ld	AL,@$XAP_AH
 	and	AL,#H'01F0
 	cmp	AL,#H'0100
-	bne	?L526
+	bne	?L503
 	ld	AL,@$XAP_AH
 	or	AL,#H'00F0
 	and	AL,#-H'0201
@@ -121705,55 +121114,55 @@ $_CsrA2dpDecoderPluginSubCheckForConnectionFailure:
 	ld	AH,#H'0001
 	st	AH,@(0,Y)
 	bsr	$_CsrA2dpDecoderPluginSetLevels
-?L526:
-?LBE48:
-?LBE47:
+?L503:
+?LBE46:
+?LBE45:
 ?LBE_CsrA2dpDecoderPluginSubCheckForConnectionFailure:
 	leavel	#3
-;.stabn	192,0,0,?LBB48
-;.stabn	224,0,0,?LBE48
+;.stabn	192,0,0,?LBB46
+;.stabn	224,0,0,?LBE46
 $_CsrA2DPDecoderSetDACGain:
 	enterl	#4
 ?LBB_CsrA2DPDecoderSetDACGain:
 	st	AL,@(H'0001,Y)
 	bsr	$_isCodecLowLatencyBackChannel
 	cmp	AL,#H'0000
-	bne	?L532
+	bne	?L509
 	ld	X,@_DECODER
 	ld	AL,@(H'0010,X)
 	cmp	AL,#H'0001
-	beq	?L532
+	beq	?L509
 	cmp	AL,#H'0000
-	bne	?L530
-?L532:
+	bne	?L507
+?L509:
 	ld	X,@_DECODER
 	ld	AH,@(H'0006,X)
 	lsr	#H'0009
 	and	AH,#H'0003
 	add	AH,#-H'0002
 	cmp	AH,#H'0001
-	bcz	?L530
+	bcz	?L507
 	ld	AL,@(H'0004,X)
 	and	AL,#-H'4000
 	cmp	AL,#H'4000
-	bne	?L530
+	bne	?L507
 	ld	AL,#H'0002
 	st	AL,@(0,Y)
 	ld	AL,@(H'0003,X)
 	ld	AH,@(H'0001,Y)
 	bsr	$_CodecSetOutputGainNow
-?L530:
+?L507:
 ?LBE_CsrA2DPDecoderSetDACGain:
 	leavel	#4
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 589 used[1] = 145 used[3] = 12 total = 746
-;# Function pattern *movqi3 used[0] = 997 total = 997
-;# Function pattern *movqi8 used[0] = 4 total = 4
+;# Function pattern *movqi2 used[0] = 572 used[1] = 138 used[3] = 12 total = 722
+;# Function pattern *movqi3 used[0] = 967 total = 967
+;# Function pattern *movqi8 used[0] = 3 total = 3
 ;# Function pattern *movhi used[2] = 19 used[3] = 17 total = 36
 ;# Function pattern *addhi3 used[0] = 1 total = 1
 ;# Function pattern *addqi0 used[0] = 2 total = 2
-;# Function pattern *addqi2 used[0] = 24 used[2] = 10 total = 34
+;# Function pattern *addqi2 used[0] = 22 used[2] = 8 total = 30
 ;# Function pattern *andqi3 used[0] = 128 total = 128
 ;# Function pattern *iorqi3 used[0] = 24 total = 24
 ;# Function pattern *udivqi3_const used[0] = 1 total = 1
@@ -121765,14 +121174,14 @@ $_CsrA2DPDecoderSetDACGain:
 ;# Function pattern *ashlqi3 used[0] = 13 total = 13
 ;# Function pattern one_cmplqi2 used[0] = 4 total = 4
 ;# Function pattern *zero_extendqihi2_1 used[0] = 2 used[1] = 2 total = 4
-;# Function pattern jump used[0] = 113 total = 113
-;# Function pattern *call1 used[0] = 109 total = 109
-;# Function pattern *call_value1 used[0] = 242 total = 242
+;# Function pattern jump used[0] = 109 total = 109
+;# Function pattern *call1 used[0] = 104 total = 104
+;# Function pattern *call_value1 used[0] = 237 total = 237
 ;# Function pattern tablejump_1 used[0] = 7 total = 7
 ;# Function pattern movstrqi+2 used[0] = 9 total = 9
 ;# Function pattern movstrqi+3 used[0] = 55 used[1] = 44 total = 99
 ;# Function pattern movstrqi+4 used[1] = 21 total = 21
-;# Function pattern movstrqi+5 used[0] = 87 total = 87
+;# Function pattern movstrqi+5 used[0] = 82 total = 82
 ;# Function pattern movstrqi+6 used[0] = 2 total = 2
 ;# Function pattern movstrqi+7 used[0] = 1 total = 1
 	MODULE	csr_a2dp_decoder_common_sharing
@@ -142177,7 +141586,7 @@ _message_handler:
 	ld	X,@(H'0003,Y)
 	ld	AL,#-H'7000
 	add	AL,@$XAP_AH
-	cmp	AL,#(H'0001+H'0019)
+	cmp	AL,#(H'0001+H'0017)
 	bcc	?L2
 	st	X,@(0,Y)
 	ld	AL,@H'fff8
@@ -151893,7 +151302,7 @@ _message_handler:
 	ld	X,@(H'0003,Y)
 	ld	AL,#-H'7000
 	add	AL,@$XAP_AH
-	cmp	AL,#(H'0001+H'0019)
+	cmp	AL,#(H'0001+H'0017)
 	bcc	?L2
 	st	X,@(0,Y)
 	ld	AL,@H'fff8
@@ -151914,10 +151323,10 @@ _message_handler:
 ?LBE_message_handler:
 	leavel	#3
 _handleAudioMessage:
-	enterl	#9
+	enterl	#8
 ?LBB_handleAudioMessage:
-	st	AL,@(H'0004,Y)
-	ld	X,@(H'0009,Y)
+	st	AL,@(H'0003,Y)
+	ld	X,@(H'0008,Y)
 ?LBB2:
 	cmp	AH,#H'700A
 	beq	?L15
@@ -151937,7 +151346,7 @@ _handleAudioMessage:
 	bra	(?L7)
 ?L10:
 ?LBB4:
-	st	X,@(H'0005,Y)
+	st	X,@(H'0004,Y)
 	bsr	$_IsAudioBusy
 	cmp	AL,#H'0000
 	bne	?L12
@@ -151948,37 +151357,35 @@ _handleAudioMessage:
 	cmp	AL,#H'0003
 	beq	?L11
 ?L12:
-	ld	X,@(H'0005,Y)
+	ld	X,@(H'0004,Y)
 	tst	@(H'0002,X)
 	beq	?L7
 ?LBB5:
-	ld	AL,#H'0008
+	ld	AL,#H'0007
 	bsr	$_PanicUnlessMalloc
-	st	AL,@(H'0006,Y)
-	ld	AL,#H'0008
+	st	AL,@(H'0005,Y)
+	ld	AL,#H'0007
 	st	AL,@(0,Y)
-	ld	AL,@(H'0006,Y)
-	ld	AH,@(H'0005,Y)
+	ld	AL,@(H'0005,Y)
+	ld	AH,@(H'0004,Y)
 	bsr	$_memmove
 	bsr	$_AudioBusyPtr
-	ld	AH,@(H'0006,Y)
+	ld	AH,@(H'0005,Y)
 	st	AH,@(0,Y)
 	st	AL,@(H'0001,Y)
-	ld	AL,@(H'0004,Y)
+	ld	AL,@(H'0003,Y)
 	ld	AH,#H'7009
 	bsr	$_MessageSendConditionally
 ?LBE5:
 	bra	(?L7)
 ?L11:
-	ld	X,@(H'0005,Y)
+	ld	X,@(H'0004,Y)
 	ld	AL,@(H'0003,X)
 	st	AL,@(0,Y)
 	ld	AL,@(H'0004,X)
 	st	AL,@(H'0001,Y)
 	ld	AL,@(H'0005,X)
 	st	AL,@(H'0002,Y)
-	ld	AL,@(H'0007,X)
-	st	AL,@(H'0003,Y)
 	ld	AL,@(0,X)
 	ld	AH,@(H'0001,X)
 	bsr	$_CsrVoicePresencesPluginPlayPhrase
@@ -151992,7 +151399,7 @@ _handleAudioMessage:
 ?L7:
 ?LBE2:
 ?LBE_handleAudioMessage:
-	leavel	#9
+	leavel	#8
 ;.stabn	192,0,0,?LBB4
 ;.stabn	192,0,0,?LBB5
 ;.stabn	224,0,0,?LBE5
@@ -152058,8 +151465,8 @@ _handleInternalMessage:
 	leavel	#4
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 19 used[1] = 8 total = 27
-;# Function pattern *movqi3 used[0] = 23 total = 23
+;# Function pattern *movqi2 used[0] = 18 used[1] = 8 total = 26
+;# Function pattern *movqi3 used[0] = 22 total = 22
 ;# Function pattern *addqi2 used[2] = 1 total = 1
 ;# Function pattern jump used[0] = 7 total = 7
 ;# Function pattern *call1 used[0] = 10 total = 10
@@ -152427,10 +151834,10 @@ $_CsrVoicePresencesPluginPlayPhrase:
 	beq	?L38
 	bsr	$_Panic
 ?L38:
-	ld	AL,#H'000C
+	ld	AL,#H'000B
 	bsr	$_PanicUnlessMalloc
 	st	AL,@_koovox_phrase_data
-	ld	AH,#H'000C
+	ld	AH,#H'000B
 	st	AH,@(0,Y)
 	ld	AH,#H'0000
 	bsr	$_memset
@@ -152454,9 +151861,6 @@ $_CsrVoicePresencesPluginPlayPhrase:
 	st	AL,@(H'0008,X)
 	ld	X,@_koovox_phrase_data
 	st	AL,@(H'000A,X)
-	ld	X,@_koovox_phrase_data
-	ld	AL,@(H'0008,Y)
-	st	AL,@(H'000B,X)
 	ld	AL,#($_csr_voice_presences_plugin)
 	ld	AH,#-H'7FDA
 	bsr	$_MessageCancelAll
@@ -152617,8 +152021,8 @@ _present_header:
 	DS	2
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 62 used[1] = 23 total = 85
-;# Function pattern *movqi3 used[0] = 121 total = 121
+;# Function pattern *movqi2 used[0] = 61 used[1] = 23 total = 84
+;# Function pattern *movqi3 used[0] = 119 total = 119
 ;# Function pattern *movhi used[2] = 1 used[3] = 6 total = 7
 ;# Function pattern *iorhi3 used[0] = 3 total = 3
 ;# Function pattern *addqi0 used[0] = 7 total = 7
@@ -152640,460 +152044,6 @@ _present_header:
 ;# Function pattern movstrqi+4 used[1] = 3 total = 3
 ;# Function pattern movstrqi+5 used[0] = 7 total = 7
 ;# Function pattern movstrqi+7 used[0] = 1 total = 1
-	MODULE	koovox_sport_common_plugin
-	.LARGE
-; GNU C version 3.3.3 (CSR version 30 for xapnative)
-; 	compiled by GNU C version 3.2.3 (mingw special 20030504-1).
-;# options passed:  -IC:\ADK3.5\tools/include/firmware
-;# -IC:\ADK3.5\tools/include/standard
-;# -IC:\ADK3.5\tools/include/profiles/BlueLab-6.5.2-Release -iprefix
-;# -isystem -D__GNUC__=3 -D__GNUC_MINOR__=3 -D__GNUC_PATCHLEVEL__=3 -MD -MQ
-;# -massisted-crt0 -mlarge-mode -mno-inline-block-copy-mode
-;# -mfunction-ptr-pi -mal-first -mleaf-optim -mno-function-sizeof
-;# -mworkaround-b96516 -ansi -auxbase-strip -g -O -pedantic -Wall
-;# -Wmissing-prototypes -Wstrict-prototypes -Wsign-compare
-;# -Wredundant-decls -Werror -ansi -fno-builtin-memcpy
-;# options enabled:  -fdefer-pop -fthread-jumps -fpeephole -ffunction-cse
-;# -fkeep-static-consts -fpcc-struct-return -fgcse-lm -fgcse-sm
-;# -floop-optimize -fcrossjumping -fif-conversion -fif-conversion2
-;# -fsched-interblock -fsched-spec -fbranch-count-reg -fcprop-registers
-;# -fcommon -fgnu-linker -fargument-alias -fmerge-constants
-;# -fzero-initialized-in-bss -fleading-underscore -fident -fpeephole2
-;# -fguess-branch-probability -fmath-errno -ftrapping-math -mlarge-mode
-;# -mquiet-mode -mbitfield-mode -mleaf-optim -mfunction-ptr-pi
-;# -massisted-crt0 -mworkaround-b96516 -mal-first
-
-	.ENHANCED
-	.SEG	CONST
-$_koovox_sport_common_plugin:
-	dc	hwrd(_message_handler)
-	dc	lwrd(_message_handler)
-	.CODE
-_message_handler:
-	enterl	#3
-?LBB_message_handler:
-	st	AL,@H'fff8
-	ld	X,@(H'0003,Y)
-	ld	AL,#-H'7000
-	add	AL,@$XAP_AH
-	cmp	AL,#(H'0001+H'0019)
-	bcc	?L2
-	st	X,@(0,Y)
-	ld	AL,@H'fff8
-	bsr	_handleAudioMessage
-	bra	(?L1)
-?L2:
-	cmp	AH,#-H'7FDC
-	bne	?L4
-	ld	AL,@H'fff8
-	ld	AH,@$XAP_UXL
-	bsr	_handleKalimbaMessage
-	bra	(?L1)
-?L4:
-	cmp	AH,#-H'7FD6
-	bne	?L6
-	ld	AL,@H'fff8
-	ld	AH,@$XAP_UXL
-	bsr	_handleKalimbaMessageLong
-	bra	(?L1)
-?L6:
-	st	X,@(0,Y)
-	ld	AL,@H'fff8
-	bsr	_handleInternalMessage
-?L1:
-?LBE_message_handler:
-	leavel	#3
-_handleAudioMessage:
-	enterl	#4
-?LBB_handleAudioMessage:
-	ld	AL,@(H'0004,Y)
-?LBB2:
-	cmp	AH,#H'7017
-	beq	?L12
-	cmp	AH,#H'7018
-	beq	?L17
-	bra	(?L10)
-?L12:
-?LBB3:
-	st	AL,@(H'0001,Y)
-	bsr	$_IsAudioBusy
-	cmp	AL,#H'0000
-	bne	?L10
-	bsr	$_GetCurrentDspStatus
-	cmp	AL,#H'0000
-	beq	?L15
-	bsr	$_GetCurrentDspStatus
-	cmp	AL,#H'0003
-	bne	?L10
-?L15:
-	bsr	$_IsSportRunning
-	cmp	AL,#H'0000
-	bne	?L10
-	ld	X,@(H'0001,Y)
-	ld	AL,@(H'0002,X)
-	st	AL,@(0,Y)
-	ld	AL,@(0,X)
-	ld	AH,@(H'0001,X)
-	bsr	$_KoovoxSportCommonPluginStart
-?LBE3:
-	bra	(?L10)
-?L17:
-	bsr	$_GetCurrentDspStatus
-	cmp	AL,#H'0003
-	bne	?L10
-	bsr	$_KoovoxStopSportKalimba
-	bsr	$_KoovoxPowerOffKalimba
-?L10:
-?LBE2:
-?LBE_handleAudioMessage:
-	leavel	#4
-;.stabn	192,0,0,?LBB3
-;.stabn	224,0,0,?LBE3
-_handleKalimbaMessage:
-	enterl	#2
-?LBB_handleKalimbaMessage:
-	ld	AL,@$XAP_AH
-	bsr	$_KoovoxMessageFromKalimba
-?LBE_handleKalimbaMessage:
-	leavel	#2
-_handleKalimbaMessageLong:
-	enterl	#2
-?LBB_handleKalimbaMessageLong:
-	ld	AL,@$XAP_AH
-	bsr	$_KoovoxMessageFromKalimbaLong
-?LBE_handleKalimbaMessageLong:
-	leavel	#2
-_handleInternalMessage:
-; leaf function with empty stack frame
-?LBB_handleInternalMessage:
-?LBE_handleInternalMessage:
-	rts
-	ENDMOD
-
-;# Function pattern *movqi2 used[0] = 9 used[1] = 4 total = 13
-;# Function pattern *movqi3 used[0] = 6 total = 6
-;# Function pattern *addqi2 used[2] = 1 total = 1
-;# Function pattern jump used[0] = 5 total = 5
-;# Function pattern *call1 used[0] = 9 total = 9
-;# Function pattern *call_value1 used[0] = 5 total = 5
-;# Function pattern movstrqi+3 used[0] = 3 total = 3
-;# Function pattern movstrqi+4 used[1] = 1 total = 1
-;# Function pattern movstrqi+5 used[0] = 6 total = 6
-	MODULE	koovox_sport_common
-	.LARGE
-; GNU C version 3.3.3 (CSR version 30 for xapnative)
-; 	compiled by GNU C version 3.2.3 (mingw special 20030504-1).
-;# options passed:  -IC:\ADK3.5\tools/include/firmware
-;# -IC:\ADK3.5\tools/include/standard
-;# -IC:\ADK3.5\tools/include/profiles/BlueLab-6.5.2-Release -iprefix
-;# -isystem -D__GNUC__=3 -D__GNUC_MINOR__=3 -D__GNUC_PATCHLEVEL__=3 -MD -MQ
-;# -massisted-crt0 -mlarge-mode -mno-inline-block-copy-mode
-;# -mfunction-ptr-pi -mal-first -mleaf-optim -mno-function-sizeof
-;# -mworkaround-b96516 -ansi -auxbase-strip -g -O -pedantic -Wall
-;# -Wmissing-prototypes -Wstrict-prototypes -Wsign-compare
-;# -Wredundant-decls -Werror -ansi -fno-builtin-memcpy
-;# options enabled:  -fdefer-pop -fthread-jumps -fpeephole -ffunction-cse
-;# -fkeep-static-consts -fpcc-struct-return -fgcse-lm -fgcse-sm
-;# -floop-optimize -fcrossjumping -fif-conversion -fif-conversion2
-;# -fsched-interblock -fsched-spec -fbranch-count-reg -fcprop-registers
-;# -fcommon -fgnu-linker -fargument-alias -fmerge-constants
-;# -fzero-initialized-in-bss -fleading-underscore -fident -fpeephole2
-;# -fguess-branch-probability -fmath-errno -ftrapping-math -mlarge-mode
-;# -mquiet-mode -mbitfield-mode -mleaf-optim -mfunction-ptr-pi
-;# -massisted-crt0 -mworkaround-b96516 -mal-first
-
-	.ENHANCED
-	.SEG	VAR
-_sport_data:
-	DS	1
-	.CODE
-$_KoovoxPromptsPluginPlayDsp:
-	enterl	#6
-?LBB_KoovoxPromptsPluginPlayDsp:
-?LBB2:
-	cmp	AL,#H'0000
-	bne	?L2
-?LBB3:
-	ld	AL,#(?LC0)
-	bsr	$_strlen
-	st	AL,@(0,Y)
-	ld	AL,#H'0001
-	ld	AH,#(?LC0)
-	bsr	$_FileFind
-	st	AL,@(H'0003,Y)
-	ld	AL,#H'0001
-	bsr	$_SetCurrentDspStatus
-	ld	AL,@(H'0003,Y)
-	bsr	$_KalimbaLoad
-	cmp	AL,#H'0000
-	bne	?L3
-	bsr	$_Panic
-?L3:
-	ld	AL,#H'0002
-	bsr	$_SetCurrentDspStatus
-	bra	(?L1)
-?L2:
-?LBE3:
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'7000
-	ld	AH,#H'0000
-	bsr	$_KalimbaSendMessage
-	cmp	AL,#H'0000
-	bne	?L4
-	bsr	$_Panic
-?L4:
-	ld	X,@_sport_data
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	ld	AL,@(H'0002,X)
-	ld	AH,#H'40C8
-	bsr	$_MessageSend
-	ld	AL,#H'0003
-	bsr	$_SetCurrentDspStatus
-	ld	X,@_sport_data
-	ld	AL,@(0,X)
-	ld	AH,@(H'0001,X)
-	bsr	$_KoovoxStartSportKalimba
-	ld	AL,#H'0000
-	bsr	$_SetAudioBusy
-	ld	AL,#H'0001
-	bsr	$_SetSportStatus
-?L1:
-?LBE2:
-?LBE_KoovoxPromptsPluginPlayDsp:
-	leavel	#6
-	.SEG	CONST
-?LC0:
-	dc	H'76
-	dc	H'65
-	dc	H'65
-	dc	H'5F
-	dc	H'68
-	dc	H'65
-	dc	H'61
-	dc	H'72
-	dc	H'74
-	dc	H'72
-	dc	H'61
-	dc	H'74
-	dc	H'65
-	dc	H'2F
-	dc	H'76
-	dc	H'65
-	dc	H'65
-	dc	H'5F
-	dc	H'68
-	dc	H'65
-	dc	H'61
-	dc	H'72
-	dc	H'74
-	dc	H'72
-	dc	H'61
-	dc	H'74
-	dc	H'65
-	dc	H'2E
-	dc	H'6B
-	dc	H'61
-	dc	H'70
-	dc	H'00
-	.CODE
-;.stabn	192,0,0,?LBB3
-;.stabn	224,0,0,?LBE3
-$_KoovoxSportCommonPluginStart:
-	enterl	#5
-?LBB_KoovoxSportCommonPluginStart:
-	st	AL,@(0,Y)
-	st	AH,@(H'0001,Y)
-?LBB4:
-	tst	@_sport_data
-	beq	?L6
-	bsr	$_Panic
-?L6:
-	ld	AL,#H'0003
-	bsr	$_PanicUnlessMalloc
-	ld	X,@$XAP_AL
-	st	AL,@_sport_data
-	ld	AL,#H'0000
-	st	AL,@(H'0001,X)
-	st	AL,@(0,X)
-	st	AL,@(H'0002,X)
-	ld	X,@_sport_data
-	ld	AL,@(0,Y)
-	st	AL,@(0,X)
-	ld	X,@_sport_data
-	ld	AL,@(H'0001,Y)
-	st	AL,@(H'0001,X)
-	ld	X,@_sport_data
-	ld	AL,@(H'0005,Y)
-	st	AL,@(H'0002,X)
-	ld	AL,#($_koovox_sport_common_plugin)
-	ld	AH,#-H'7FDC
-	bsr	$_MessageCancelAll
-	ld	AL,#($_koovox_sport_common_plugin)
-	ld	AH,#-H'7FD6
-	bsr	$_MessageCancelAll
-	ld	AL,#($_koovox_sport_common_plugin)
-	bsr	$_MessageKalimbaTask
-	st	AL,@(H'0002,Y)
-	ld	AL,#($_koovox_sport_common_plugin)
-	bsr	$_SetAudioBusy
-	ld	AL,@(H'0002,Y)
-	cmp	AL,#($_koovox_sport_common_plugin)
-	bne	?L7
-	ld	AL,#H'0002
-	bra	(?L8)
-?L7:
-	ld	AL,#H'0000
-?L8:
-	bsr	$_KoovoxPromptsPluginPlayDsp
-?LBE4:
-?LBE_KoovoxSportCommonPluginStart:
-	leavel	#5
-;.stabn	192,0,0,?LBB4
-;.stabn	224,0,0,?LBE4
-$_KoovoxPowerOffKalimba:
-	enterl	#2
-?LBB_KoovoxPowerOffKalimba:
-	tst	@_sport_data
-	bne	?L11
-	bsr	$_Panic
-?L11:
-	ld	AL,#($_koovox_sport_common_plugin)
-	ld	AH,#-H'7FDC
-	bsr	$_MessageCancelAll
-	ld	AL,#($_koovox_sport_common_plugin)
-	ld	AH,#-H'7FD6
-	bsr	$_MessageCancelAll
-	ld	AL,#H'0000
-	bsr	$_MessageKalimbaTask
-	bsr	$_KalimbaPowerOff
-	ld	AL,#H'0000
-	bsr	$_SetSportStatus
-	ld	AL,#H'0000
-	bsr	$_SetCurrentDspStatus
-	ld	AL,@_sport_data
-	bsr	$_free
-	ld	AL,#H'0000
-	st	AL,@_sport_data
-	bsr	$_SetAudioBusy
-?LBE_KoovoxPowerOffKalimba:
-	leavel	#2
-$_KoovoxMessageFromKalimbaLong:
-	enterl	#5
-?LBB_KoovoxMessageFromKalimbaLong:
-	st	AL,@(H'0001,Y)
-	ld	X,@$XAP_AL
-?LBB5:
-	ld	AL,@(0,X)
-	add	AL,#-H'4087
-	cmp	AL,#(H'0001+H'0001)
-	bcc	?L12
-?LBB6:
-	ld	AL,@(H'0001,X)
-	add	AL,#H'0003
-	bsr	$_PanicUnlessMalloc
-	st	AL,@(-1,Y)
-	ld	X,@(H'0001,Y)
-	ld	AL,@(0,X)
-	ld	X,@(-1,Y)
-	st	AL,@(0,X)
-	ld	X,@(H'0001,Y)
-	ld	AL,@(H'0001,X)
-	ld	X,@(-1,Y)
-	st	AL,@(H'0001,X)
-	ld	AH,#H'0000
-	ld	X,@(H'0001,Y)
-	cmp	AH,@(H'0001,X)
-	bcc	?L24
-?L20:
-	ld	AL,@$XAP_AH
-	add	AL,@(-1,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,@(H'0001,Y)
-	add	AL,@$XAP_AH
-	ld	X,@$XAP_AL
-	ld	AL,@(H'0002,X)
-	ld	X,@(H'0002,Y)
-	st	AL,@(H'0002,X)
-	add	AH,#H'0001
-	ld	X,@(H'0001,Y)
-	cmp	AH,@(H'0001,X)
-	bcs	?L20
-?L24:
-	ld	X,@_sport_data
-	ld	AL,@(-1,Y)
-	st	AL,@(0,Y)
-	ld	AL,@(H'0002,X)
-	ld	AH,#H'40C4
-	bsr	$_MessageSend
-?L12:
-?LBE6:
-?LBE5:
-?LBE_KoovoxMessageFromKalimbaLong:
-	leavel	#5
-;.stabn	192,0,0,?LBB5
-;.stabn	192,0,0,?LBB6
-;.stabn	224,0,0,?LBE6
-;.stabn	224,0,0,?LBE5
-$_KoovoxMessageFromKalimba:
-	enterl	#5
-?LBB_KoovoxMessageFromKalimba:
-	st	AL,@(H'0001,Y)
-	ld	X,@$XAP_AL
-?LBB7:
-	ld	AL,@(0,X)
-	cmp	AL,#H'1000
-	beq	?L29
-	cmp	AL,#H'1000
-	bcs	?L27
-	add	AL,#-H'4F20
-	cmp	AL,#(H'0001+H'0006)
-	bcc	?L27
-	bra	(?L36)
-?L29:
-	ld	AL,#H'0001
-	bsr	$_KoovoxPromptsPluginPlayDsp
-	bra	(?L27)
-?L36:
-?LBB8:
-	ld	AL,#H'0005
-	bsr	$_PanicUnlessMalloc
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,@(H'0002,Y)
-	ld	AH,@(H'0001,Y)
-	bsr	$_memcpy
-	ld	X,@_sport_data
-	ld	AL,@(H'0002,Y)
-	st	AL,@(0,Y)
-	ld	AL,@(H'0002,X)
-	ld	AH,#H'40C3
-	bsr	$_MessageSend
-?L27:
-?LBE8:
-?LBE7:
-?LBE_KoovoxMessageFromKalimba:
-	leavel	#5
-;.stabn	192,0,0,?LBB7
-;.stabn	192,0,0,?LBB8
-;.stabn	224,0,0,?LBE8
-;.stabn	224,0,0,?LBE7
-	ENDMOD
-
-;# Function pattern *movqi2 used[0] = 32 used[1] = 8 total = 40
-;# Function pattern *movqi3 used[0] = 64 total = 64
-;# Function pattern *movqi8 used[0] = 1 total = 1
-;# Function pattern *addqi2 used[0] = 5 used[2] = 1 total = 6
-;# Function pattern jump used[0] = 4 total = 4
-;# Function pattern *call1 used[0] = 21 total = 21
-;# Function pattern *call_value1 used[0] = 14 total = 14
-;# Function pattern movstrqi+3 used[0] = 3 used[1] = 2 total = 5
-;# Function pattern movstrqi+4 used[1] = 2 total = 2
-;# Function pattern movstrqi+5 used[0] = 5 total = 5
 	MODULE	gaia
 	.LARGE
 ; GNU C version 3.3.3 (CSR version 30 for xapnative)

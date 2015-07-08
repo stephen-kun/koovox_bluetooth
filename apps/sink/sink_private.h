@@ -96,6 +96,7 @@ DESCRIPTION
 #include "sink_gatt.h"
 #endif
 
+
 /* Input manager */
 #if defined(ENABLE_IR_REMOTE) || (defined(BLE_ENABLED) && defined(GATT_CLIENT_ENABLED))
 #include "sink_input_manager.h"

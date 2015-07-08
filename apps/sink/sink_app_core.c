@@ -12,7 +12,6 @@ FILE NAME
 #include <kalimba.h>
 #include <vm.h>
 #include <csr_voice_presences_plugin.h>
-#include <koovox_sport_common_plugin.h>
 #include <micbias.h>
 #include <pio.h>
 #include <pio_common.h>
@@ -326,41 +325,6 @@ void KoovoxRestartDsp(void)
 
 	if(GetSampleStatus())
 	{
-		TaskData * task    = (TaskData *) &koovox_sport_common_plugin;
-		uint8 sensor_sample = 0;
-		uint16 sensor_value = 0;
-		
-		switch(GetSampleStatus())
-		{
-		case SPORT_ENABLE:
-			sensor_sample = HB_SENSOR + ACC_SENSOR;
-			sensor_value = STEP_VALUE;
-			if(!isOnlineState())
-				sensor_value += TIME_VALUE;
-		break;
-		
-		case HB_ENABLE:
-			sensor_sample = HB_SENSOR;
-		break;
-		
-		case NECK_PROTECT:
-			sensor_sample = ACC_SENSOR;
-			sensor_value = NECK_EVENT;
-		break;
-		
-		case SAFE_DRIVER:
-			sensor_sample = ACC_SENSOR;
-			sensor_value = DRIVER_EVENT;
-		break;
-
-		case CONST_SEAT:
-			sensor_sample = ACC_SENSOR;
-			sensor_value = SEAT_EVENT;
-		break;
-		
-		}
-		
-		AudioSportModePlayPrompt( task, sensor_sample, sensor_value, &theSink.task);
 	}
 }
 
@@ -542,16 +506,6 @@ void KoovoxStartSafeDriver(void)
 {
 	APP_CORE_DEBUG(("KoovoxStartSafeDriver\n")) ;
 
-	/* enable the health mode */
-	SetSampleStatus(SAFE_DRIVER);
-
-	{
-	TaskData * task    = (TaskData *) &koovox_sport_common_plugin;
-	uint8 sensor_sample = ACC_SENSOR;
-	uint16 sensor_value = NECK_EVENT;
-	
-	AudioSportModePlayPrompt( task, sensor_sample, sensor_value, &theSink.task);
-	}
 
 }
 
@@ -567,14 +521,6 @@ void KoovoxStopSafeDriver(void)
 {	
 	APP_CORE_DEBUG(("KoovoxStopSafeDriver\n")) ;
 
-	/* disable the health mode */
-	SetSampleStatus(SAMPLE_DISABLE);
-
-	{
-		TaskData * task    = NULL;
-		task = (TaskData *) &koovox_sport_common_plugin;
-		AudioSportModeStopPrompt(task);
-	}
 	
 }
 
@@ -1896,6 +1842,7 @@ void KoovoxHandleEventCvcKalimbaLoaded(void)
 {
 	APP_CORE_DEBUG(("KoovoxHandleEventCvcKalimbaLoaded\n")) ;
 
+#if 0
 	if(isPresentBusy())
 	{
 		/* disconnect the connect bitween sco source with sco port */
@@ -1912,6 +1859,7 @@ void KoovoxHandleEventCvcKalimbaLoaded(void)
 		/* ≤•∑≈Ã· æ“Ù */
 		TonesPlayEvent(EventKoovoxPromptAsrBegin);
 	}
+#endif
 }
 
 

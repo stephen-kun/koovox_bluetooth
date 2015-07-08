@@ -784,6 +784,8 @@
                   value="12"/>
             <enum key="Streaming A2DP"
                   value="13"/>
+            <enum key="Automatic Speech Recognition"
+                  value="14"/>				  
         </DefineList>
         <DefineList Id="PIO">
             <enum key="PIO 0"

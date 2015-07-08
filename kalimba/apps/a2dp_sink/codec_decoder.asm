@@ -19,10 +19,6 @@
 #include "codec_decoder.h"
 #include "audio_proc_library.h"
 
-#include "i2c_library.h"
-
-
-
 #ifdef USB_ENABLE
 #include "usbio.h"
 #endif
@@ -828,9 +824,6 @@
    r2 = VM_SET_TONE_RATE_MESSAGE_ID;
    r3 = &$set_tone_rate_from_vm;
    call $message.register_handler;
-   
-	call $vee.accelerate.start;
-    call $vee.heartrate.start;
 
    // intialize SPI communications library
    call $spi_comm.initialize;
@@ -860,7 +853,7 @@
 #endif
 
 
-   // tell vm we re ready and wait for the go message
+   // tell vm we're ready and wait for the go message
    call $message.send_ready_wait_for_go;
 
    // Initialize the USB/decoder according to the connection type (A2DP or USB)
@@ -901,19 +894,12 @@
     r2 = SIGNAL_DETECT_TIMER_PERIOD;
     r3 = &$signal_detect_timer_handler;
     call $timer.schedule_event_in;
-    
-
 
    // continually decode codec frames
    frame_loop:
 
-
-	call $vee.accelerate.angle_calc;
-    call $vee.heartrate.calc;
-
-
-	// Check Communication
-	call $spi_comm.polled_service_routine;
+      // Check Communication
+      call $spi_comm.polled_service_routine;
 
         // Check the connection type (A2DP or USB/ANALOGUE) and process accordingly
         r0 = M[$app_config.io];
@@ -1014,7 +1000,7 @@
        r0 = M[$sub_link_port];
        Null = r0 - $AUDIO_ESCO_SUB_OUT_PORT;
        if NZ jump not_esco_sub;
-          // if we have ADC input, the DSP s processing is scheduled.
+          // if we have ADC input, the DSP's processing is scheduled.
           // if we have USB input, USB runs when we have enough data
           r0 = M[$app_config.io];
           null = r0 - $USB_IO;
@@ -1082,7 +1068,7 @@ mono_process:
 
       call $downsample_sub_to_1k2;
       
-      // if don t have enough data in 'sub_out_1k2' buffer for an L2CAP sub packet, then keep calm and carry on
+      // if don't have enough data in 'sub_out_1k2' buffer for an L2CAP sub packet, then keep calm and carry on
       r0 = &$sub_out_1k2_cbuffer_struc;
       call $cbuffer.calc_amount_data;
       null = r0 - 18;
@@ -1097,10 +1083,12 @@ mono_process:
       call $M.Subwoofer.l2cap_handler;      // create sub packet and copy to port
       
    #endif // SUB_ENABLE
-   
+
    jump frame_loop;
 
 .ENDMODULE;
+
+
 
 //------------------------------------------------------------------------------
 .module $M.signal_detect_timer_handler;

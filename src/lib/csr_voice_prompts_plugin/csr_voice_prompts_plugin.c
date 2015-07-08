@@ -11,7 +11,6 @@ NOTES
 #include <audio.h>
 #include <codec.h>
 #include <stdlib.h>
-#define DEBUG_PRINT_ENABLEDx
 #include <print.h>
 #include <stream.h> /*for the ringtone_note*/
 #include <string.h>
@@ -94,7 +93,7 @@ static void handleAudioMessage ( Task task , MessageId id, Message message )
                            
             /* if the audio is currently busy then queue this audio prompt request, or if the audio plugin is in an 'about to be loaded state', queue until it is
                                      loaded and running */
-            if ((IsAudioBusy())||(GetCurrentDspStatus() && (GetCurrentDspStatus() != DSP_RUNNING))|| (IsAudioDisconnecting()))
+            if ((IsAudioBusy())||(GetCurrentDspStatus() && (GetCurrentDspStatus() != DSP_RUNNING)))
             {    
                 if ( prompt_message->can_queue) 
                 {                
@@ -107,7 +106,7 @@ static void handleAudioMessage ( Task task , MessageId id, Message message )
             else
             {
                 CsrVoicePromptsPluginPlayPhrase ( prompt_message->id, prompt_message->language, 
-                                                  prompt_message->codec_task, prompt_message->ap_volume, prompt_message->features, prompt_message->app_task);
+                                                  prompt_message->codec_task, prompt_message->ap_volume, prompt_message->features);
                 PRINT(("VP:start\n"));
             } 
         }
@@ -181,7 +180,7 @@ static void handleKalimbaMessage ( Task task , Message message )
     PRINT(("handleKalimbaMessage: msg id[%x] a[%x] b[%x] c[%x] d[%x]\n", m->id, m->a, m->b, m->c, m->d));
     
     switch ( m->id ) 
-    {	
+    {
         case MUSIC_READY_MSG:
         {
             PRINT(("VP: KalMsg MUSIC_READY_MSG\n"));

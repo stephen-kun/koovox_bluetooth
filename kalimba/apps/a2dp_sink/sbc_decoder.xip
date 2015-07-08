@@ -19,7 +19,6 @@
  <file path="user_eq.asm" />
  <file path="latency_reporting.asm" />
  <file path="relay_conn.asm" />
- <file path="vee_heartrate.asm" />
  <properties currentconfiguration="Release" >
   <configuration name="Debug" >
    <property key="BUILDENV" >0</property>

@@ -3,7 +3,6 @@
 .PHONY : image/START.HTM \
 	image/usb_root \
 	image/usb_fat \
-	image/vee_heartrate/vee_heartrate.kap \
 	image/cvc_headset/cvc_headset.kap \
 	image/cvc_headset_2mic/cvc_headset_2mic.kap \
 	image/cvc_handsfree/cvc_handsfree.kap \
@@ -77,13 +76,6 @@ image/a2dp_low_latency_2mic/a2dp_low_latency_2mic.kap :
 	$(copyfile) ..\..\kalimba\apps\a2dp_low_latency_2mic\image\a2dp_low_latency_2mic\a2dp_low_latency_2mic.kap $@
 
 image.fs : image/a2dp_low_latency_2mic/a2dp_low_latency_2mic.kap
-
-# copy in vee heartrate
-image/vee_heartrate/vee_heartrate.kap :
-	$(mkdir) image/vee_heartrate
-	$(copyfile) ..\..\kalimba\apps\vee_heartrate\image\vee_heartrate\vee_heartrate.kap $@
-
-image.fs : image/vee_heartrate/vee_heartrate.kap
 
 
 # copy in mp3 decoder 

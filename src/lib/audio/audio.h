@@ -38,9 +38,7 @@ typedef struct audio_lib_Tag
     unsigned tone_playing:1;                /* tone currently being played */
     unsigned vp_playing:1;                  /* voice prompt currently being played */
     unsigned asr_running:1;                 /* asr is currently running/listening */
-	unsigned audio_disconnecting:1;			/* audio is disconnecting */
-	unsigned sport_running:1;				/* sport kalimba is running */
-    unsigned unused:10;     
+    unsigned unused:12;     
 }AUDIO_t ;
 
 /****************************************************************************
@@ -506,37 +504,5 @@ RETURNS
 */
 void AudioSetVolumeA2DP(AUDIO_PLUGIN_SET_VOLUME_A2DP_MSG_T *volume);
 
-#ifndef KOOVOX
-
-/****************************************************************************
-NAME	
-	AudioSportModePlayPrompt
-    
-DESCRIPTION
-
-    . 
-
-RETURNS
-    
-*/
-void AudioSportModePlayPrompt ( Task plugin , uint8 sensor_sample, uint16 sensor_value , Task app_task );
-
-/****************************************************************************
-NAME	
-	AudioSportModeStopPrompt
-
-DESCRIPTION
-
-RETURNS
-*/
-void AudioSportModeStopPrompt ( TaskData * plugin );
-void KoovoxStartSportKalimba(uint8 sensor_sample, uint16 sensor_value);
-void KoovoxStopSportKalimba(void);
-
-bool IsSportRunning(void);
-void SetSportStatus(bool status);
-bool IsAudioDisconnecting(void);
-void SetAudioDisconnectStatus(bool status);
-#endif
 
 #endif /* _AUDIO_H_ */

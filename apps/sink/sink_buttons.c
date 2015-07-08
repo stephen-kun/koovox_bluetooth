@@ -166,7 +166,7 @@ static void ButtonsMessageHandler ( Task pTask, MessageId pId, Message pMessage 
 {   
     ButtonsTaskData * lBTask = (ButtonsTaskData*)pTask ;
 
-    /*B_DEBUG(("B:Message\n")) ;*/
+    B_DEBUG(("B:Message\n")) ;
     switch ( pId )
     {
 #ifdef ENABLE_CAPSENSE
@@ -332,7 +332,7 @@ static void ButtonsMessageHandler ( Task pTask, MessageId pId, Message pMessage 
         case B_REPEAT_TIMER:
         {
             /*if we have reached here, the repeat time has been reached so send a new message*/
-            /*B_DEBUG(("B:Repeat[%lx][%x]\n", lBTask->gBOldInputState , B_REPEAT  )) ;*/
+            B_DEBUG(("B:Repeat[%lx][%x]\n", lBTask->gBOldInputState , B_REPEAT  )) ;
             
             /*send another repeat message*/
             MessageSendLater ( &lBTask->task , B_REPEAT_TIMER , 0 ,  lBTask->button_config->repeat_time ) ; 
@@ -387,7 +387,7 @@ DESCRIPTION
 */ 
 static void ButtonsButtonDetected (  ButtonsTaskData * pButtonsTask, uint32 pButtonMask  , ButtonsTime_t pTime )
 {
-    /*B_DEBUG(("B:But Det[%lx]\n", pButtonMask)) ;*/
+    B_DEBUG(("B:But Det[%lx]\n", pButtonMask)) ;
     
     if( pButtonMask == 0 )
     {

@@ -594,7 +594,6 @@ void CsrA2dpDecoderPluginConnect( A2dpPluginTaskdata *task,
 
     /*ensure that the messages received are from the correct kap file*/
     (void) MessageCancelAll( (TaskData*) task, MESSAGE_FROM_KALIMBA);
-    (void) MessageCancelAll( (TaskData*) task, MESSAGE_FROM_KALIMBA_LONG);
     MessageKalimbaTask( (TaskData*) task );
 
     /* audio busy until DSP returns ready message */
@@ -625,9 +624,6 @@ void CsrA2dpDecoderPluginConnect( A2dpPluginTaskdata *task,
     CsrA2DPDecoderSetDACGain(DAC_MUTE);
 
     PRINT(("DECODER: CsrA2dpDecoderPluginConnect completed\n"));
-
-	SetAudioDisconnectStatus(FALSE);
-
 }
 
 /****************************************************************************
@@ -638,9 +634,6 @@ void CsrA2dpDecoderPluginStartDisconnect(TaskData * task)
 {
 
     PRINT(("DECODER: CsrA2dpDecoderPluginDisconnect start mute\n"));
-
-	SetAudioDisconnectStatus(TRUE);
-	
     /* sample rate no longer valid as plugin is unloading, set to 0 to ensure subwoofer doesn't use it */
     DECODER->rate = 0;
     /* ensure nothing interrupts this sequence of events */
@@ -668,7 +661,6 @@ void CsrA2dpDecoderPluginStartDisconnect(TaskData * task)
     {
         MessageSendLater( task, AUDIO_PLUGIN_DISCONNECT_DELAYED_MSG, 0, MUTE_DISCONNECT_DELAY_WITH_SUB);
     }
-
 }
 /****************************************************************************
 DESCRIPTION
@@ -838,16 +830,11 @@ void CsrA2dpDecoderPluginDisconnect( A2dpPluginTaskdata *task )
     (void) MessageCancelAll((TaskData*) task, AUDIO_PLUGIN_DELAY_VOLUME_SET_MSG);  
 
      /* dispose of any remaining messages in the queue */
-	(void) MessageCancelAll( (TaskData*) task, MESSAGE_FROM_KALIMBA);
-	(void) MessageCancelAll( (TaskData*) task, MESSAGE_FROM_KALIMBA_LONG);
+    (void) MessageCancelAll( (TaskData*) task, MESSAGE_FROM_KALIMBA);
     MessageKalimbaTask( NULL );
 
     /* turn off dsp */
-    KalimbaPowerOff();
-
-#ifndef KOOVOX	
-	MessageSend(DECODER->app_task, EVENT_KALIMBA_POWER_OFF, 0);
-#endif
+    KalimbaPowerOff() ;
 
     /* update current dsp status */
     SetCurrentDspStatus( DSP_NOT_LOADED );
@@ -859,8 +846,6 @@ void CsrA2dpDecoderPluginDisconnect( A2dpPluginTaskdata *task )
     /* free plugin memory */
     free (DECODER);
     DECODER = NULL ;
-
-	SetAudioDisconnectStatus(FALSE);
 
     PRINT(("DECODER: CsrA2dpDecoderPluginDisconnect completed\n"));
 }
@@ -1399,28 +1384,6 @@ void CsrA2dpDecoderPluginInternalMessage( A2dpPluginTaskdata *task ,uint16 id , 
 
                 switch ( m->id )
                 {
-#ifndef KOOVOX        
-					/* send the heart rate msg to app task */
-					case (HEARTRATE_VALUE_FROM_DSP):
-					/* send the heart rate i2c test result to app task */
-					case (HB_I2C_TEST_RESULT_FROM_DSP):
-					/* send the accelerate i2c test result to app task */
-					case (ACC_I2C_TEST_RESULT_FROM_DSP):
-					case (SPORT_DATA_FROM_DSP):
-					case (NECK_PROMPT_EVENT_FROM_DSP):
-					case (SEAT_PROMPT_EVENT_FROM_DSP):
-					case (DRIVER_PROMPT_EVENT_FROM_DSP):
-					case (NOD_ACTION_EVENT_FROM_DSP):
-					case (SHAKE_ACTION_EVENT_FROM_DSP):
-					{
-						uint8* msg = PanicUnlessMalloc(sizeof(DSP_REGISTER_T));
-						memcpy(msg, m, sizeof(DSP_REGISTER_T));
-						PRINT(("message from dsp\n"));
-						MessageSend(DECODER->app_task, EVENT_SPORT_DSP_SHORT_MSG, msg);
-					}
-					break;
-#endif
-					
                     /* indication that the dsp is loaded and ready to accept configuration data */
                     case MUSIC_READY_MSG:
                         {
@@ -1495,7 +1458,6 @@ void CsrA2dpDecoderPluginInternalMessage( A2dpPluginTaskdata *task ,uint16 id , 
                                 /* update current dsp status */
                                 SetCurrentDspStatus( DSP_ERROR );
                             }
-
                         }
                         break;
 
@@ -1763,23 +1725,6 @@ void CsrA2dpDecoderPluginInternalMessage( A2dpPluginTaskdata *task ,uint16 id , 
 
                 switch ( rcv_msg[0] )
                 {
-#ifndef KOOVOX        
-					/* send the heart rate msg to app task */
-					case (HB_ORIGIN_VALUE_FROM_DSP):
-					case (ACC_ORIGIN_VALUE_FROM_DSP):
-					{
-						uint16 i;
-						DSP_LONG_REGISTER_T* message = (DSP_LONG_REGISTER_T*)PanicUnlessMalloc(sizeof(DSP_LONG_REGISTER_T) + rcv_msg[1]);
-						PRINT(("message from dsp\n"));
-						message->id   = rcv_msg[0];
-						message->size = rcv_msg[1];
-						for(i=0;i<rcv_msg[1];i++)
-							message->buf[i] = rcv_msg[i+2];
-						MessageSend(DECODER->app_task, EVENT_SPORT_DSP_LONG_MSG, message);
-					}
-					break;
-#endif
-				
                     case DSP_GAIA_MSG_GET_USER_GROUP_PARAM_RESP:
                         {
                             uint16 i;
@@ -2342,10 +2287,6 @@ void MusicConnectAudio (A2dpPluginTaskdata *task)
     }
     /* update the current audio state */
     SetAudioInUse(TRUE);
-
-#ifndef KOOVOX
-	MessageSend(DECODER->app_task, EVENT_CODEC_KALIMBA_LOADED, 0);
-#endif
 }
 
 /****************************************************************************

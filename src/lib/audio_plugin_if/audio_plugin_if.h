@@ -208,23 +208,6 @@ Param1 == 1 => receiving audio - come out of standby
 #define PROMPT_STEREO                   0x1     /* 1= stereo, 0 = mono*/
 #define PROMPT_ISPROMPT                   0x2     /* 1= prompt, 0 =tone */
 
-/* operating sensor of the DSP */
-typedef enum
-{
-	HB_SENSOR = 0x01,
-	ACC_SENSOR = 0x02	
-}DSP_SENSOR_INFO_T;
-
-/* operating sensor value  */
-typedef enum
-{
-	STEP_VALUE  	= 0x01,
-	TIME_VALUE  	= 0x02,
-	NECK_EVENT   	= 0x04,
-	DRIVER_EVENT 	= 0x08,
-	SEAT_EVENT		= 0x10
-}DSP_SENSOR_VALUE_T;
-
 
 /* operating status of the DSP */
 typedef enum  DspStatusTag
@@ -390,9 +373,6 @@ typedef enum audio_plugin_interface_message_type_tag
     AUDIO_PLUGIN_DISCONNECT_DELAYED_MSG,
     AUDIO_PLUGIN_ALLOW_VOLUME_CHANGES_MSG,
     AUDIO_PLUGIN_SUBWOOFER_CONNECTION_TIMEOUT_MSG,
-    AUDIO_PLUGIN_SPORT_MODE_PLAY_PROMPT_MSG,
-    AUDIO_PLUGIN_SPORT_MODE_STOP_PROMPT_MSG,
-    
 
 	AUDIO_DOWNSTREAM_MESSAGE_TOP
 
@@ -613,8 +593,6 @@ typedef struct
     AudioPluginFeatures features;
         /*! The audio route of connection required*/
     AUDIO_ROUTE_T   route ;
-		/*! The app task to use to communication the audio*/
-	Task			app_task ;
 
 }AUDIO_PLUGIN_PLAY_AUDIO_PROMPT_MSG_T ;
 
@@ -763,20 +741,6 @@ typedef struct
     int16 device_trim_slave;
     bool mute_active;           /* TRUE when output is muted */
 }AUDIO_PLUGIN_SET_VOLUME_A2DP_MSG_T;
-
-/* DSP sensor control */
-typedef struct
-{
-	/*! sensor sample enable or disable */
-	uint8 sensor_sample;
-
-	/* sensor value enable or disable */
-	uint16 sensor_value;
-
-	/*! The app task to use to communication the audio*/
-	Task			app_task ;
-
-}AUDIO_PLUGIN_SPORT_MODE_PLAY_PROMPT_MSG_T;
 
 
 #endif

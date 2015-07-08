@@ -6230,13 +6230,6 @@
       &CurParams + $M.CVC_HEADSET.PARAMETERS.OFFSET_AUX_STREAM_MIX, &$dac_out.auxillary_mix_op.param + $cbops.aux_audio_mix_op.AUX_GAIN_FIELD,
 
 
-      &CurParams + $M.CVC_HEADSET.PARAMETERS.OFFSET_CLIP_POINT, &$vp_in.auxillary_mix_op.param + $cbops.aux_audio_mix_op.CLIP_POINT_FIELD,
-      &CurParams + $M.CVC_HEADSET.PARAMETERS.OFFSET_BOOST_CLIP_POINT, &$vp_in.auxillary_mix_op.param + $cbops.aux_audio_mix_op.BOOST_CLIP_POINT_FIELD,
-      &CurParams + $M.CVC_HEADSET.PARAMETERS.OFFSET_BOOST, &$vp_in.auxillary_mix_op.param + $cbops.aux_audio_mix_op.BOOST_FIELD,
-      &CurParams + $M.CVC_HEADSET.PARAMETERS.OFFSET_SCO_STREAM_MIX, &$vp_in.auxillary_mix_op.param + $cbops.aux_audio_mix_op.PRIM_GAIN_FIELD,
-      &CurParams + $M.CVC_HEADSET.PARAMETERS.OFFSET_AUX_STREAM_MIX, &$vp_in.auxillary_mix_op.param + $cbops.aux_audio_mix_op.AUX_GAIN_FIELD,
-
-
 
       &CurParams + $M.CVC_HEADSET.PARAMETERS.OFFSET_HD_THRESH_GAIN, &vsm_fdnlp_dm1 + $M.AEC_500_HF.OFFSET_HD_THRESH_GAIN,
 
@@ -6269,7 +6262,6 @@
 
 
       $dac_out.auxillary_mix_op.param + $cbops.aux_audio_mix_op.PEAK_AUXVAL_FIELD,
-      $vp_in.auxillary_mix_op.param + $cbops.aux_audio_mix_op.PEAK_AUXVAL_FIELD,
       &$M.CVC_MODULES_STAMP.CompConfig,
       &$adc_in.sidetone_copy_op.param + $cbops.sidetone_filter_op.OFFSET_CURRENT_SIDETONE_GAIN,
       &$M.CVC_SYS.Volume,
@@ -6326,7 +6318,6 @@
       &sco_in_pk_dtct + $M.audio_proc.peak_monitor.PEAK_LEVEL,
       &sco_out_pk_dtct + $M.audio_proc.peak_monitor.PEAK_LEVEL,
       $dac_out.auxillary_mix_op.param + $cbops.aux_audio_mix_op.PEAK_AUXVAL_FIELD,
-      $vp_in.auxillary_mix_op.param + $cbops.aux_audio_mix_op.PEAK_AUXVAL_FIELD,
       &$adc_in.sidetone_copy_op.param + $cbops.sidetone_filter_op.OFFSET_PEAK_ST,
       0;
 
@@ -6470,7 +6461,7 @@
       $cvc.non_fe.Zero_DC_Nyquist, &E_real, &E_imag,
 
       $filter_bank.one_channel.synthesis.process, &fft_obj, &RcvSynthesisBank,
-.linefile 1333 "cvc_headset_config.asm"
+.linefile 1324 "cvc_headset_config.asm"
       $cvc.rcv_peq.process, &rcv_peq_dm2, 0,
 
 
@@ -6659,7 +6650,7 @@
       $frame_sync.distribute_input_stream_ind,
       $frame_sync.update_input_streams_ind,
       0 ...;
-.linefile 1533 "cvc_headset_config.asm"
+.linefile 1524 "cvc_headset_config.asm"
    .VAR stream_map_sndout[$framesync_ind.ENTRY_SIZE_FIELD] =
       0,
       0,
@@ -6669,7 +6660,7 @@
       $frame_sync.distribute_output_stream_ind,
       $frame_sync.update_output_streams_ind,
       0 ...;
-.linefile 1556 "cvc_headset_config.asm"
+.linefile 1547 "cvc_headset_config.asm"
    .VAR stream_map_rcvin[$framesync_ind.ENTRY_SIZE_FIELD] =
       &$far_end.in.output.cbuffer_struc,
       0,
@@ -6679,7 +6670,7 @@
       $frame_sync.distribute_input_stream_ind,
       $frame_sync.update_input_streams_ind,
       0 ...;
-.linefile 1577 "cvc_headset_config.asm"
+.linefile 1568 "cvc_headset_config.asm"
    .VAR stream_map_rcvout[$framesync_ind.ENTRY_SIZE_FIELD] =
       &$dac_out.cbuffer_struc,
       0,
@@ -6689,7 +6680,7 @@
       $frame_sync.distribute_output_stream_ind,
       $frame_sync.update_output_streams_ind,
       0 ...;
-.linefile 1601 "cvc_headset_config.asm"
+.linefile 1592 "cvc_headset_config.asm"
 .VAR/DMCONST rcv_process_streams[] =
    &stream_map_rcvin,
    &stream_map_rcvout,
@@ -6712,7 +6703,7 @@
    0;
 
 .ENDMODULE;
-.linefile 1643 "cvc_headset_config.asm"
+.linefile 1634 "cvc_headset_config.asm"
 .MODULE $M.purge_cbuffer;
    .CODESEGMENT CVC_SSR_UTILITY_PM;
    .DATASEGMENT DM;
@@ -6950,7 +6941,7 @@ func:
    M[r8 + r0] = Null;
    rts;
 .ENDMODULE;
-.linefile 1902 "cvc_headset_config.asm"
+.linefile 1893 "cvc_headset_config.asm"
 .MODULE $M.set_mode_gains;
     .CODESEGMENT SET_MODE_GAIN_PM;
 
@@ -7007,7 +6998,7 @@ setgains:
    M[r7 + $M.SET_MODE_GAIN.SCO_IN_EXP] = r3;
    rts;
 .ENDMODULE;
-.linefile 1967 "cvc_headset_config.asm"
+.linefile 1958 "cvc_headset_config.asm"
 .MODULE $M.cvc.rcv_peq;
    .CODESEGMENT CVC_BANDWIDTH_PM;
    .DATASEGMENT DM;
@@ -7025,7 +7016,7 @@ $cvc.rcv_peq.process:
    jump $audio_proc.peq.process;
 
 .ENDMODULE;
-.linefile 1993 "cvc_headset_config.asm"
+.linefile 1984 "cvc_headset_config.asm"
 .MODULE $M.cvc.fe_utility;
    .CODESEGMENT CVC_BANDWIDTH_PM;
    .DATASEGMENT DM;
@@ -7137,7 +7128,7 @@ func:
    M[$M.CVC_SYS.AlgReInit] = r2;
    rts;
 .ENDMODULE;
-.linefile 2115 "cvc_headset_config.asm"
+.linefile 2106 "cvc_headset_config.asm"
 .MODULE $M.pblock_send_handler;
    .CODESEGMENT PM;
    .DATASEGMENT DM;
@@ -7214,7 +7205,7 @@ $pblock_send_handler:
    jump $pop_rLink_and_rts;
 
 .ENDMODULE;
-.linefile 2210 "cvc_headset_config.asm"
+.linefile 2201 "cvc_headset_config.asm"
 .MODULE $M.vad_hold.process;
    .CODESEGMENT PM;
 

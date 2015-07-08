@@ -40,7 +40,6 @@
   C:/ADK3.5/tools/include/standard/stdlib.h \
   C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/print.h \
   C:/ADK3.5/tools/include/standard/string.h \
-  C:/ADK3.5/tools/include/firmware/kalimba.h \
   C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/audio_plugin_common.h \
   csr_a2dp_decoder_common_plugin/csr_a2dp_decoder_common_plugin.h \
   C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/a2dp.h \

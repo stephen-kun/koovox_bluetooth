@@ -11,7 +11,6 @@ NOTES
 #include <audio.h>
 #include <codec.h>
 #include <stdlib.h>
-#define DEBUG_PRINT_ENABLEDx
 #include <panic.h>
 #include <stream.h>
 #include <print.h>
@@ -76,9 +75,6 @@ typedef struct
     uint16              prompt_id;   
     /*! If this is a tone, pointer to the ringtone_note */
     ringtone_note       *tone;   
-
-	/*! The app task to use to communication the audio*/
-	Task				app_task ;
 } PHRASE_DATA_T ;
 
 /* Decoder type to send to DSP app */
@@ -696,11 +692,11 @@ DESCRIPTION
     plays a number phrase using the audio plugin    
 */
 
-void CsrVoicePromptsPluginPlayPhrase (uint16 id , uint16 language, Task codec_task , uint16 prompt_volume , AudioPluginFeatures features, Task app_task)
+void CsrVoicePromptsPluginPlayPhrase (uint16 id , uint16 language, Task codec_task , uint16 prompt_volume , AudioPluginFeatures features)
 {
     if(phrase_data != NULL)
-		Panic();
-	
+        Panic();
+    
     PRINT(("VP: Play Phrase:\n"));
     
     /* Allocate the memory */
@@ -715,7 +711,6 @@ void CsrVoicePromptsPluginPlayPhrase (uint16 id , uint16 language, Task codec_ta
     phrase_data->prompt_id     = id;
     phrase_data->mixing        = FALSE; /* currently unknown so set to false */
     phrase_data->tone          = NULL;  /* not a tone */
-	phrase_data->app_task	   = app_task;
     
     MessageCancelAll((TaskData*) &csr_voice_prompts_plugin, MESSAGE_STREAM_DISCONNECT );
     MessageCancelAll((TaskData*) &csr_voice_prompts_plugin, MESSAGE_FROM_KALIMBA);
@@ -827,12 +822,11 @@ DESCRIPTION
 */
 void CsrVoicePromptsPluginStopPhraseDsp ( void ) 
 {
-    Sink lSink=NULL;	
+    Sink lSink=NULL;
 
     /* Cancel all the messages relating to VP that have been sent */
     (void)MessageKalimbaTask(NULL);
     MessageCancelAll((TaskData*) &csr_voice_prompts_plugin, MESSAGE_FROM_KALIMBA);
-    MessageCancelAll((TaskData*) &csr_voice_prompts_plugin, MESSAGE_FROM_KALIMBA_LONG);
     
     /* Disconnect PCM sources/sinks */
     switch(phrase_data->features.audio_output_type)
@@ -876,14 +870,7 @@ void CsrVoicePromptsPluginStopPhraseDsp ( void )
     }
     /* PCM connected to kalimba, make sure prompt source is disconnected */
     StreamDisconnect(phrase_data->source, NULL);
-
-	KalimbaPowerOff();
-
-#ifndef KOOVOX	
-	MessageSend(phrase_data->app_task, EVENT_KALIMBA_POWER_OFF, 0);
-#endif
-
-
+    KalimbaPowerOff();
 }
 
 /****************************************************************************

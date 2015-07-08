@@ -291,7 +291,6 @@ void CsrCvcPluginConnect( CvcPluginTaskdata *task,
        
     /*ensure that the messages received are from the correct kap file*/ 
     (void) MessageCancelAll( (TaskData*) task, MESSAGE_FROM_KALIMBA);
-    (void) MessageCancelAll( (TaskData*) task, MESSAGE_FROM_KALIMBA_LONG);
     MessageKalimbaTask( (TaskData*) task );
     
     /* Select which Kap file to be loaded based on the plugin selected */
@@ -322,7 +321,7 @@ void CsrCvcPluginConnect( CvcPluginTaskdata *task,
        dsp to be sent to the message_handler function. In the case of CVC_MULTI_KAP
        we wait for CVC_CORE_READY. */
     SetCurrentDspStatus(DSP_LOADING);
-	
+
 }
 
 
@@ -468,7 +467,6 @@ void CsrCvcPluginDisconnect( CvcPluginTaskdata *task )
     
     /* Cancel any outstanding cvc messages */
     MessageCancelAll( (TaskData*)task , MESSAGE_FROM_KALIMBA);
-	MessageCancelAll( (TaskData*)task , MESSAGE_FROM_KALIMBA_LONG);
     MessageCancelAll( (TaskData*)task , MESSAGE_STREAM_DISCONNECT);
     MessageCancelAll( CVC->app_task , CSR_SR_WORD_RESP_UNKNOWN);
     MessageCancelAll( CVC->app_task , CSR_SR_WORD_RESP_YES);
@@ -480,15 +478,11 @@ void CsrCvcPluginDisconnect( CvcPluginTaskdata *task )
     AudioPluginSetMicPio(CVC->digital->mic_a, FALSE);
     if(task->two_mic) 
         AudioPluginSetMicPio(CVC->digital->mic_b, FALSE);
-	
-    KalimbaPowerOff();
-
-#ifndef KOOVOX	
-	MessageSend(CVC->app_task, EVENT_KALIMBA_POWER_OFF, 0);
-#endif
 
     free (CVC);
-    CVC = NULL;	
+    CVC = NULL;
+    
+    KalimbaPowerOff();
     
     /* update current dsp status */
     SetCurrentDspStatus( DSP_NOT_LOADED );
@@ -1213,7 +1207,6 @@ static void CvcConnectAudio (CvcPluginTaskdata *task)
             /* update the current audio state */
             SetAsrPlaying(TRUE);
         }
-
     }
     else
     {   
@@ -1270,7 +1263,6 @@ void CsrCvcPluginInternalMessage( CvcPluginTaskdata *task ,uint16 id , Message m
         
             switch ( m->id ) 
             {
-			
 #ifdef CVC_MULTI_KAP
                 case CVC_CORE_READY:
                     PRINT(("CVC: Core Loaded, Load App [0x%X]\n", CVC->app_index));
@@ -1490,7 +1482,7 @@ void CsrCvcPluginInternalMessage( CvcPluginTaskdata *task ,uint16 id , Message m
             const DSP_LONG_REGISTER_T *m = (const DSP_LONG_REGISTER_T*) message;
 /*            PRINT(("CVC: LONG_MESSAGE_FROM_KALIMBA id[0x%x] l[0x%x] \n", m->id, m->size));*/
             switch (m->id)
-            {			
+            {
 #ifdef CVC_MULTI_KAP
                 case CVC_FILE_NAME:
                 {
