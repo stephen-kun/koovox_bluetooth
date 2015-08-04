@@ -12,9 +12,6 @@ NOTES
 #include <codec.h>
 #include <stdlib.h>
 #include <panic.h>
-#ifndef DEBUG_PRINT_ENABLED
-#define DEBUG_PRINT_ENABLEDx
-#endif
 #include <print.h>
 #include <file.h>
 #include <stream.h> /*for the ringtone_note*/

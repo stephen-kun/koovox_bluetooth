@@ -128,7 +128,7 @@
 //    r0-6, r10, DoLoop
 //
 // NOTES:
-//    This is a request to the Firmware to retrieve a PS key s value from the
+//    This is a request to the Firmware to retrieve a PS key's value from the
 // persistent store. This is not an instantaneous process. When you request a
 // key the data is retrieved and a message is sent to Kalimba. Once the payload
 // is complete the data is delivered to your registered handler.
@@ -233,7 +233,7 @@
 // NOTES:
 //    The registered handler is called with the PS key ID, payload length and
 // address of the payload in registers (see below). For example if you request
-// the device s Bluetooth address you will get:
+// the device's Bluetooth address you will get:
 //@verbatim
 //  r1 = 0x0001;
 //  r2 = 5;
@@ -273,7 +273,7 @@
    // is it a failure or pass message
    Null = r0 - $MESSAGE_PS_FAIL;
    if Z jump failure;
-      // it was a pass get the Key s ID
+      // it was a pass get the Key's ID
       r1 = M[r3];
    jump ready;
 
@@ -318,7 +318,7 @@
       Null = r0 - $pskey.LAST_ENTRY;
    if NZ jump find_structure_loop;
 
-   // ** we don t appear to have asked for this ID **
+   // ** we don't appear to have asked for this ID **
    #ifdef PSKEY_DEBUG_ON
       call $error;
    #else

@@ -21,12 +21,11 @@
 #include "i2c.h"
 #include "stack.h"
 
-
 .MODULE $i2c;
    .DATASEGMENT DM;
 
-   .VAR $i2c.pio_sclk_mask = $i2c.default_pio_mask.SCLK;
-   .VAR $i2c.pio_sda_mask  = $i2c.default_pio_mask.SDA;
+   .VAR $i2c.pio_sclk_mask = $i2c.default_pio_mask.SDA;
+   .VAR $i2c.pio_sda_mask  = $i2c.default_pio_mask.SCLK;
 
 .ENDMODULE;
 
@@ -107,7 +106,7 @@
 //    none
 //
 // TRASHED REGISTERS:
-//    r0, r1, r2, r3, r10, Do Loop
+//    r0, r1, r2, r10, Do Loop
 //
 // *****************************************************************************
 .MODULE $M.i2c.start_bit;
@@ -123,8 +122,7 @@
 
    // if we have PIO direction control make sure SDA is set as an output
    r0 = M[$PIO_DIR];
-   r3 = r1 + r2;
-   r0 = r0 OR r3;
+   r0 = r0 OR r2;
    M[$PIO_DIR] = r0;
 
    call $i2c.delay_low_clk;

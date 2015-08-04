@@ -16,6 +16,7 @@ DESCRIPTION
 #include "sink_gatt_server.h"
 #include "sink_gatt.h"
 #include "sink_utils.h"
+#include "sink_koovox_core.h"
 
 /* Library includes */
 #include <connection.h>
@@ -26,12 +27,17 @@ DESCRIPTION
 #include <stdlib.h>
 #include <string.h>
 
+
 /* Macro for BLE AD Data Debug */
 #ifdef DEBUG_BLE
 #include <stdio.h>
 #define BLE_AD_DEBUG(x) DEBUG(x)
 #else
 #define BLE_AD_DEBUG(x) 
+#endif
+
+#ifdef ENABLE_KOOVOX
+#define SIZE_MANUFATURE_DATA	(8)
 #endif
 
 
@@ -55,7 +61,7 @@ static void setup_flags_ad_data(builtAdData_t * ad_data_ptr)
     ad_data_ptr->ptr = malloc(ad_data_ptr->size);
     ad_data_ptr->ptr[0] = 0x02;
     ad_data_ptr->ptr[1] = ble_ad_type_flags;
-    ad_data_ptr->ptr[2] = BLE_FLAGS_GENERAL_DISCOVERABLE_MODE | BLE_FLAGS_DUAL_HOST;
+    ad_data_ptr->ptr[2] = BLE_FLAGS_GENERAL_DISCOVERABLE_MODE | BLE_FLAGS_SINGLE_MODE;
     
 #ifdef DEBUG_BLE
     {
@@ -90,6 +96,10 @@ static void setup_services_ad_data(builtAdData_t * ad_data_ptr, uint16 num_free_
     num_services = 1;
 #else
     num_services = 0;
+#endif
+
+#ifdef ENABLE_KOOVOX
+	num_services++;
 #endif
     
     /* Is there enough room to store the complete list of services defined for the device? */
@@ -133,6 +143,14 @@ static void setup_services_ad_data(builtAdData_t * ad_data_ptr, uint16 num_free_
         counter++;
         if (!complete_list) return;
 #endif    
+
+#ifdef ENABLE_KOOVOX
+        ad_data_ptr->ptr[counter] = (GATT_SERVICE_UUID_WE_CHAT & 0xFF);
+        counter++;
+        ad_data_ptr->ptr[counter] = (GATT_SERVICE_UUID_WE_CHAT >> 8);
+        counter++;
+        if (!complete_list) return;
+#endif
     
     BLE_AD_DEBUG(("\n"));
     
@@ -145,6 +163,7 @@ static void setup_services_ad_data(builtAdData_t * ad_data_ptr, uint16 num_free_
     BLE_AD_DEBUG(("]\n"));
 #endif
 }
+
 
 
 /*******************************************************************************
@@ -184,9 +203,10 @@ static void setup_local_name_advertising_data(builtAdData_t * ad_data_ptr, uint1
         ad_tag = ble_ad_type_shortened_local_name;
         ad_name_length = ad_data_free_space - 2;
     }
-    
+	
     /* Setup the local name advertising data */
     ad_data_ptr->size = ad_name_length + AD_DATA_HEADER_SIZE;
+		
     ad_data_ptr->ptr = malloc(ad_data_ptr->size);
     ad_data_ptr->ptr[0] = ad_name_length + 1;
     ad_data_ptr->ptr[1] = ad_tag;
@@ -203,6 +223,41 @@ static void setup_local_name_advertising_data(builtAdData_t * ad_data_ptr, uint1
         BLE_AD_DEBUG(("]\n"));
     }
 #endif
+}
+
+
+/*******************************************************************************
+NAME    
+    setup_manufature_ad_data
+
+DESCRIPTION
+    Helper function to setup the manufature specific data to ad data
+*/      
+static void setup_manufature_ad_data(builtAdData_t * ad_data_ptr, uint16 ad_data_free_space)
+{
+
+    uint8 ad_tag ;
+	
+	if(ad_data_free_space < AD_DATA_HEADER_SIZE + SIZE_MANUFATURE_DATA)
+	{
+        /* No local name to advertise */
+        ad_data_ptr->size = 0;
+        return;
+	}
+
+	ad_tag = ble_ad_type_manufacturer_specific_data;
+	
+    ad_data_ptr->size = SIZE_MANUFATURE_DATA + AD_DATA_HEADER_SIZE;
+		
+    ad_data_ptr->ptr = malloc(ad_data_ptr->size);
+    ad_data_ptr->ptr[0] = SIZE_MANUFATURE_DATA + 1;
+    ad_data_ptr->ptr[1] = ad_tag;
+	
+	ad_data_ptr->ptr[2] = 0x01;
+	ad_data_ptr->ptr[3] = 0x01;
+
+	KoovoxGetBluetoothAdrress(ad_data_ptr->ptr + 4);
+			
 }
 
 
@@ -250,6 +305,22 @@ void setup_ble_ad_data(uint16 size_local_name, uint8 *local_name)
         
         BLE_AD_DEBUG(("AD Data: local name added, free=%d\n", ad_data_num_free_octets));
     }
+
+#ifdef ENABLE_KOOVOX
+	/* add manufature specific data to AD data */
+	setup_manufature_ad_data(&temp, ad_data_num_free_octets);
+
+	if(temp.size)
+	{
+        ad_data = realloc(ad_data, temp.size + ad_data_index);
+        memmove(&ad_data[ad_data_index], temp.ptr, temp.size);
+        ad_data_num_free_octets -= temp.size;   /* Update number of free octets in AD data */
+        ad_data_index += temp.size;             /* Update the ad data index so it now counts the total number of octets in the AD data */
+        free(temp.ptr);                         /* Tidy up to avoid a memory leak */
+        
+        BLE_AD_DEBUG(("AD Data: manufature specific data, free=%d\n", ad_data_num_free_octets));
+	}
+#endif
     
     /* Register AD data with the Connection library & Tidy up allocated memory*/
     ConnectionDmBleSetAdvertisingDataReq(ad_data_index, ad_data);

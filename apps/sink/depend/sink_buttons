@@ -68,5 +68,4 @@ sink_buttons.o: sink_buttons.c sink_private.h \
   C:/ADK3.5/tools/include/firmware/app/pio/pio_if.h \
   C:/ADK3.5/tools/include/firmware/psu.h \
   C:/ADK3.5/tools/include/firmware/app/psu/psu_if.h \
-  C:/ADK3.5/tools/lib/gcc-lib/xap-local-xap-assisted/3.3.3/include/stddef.h \
-  C:/ADK3.5/tools/include/firmware/capsense.h
+  C:/ADK3.5/tools/lib/gcc-lib/xap-local-xap-assisted/3.3.3/include/stddef.h

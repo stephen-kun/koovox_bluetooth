@@ -56,7 +56,7 @@ DESCRIPTION
 bool PioCommonSetPin(uint8 pin, pio_common_dir dir, bool level)
 {
     uint32 pins = pioCommonGetMask(pin, dir);
-    PRINT(("PIO: %s %d (0x%lX) ", (dir ?  "Drive" : "Pull"), pin, pins));
+    PRINT(("PIO: %s %d (0x%lX) ", (dir ? "Drive" : "Pull"), pin, pins));
     if((pins != PIO_NONE) && (PioSet32(pins, (level ? pins : 0)) == PIO_NONE))
     {
         PRINT(("%s\n", level ? "High" : "Low"));

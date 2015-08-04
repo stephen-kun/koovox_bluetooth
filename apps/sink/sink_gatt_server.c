@@ -16,6 +16,11 @@ DESCRIPTION
 #include "sink_gatt_server_bas.h"
 #include "sink_gatt.h"
 #include "sink_gatt_db.h"
+#include "sink_statemanager.h"
+#include "sink_koovox_core.h"
+#include "epb_MmBp.h"
+#include "koovox_wechat_handle.h"
+
 #ifdef BLE_ENABLED
 #include "sink_ble_advertising.h"
 #endif
@@ -28,11 +33,6 @@ DESCRIPTION
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef ENABLE_KOOVOX
-#include "sink_app_task.h"
-#include "sink_app_core.h"
-#include "sink_app_message.h"
-#endif
 
 /* Macro for GATT SERVER Debug */
 #ifdef DEBUG_GATT
@@ -41,7 +41,6 @@ DESCRIPTION
 #else
 #define GATT_SERVER_DEBUG(x) 
 #endif
-
 
 typedef enum
 {
@@ -109,7 +108,6 @@ static void remove_client_device(uint16 cid)
     }
 }
 
-
 /******************************************************************************/
 void server_handle_gatt_init_cfm(GATT_INIT_CFM_T * cfm)
 {
@@ -137,9 +135,9 @@ void server_handle_gatt_connect_cfm(GATT_CONNECT_CFM_T * cfm)
             #if defined(BLE_ENABLED)
             {
                 /* Start Advertising so a remote device can find and connect */
-				if(isConnectedState())
+				if(deviceConnected <= stateManagerGetState())
 				{
-	                start_ble_advertising();
+					start_ble_advertising();
 				}
             }
             #endif
@@ -185,6 +183,7 @@ void server_handle_gatt_disconnect_ind(GATT_DISCONNECT_IND_T * ind)
     GATT_SERVER_DEBUG(("GATT: Wait for a connection from a remote device\n"));
     GattConnectRequest(&theSink.rundata->gatt.task, NULL, gatt_connection_ble_slave_undirected, FALSE);
 
+	koovox_device_wechat_disconnect();
 }
 
 
@@ -192,62 +191,145 @@ void server_handle_gatt_disconnect_ind(GATT_DISCONNECT_IND_T * ind)
 void server_handle_gatt_access_ind(GATT_ACCESS_IND_T * ind)
 {
 
-#ifdef	ENABLE_KOOVOX
-	koovox.handle = ind->handle;
+    /* Which GATT declaration/characteristic/descriptor has been requested? */
+    bool is_valid = FALSE;
+
+	DEBUG(("server_handle_gatt_access_ind: %x\n", ind->handle));
+    
+    /* Was the GATT characteristic requested? */
+    if (ind->handle == HANDLE_GATT_SERVICE)
+    {
+        handle_gatt_service_access(ind);
+        is_valid = TRUE;
+    }
+    
+    /* Was a GAP characteristic requested? */
+    if (ind->handle == HANDLE_GAP_SERVICE)
+    {
+        handle_gap_service_access(ind);
+        is_valid = TRUE;
+    }
+    else if (ind->handle == HANDLE_DEVICE_NAME)
+    {
+        handle_device_name_access(ind);
+        is_valid = TRUE;
+    }
+    else if (ind->handle == HANDLE_DEVICE_APPEARANCE)
+    {
+         handle_device_appearance_access(ind);
+         is_valid = TRUE;
+    }
+    
+#ifdef GATT_SERVER_BAS_ENABLED
+    /* Was a BAS characteristic requested? */
+    if (ind->handle == HANDLE_BATTERY_SERVICE)
+    {
+        handle_battery_service_access(ind);
+        is_valid = TRUE;
+    }
+    else if (ind->handle == HANDLE_BATTERY_LEVEL)
+    {
+        handle_battery_level_access(ind);
+        is_valid = TRUE;
+    }
+    else if (ind->handle == HANDLE_BATTERY_LEVEL_CLIENT_CONFIG)
+    {
+        handle_battery_level_c_cfg_access(ind);
+        is_valid = TRUE;
+    }
 #endif
 
-	switch(ind->handle)
+#ifdef ENABLE_KOOVOX
+	if(ind->handle == HANDLE_WeChat)
 	{
-		case HANDLE_GATT_SERVICE:
-			handle_gatt_service_access(ind);
-			break;
-		case HANDLE_GAP_SERVICE:
-			handle_gap_service_access(ind);
-			break;
-		case HANDLE_DEVICE_NAME:
-			handle_device_name_access(ind);
-			break;
-		case HANDLE_DEVICE_APPEARANCE:
-			handle_device_appearance_access(ind);
-			break;
-#if defined(GATT_SERVER_BAS_ENABLED)
-		case HANDLE_BATTERY_SERVICE:
-			handle_battery_service_access(ind);
-			break;
-		case HANDLE_BATTERY_LEVEL:
-			handle_battery_level_access(ind);
-			break;
-		case HANDLE_BATTERY_LEVEL_CLIENT_CONFIG:
-			handle_battery_level_c_cfg_access(ind);
-			break;
-		case HANDLE_HEART_RATE_SERVICE:
-			handle_heart_rate_service_access(ind);
-			break;
-		case HANDLE_HEART_RATE_MEASUREMENT:
-			handle_heart_rate_measurement_access(ind);
-			break;
-		case HANDLE_HEART_RATE_MEASUREMENT_CLIENT_CONFIG:
-			handle_heart_rate_measurement_c_cfg_access(ind);
-			break;
-			
-#if defined(ENABLE_KOOVOX)
-		case HANDLE_KOOVOX_SERVICE:
-			handle_koovox_service_access(ind);
-			break;
-		case HANDLE_GET_CHARACTERISTIC:
-			handle_get_characteristic_access(ind);
-			break;
-		case HANDLE_SET_CHARACTERISTIC:
-			handle_set_characteristic_access(ind);
-			break;
-#endif /* ENABLE_KOOVOX */
-			
-#endif /* GATT_SERVER_BAS_ENABLED */
-		default:
-			GATT_SERVER_DEBUG(("ERROR : GATT_ACCESS_IND cid[%x] handle[%x] flags[%x] offset[%x] size[%x] value[%x]\n", ind->cid, ind->handle, ind->flags, ind->offset, ind->size_value, ind->value[0]));
-			break;
+		GattAccessResponse(ind->cid, ind->handle, gatt_status_success, 0, 0);
+        is_valid = TRUE;
 	}
-	
+	else if(ind->handle == HANDLE_WRITE_CHARACTERISTIC)
+	{
+        is_valid = TRUE;
+
+		DEBUG(("flags: %x, offset:%x \n", ind->flags, ind->offset));
+		
+		GattAccessResponse(ind->cid, ind->handle, gatt_status_success, 0, 0);
+
+		if(ind->flags & ATT_ACCESS_WRITE)
+		{
+			/* 处理消息 */
+			koovox_write_from_wechat(ind->value, ind->size_value);
+			
+			/* 发送init req */
+			if((g_wechatble_state.auth_state) 
+				&& (!g_wechatble_state.init_state) 
+				&& (!g_wechatble_state.init_send))
+			{
+				koovox_pack_wechat_init_req();
+				koovox_indicate_to_wechat(ind->cid, HANDLE_WECHAR_CLIENT_CONFIG);
+				g_wechatble_state.init_send = TRUE;
+			}
+
+#if 1
+			/* 测试发送send data req */
+			{
+			static bool test_flag = FALSE;
+			
+			if((g_wechatble_state.init_state)&&(!test_flag))
+			{
+				uint8 device_name[] = {'K', 'O', 'O', 'V','O', 'X'};
+				koovox_pack_wechat_send_data_req((uint8*)device_name, 6, TRUE, EDDT_manufatureSvr);
+				koovox_indicate_to_wechat(ind->cid, HANDLE_WECHAR_CLIENT_CONFIG);
+				test_flag = TRUE;
+			}
+			}
+#endif
+		}
+
+	}
+	else if(ind->handle == HANDLE_READ_CHARACTERISTIC)
+	{
+		uint8 value[6] = {0};
+		KoovoxGetBluetoothAdrress((uint8*)value);
+		is_valid = TRUE;
+        GattAccessResponse(ind->cid, ind->handle, gatt_status_success, 6, value);
+	}
+	else if(ind->handle == HANDLE_INDICATE_CHARACTERISTIC)
+	{
+		is_valid = TRUE;
+        GattAccessResponse(ind->cid, ind->handle, gatt_status_success, 0, 0);
+	}
+	else if(ind->handle == HANDLE_WECHAR_CLIENT_CONFIG)
+	{
+		if (ind->flags & ATT_ACCESS_READ)
+		{
+			GattAccessResponse(ind->cid, ind->handle, gatt_status_success, 0, 0);
+		}
+		else if (ind->flags & ATT_ACCESS_WRITE)
+		{
+			/* Check the size of the data requested to write to the client config is correct */
+			if (ind->size_value == GATT_CLIENT_CONFIG_OCTET_SIZE)
+			{	 
+				GattAccessResponse(ind->cid, ind->handle, gatt_status_success, 0, 0);
+
+				koovox_handle_wechat_indicate(ind->cid, ind->handle);
+				
+			}
+			else
+			{
+				g_wechatble_state.indication_state = FALSE;
+				
+				/* Requested data to write is the wrong length, respond to the device with appropriate error */
+				GattAccessResponse(ind->cid, ind->handle, gatt_status_invalid_length, 0, NULL);
+			}
+		}
+		
+        is_valid = TRUE;
+	}
+#endif
+    
+    if (!is_valid)
+    {
+        GATT_SERVER_DEBUG(("ERROR : GATT_ACCESS_IND cid[%x] handle[%x] flags[%x] offset[%x] size[%x] value[%x]\n", ind->cid, ind->handle, ind->flags, ind->offset, ind->size_value, ind->value[0]));
+    }
 }
 
 
@@ -262,6 +344,7 @@ void server_handle_gatt_indication_cfm(GATT_INDICATION_CFM_T * ind)
             GATT_SERVER_DEBUG(("GATT_INDICATION_CFM : ERROR, no service is doing indication\n"));
         }
         break;
+		
         case indication_battery_level:
         {
             #ifdef GATT_SERVER_BAS_ENABLED
@@ -271,9 +354,20 @@ void server_handle_gatt_indication_cfm(GATT_INDICATION_CFM_T * ind)
             #endif
         }
         break;
+		
+		case indication_wechat:
+		{
+			if(ind->status == gatt_status_success)
+			{
+				koovox_indicate_to_wechat(ind->cid, HANDLE_WECHAR_CLIENT_CONFIG);
+			}
+		}
+		break;
+		
 		default:
 			break;
     }
+	
 }
 
 

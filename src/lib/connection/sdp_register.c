@@ -43,7 +43,7 @@ void ConnectionRegisterServiceRecord(Task appTask, uint16 num_rec_bytes, const u
 		MAKE_CL_MESSAGE(CL_INTERNAL_SDP_REGISTER_RECORD_REQ);
 		message->theAppTask = appTask;
 		message->record_length = num_rec_bytes;
-		message->record = (uint8 *) service_record;
+			message->record = (uint8 *) service_record;
 		MessageSend(connectionGetCmTask(), CL_INTERNAL_SDP_REGISTER_RECORD_REQ, message);
 	}
 }

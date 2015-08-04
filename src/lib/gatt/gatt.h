@@ -50,6 +50,8 @@ GATT Service UUID's see (https://developer.bluetooth.org/gatt/services/Pages/Ser
 #define GATT_SERVICE_UUID_SCAN_PARAMETERS					                (0x1813)
 #define GATT_SERVICE_UUID_TX_POWER							                (0x1804)
 
+#define GATT_SERVICE_UUID_WE_CHAT											(0xfee7)
+
 
 /*****************************************************************************
 GATT Characteristic UUID's see (https://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicsHome.aspx)

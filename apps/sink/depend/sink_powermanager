@@ -66,7 +66,7 @@ sink_powermanager.o: sink_powermanager.c sink_powermanager.h \
   C:/ADK3.5/tools/include/firmware/pio.h \
   C:/ADK3.5/tools/include/firmware/app/pio/pio_if.h \
   C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/pio_common.h \
-  sink_csr_features.h sink_leds.h sink_display.h sink_audio_prompts.h \
+  sink_csr_features.h sink_leds.h sink_display.h \
   C:/ADK3.5/tools/include/firmware/psu.h \
   C:/ADK3.5/tools/include/firmware/app/psu/psu_if.h \
   C:/ADK3.5/tools/include/firmware/vm.h \

@@ -515,7 +515,6 @@ void slcHandleLinkLossInd( const HFP_SLC_LINK_LOSS_IND_T *ind )
         /* Send an event to notify the user */
         MessageCancelAll(&theSink.task , EventSysLinkLoss );
         MessageSend(&theSink.task , EventSysLinkLoss , 0);
-		DEBUG(("slcHandleLinkLossInd\n"));
         /* Go connectable if feature enabled */
         if(theSink.features.GoConnectableDuringLinkLoss)
             sinkEnableConnectable(); 

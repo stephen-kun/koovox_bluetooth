@@ -49,7 +49,6 @@ image/cvc_handsfree_2mic/cvc_handsfree_2mic.kap :
 
 image.fs : image/cvc_handsfree_2mic/cvc_handsfree_2mic.kap
 
-
 endif
 
 ######################################################################################################
@@ -76,7 +75,6 @@ image/a2dp_low_latency_2mic/a2dp_low_latency_2mic.kap :
 	$(copyfile) ..\..\kalimba\apps\a2dp_low_latency_2mic\image\a2dp_low_latency_2mic\a2dp_low_latency_2mic.kap $@
 
 image.fs : image/a2dp_low_latency_2mic/a2dp_low_latency_2mic.kap
-
 
 # copy in mp3 decoder 
 #image/mp3_decoder/mp3_decoder.kap :

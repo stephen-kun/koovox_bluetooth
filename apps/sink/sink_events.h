@@ -72,11 +72,11 @@ typedef enum sinkEventsTag
 /*0x4020*/    EventUsrRejectHeldIncomingCall,
 /*0x4021*/    EventUsrEnterDFUMode,            
 /*0x4022*/    EventUsrEnterDriverlessDFUMode,                        
-/*0x4023*/	    EventUsrEnterServiceMode,    
+/*0x4023*/	EventUsrEnterServiceMode,    
             
 /*0x4024*/    EventUsrAudioPromptsOn,
 /*0x4025*/    EventUsrAudioPromptsOff,              
-/*0x4026*/ 	EventUsrDialStoredNumber,
+/*0x4026*/	EventUsrDialStoredNumber,
 /*0x4027*/    EventUsrUpdateStoredNumber,  
                        
 /*0x4028*/	EventUsrRestoreDefaults,            
@@ -186,7 +186,7 @@ typedef enum sinkEventsTag
             
 /*0x407C*/    EventUsrFmRxStore,
 /*0x407D*/    EventUsrFmRxTuneToStore,     
-/*0x407E*/	    EventUsrFmRxErase,            
+/*0x407E*/	  EventUsrFmRxErase,            
 /*0x407F*/    EventUsrSwapA2dpMediaChannel,  
             
 /*0x4080*/    EventUsrExternalMicConnected,            
@@ -268,35 +268,11 @@ typedef enum sinkEventsTag
 /*0x40BD*/		EventKoovoxButtonCPress,
 /*0x40BE*/		EventKoovoxButtonCRelease,
 
-/* switch p event */	
-/*0x40BF*/		EventKoovoxSwitchPON,
-/*0x40C0*/		EventKoovoxSwitchPOff,
+/******** dsp event ************/
+/*0x40BD*/    EventCVCKalimbaLoaded,
 
-/* switch v event */	
-/*0x40C1*/		EventKoovoxSwitchVUp,
-/*0x40C2*/		EventKoovoxSwitchVDown,
-
-/* dsp event */
-/*0x40C3*/		EventKoovoxSportDspShortMessage,
-/*0x40C4*/		EventKoovoxSportDspLongMessage,	
-/*0x40C5*/		EventKoovoxCvcKalimbaLoaded,
-/*0x40C6*/		EventKoovoxDSPPowerOff,
-/*0x40C7*/		EventKoovoxCodecKalimbaLoaded,
-/*0x40C8*/		EventKoovoxSportKalimbaLoaded,
-
-/* app event */
-/*0x40Cc*/		EventKoovoxCallStart,
-/*0x40Cd*/		EventKoovoxCallStop,
-/*0x40ce*/		EventKoovoxSetMode,
-
-/* other event */
-/*0x40Cf*/		EventKoovoxPeriodPromptHeartRate,
-/*0x40d0*/		EventKoovoxAutoSwitchCallMode,
-/*0x40d1*/		EventKoovoxAutoLeaveCallMode,
-/*0x40d4*/		EventKoovoxTimeout,
-/*0x40D5*/		EventKoovoxPromptPresence,
-/*0x40D6*/		EventKoovoxAsrCall,
-
+/******** koovox event *************/
+/*0x40BD*/		EventKoovoxRepeatSendIndication,
 
 /* User events list cannot go past 0x40FF */   
               EventUsrLast,
@@ -471,57 +447,6 @@ typedef enum sinkEventsTag
 /*0x4783*/    EventSysCheckDefrag,   
 /*0x4784*/    EventSysDefrag,              
 /*0x4785*/    EventSysAmpPowerDown,
-
-/* audio prompts */
-/*0x4786*/	    EventKoovoxPromptWelcome,
-/*0x4787*/		EventKoovoxPromptEnduranceTime,
-/*0x4788*/		EventKoovoxPromptPhoneConnected,
-/*0x4789*/		EventKoovoxPromptPhoneDisconnected,
-/*0x478A*/		EventKoovoxPromptPhoneLinkLoss,
-
-/*0x478B*/		EventKoovoxPromptAppConnected,
-/*0x478C*/		EventKoovoxPromptAppDisconnected,
-/*0x478D*/		EventKoovoxPromptIncomingCall,
-/*0x478E*/		EventKoovoxPromptRecordStart,
-/*0x478F*/		EventKoovoxPromptRecordStop,
-
-/*0x4790*/		EventKoovoxPromptCallLater,
-/*0x4791*/		EventKoovoxPromptDriving,
-/*0x4792*/		EventKoovoxPromptMeeting,
-/*0x4793*/		EventKoovoxPromptLeaving,
-/*0x4794*/		EventKoovoxPromptNoDisturbing,
-
-/*0x4795*/		EventKoovoxPromptAsrBegin,
-/*0x4796*/		EventKoovoxPromptVoiceMeassage,
-/*0x4797*/		EventKoovoxPromptStartSport,
-/*0x4798*/		EventKoovoxPromptStopSport,
-/*0x4799*/		EventKoovoxPromptMuteStart,
-
-/*0x479A*/		EventKoovoxPromptMuteStop,
-/*0x479B*/		EventKoovoxPromptBusinessMode,
-/*0x479C*/		EventKoovoxPromptMusicMode,
-/*0x479D*/		EventKoovoxPromptSportMode,
-/*0x479E*/		EventKoovoxPromptHeartRateValue,
-/*0x479F*/		EventKoovoxPromptNectProtectEnable,
-
-/*0x47A0*/		EventKoovoxPromptNectProtectDisable,
-/*0x47A1*/		EventKoovoxPromptNectProtectAdvice,
-/*0x47A2*/		EventKoovoxPromptSafeDriverEnable,
-/*0x47A3*/		EventKoovoxPromptSafeDriverDisable,
-/*0x47A4*/		EventKoovoxPromptSafeDriverAdvice,
-
-/*0x47A5*/		EventKoovoxPromptLowBattery,
-/*0x47A6*/		EventKoovoxPromptCriticalBattery,
-/*0x47A7*/		EventKoovoxPromptTen,
-/*0x47A8*/		EventKoovoxPromptHundrend,
-/*0x47A9*/		EventKoovoxPromptHour,
-
-/*0x47AA*/		EventKoovoxPromptMinute,
-/*0x47AB*/		EventKoovoxPromptConstSeatEnable,
-/*0x47AC*/		EventKoovoxPromptConstSeatDisable,
-/*0x47AD*/		EventKoovoxPromptConstSeatAdvice,
-
-	
     EventSysLast
               
 } sinkEvents_t; 

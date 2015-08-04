@@ -9,19 +9,14 @@
 #include <csrtypes.h>
 
 #define HANDLE_GATT_SERVICE             (0x0001)
-#define HANDLE_BATTERY_SERVICE          (0x0002)
-#define HANDLE_BATTERY_LEVEL            (0x0004)
-#define HANDLE_BATTERY_LEVEL_CLIENT_CONFIG (0x0005)
-#define HANDLE_HEART_RATE_SERVICE       (0x0006)
-#define HANDLE_HEART_RATE_MEASUREMENT   (0x0008)
-#define HANDLE_HEART_RATE_MEASUREMENT_CLIENT_CONFIG (0x0009)
-#define HANDLE_KOOVOX_SERVICE           (0x000a)
-#define HANDLE_GET_CHARACTERISTIC       (0x000c)
-#define HANDLE_SET_CHARACTERISTIC       (0x000e)
-#define HANDLE_NOTIFY_CHARACTERISTIC    (0x0010)
-#define HANDLE_GAP_SERVICE              (0x0011)
-#define HANDLE_DEVICE_NAME              (0x0013)
-#define HANDLE_DEVICE_APPEARANCE        (0x0015)
+#define HANDLE_WeChat                   (0x0002)
+#define HANDLE_WRITE_CHARACTERISTIC     (0x0004)
+#define HANDLE_INDICATE_CHARACTERISTIC  (0x0006)
+#define HANDLE_WECHAR_CLIENT_CONFIG     (0x0007)
+#define HANDLE_READ_CHARACTERISTIC      (0x0009)
+#define HANDLE_GAP_SERVICE              (0x000a)
+#define HANDLE_DEVICE_NAME              (0x000c)
+#define HANDLE_DEVICE_APPEARANCE        (0x000e)
 
 uint16 *GattGetDatabase(uint16 *len);
 

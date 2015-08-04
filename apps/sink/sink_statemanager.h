@@ -210,18 +210,6 @@ void stateManagerEnterA2dpStreamingState(void);
 
 /****************************************************************************
 NAME	
-	stateManagerEnterAutomaticSpeechRecognitionState
-
-DESCRIPTION
-    enter automatic speech recognition states
-RETURNS
-	void
-    
-*/
-void stateManagerEnterAutomaticSpeechRecognitionState(void);
-
-/****************************************************************************
-NAME	
 	stateManagerAmpPowerControl
 
 DESCRIPTION

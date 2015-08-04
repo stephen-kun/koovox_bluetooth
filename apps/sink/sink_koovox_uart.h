@@ -23,6 +23,9 @@ FILE NAME
 #define SIZE_FRAME_MSG		4
 #define SIZE_UART_MSG		50
 
+#define LOG_WIDE	5
+
+#define REPEAT_TIMES		(3)
 
 
 typedef struct
@@ -53,13 +56,14 @@ typedef enum
 typedef enum
 {
 	OBJ_SYSTEM 			= 0x01,
-	OBJ_CONST_SEAT 		= 0x02,
+	OBJ_HEALTH_MONITOR	= 0x02,
+	OBJ_CONST_SEAT 		= 0x03,
 	OBJ_NECK_PROTECT 	= 0x04,
-	OBJ_NOD_HEAD		= 0x08,
-	OBJ_SHAKE_HEAD		= 0x10,
-	OBJ_STEP_COUNT		= 0x20,
-	OBJ_HEART_RATE		= 0x40,
-	OBJ_I2C_TEST		= 0x80,
+	OBJ_NOD_HEAD		= 0x05,
+	OBJ_SHAKE_HEAD		= 0x06,
+	OBJ_STEP_COUNT		= 0x07,
+	OBJ_HEART_RATE		= 0x08,
+	OBJ_I2C_TEST		= 0x09,
 	OBJ_FRAME_ERR		= 0xff
 }enumObj;
 
@@ -75,7 +79,8 @@ void KoovoxFillAndSendUartPacket(uint8 cmd, uint8 obj, uint8* value, uint8 size_
 
 void KoovoxControlObject(uint8 ctrl, uint8 obj);
 
-extern bool respond_flag;
+extern bool wechat_req;
+extern bool button_req;
 
 #endif
 

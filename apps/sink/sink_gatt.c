@@ -34,11 +34,6 @@ DESCRIPTION
 #include <csrtypes.h>
 #include <message.h>
 
-#ifdef ENABLE_KOOVOX
-#include "sink_app_task.h"
-#include "sink_app_core.h"
-#include "sink_app_message.h"
-#endif
 
 /* Macro for GATT Debug */
 #ifdef DEBUG_GATT
@@ -130,13 +125,6 @@ void gatt_message_handler( Task task, MessageId id, Message message )
             #endif
         }
         break;
-		case GATT_CONNECT_IND:
-		{
-			GATT_CONNECT_IND_T *ind = (GATT_CONNECT_IND_T *)message;
-			DEBUG(("GATT_CONNECT_IND:cid[%x] mtu[%x]\n", ind->cid, ind->mtu));
-			GattConnectResponse(task, ind->cid, ind->flags, TRUE);
-		}
-		break;
         case GATT_CONNECT_CFM:
         {
             GATT_CONNECT_CFM_T * cfm = (GATT_CONNECT_CFM_T*)message;
@@ -154,13 +142,9 @@ void gatt_message_handler( Task task, MessageId id, Message message )
                         ConnectionDmBleSecurityReq(&theSink.task, &cfm->taddr, ble_security_encrypted, ble_connection_slave_directed);
                     }
                     #endif
-
-					#ifdef	ENABLE_KOOVOX	
-					KoovoxAppConnection(NULL, cfm->cid, GATT_CONNECTED);
-					SetVoiceMessageEnable(VM_DISABLE);
-					#endif
                 }
                 server_handle_gatt_connect_cfm( (GATT_CONNECT_CFM_T*)message );
+
             }
             #elif defined(GATT_CLIENT_ENABLED)
             {
@@ -200,21 +184,17 @@ void gatt_message_handler( Task task, MessageId id, Message message )
             #if defined(GATT_SERVER_ENABLED)
             {
                 server_handle_gatt_disconnect_ind( (GATT_DISCONNECT_IND_T*)message );
-#ifdef	ENABLE_KOOVOX
-				KoovoxAppDisconnection();
-#endif
             }
             #elif defined(GATT_CLIENT_ENABLED)
             {
                 client_handle_gatt_disconnect_ind( (GATT_DISCONNECT_IND_T*)message );
             }
             #endif
-			
         }
         break;
         case GATT_EXCHANGE_MTU_IND:
         {
-            GATT_DEBUG(("GATT_EXCHANGE_MTU_IND:%d\n", ((GATT_EXCHANGE_MTU_IND_T*)message)->mtu));
+            GATT_DEBUG(("GATT_EXCHANGE_MTU_IND:%d\n",((GATT_EXCHANGE_MTU_IND_T*)message)->mtu));
             GattExchangeMtuResponse( ((GATT_EXCHANGE_MTU_IND_T*)message)->cid, 0);
         }
         break;
@@ -325,6 +305,7 @@ void gatt_message_handler( Task task, MessageId id, Message message )
                 server_handle_gatt_indication_cfm( (GATT_INDICATION_CFM_T*)message );
             }
             #endif
+			
         }
         break;
         

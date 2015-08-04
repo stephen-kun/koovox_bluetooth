@@ -581,7 +581,7 @@ void audioHfpConnectAudio (hfp_link_priority priority, Sink sink)
                        AUDIO_ROUTE_INTERNAL,
                        powerManagerGetLBIPM(),
                        AUDIO_CONNECT_PARAMS,
-                       &theSink.task) ;       
+                       NULL ) ;       
 
         audioControlLowPowerCodecs (TRUE) ;
 

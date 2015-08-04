@@ -47,7 +47,7 @@
    <property key="goodworkingbufferlevel" >0.65</property>
    <property key="hardware" >0</property>
    <property key="image" >image</property>
-   <property key="libs" >core, cbops, sbc, codec, frame_sync, audio_proc, spi_comm, math, cvc_modules, stream_relay,i2c</property>
+   <property key="libs" >core, cbops, sbc, codec, frame_sync, audio_proc, spi_comm, math, cvc_modules, stream_relay</property>
    <property key="output" ></property>
   </configuration>
   <configuration name="ShareMe" >

@@ -64,6 +64,4 @@ sink_multipoint.o: sink_multipoint.c sink_multipoint.h \
   sink_gatt_server_bas.h sink_gatt_client.h sink_callmanager.h \
   sink_statemanager.h sink_tones.h sink_audio.h sink_slc.h \
   sink_audio_prompts.h C:/ADK3.5/tools/include/firmware/ps.h \
-  C:/ADK3.5/tools/include/firmware/app/ps/ps_if.h sink_app_task.h \
-  C:/ADK3.5/tools/include/firmware/partition.h sink_app_core.h \
-  sink_app_message.h
+  C:/ADK3.5/tools/include/firmware/app/ps/ps_if.h

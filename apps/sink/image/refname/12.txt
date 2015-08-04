@@ -1,1 +1,0 @@
-file="C:\Users\Administrator\Desktop\tts_voice\Leaving.wav",compression=ADPCM,rate=8000,channels=Mono

@@ -1363,10 +1363,6 @@ void CsrCvcPluginInternalMessage( CvcPluginTaskdata *task ,uint16 id , Message m
                     SetCurrentDspStatus(DSP_LOADED_IDLE);
 
                     PRINT(("CVC: CVC_READY, SysId[%x] BuildVersion[%x] \n",m->a, m->b));
-
-#ifndef KOOVOX
-					MessageSend(CVC->app_task, EVENT_CVC_KALIMBA_LOADED, 0);
-#endif
                     
                     CvcConnectAudio (task);
                 }

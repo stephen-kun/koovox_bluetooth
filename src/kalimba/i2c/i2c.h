@@ -15,6 +15,7 @@
     // alter (lower) to clock I2C faster than the 400KHz spec
     .CONST I2C_CLK_PERIOD_ADJUSTMENT                        1.0;
 
+
     // TODO: These speeds should be moved to architecture-specific files
     #ifdef KAL_ARCH3
         .CONST CLOCKS_PER_US                                80;
@@ -24,10 +25,7 @@
     #endif
 
     // Kalasm3: Uses casts to convert from fractional to integer type
-    //.CONST $i2c.CLK_LOW_PERIOD_IN_CYCLES                    round(1.3 * CLOCKS_PER_US * I2C_CLK_PERIOD_ADJUSTMENT);		// 400khz
-    //.CONST $i2c.CLK_HIGH_PERIOD_IN_CYCLES                   round(0.6 * CLOCKS_PER_US * I2C_CLK_PERIOD_ADJUSTMENT);
-	.CONST $i2c.CLK_LOW_PERIOD_IN_CYCLES					round(4.7 * CLOCKS_PER_US * I2C_CLK_PERIOD_ADJUSTMENT);
-	.CONST $i2c.CLK_HIGH_PERIOD_IN_CYCLES					round(4.0 * CLOCKS_PER_US * I2C_CLK_PERIOD_ADJUSTMENT);
-
+    .CONST $i2c.CLK_LOW_PERIOD_IN_CYCLES                    round(1.3 * CLOCKS_PER_US * I2C_CLK_PERIOD_ADJUSTMENT);
+    .CONST $i2c.CLK_HIGH_PERIOD_IN_CYCLES                   round(0.6 * CLOCKS_PER_US * I2C_CLK_PERIOD_ADJUSTMENT);
 
 #endif

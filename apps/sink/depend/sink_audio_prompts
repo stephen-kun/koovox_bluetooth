@@ -70,6 +70,4 @@ sink_audio_prompts.o: sink_audio_prompts.c sink_private.h \
   C:/ADK3.5/tools/lib/gcc-lib/xap-local-xap-assisted/3.3.3/include/stddef.h \
   C:/ADK3.5/tools/include/firmware/partition.h \
   C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/csr_tone_plugin.h \
-  C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/csr_voice_prompts_plugin.h \
-  C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/csr_voice_presences_plugin.h \
-  sink_app_task.h sink_app_message.h sink_app_core.h
+  C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/csr_voice_prompts_plugin.h

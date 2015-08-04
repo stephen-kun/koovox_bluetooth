@@ -1,1 +1,0 @@
-file="C:\Users\Administrator\Desktop\tts_voice\safe_driver_advice.wav",compression=ADPCM,rate=8000,channels=Mono

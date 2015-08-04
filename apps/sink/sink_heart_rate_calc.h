@@ -13,33 +13,6 @@ FILE NAME
 #include <message.h>
 #include "sink_private.h"
 
-
-#ifdef HZ_40
-#define HB_MIN_POINT         16
-#define HB_MAX_POINT         50
-#define HB_MAX_MIN_LEN		 8
-#define HB_MIN_MAX_LEN		 4
-#define HB_POINT_THRESHOLD	 4
-
-#define HR_SAMPLE_POINT_NUM 240
-#define HR_SAMPLE_TIMES     25
-#define HR_SAMPLE_PERIOD    (HR_SAMPLE_TIMES*1000) 
-#define HR_SAMPLE_FREQUENCE	40
-
-#else
-#define HB_MIN_POINT         8
-#define HB_MAX_POINT         25
-#define HB_MAX_MIN_LEN		 4
-#define HB_MIN_MAX_LEN		 2
-#define HB_POINT_THRESHOLD	 2
-
-#define HR_SAMPLE_POINT_NUM 120
-#define HR_SAMPLE_TIMES     50
-#define HR_SAMPLE_PERIOD    (HR_SAMPLE_TIMES*1000) /*50ms, so we get 20 samples per second.*/
-#define HR_SAMPLE_FREQUENCE	20
-
-#endif
-
 #define  HB_VALIDE_POINT	 5
 #define	 HB_MAX_BUFF_SIZE	 16
 #define  HB_MIN_VALUE    	 50
@@ -65,8 +38,6 @@ typedef struct{
 	uint8 hb_smooth_buff[HB_SMOOTH_BUFF_SIZE];
 }Hb_smooth_var;
 
-void Koovox_init_hb_calc_var(void);
-void Koovox_free_hb_calc_var(void);
 void Koovox_init_smooth_var(void);
 void Koovox_free_smooth_var(void);
 

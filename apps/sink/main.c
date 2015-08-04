@@ -44,6 +44,12 @@ NOTES
 #include "sink_partymode.h"
 #include "sink_leds.h"
 
+#ifdef ENABLE_KOOVOX
+#include "sink_koovox_core.h"
+#include "sink_koovox_task.h"
+#include "sink_koovox_message.h"
+#endif
+
 #ifndef GATT_DISABLED
 #include "sink_gatt.h"
 #endif
@@ -125,15 +131,7 @@ NOTES
 #include <display_example_plugin.h>
 #endif /* ENABLE_DISPLAY */
 
-#ifdef ENABLE_KOOVOX
-#include <kalimba.h>
-#include "sink_app_task.h"
-#include "sink_app_message.h"
-#include "sink_app_core.h"
 #include "sink_koovox_uart.h"
-#include "sink_handle_accelerate_data.h"
-static bool power_on_prompt = TRUE;
-#endif
 
 #ifdef DEBUG_MAIN
 #define MAIN_DEBUG(x) DEBUG(x)
@@ -152,8 +150,6 @@ static const uint16 tws_audio_routing[4] =
     
 };
 #endif
-
-static bool gatt_init = FALSE;
 
 /* Single instance of the device state */
 hsTaskData theSink;
@@ -192,15 +188,16 @@ static void handleCLMessage ( Task task, MessageId id, Message message )
                 MAIN_DEBUG(("Setup CL for discoverable advertising\n"));
                 ConnectionDmBleSetAdvertisingParamsReq(ble_adv_scan_ind, FALSE, 0, NULL);
 #endif
-
-#ifdef ENABLE_KOOVOX
-				init_koovox_task();
-#endif
                 
 #ifdef ENABLE_GAIA                
                 /* Initialise Gaia with a concurrent connection limit of 1 */
                 GaiaInit(task, 1);
 #endif
+
+#ifdef ENABLE_KOOVOX
+				InitKoovoxTask();
+#endif
+
             }
             else
             {
@@ -219,6 +216,10 @@ static void handleCLMessage ( Task task, MessageId id, Message message )
             MAIN_DEBUG(("CL_DM_LOCAL_NAME_COMPLETE\n"));
             /* Write EIR data and initialise the codec task */
             sinkWriteEirData((CL_DM_LOCAL_NAME_COMPLETE_T*)message);
+#ifndef GATT_DISABLED
+            /* Initialise any GATT services */
+            initialise_gatt_for_device( ((CL_DM_LOCAL_NAME_COMPLETE_T*)message)->local_name, ((CL_DM_LOCAL_NAME_COMPLETE_T*)message)->size_local_name );
+#endif
         break;
         case CL_SM_SEC_MODE_CONFIG_CFM:
             MAIN_DEBUG(("CL_SM_SEC_MODE_CONFIG_CFM\n"));
@@ -514,7 +515,6 @@ static void handleCLMessage ( Task task, MessageId id, Message message )
    
 }
 
-
 /*************************************************************************
 NAME    
     handleUEMessage
@@ -573,57 +573,6 @@ static void handleUEMessage  ( Task task, MessageId id, Message message )
     /* The configurable Events*/
     switch ( id )
     {   
-#ifdef ENABLE_KOOVOX
-    	case (EventKoovoxSportDspShortMessage):
-		{
-			KoovoxRcvShortKalimbaMsg(message);
-		}
-		break;
-		
-		case (EventKoovoxSportDspLongMessage):
-		{
-			KoovoxRcvLongKalimbaMsg(message);
-		}
-		break;
-
-    	case (EventKoovoxCvcKalimbaLoaded):
-		{
-            DEBUG(("EventKoovoxCvcKalimbaLoaded\n"));
-			KoovoxHandleEventCvcKalimbaLoaded();
-		}
-		break;
-
-		case (EventKoovoxCodecKalimbaLoaded):
-		{
-            DEBUG(("EventKoovoxCodecKalimbaLoaded\n"));
-			KoovoxHandleEventCodecKalimbaLoaded();
-		}
-		break;
-
-		case (EventKoovoxSportKalimbaLoaded):
-		{
-            DEBUG(("EventKoovoxSportKalimbaLoaded\n"));
-			KoovoxHandleEventSportKalimbaLoaded();
-		}
-		break;
-
-    	/* dsp is power off */
-    	case (EventKoovoxDSPPowerOff):
-		{
-            DEBUG(("EventKoovoxDSPPowerOff\n"));
-			KoovoxRestartDsp();
-		}
-		break;
-		
-    	/* dispose the timeout event */
-    	case (EventKoovoxTimeout):
-		{
-			lIndicateEvent = FALSE;
-			KoovoxTimeoutHandler();
-		}
-		break;
-#endif
-
         case (EventUsrDebugKeysToggle):
             MAIN_DEBUG(("HS: Toggle Debug Keys\n"));
             /* If the device has debug keys enabled then toggle on/off */
@@ -632,6 +581,8 @@ static void handleUEMessage  ( Task task, MessageId id, Message message )
         case (EventUsrPowerOn):
         case (EventSysPowerOnPanic):
             MAIN_DEBUG(("HS: Power On\n" )) ;
+
+			DEBUG(("+++ EventUsrPowerOn ++++\n"));
             
             /* cancel any existing mute operations when powering up */
             theSink.sink_mute_status = FALSE;
@@ -649,7 +600,9 @@ static void handleUEMessage  ( Task task, MessageId id, Message message )
                 /* update battery display */
                 displayUpdateBatteryLevel(powerManagerIsChargerConnected());
             }
-                                                    
+            
+          
+                                        
             /*we have received the power on event- we have fully powered on*/
             stateManagerPowerOn();   
 
@@ -694,21 +647,16 @@ static void handleUEMessage  ( Task task, MessageId id, Message message )
                 MessageSendLater(&theSink.task, EventSysCheckDefrag, 0, D_SEC(theSink.conf1->timeouts.DefragCheckTimer_s)); 
             }
 
-#ifdef ENABLE_KOOVOX
-			if(power_on_prompt)
-			{
-				/*	¿ª»úÌáÊ¾Óï(ÎÊºòÓï) */
-				KoovoxPowerOnPrompt();
-				power_on_prompt = FALSE;
-			}
-
-			/* ·¢ËÍi2c¼ì²âÃüÁî */
+			/* ¼ì²âi2c */
 			KoovoxFillAndSendUartPacket(START, OBJ_I2C_TEST, 0, 0);
-#endif
+			KoovoxStoreLastCmd(START, OBJ_I2C_TEST);
+			button_req = TRUE;
             
         break ;          
         case (EventUsrPowerOff):
             MAIN_DEBUG(("HS: PowerOff - En[%c]\n" , ((theSink.PowerOffIsEnabled) ? 'T':'F') )) ;
+
+			DEBUG(("***** EventUsrPowerOff ****\n"));
 #ifdef ENABLE_PEER
             {
                 uint16 peerIndex = 0;
@@ -724,7 +672,6 @@ static void handleUEMessage  ( Task task, MessageId id, Message message )
                 }
             }
 #endif 
-
             /* don't indicate event if already in limbo state */
             if(lState == deviceLimbo) lIndicateEvent = FALSE ;
                 
@@ -791,17 +738,12 @@ static void handleUEMessage  ( Task task, MessageId id, Message message )
                 if (!theSink.features.GaiaRemainConnected)
                     gaiaDisconnect();
 #endif
-
             }
             else
             {
                 lIndicateEvent = FALSE ;
             }
-#ifdef  ENABLE_KOOVOX
-			HeartRateSensorDisable();
-			power_on_prompt = TRUE;
-			Koovox_free_step_var();
-#endif
+            
         
         break ;
         case (EventUsrInitateVoiceDial):
@@ -968,8 +910,7 @@ static void handleUEMessage  ( Task task, MessageId id, Message message )
                 /* Cancel and start again the timer*/
                 MessageCancelAll( &theSink.task , EventSysVolumeChangeTimer) ;
                 MessageSendLater(&theSink.task, EventSysVolumeChangeTimer, 0, D_SEC(theSink.conf1->timeouts.StoreCurrentSinkVolumeTimeout_s) );
-            } 
-
+            }            
             break;
             
         case (EventUsrVolumeDown):     
@@ -1394,15 +1335,11 @@ static void handleUEMessage  ( Task task, MessageId id, Message message )
             }    
         break ;
         case EventSysSLCDisconnected: 
-            MAIN_DEBUG(("HS: EvSLCDisconnect\n")) ;
+                MAIN_DEBUG(("HS: EvSLCDisconnect\n")) ;
             {
                 theSink.VoiceRecognitionIsActive = FALSE ;
                 MessageCancelAll ( &theSink.task , EventSysNetworkOrServiceNotPresent ) ;                
             }
-#ifdef ENABLE_KOOVOX
-			AudioPromptPlayEvent(EventKoovoxPromptPhoneDisconnected);
-			disconnect_all_gatt_devices();
-#endif
         break ;
         case (EventSysLinkLoss):
             MAIN_DEBUG(("HS: Link Loss\n")) ;
@@ -1417,9 +1354,6 @@ static void handleUEMessage  ( Task task, MessageId id, Message message )
                 if((!theSink.hfp_profiles) && (theSink.linkLossReminderTime != 0))
                     MessageSendLater(&theSink.task,  EventSysLinkLoss, 0, D_SEC(theSink.linkLossReminderTime));
             }
-#ifdef ENABLE_KOOVOX
-			AudioPromptPlayEvent(EventKoovoxPromptPhoneLinkLoss);
-#endif
         break ;
         case (EventSysMuteReminder) :        
             MAIN_DEBUG(("HS: Mute Remind\n")) ;
@@ -1438,16 +1372,10 @@ static void handleUEMessage  ( Task task, MessageId id, Message message )
 
         case EventSysBatteryCritical:
             MAIN_DEBUG(("HS: EventSysBatteryCritical\n")) ;
-#ifdef ENABLE_KOOVOX
-			AudioPromptPlayEvent(EventKoovoxPromptCriticalBattery);
-#endif
         break;
 
         case EventSysBatteryLow:
             MAIN_DEBUG(("HS: EventSysBatteryLow\n")) ;
-#ifdef ENABLE_KOOVOX
-			AudioPromptPlayEvent(EventKoovoxPromptLowBattery);
-#endif
         break; 
         
         case EventSysGasGauge0 :
@@ -1562,26 +1490,15 @@ static void handleUEMessage  ( Task task, MessageId id, Message message )
             MAIN_DEBUG(("HS: Disable LED indication\n")) ;        
             LedManagerResetLEDIndications ( ) ;
             break ;
+        case EventSysCallAnswered:
+            MAIN_DEBUG(("HS: EventSysCallAnswered\n")) ;
+        break;
         case EventSysSLCConnected:
         case EventSysSLCConnectedAfterPowerOn:
             
             MAIN_DEBUG(("HS: EventSysSLCConnected\n")) ;
             /*if there is a queued event - we might want to know*/                
             sinkRecallQueuedEvent();
-#ifdef ENABLE_KOOVOX
-			AudioPromptPlayEvent(EventKoovoxPromptPhoneConnected);
-#ifndef GATT_DISABLED
-			if(isConnectedState()&&(!gatt_init))
-			{
-				char* local_name = "KOOVOX";
-				gatt_init = TRUE;
-				/* Initialise any GATT services */
-				initialise_gatt_for_device((uint8*)local_name, strlen(local_name));
-			}
-#endif	/* GATT_DISABLED */
-
-#endif 	/* ENABLE_KOOVOX */
-
         break;            
         case EventSysPrimaryDeviceConnected:
         case EventSysSecondaryDeviceConnected:
@@ -1616,39 +1533,8 @@ static void handleUEMessage  ( Task task, MessageId id, Message message )
 #ifdef ENABLE_DISPLAY
             displayShowSimpleText(DISPLAYSTR_CLEAR,1);
             displayShowSimpleText(DISPLAYSTR_CLEAR,2);
-#endif       
-
-#ifdef ENABLE_KOOVOX
-			/* if is asr idle , recover to previous mode  */
-			if(!isAsrBusy())
-			{
-				/* send message to switch to previous mode */
-				MessageSend(&(koovox.task), EventKoovoxAutoLeaveCallMode, 0);
-			}
-
-			if(isRecordBusy()||isPresentBusy())
-			{
-				uint8 value = OFF;
-				SendNotifyToDevice(OID_RECODE, 0, &value, 1);
-			}
-			
-			SetRecordStatus(RECORD_IDLE);
-			SetPresentStatus(PRESET_IDLE);
-			SetMuteStatus(MUTE_ENABLE);
-#endif
+#endif            
         break;    
-
-        case EventSysCallAnswered:
-            MAIN_DEBUG(("HS: EventSysCallAnswered\n")) ;
-#ifdef ENABLE_KOOVOX
-			/* if presence is busy ,send  EventKoovoxPromptPresence message to koovox task */
-			if(isPresentBusy())
-			{
-				MessageSendLater(&(koovox.task), EventKoovoxPromptPresence, 0, 2000);
-			}
-#endif
-        break;
-
         case EventSysResetComplete:        
             MAIN_DEBUG(("EventSysResetComplete\n")) ;
         break ;
@@ -1810,7 +1696,7 @@ static void handleUEMessage  ( Task task, MessageId id, Message message )
         
         /* paging stopped whilst in connectable state */
         case EventSysStopPagingInConnState:
-            MAIN_DEBUG(("EventSysStopPagingInConnState\n"));
+            MAIN_DEBUG(("EventSysStartPagingInConnState\n"));
             /* set bit to indicate paging status */
             theSink.paging_in_progress = FALSE;
         break;
@@ -2758,7 +2644,7 @@ static void handleUEMessage  ( Task task, MessageId id, Message message )
             else
             {
                 MAIN_DEBUG (( "HS : EventSysCheckAudioAmpDrive still busy, reschedule\n" ));     
-				MessageSendLater(&theSink.task , EventSysCheckAudioAmpDrive, 0, CHECK_AUDIO_AMP_PIO_DRIVE_DELAY);	 
+                MessageSendLater(&theSink.task , EventSysCheckAudioAmpDrive, 0, CHECK_AUDIO_AMP_PIO_DRIVE_DELAY);    
             }
         break;
 
@@ -3139,8 +3025,6 @@ static void handleUEMessage  ( Task task, MessageId id, Message message )
         /*  GAIA DFU requires that audio not be busy, so disallow any tone  */
             lIndicateEvent = FALSE;
             gaiaDfuRequest();
-
-			KoovoxFillAndSendUartPacket(STOP, OBJ_STEP_COUNT, 0, 0);
         break;
 #endif
 
@@ -3433,13 +3317,13 @@ static void handleUEMessage  ( Task task, MessageId id, Message message )
             MAIN_DEBUG (( "HS : UE unhandled!! [%x]\n", id ));     
         break ;  
         
-    } 
+    }   
 
-#ifdef ENABLE_KOOVOX	
-	if((id >= EventKoovoxButtonMClick) && (id <= EventKoovoxSwitchVDown))
+#ifdef ENABLE_KOOVOX
+	if((id >= EventKoovoxButtonMClick) && (id < EventUsrLast))
 	{
-		/* dispose the koovox event */
-		KoovoxEventHandler(id); 
+		lIndicateEvent = FALSE;
+		KoovoxUsrEventHandle(id, message);
 	}
 #endif
     
@@ -3663,11 +3547,8 @@ static void handleHFPMessage  ( Task task, MessageId id, Message message )
             /* Attempt to play caller name */
             if(!AudioPromptPlayCallerName (ind->size_name, ind->caller_info + ind->offset_name))
             {
-            	if(!isPresentAuto())
-            	{
-					/* Caller name not present or not supported, try to play number */
-					AudioPromptPlayCallerNumber(ind->size_number, ind->caller_info + ind->offset_number) ;
-				}
+                /* Caller name not present or not supported, try to play number */
+                AudioPromptPlayCallerNumber(ind->size_number, ind->caller_info + ind->offset_number) ;
             }
         }
     
@@ -4231,12 +4112,7 @@ void _init(void)
     /* Read in any PIOs required */   
     configManagerPioMap();
     /* Time critical USB setup */
-    usbTimeCriticalInit();
-	
-#ifdef ENABLE_KOOVOX
-	/* init the phone app task structure */
-	memset(&koovox, 0, sizeof(koovox));
-#endif
+    usbTimeCriticalInit();    
 }
 
 

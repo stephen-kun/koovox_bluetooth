@@ -28,12 +28,6 @@ NOTES
 #include <stdlib.h>
 #include <audio.h>
 
-#ifdef ENABLE_KOOVOX
-#include "sink_app_task.h"
-#include "sink_app_core.h"
-#include "sink_app_message.h"
-#endif
-
 #ifdef DEBUG_MULTI_MAN
     #define MP_DEBUG(x) DEBUG(x)
 #else
@@ -94,35 +88,6 @@ void sinkHandleCallInd(const HFP_CALL_STATE_IND_T *pInd)
        call still on AG2, check for this and update as necessry */
     if(!((HfpLinkGetCallState(pInd->priority, &CallState))&&(CallState != pInd->call_state)))
         CallState = pInd->call_state;
-
-
-#ifdef ENABLE_KOOVOX
-	if(!isAsrBusy())
-	{
-		if(CALL_MODE != GetCurrMode())
-		{
-			if(pInd->call_state != hfp_call_state_idle)
-			{
-				/* auto switch to call mode */
-				KoovoxSwitchToCallMode();
-			}
-		}
-	}
-	
-	if(hfp_call_state_incoming == CallState)
-	{
-		if(isPresentAuto())
-		{
-		   DEBUG(("+++++++AUTO PRESENT CALL \n"));
-		   TonesPlayEvent(EventSysRingtone1);
-		   MessageSendLater(&theSink.task, EventKoovoxButtonCDoubleClick, 0, D_SEC(5));
-		}
-		else
-		{
-			DEBUG(("++++auto preset isn't enable\n"));
-		}
-	}
-#endif
 
     /* get call state of other AG */
     OtherAGPresent = HfpLinkGetCallState(link_priority_other, &CallStateOtherAG);

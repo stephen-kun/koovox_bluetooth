@@ -1,1 +1,0 @@
-file="C:\Users\Administrator\Desktop\tts_voice\call_later.wav",compression=ADPCM,rate=8000,channels=Mono

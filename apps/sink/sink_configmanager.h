@@ -103,7 +103,7 @@ enum
     CONFIG_PMU_MONITOR_CONFIG                 = 41,
     CONFIG_PEER_DEVICE_CUSTOM_UUID            = 42,
     CONFIG_ASR_PHONE_NUMBER					  = 43,
-    CONFIG_HB_I2C_TEST_RESULT				  = 44,
+    CONFIG_KOOVOX_CONFIG					  = 44,
     CONFIG_ACC_I2C_TEST_RESULT				  = 45,
     CONFIG_SPORT_DATA						  = 46,
     CONFIG_DEFRAG_TEST                        = 47,    

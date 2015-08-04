@@ -51,13 +51,6 @@ Copyright (C) Cambridge Silicon Radio Ltd. 2004-2014
 #include <csr_a2dp_decoder_common_plugin.h>
 #include "sink_slc.h"
 
-#ifdef ENABLE_KOOVOX
-#include "sink_app_task.h"
-#include "sink_app_core.h"
-#include "sink_app_message.h"
-#endif
-
-
 #ifdef DEBUG_A2DP
 #define A2DP_DEBUG(x) DEBUG(x)
 #ifdef ENABLE_PEER
@@ -2573,7 +2566,6 @@ void handleA2DPSignallingLinkloss(uint16 DeviceId)
         /* Send an event to notify the user of link loss */
         MessageCancelAll(&theSink.task , EventSysLinkLoss );
         MessageSend(&theSink.task,  EventSysLinkLoss, 0);
-		DEBUG(("handleA2DPSignallingLinkloss\n"));
     }
 }
 
@@ -3526,11 +3518,7 @@ void handleA2DPMessage( Task task, MessageId id, Message message )
             A2DP_DEBUG(("A2DP_START_IND : \n"));
          	handleA2DPStartInd(((A2DP_MEDIA_START_IND_T*)message)->device_id,
                                ((A2DP_MEDIA_START_IND_T*)message)->stream_id);
-#ifdef ENABLE_KOOVOX
-			KoovoxAutoSwitchToMusicMode();
-#endif
-
-		break;
+        break;
 		
         /* confirmation of a local request to start media streaming */
         case A2DP_MEDIA_START_CFM:
@@ -3545,10 +3533,6 @@ void handleA2DPMessage( Task task, MessageId id, Message message )
         	handleA2DPSuspendStreaming(((A2DP_MEDIA_SUSPEND_IND_T*)message)->device_id,
                                        ((A2DP_MEDIA_SUSPEND_IND_T*)message)->stream_id,
                                          a2dp_success);
-
-#ifdef ENABLE_KOOVOX
-			KoovoxAutoLeaveToMusicMode();
-#endif
         break;
 		
         case A2DP_MEDIA_SUSPEND_CFM:

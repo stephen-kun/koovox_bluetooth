@@ -10,17 +10,18 @@ FILE NAME
 
 #include "sink_koovox_uart.h"
 #include "sink_private.h"
-#include "sink_app_core.h"
-#include "sink_app_message.h"
-#include "sink_app_task.h"
-#include "sink_heart_rate_calc.h"
-#include "sink_handle_accelerate_data.h"
+#include "sink_koovox_core.h"
+#include "sink_koovox_message.h"
+#include "sink_koovox_task.h"
 
+#include "sink_handle_accelerate_data.h"
+#include "sink_heart_rate_calc.h"
 
 UARTStreamTaskData theUARTStreamTask;
 uint8* uart_msg = NULL;
 uint16 uart_offset = 0;
-bool respond_flag = FALSE;
+bool wechat_req = FALSE;
+bool button_req = FALSE;
 
 static void UARTStreamMessageHandler (Task pTask, MessageId pId, Message pMessage);
 static void KoovoxUartMessageHandle(uint8 *data, uint16 length);
@@ -41,7 +42,7 @@ RETURNS
 void uart_data_stream_init(void)
 {
 
-	APP_CORE_LOG(("uart_data_stream_init\n"));
+	KOOVOX_CORE_LOG(("uart_data_stream_init\n"));
 
 	/* Assign task message handler */
 	theUARTStreamTask.task.handler = UARTStreamMessageHandler;
@@ -163,43 +164,6 @@ static void uart_data_stream_rx_data(Source src)
 		}
 	}
 
-#if 0
-	for(; i<length; )
-	{
-		if(uart_offset == SIZE_UART_MSG)
-			uart_offset = 0;
-
-		if((length + uart_offset) < SIZE_UART_MSG)
-		{
-			uint16 len = length - i;
-			memcpy(uart_msg + uart_offset, data + i, len);
-			uart_offset += len;
-			i += len;
-		}
-		else
-		{
-			uint16 len = SIZE_UART_MSG - uart_offset;
-			memcpy(uart_msg + uart_offset, data + i, len);
-			i += len;
-			uart_offset = SIZE_UART_MSG;
-		}
-				
-		ret = KoovoxMessageStr((const uint8*)uart_msg, FRAME_TAIL, uart_offset);
-		if(ret)
-		{
-			/* handle the received message */
-			KoovoxUartMessageHandle(uart_msg, ret);
-
-			if(ret != uart_offset)
-			{
-				i -= (uart_offset - ret); 
-			}
-
-			uart_offset = 0;
-		}
-	}
-#endif
-
 	/* Discards the specified amount of bytes from the front of the specifiedsource */
 	SourceDrop(src, size);
 }
@@ -228,6 +192,7 @@ void UARTStreamMessageHandler (Task pTask, MessageId pId, Message pMessage)
 	}
 }
 
+
 /****************************************************************************
 NAME 
   	KoovoxResponseFrameError
@@ -242,22 +207,33 @@ static void KoovoxResponseFrameError(uint16 value)
 {
 	uint8 cmd = value & 0xff;
 	uint8 obj = (value >> 8) & 0xff;
-	
-	switch(obj)
 
+	if(koovox.repeat_times >= REPEAT_TIMES)
 	{
-	case OBJ_STEP_COUNT:
-		if(cmd == START)
+		koovox.repeat_times = 0;
+		/* 语音提示用户，通信异常 */
+		
+	}
+	else
+	{
+		if(button_req)
 		{
 			/* 重发命令 */
-			KoovoxFillAndSendUartPacket(START, OBJ_STEP_COUNT, 0, 0);
+			KoovoxStoreLastCmd(cmd, obj);
+			KoovoxFillAndSendUartPacket(cmd, obj, 0, 0);
+			koovox.repeat_times++;
 		}
-		break;
 
-	default:
-		break;
+		if(wechat_req)
+		{
+			/* 通知前端，通信异常 */
+			
+			wechat_req = FALSE;
+		}
 	}
+	
 }
+
 
 
 /****************************************************************************
@@ -276,9 +252,13 @@ static void KoovoxUartMessageHandle(uint8 *data, uint16 length)
 	UartMsg* msg = (UartMsg*)data;
 
 	if((!data) || (msg->len > (length - FRAME_UART_SIZE)))
+	{
+		/* 通知前端通信异常 */
+		
 		return;
+	}
 
-#ifdef DEBUG_PRINT_ENABLEDX
+#ifdef DEBUG_PRINT_ENABLED
 	{
 		uint8 i = 0;
 		for(; i<length; i++)
@@ -291,9 +271,12 @@ static void KoovoxUartMessageHandle(uint8 *data, uint16 length)
 	{
 	case CFM:
 		{
-			respond_flag = TRUE;
 			switch(msg->obj)
 			{
+			case OBJ_HEALTH_MONITOR:
+				KoovoxResponseHealthMonitor(msg->data, msg->len);
+				break;
+			
 			case OBJ_HEART_RATE:
 				KoovoxResponseHeartRate(msg->data, msg->len);
 				break;
@@ -310,15 +293,12 @@ static void KoovoxUartMessageHandle(uint8 *data, uint16 length)
 				KoovoxResponseConstSeat(msg->data, msg->len);
 				break;
 
-			case OBJ_NOD_HEAD:
-				KoovoxResponseNodHead(msg->data, msg->len);
-				break;
-
 			case OBJ_FRAME_ERR:
 				KoovoxResponseFrameError(koovox.last_cmd);
 				break;
 
 			default:
+				button_req = FALSE;
 				break;
 			}
 		}
@@ -327,7 +307,7 @@ static void KoovoxUartMessageHandle(uint8 *data, uint16 length)
 	case ENV:
 		{
 			switch(msg->obj)
-			{
+			{			
 			case OBJ_STEP_COUNT:
 				KoovoxCountStep(msg->data, msg->len);
 				break;
@@ -342,6 +322,10 @@ static void KoovoxUartMessageHandle(uint8 *data, uint16 length)
 
 			case OBJ_NOD_HEAD:
 				KoovoxNodHead(msg->data, msg->len);
+				break;
+
+			case OBJ_SHAKE_HEAD:
+				KoovoxShakeHead(msg->data, msg->len);
 				break;
 
 			case OBJ_HEART_RATE:

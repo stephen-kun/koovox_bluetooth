@@ -258,14 +258,14 @@
    #ifdef MESSAGE_ERROR_IF_MASK_ID_WRONG
       // check the address is correct for the mask
       r0 = M[r1 + $message.MASK_FIELD];
-      // mask off the bits we don t care about
+      // mask off the bits we don't care about
       r0 = r0 AND r2;
-      // check that s the same as the ID we were given
+      // check that's the same as the ID we were given
       Null = r2 - r0;
       if NZ call $error;
    #endif
 
-   // store new entry s ID and handler address in this structre
+   // store new entry's ID and handler address in this structre
    M[r1 + $message.ID_FIELD] = r2;
    M[r1 + $message.HANDLER_ADDR_FIELD] = r3;
 
@@ -1066,7 +1066,7 @@
       rts;
    go_from_vm_setup_done:
 
-   // send message saying we re up and running!
+   // send message saying we're up and running!
    r2 = Null OR $MESSAGE_KALIMBA_READY;
    call $message.send_short;
 

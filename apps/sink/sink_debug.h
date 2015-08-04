@@ -34,7 +34,7 @@ DESCRIPTION
             /* RSSI pairing */
         #define DEBUG_INQx
                 /*The button manager */
-        #define DEBUG_BUT_MANx
+        #define DEBUG_BUT_MAN
             /*The low level button parsing*/
         #define DEBUG_BUTTONSx
             /*The call manager*/
@@ -93,7 +93,7 @@ DESCRIPTION
 
         #define DEBUG_MAPCx
 
-        #define DEBUG_GAIAx
+        #define DEBUG_GAIA
         
         #define DEBUG_SPEECH_RECx
         
@@ -101,10 +101,10 @@ DESCRIPTION
         
         #define DEBUG_AT_COMMANDSx
         
-        #define DEBUG_GATTx
+        #define DEBUG_GATT
         
             /* BLE transport / messages debug */
-        #define DEBUG_BLEx
+        #define DEBUG_BLE
         
         #define DEBUG_DUTx
         
@@ -130,14 +130,10 @@ DESCRIPTION
             /* Battery Reporting debug */
         #define DEBUG_BAT_REPx
 
-		/* Phone app debug */
-		#define DEBUG_APP_TASKx
-
-		/* app core debug */
-		#define DEBUG_APP_COREx
-
-		/* app message debug */
-		#define DEBUG_APP_MESSAGEx
+		#define DEBUG_KOOVOX_TASK
+		#define DEBUG_KOOVOX_CORE
+		#define DEBUG_KOOVOX_MESSAGE
+		#define DEBUG_KOOVOX_UARTx
 
     #else
         #define DEBUG(x) 

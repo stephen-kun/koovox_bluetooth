@@ -2,9 +2,7 @@
 -O
 -fno-builtin-memcpy
 -Xlinker
--s246
--Xlinker
--p
+-s0
 -ldisplay_plugin_cns10010_scroll
 -ldisplay_example_plugin
 -ldisplay
@@ -41,7 +39,5 @@
 -lfm_rx_api
 -lswat
 -lcsr_i2s_audio_plugin
--lcsr_voice_presences_plugin
--lkoovox_sport_common_plugin
 -lgaia
 assisted

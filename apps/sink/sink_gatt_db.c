@@ -12,45 +12,31 @@
 const uint16 gattDatabase[] = {
     /* 0001: Primary Service 1801 */
     0x0002, 0x0118,
-    /* 0002: Primary Service 180f */
-    0x0002, 0x0f18,
-    /* 0003: Characteristic Declaration 2a19 */
-    0x3005, 0x1204, 0x0019, 0x2a00,
+    /* 0002: Primary Service fee7 */
+    0x0002, 0xe7fe,
+    /* 0003: Characteristic Declaration fec7 */
+    0x3005, 0x0804, 0x00c7, 0xfe00,
     /* 0004: . */
     0xd401, 0x0000,
-    /* 0005: Client Characteristic Configuration */
+    /* 0005: Characteristic Declaration fec8 */
+    0x3005, 0x2006, 0x00c8, 0xfe00,
+    /* 0006: . */
+    0xd401, 0x0000,
+    /* 0007: Client Characteristic Configuration */
     0x6c00,
-    /* 0006: Primary Service 180d */
-    0x0002, 0x0d18,
-    /* 0007: Characteristic Declaration 2a37 */
-    0x3005, 0x1208, 0x0037, 0x2a00,
-    /* 0008: . */
+    /* 0008: Characteristic Declaration fec9 */
+    0x3005, 0x0209, 0x00c9, 0xfe00,
+    /* 0009: . */
     0xd401, 0x0000,
-    /* 0009: Client Characteristic Configuration */
-    0x6c00,
-    /* 000a: Primary Service 1900 */
-    0x0002, 0x0019,
-    /* 000b: Characteristic Declaration 2b01 */
-    0x3005, 0x0a0c, 0x0001, 0x2b00,
-    /* 000c: . */
-    0xd401, 0x0000,
-    /* 000d: Characteristic Declaration 2b02 */
-    0x3005, 0x0a0e, 0x0002, 0x2b00,
-    /* 000e: . */
-    0xd401, 0x0000,
-    /* 000f: Characteristic Declaration 2b10 */
-    0x3005, 0x1010, 0x0010, 0x2b00,
-    /* 0010: . */
-    0xd401, 0x0000,
-    /* 0011: Primary Service 1800 */
+    /* 000a: Primary Service 1800 */
     0x0002, 0x0018,
-    /* 0012: Characteristic Declaration 2a00 */
-    0x3005, 0x0213, 0x0000, 0x2a00,
-    /* 0013:  */
+    /* 000b: Characteristic Declaration 2a00 */
+    0x3005, 0x020c, 0x0000, 0x2a00,
+    /* 000c:  */
     0xd400,
-    /* 0014: Characteristic Declaration 2a01 */
-    0x3005, 0x0215, 0x0001, 0x2a00,
-    /* 0015:  */
+    /* 000d: Characteristic Declaration 2a01 */
+    0x3005, 0x020e, 0x0001, 0x2a00,
+    /* 000e:  */
     0xd400,
 };
 

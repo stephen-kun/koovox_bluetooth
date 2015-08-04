@@ -11,7 +11,6 @@ C:/ADK3.5/kalimba/lib_sets/sdk/gordon/spi_comm.a
 C:/ADK3.5/kalimba/lib_sets/sdk/gordon/math.a
 C:/ADK3.5/kalimba/lib_sets/sdk/gordon/cvc_modules.pa
 C:/ADK3.5/kalimba/lib_sets/sdk/gordon/stream_relay.a
-C:/ADK3.5/kalimba/lib_sets/sdk/gordon/i2c.a
 C:/ADK3.5/kalimba/architecture/gordon.link
 C:/ADK3.5/kalimba/lib_sets/sdk/gordon/core.link
 C:/ADK3.5/kalimba/lib_sets/sdk/gordon/cbops.link
@@ -23,7 +22,6 @@ C:/ADK3.5/kalimba/lib_sets/sdk/gordon/spi_comm.link
 C:/ADK3.5/kalimba/lib_sets/sdk/gordon/math.link
 C:/ADK3.5/kalimba/lib_sets/sdk/gordon/cvc_modules.link
 C:/ADK3.5/kalimba/lib_sets/sdk/gordon/stream_relay.link
-C:/ADK3.5/kalimba/lib_sets/sdk/gordon/i2c.link
 sbc_decoder.link
 sbc_decoder-objects/music_example_resample.o
 sbc_decoder-objects/codec_decoder.o

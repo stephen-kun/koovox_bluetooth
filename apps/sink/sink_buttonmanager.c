@@ -327,10 +327,9 @@ static void BMCheckForButtonMatch ( uint32 pButtonMask , ButtonsTime_t  pDuratio
     uint16 lEvIndex = 0 ;        
     uint32 lMask = 0;
 
-/*	if(pButtonMask & 0xFFFF)
+	if(pButtonMask & 0xFFFF)
 		pButtonMask &= ~VREG_PIN_MASK;
-		*/
-    
+		
         /*each block*/
     for (lBlockIndex = 0 ; lBlockIndex < BM_NUM_BLOCKS ; lBlockIndex++)
     {       /*Each Entry*/        

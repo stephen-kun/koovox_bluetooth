@@ -68,6 +68,4 @@ sink_a2dp.o: sink_a2dp.c sink_debug.h sink_statemanager.h sink_private.h \
   sink_auth.h sink_tones.h C:/ADK3.5/tools/include/standard/memory.h \
   C:/ADK3.5/tools/include/firmware/ps.h \
   C:/ADK3.5/tools/include/firmware/app/ps/ps_if.h \
-  C:/ADK3.5/tools/include/firmware/kalimba.h sink_app_task.h \
-  C:/ADK3.5/tools/include/firmware/partition.h sink_app_core.h \
-  sink_app_message.h
+  C:/ADK3.5/tools/include/firmware/kalimba.h

@@ -27,7 +27,7 @@
 .CONST $M.CVC.CONFIG.STATUS_PTR                 15;
 .CONST $M.CVC.CONFIG.TONE_MIX_PTR               16;
 .CONST $M.CVC.CONFIG.PTR_INV_DAC_TABLE          17;
-.CONST $M.CVC.CONFIG.STRUC_SIZE                 19;
+.CONST $M.CVC.CONFIG.STRUC_SIZE                 18;
 
 // VM Message IDs
 .CONST $M.CVC.VMMSG.READY           0x1000;

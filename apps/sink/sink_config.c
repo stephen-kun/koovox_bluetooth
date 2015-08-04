@@ -310,6 +310,10 @@ uint16 ConfigRetrieve(uint16 config_id, void* data, uint16 len)
             case CONFIG_FM_FREQUENCY_STORE:
             case CONFIG_IR_REMOTE_CONTROL_LEARNED_CODES:
             case CONFIG_SQIF_PARTITIONS:
+			case CONFIG_ASR_PHONE_NUMBER:
+			case CONFIG_KOOVOX_CONFIG:
+			case CONFIG_ACC_I2C_TEST_RESULT:
+			case CONFIG_SPORT_DATA:
                 break;
             default:
             if (ret_len != len)

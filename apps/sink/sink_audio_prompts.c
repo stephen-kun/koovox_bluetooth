@@ -28,13 +28,6 @@ DESCRIPTION
 #include <partition.h>
 #include <csr_tone_plugin.h> 
 #include <csr_voice_prompts_plugin.h>
-#include <csr_voice_presences_plugin.h>
-
-#ifdef ENABLE_KOOVOX
-#include "sink_app_task.h"
-#include "sink_app_message.h"
-#include "sink_app_core.h"
-#endif
 
 #ifdef DEBUG_AUDIO_PROMPTS
     #define PROMPTS_DEBUG(x) DEBUG(x)
@@ -56,10 +49,8 @@ void AudioPromptPlay(Task plugin, uint16 id, bool can_queue, bool override)
     {
         /* turn on audio amp */
         PioSetPio ( theSink.conf1->PIOIO.pio_outputs.DeviceAudioActivePIO , pio_drive, TRUE) ;
-
-		/* start check to turn amp off again if required */ 
-		MessageSendLater(&theSink.task , EventSysCheckAudioAmpDrive, 0, 1000);	  
-
+        /* start check to turn amp off again if required */ 
+        MessageSendLater(&theSink.task , EventSysCheckAudioAmpDrive, 0, 1000);    
         
 #ifdef ENABLE_SQIFVP        
         /* If using multiple partitions for the voice prompt langages, mount the relevant partiton if required */
@@ -94,7 +85,6 @@ void AudioPromptConfigure( uint8 size_index )
 {
     PROMPTS_DEBUG(("Setup AP Indexing: %d prompts\n",size_index));
     AudioVoicePromptsInit((TaskData *)&csr_voice_prompts_plugin, size_index, theSink.num_audio_prompt_languages);
-    AudioVoicePromptsInit((TaskData *)&csr_voice_presences_plugin, size_index, theSink.num_audio_prompt_languages);
 }
 
 /****************************************************************************
@@ -158,15 +148,6 @@ bool AudioPromptPlayEvent ( sinkEvents_t event )
                 case EventSysMuteReminder:
                 case EventSysRingtone1:
                 case EventSysRingtone2:
-				case EventKoovoxPromptStartSport:
-				case EventKoovoxPromptStopSport:
-				case EventKoovoxPromptMusicMode:
-				case EventKoovoxPromptSportMode:
-				case EventKoovoxPromptBusinessMode:
-				case EventKoovoxPromptNectProtectEnable:
-				case EventKoovoxPromptNectProtectDisable:
-				case EventKoovoxPromptSafeDriverEnable:
-				case EventKoovoxPromptSafeDriverDisable:
                 
                     /* never queue mute reminders to protect against the case that the prompt is longer 
                     than the mute reminder timer */
@@ -207,7 +188,7 @@ void AudioPromptPlayNumString(uint16 size_num_string, uint8* num_string)
         for(i=0;i<size_num_string;i++)
         {                    
             /* Check for non-numeric characters */
-            if(pData[i] >= 0x30 && pData[i] <= 0x39)
+            if(*pData >= 0x30 || *pData <= 0x39)
             {
                 PROMPTS_DEBUG(("AP: PlayDigit[%x]\n", pData[i]- 0x30 )) ;
                 
@@ -281,7 +262,6 @@ bool AudioPromptPlayCallerNumber( const uint16 size_number, const uint8* number 
         if(theSink.RepeatCallerIDFlag && size_number > 0) 
         { 
             theSink.RepeatCallerIDFlag = FALSE;
-			AudioPromptPlayEvent(EventKoovoxPromptIncomingCall);
             AudioPromptPlayNumString(size_number, (uint8*)number);
             return TRUE;
         }

@@ -222,7 +222,7 @@
    r2 = 0x1000;
    call $message.send_short;
 
-   // tell vm we re ready and wait for the go message
+   // tell vm we're ready and wait for the go message
    call $message.send_ready_wait_for_go;
 
    // see if right output port is connected

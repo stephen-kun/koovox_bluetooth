@@ -52,8 +52,6 @@ typedef enum
     deviceActiveCallNoSCO ,
         /*! The device is streaming A2DP audio */
     deviceA2DPStreaming ,
-		/*! The device is Automatic Speech Recognition*/
-	deviceAutomaticSpeechRecognition,
         /* low battery state, won't actually change to this state but will be used for independant 
            low battery led warning */
     deviceLowBattery 

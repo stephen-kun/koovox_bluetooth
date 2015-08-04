@@ -15,9 +15,6 @@
   PRINT and CPRINT take the same arguments as printf and cprintf.
 */
 
-#ifndef __PRINT_H_
-#define __PRINT_H_
-
 #ifdef PRINT
 #undef PRINT
 #endif
@@ -33,8 +30,3 @@
 #define PRINT(x)
 #define CPRINT(x)
 #endif
-
-
-
-
-#endif /* __PRINT_H_ */

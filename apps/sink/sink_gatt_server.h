@@ -35,9 +35,8 @@ DESCRIPTION
 typedef enum
 {
     indication_none=0,          /* No indication in progress */
-    indication_battery_level,   /* Battery Level indication in progress */
-    indication_heart_rate_measurement /* Heart Rate Measurement indication in progress */
-    
+    indication_battery_level,    /* Battery Level indication in progress */
+    indication_wechat
     
 } gattIndicationChars_t;
 
@@ -79,7 +78,7 @@ typedef struct
     gattGapReadName_t       dev_name_req;       /* When a remote device is reading the local name, this data is required */
     
     gattClientDevice_t      devs[MAX_GATT_CLIENT_DEVICES];  /* Store runtime data for each connected GATT client device */
-    gattServerService_t    	bas_service;                    /* Store runtime data for BAS service */
+    gattBatteryService_t    bas_service;                    /* Store runtime data for BAS service */
 
 } gattServerRuntimeData_t;
 

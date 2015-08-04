@@ -62,4 +62,5 @@ sink_ble_advertising.o: sink_ble_advertising.c sink_ble_advertising.h \
   C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/avrcp.h \
   sink_gatt.h sink_gatt_server.h sink_gatt_server_gap.h \
   C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/gatt.h \
-  sink_gatt_server_bas.h sink_gatt_client.h sink_utils.h
+  sink_gatt_server_bas.h sink_gatt_client.h sink_utils.h \
+  sink_koovox_core.h

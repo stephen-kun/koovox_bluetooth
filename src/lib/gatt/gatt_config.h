@@ -113,7 +113,7 @@ NOTES
 #define GATT_READ_DESCRIPTOR            0x00040000
 #define GATT_READ_LONG_DESCRIPTOR       0x00080000
 #define GATT_DESCRIPTOR_READ            (GATT_READ_DESCRIPTOR |         \
-                                         GATT_READ_LONGDESCRIPTOR)
+                                         GATT_READ_LONG_DESCRIPTOR)
 
 /* gatt_descriptor_write.c */
 #define GATT_WRITE_DESCRIPTOR           0x00100000

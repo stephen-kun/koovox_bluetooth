@@ -20,8 +20,6 @@ DESCRIPTION
 #include "sink_leds.h"
 #include "sink_debug.h"
 #include "sink_display.h"
-#include "sink_audio_prompts.h"
-
 
 #include <pio.h>
 #include <psu.h>
@@ -258,11 +256,6 @@ static void powerManagerHandleVbatCritical( void )
     PM_DEBUG(("PM: Battery Critical\n"));
     /* Reset low batt warning */
     theSink.battery_state = POWER_BATT_CRITICAL;
-
-#ifdef ENABLE_KOOVOX
-	AudioPromptPlayEvent(EventKoovoxPromptCriticalBattery);
-#endif
-
     /* Power Off */
     if(!powerManagerIsChargerConnected())
     {
@@ -300,10 +293,6 @@ static void powerManagerHandleVbatLow( void )
     }
     
     AudioSetPower(powerManagerGetLBIPM());
-
-#ifdef ENABLE_KOOVOX
-	AudioPromptPlayEvent(EventKoovoxPromptLowBattery);
-#endif
 }
 
 
