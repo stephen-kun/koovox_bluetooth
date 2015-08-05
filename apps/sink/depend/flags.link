@@ -39,5 +39,5 @@
 -lfm_rx_api
 -lswat
 -lcsr_i2s_audio_plugin
--lgaia
+-lwechat
 assisted

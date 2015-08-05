@@ -66,6 +66,10 @@ NOTES
 #include "sink_gaia.h"
 #include "gaia.h"
 #endif
+#ifdef ENABLE_WECHAT
+#include "sink_wechat.h"
+#include "wechat.h"
+#endif
 #ifdef ENABLE_PBAP
 #include "sink_pbap.h"
 #endif
@@ -192,6 +196,10 @@ static void handleCLMessage ( Task task, MessageId id, Message message )
 #ifdef ENABLE_GAIA                
                 /* Initialise Gaia with a concurrent connection limit of 1 */
                 GaiaInit(task, 1);
+#endif
+
+#ifdef ENABLE_WECHAT
+				WechatInit(task, 1);
 #endif
 
 #ifdef ENABLE_KOOVOX
@@ -566,6 +574,10 @@ static void handleUEMessage  ( Task task, MessageId id, Message message )
 #ifdef ENABLE_GAIA
             gaiaReportUserEvent(id);
 #endif
+
+#ifdef ENABLE_WECHAT
+			wechatReportUserEvent(id);
+#endif
     }
      
 /*    MAIN_DEBUG (( "HS : UE[%x]\n", id )); */
@@ -737,6 +749,10 @@ static void handleUEMessage  ( Task task, MessageId id, Message message )
 #ifdef ENABLE_GAIA
                 if (!theSink.features.GaiaRemainConnected)
                     gaiaDisconnect();
+#endif
+#ifdef ENABLE_WECHAT
+                if (!theSink.features.WechatRemainConnected)
+                    wechatDisconnect();
 #endif
             }
             else
@@ -3344,6 +3360,10 @@ static void handleUEMessage  ( Task task, MessageId id, Message message )
 #ifdef ENABLE_GAIA
     gaiaReportEvent(id);
 #endif
+
+#ifdef ENABLE_WECHAT
+	wechatReportEvent(id);
+#endif
     
 #ifdef TEST_HARNESS 
     vm2host_send_event(id);
@@ -4070,6 +4090,13 @@ static void app_handler(Task task, MessageId id, Message message)
     else if (id == MESSAGE_DFU_SQIF_STATUS)
     {
         handleDfuSqifStatus((MessageDFUFromSQifStatus *) message);
+        return;
+    }
+#endif
+#ifdef ENABLE_WECHAT
+    else if ((id >= WECHAT_MESSAGE_BASE) && (id < WECHAT_MESSAGE_TOP))
+    {
+        handleWechatMessage(task, id, message);
         return;
     }
 #endif

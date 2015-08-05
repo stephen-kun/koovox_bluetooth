@@ -2669,6 +2669,19 @@ static void message_handler(Task task, MessageId id, Message message)
         gaia->custom_sdp = FALSE;
         return;
     }
+
+	if(id == MESSAGE_MORE_DATA)
+	{
+		MessageMoreData *m = (MessageMoreData *) message;
+		uint16 size = SourceSize(m->source);
+		const uint8* data = SourceMap(m->source);
+		uint16 i = 0;
+
+		for(; i<size; i++)
+			printf("%x ", data[i]);
+			
+		printf("\n");
+	}
     
 	if (id == MESSAGE_MORE_DATA && gaia->pfs_raw_size)
 	{

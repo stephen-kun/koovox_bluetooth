@@ -109,5 +109,6 @@ all Bluelab libraries.
 #define     IAP_MESSAGE_BASE                     0x7A00
 #define     FM_UPSTREAM_MESSAGE_BASE             0x7B00
 #define     FM_DOWNSTREAM_MESSAGE_BASE           0x7C00
+#define		WECHAT_MESSAGE_BASE					 0x7D00
 
 #endif

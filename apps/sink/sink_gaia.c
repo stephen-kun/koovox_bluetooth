@@ -31,6 +31,8 @@ NOTES
 #include "sink_device_id.h"
 #include "sink_statemanager.h"
 
+#include "koovox_wechat_handle.h"
+
 #include <kalimba.h>
 
 #define DSP_GAIA_MSG_SET_USER_PARAM                (0x121a)
@@ -3252,6 +3254,9 @@ void handleGaiaMessage(Task task, MessageId id, Message message)
                 gaia_data.gaia_transport = m->transport;
                 GaiaSetSessionEnable(m->transport, theSink.features.GaiaEnableSession);
             }
+
+			koovox_pack_wechat_auth_req();
+			GaiaSendPacket(m->transport, g_send_data.len, g_send_data.data);
         }
         break;
         

@@ -23,7 +23,7 @@ DESCRIPTION
  /*end of DO_NOT_DOCUMENT*/
 
     /*The global debug enable*/ 
-    #define DEBUG_PRINT_ENABLEDx
+    #define DEBUG_PRINT_ENABLED
 
     #ifdef DEBUG_PRINT_ENABLED
         #define DEBUG(x) {printf x;}
@@ -93,7 +93,9 @@ DESCRIPTION
 
         #define DEBUG_MAPCx
 
-        #define DEBUG_GAIA
+        #define DEBUG_GAIAx
+
+		#define DEBUG_WECHAT
         
         #define DEBUG_SPEECH_RECx
         
@@ -101,10 +103,10 @@ DESCRIPTION
         
         #define DEBUG_AT_COMMANDSx
         
-        #define DEBUG_GATT
+        #define DEBUG_GATTx
         
             /* BLE transport / messages debug */
-        #define DEBUG_BLE
+        #define DEBUG_BLEx
         
         #define DEBUG_DUTx
         

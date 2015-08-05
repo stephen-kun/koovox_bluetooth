@@ -79,6 +79,10 @@ DESCRIPTION
 #include "sink_gaia.h"
 #endif
 
+#ifdef ENABLE_WECHAT
+#include "sink_wechat.h"
+#endif
+
 #ifdef ENABLE_PBAP
 #include "sink_pbap.h"
 #endif
@@ -260,7 +264,9 @@ typedef struct
     unsigned    ShareMePeerControlsSource:1;    /* AVRCP commands received from a ShareMe Peer are forwarded to an AV Source */
     unsigned    PeerSource:2;                   /* Initial source used for new TWS connections */
     unsigned    PeerLinkRecoveryWhileStreaming:1;  /* Master Peer device will attempt to page a Slave Peer during linkloss while streaming */
-    unsigned    :9;                            /* Unused */
+    unsigned    :7;                            /* Unused */
+    unsigned    WechatEnableSession:1;            /* GAIA session enabled on connection */
+	unsigned	WechatRemainConnected:1;		/* WECHAT connection remains after power off */
     unsigned    AmplifierShutDownByPIO:1;       /* TRUE: Audio amplifier shut down mode managed by PIO control, FALSE: Disable feature */
     unsigned    GaiaEnableSession:1;            /* GAIA session enabled on connection */
     unsigned    GaiaRemainConnected:1;          /* GAIA connection remains after power off */
@@ -544,13 +550,40 @@ typedef struct
 } gaia_settings_t;
 #endif
 
+#ifdef ENABLE_WECHAT
+/*  Gaia settings  */
+typedef struct
+{
+    WECHAT_TRANSPORT *wechat_transport;
+    
+    uint32 pio_change_mask;
+    uint32 pio_old_state;
+    ringtone_note *alert_tone;
+    
+    unsigned notify_ui_event:1;
+    unsigned notify_charger_connection:1;
+    unsigned notify_battery_charged:1;
+    unsigned notify_speech_rec:1;
+    unsigned dfu_partition:4;
+    unsigned dfu_boot_status:2;
+    unsigned unused:6;
+    
+} wechat_settings_t;
+#endif
+
+
 
 /* runtime data stored in block */
 typedef struct
 {
 #ifdef ENABLE_GAIA    
     gaia_settings_t        gaia_data;
-#endif            
+#endif  
+
+#ifdef ENABLE_WECHAT
+	wechat_settings_t		wechat_data;
+#endif
+
     sink_battery_limits battery_limits; 
     defrag_config          defrag;  
     uint16                 old_state;

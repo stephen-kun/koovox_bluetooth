@@ -97,6 +97,8 @@ void koovox_handle_wechat_indicate(uint16 cid, uint16 handle);
 
 
 extern Wechatble_state g_wechatble_state;
+extern Data_info g_send_data;
+extern Data_info g_rcv_data;
 
 #endif /* __KOOVOX_WECHAT_HANDLE_H */
 

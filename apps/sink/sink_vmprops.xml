@@ -314,6 +314,15 @@
            ]]>
        </description>
    </property>
+   <property type="list" key="enable_wechat" format="define" name="WECHAT" defaultvalue="0">
+       <option fake="">Disabled</option>
+       <option internalval="ENABLE_WECHAT">Enabled</option>
+       <description>
+           <![CDATA[
+           Enable Generic Application Interface Architecture (WECHAT). 
+           ]]>
+       </description>
+   </property>
    <property type="list" key="enable_mapc" format="define" name="MAP" defaultvalue="0">
        <option fake="">Disabled</option>
        <option internalval="ENABLE_MAPC">Enabled</option>

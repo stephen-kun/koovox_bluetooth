@@ -66,6 +66,7 @@
   <file path="sink_koovox_uart.c" />
   <file path="sink_handle_accelerate_data.c" />
   <file path="sink_heart_rate_calc.c" />
+  <file path="sink_wechat.c" />
  </folder>
  <folder name="Header Files" >
   <extension name="h" />
@@ -140,6 +141,7 @@
   <file path="sink_koovox_uart.h" />
   <file path="sink_handle_accelerate_data.h" />
   <file path="sink_heart_rate_calc.h" />
+  <file path="sink_wechat.h" />
  </folder>
  <folder name="GATT db files" >
   <extension name="db" />
@@ -166,12 +168,13 @@
    <property key="enable_capsense" >0</property>
    <property key="enable_fm" >0</property>
    <property key="enable_fm_rds" >0</property>
-   <property key="enable_gaia" >1</property>
+   <property key="enable_gaia" >0</property>
    <property key="enable_gatt" >2</property>
    <property key="enable_gatt_bas" >0</property>
    <property key="enable_ir_remote" >0</property>
    <property key="enable_pbap" >0</property>
    <property key="enable_speech_regcognition" >0</property>
+   <property key="enable_wechat" >1</property>
    <property key="enable_wired" >0</property>
    <property key="execution_mode" >0</property>
    <property key="firmware" >0</property>
@@ -182,7 +185,7 @@
    <property key="include_a2dp_extra_codecs" >0</property>
    <property key="include_aptx_acl_sprint" >0</property>
    <property key="include_faststream" >0</property>
-   <property key="libs" >display_plugin_cns10010_scroll, display_example_plugin, display, avrcp ,power ,connection,bdaddr ,hfp_min_cfm ,region ,service ,codec ,csr_tone_plugin ,audio,csr_cvc_common_plugin_all ,csr_voice_prompts_plugin ,csr_a2dp_decoder_common_plugin_stereo_bidir ,a2dp ,csr_common_example_plugin ,obex ,sdp_parse ,md5 ,usb_device_class ,spp_common ,spps ,sppc ,pblock ,audio_plugin_common ,csr_dut_audio_plugin ,pio_common, pbapc, mapc, gatt, fm_rx_plugin, fm_rx_api,  swat, csr_i2s_audio_plugin,gaia</property>
+   <property key="libs" >display_plugin_cns10010_scroll, display_example_plugin, display, avrcp ,power ,connection,bdaddr ,hfp_min_cfm ,region ,service ,codec ,csr_tone_plugin ,audio,csr_cvc_common_plugin_all ,csr_voice_prompts_plugin ,csr_a2dp_decoder_common_plugin_stereo_bidir ,a2dp ,csr_common_example_plugin ,obex ,sdp_parse ,md5 ,usb_device_class ,spp_common ,spps ,sppc ,pblock ,audio_plugin_common ,csr_dut_audio_plugin ,pio_common, pbapc, mapc, gatt, fm_rx_plugin, fm_rx_api,  swat, csr_i2s_audio_plugin,wechat</property>
    <property key="messages" >1</property>
    <property key="output" ></property>
    <property key="panic" >0</property>
