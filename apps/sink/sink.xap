@@ -4683,63 +4683,58 @@ _koovox_pack_wechat_head:
 	enterl	#2
 ?LBB_koovox_pack_wechat_head:
 	st	AL,@H'fff8
-	ld	X,@$_g_send_data
+	ld	X,@$XAP_AH
 	ld	AL,#H'00FE
 	st	AL,@(0,X)
-	ld	X,@$_g_send_data
 	ld	AL,#H'0001
 	st	AL,@(H'0001,X)
-	ld	X,@$_g_send_data
 	ld	AH,@$_g_send_data+H'0001
 	lsr	#H'0008
 	and	AH,#H'00FF
 	st	AH,@(H'0002,X)
-	ld	X,@$_g_send_data
 	ld	AL,@$_g_send_data+H'0001
 	and	AL,#H'00FF
 	st	AL,@(H'0003,X)
-	ld	X,@$_g_send_data
 	ld	AH,@H'fff8
 	lsr	#H'0008
 	and	AH,#H'00FF
 	st	AH,@(H'0004,X)
-	ld	X,@$_g_send_data
 	ld	AH,@H'fff8
 	and	AH,#H'00FF
 	st	AH,@(H'0005,X)
-	ld	X,@$_g_send_data
 	ld	AH,@$_g_wechatble_state+H'0008
 	lsr	#H'0008
 	and	AH,#H'00FF
 	st	AH,@(H'0006,X)
-	ld	X,@$_g_send_data
 	ld	AL,@$_g_wechatble_state+H'0008
 	and	AL,#H'00FF
 	st	AL,@(H'0007,X)
 ?LBE_koovox_pack_wechat_head:
 	leavel	#2
 _koovox_rcv_data_confirm:
-	enterl	#11
+	enterl	#13
 ?LBB_koovox_rcv_data_confirm:
-	st	AL,@(H'0002,Y)
-	st	AH,@(H'0003,Y)
-?LBB2:
-	ld	AL,#H'0000
 	st	AL,@(H'0004,Y)
-	cmp	AH,#(H'0001+H'0007)
+	st	AH,@(H'0005,Y)
+?LBB2:
+	ld	AH,#H'0000
+	st	AH,@(H'0006,Y)
+	ld	AL,@(H'0005,Y)
+	cmp	AL,#(H'0001+H'0007)
 	bcc	?L3
 	ld	AL,#-H'6669
 	bra	(?L2)
 ?L3:
-	ld	X,@(H'0002,Y)
+	ld	X,@(H'0004,Y)
 	ld	AL,@(H'0004,X)
 	asl	#H'0008
-	add	AL,@(H'0005,X)
-	st	AL,@(H'0005,Y)
-	st	AL,@(0,Y)
+	ld	AH,@$XAP_AL
+	add	AH,@(H'0005,X)
+	st	AH,@(H'0007,Y)
+	st	AH,@(0,Y)
 	ld	AL,#(?LC0)
 	bsr	$_printf
-	ld	AL,@(H'0005,Y)
+	ld	AL,@(H'0007,Y)
 	cmp	AL,#H'4E23
 	beq	?L14
 	cmp	AL,#(H'0001+H'4E23)
@@ -4750,21 +4745,21 @@ _koovox_rcv_data_confirm:
 	bcc	?L11
 	bra	(?L4)
 ?L35:
-	ld	AL,@(H'0005,Y)
-	cmp	AL,#H'7531
+	ld	AH,@(H'0007,Y)
+	cmp	AH,#H'7531
 	beq	?L22
-	cmp	AL,#H'7531
+	cmp	AH,#H'7531
 	bcz	?L4
-	cmp	AL,#H'7532
+	cmp	AH,#H'7532
 	beq	?L27
-	cmp	AL,#H'7533
+	cmp	AH,#H'7533
 	beq	?L30
 	bra	(?L4)
 ?L6:
-	ld	AL,@(H'0002,Y)
+	ld	AL,@(H'0004,Y)
 ?LBB3:
 	add	AL,#H'0008
-	ld	AH,@(H'0003,Y)
+	ld	AH,@(H'0005,Y)
 	sub	AH,#H'0008
 	bsr	$_epb_unpack_auth_response
 	st	AL,@H'fff8
@@ -4792,17 +4787,17 @@ _koovox_rcv_data_confirm:
 	ld	AL,@(0,X)
 	ld	X,@$XAP_AL
 	ld	AL,@(H'0001,X)
-	st	AL,@(H'0004,Y)
+	st	AL,@(H'0006,Y)
 ?L8:
 	ld	AL,@H'fff8
 	bsr	$_epb_unpack_auth_response_free
 ?LBE3:
 	bra	(?L4)
 ?L11:
-	ld	AL,@(H'0002,Y)
+	ld	AL,@(H'0004,Y)
 ?LBB4:
 	add	AL,#H'0008
-	ld	AH,@(H'0003,Y)
+	ld	AH,@(H'0005,Y)
 	sub	AH,#H'0008
 	bsr	$_epb_unpack_send_data_response
 	st	AL,@H'fff8
@@ -4813,7 +4808,7 @@ _koovox_rcv_data_confirm:
 ?L12:
 	ld	X,@$XAP_AL
 	ld	X,@(0,X)
-	st	X,@(H'0006,Y)
+	st	X,@(H'0008,Y)
 	ld	AH,@(0,X)
 	ld	AL,@(1,X)
 	cmp	AH,#H'0000
@@ -4821,27 +4816,27 @@ _koovox_rcv_data_confirm:
 	cmp	AL,#H'0000
 	beq	?L13
 ?L44:
-	ld	AL,@(H'0001,X)
-	st	AL,@(H'0004,Y)
+	ld	AH,@(H'0001,X)
+	st	AH,@(H'0006,Y)
 ?L13:
 	ld	AL,@H'fff8
 	bsr	$_epb_unpack_send_data_response_free
 ?LBE4:
 	bra	(?L4)
 ?L14:
-	ld	AL,@(H'0002,Y)
+	ld	AL,@(H'0004,Y)
 ?LBB5:
 	add	AL,#H'0008
-	ld	AH,@(H'0003,Y)
+	ld	AH,@(H'0005,Y)
 	sub	AH,#H'0008
 	bsr	$_epb_unpack_init_response
-	st	AL,@(H'0007,Y)
+	st	AL,@(H'0009,Y)
 	cmp	AL,#H'0000
 	bne	?L15
 	ld	AL,#-H'666F
 	bra	(?L2)
 ?L15:
-	ld	X,@(H'0007,Y)
+	ld	X,@(H'0009,Y)
 	tst	@(0,X)
 	beq	?L16
 	ld	AL,@(0,X)
@@ -4852,9 +4847,10 @@ _koovox_rcv_data_confirm:
 	bne	?L17
 	cmp	AL,#H'0000
 	bne	?L17
-	ld	X,@(H'0007,Y)
+	ld	X,@(H'0009,Y)
 	tst	@(H'0005,X)
 	beq	?L18
+?LBB6:
 	ld	AL,#($_challeange)
 	st	AL,@(0,Y)
 	ld	AL,#H'0004
@@ -4862,11 +4858,29 @@ _koovox_rcv_data_confirm:
 	ld	AL,#H'0000
 	ld	AH,#H'0000
 	bsr	$_crc32
-	ld	X,@(H'0007,Y)
+	st	AH,@H'fff8
+	st	AL,@H'fff9
+	ld	X,@(H'0009,Y)
 	cmp	AH,@(H'0006,X)
-	bne	?L20
+	bne	?L19
 	cmp	AL,@(H'0007,X)
-	bne	?L20
+	bne	?L19
+	ld	AL,#H'0001
+	st	AL,@$_g_wechatble_state+H'0003
+?L19:
+	ld	AH,@H'fff8
+	ld	AL,@H'fff9
+	st	AH,@(0,Y)
+	st	AL,@(1,Y)
+	ld	X,@(H'0009,Y)
+	ld	AH,@(H'0006,X)
+	ld	AL,@(H'0007,X)
+	st	AH,@(H'0002,Y)
+	st	AL,@(H'0003,Y)
+	ld	AL,#(?LC1)
+	bsr	$_printf
+?LBE6:
+	bra	(?L20)
 ?L18:
 	ld	AL,#H'0001
 	st	AL,@$_g_wechatble_state+H'0003
@@ -4875,24 +4889,24 @@ _koovox_rcv_data_confirm:
 	st	AL,@$_g_wechatble_state
 	bra	(?L16)
 ?L17:
-	ld	X,@(H'0007,Y)
+	ld	X,@(H'0009,Y)
 	ld	AL,@(0,X)
 	ld	X,@$XAP_AL
 	ld	AL,@(H'0001,X)
-	st	AL,@(H'0004,Y)
+	st	AL,@(H'0006,Y)
 ?L16:
-	ld	AL,@(H'0007,Y)
+	ld	AL,@(H'0009,Y)
 	bsr	$_epb_unpack_init_response_free
 ?LBE5:
 	bra	(?L4)
 ?L22:
-	ld	AL,@(H'0002,Y)
-?LBB6:
+	ld	AL,@(H'0004,Y)
+?LBB7:
 	add	AL,#H'0008
-	ld	AH,@(H'0003,Y)
+	ld	AH,@(H'0005,Y)
 	sub	AH,#H'0008
 	bsr	$_epb_unpack_recv_data_push
-	st	AL,@(H'0008,Y)
+	st	AL,@(H'000A,Y)
 	ld	X,@$XAP_AL
 	ld	AL,@(H'0001,X)
 	cmp	X,#H'0000
@@ -4903,18 +4917,18 @@ _koovox_rcv_data_confirm:
 	ld	X,@$XAP_AL
 	ld	AL,@(H'0004,X)
 	bsr	$_ntohs
-	ld	AL,@(H'0008,Y)
+	ld	AL,@(H'000A,Y)
 	bsr	$_epb_unpack_recv_data_push_free
 	ld	AL,@$_g_wechatble_state+H'0007
 	add	AL,#H'0001
 	st	AL,@$_g_wechatble_state+H'0007
-?LBE6:
+?LBE7:
 	bra	(?L4)
 ?L27:
-	ld	AL,@(H'0002,Y)
-?LBB7:
+	ld	AL,@(H'0004,Y)
+?LBB8:
 	add	AL,#H'0008
-	ld	AH,@(H'0003,Y)
+	ld	AH,@(H'0005,Y)
 	sub	AH,#H'0008
 	bsr	$_epb_unpack_switch_view_push
 	ld	AH,#H'0000
@@ -4929,13 +4943,13 @@ _koovox_rcv_data_confirm:
 	bra	(?L2)
 ?L29:
 	bsr	$_epb_unpack_switch_view_push_free
-?LBE7:
+?LBE8:
 	bra	(?L4)
 ?L30:
-	ld	AL,@(H'0002,Y)
-?LBB8:
+	ld	AL,@(H'0004,Y)
+?LBB9:
 	add	AL,#H'0008
-	ld	AH,@(H'0003,Y)
+	ld	AH,@(H'0005,Y)
 	sub	AH,#H'0008
 	bsr	$_epb_unpack_switch_backgroud_push
 	cmp	AL,#H'0000
@@ -4945,12 +4959,12 @@ _koovox_rcv_data_confirm:
 ?L31:
 	bsr	$_epb_unpack_switch_backgroud_push_free
 ?L4:
-?LBE8:
-	ld	AL,@(H'0004,Y)
+?LBE9:
+	ld	AL,@(H'0006,Y)
 ?L2:
 ?LBE2:
 ?LBE_koovox_rcv_data_confirm:
-	leavel	#11
+	leavel	#13
 	.SEG	CONST
 ?LC0:
 	dc	H'3D
@@ -4972,6 +4986,41 @@ _koovox_rcv_data_confirm:
 	dc	H'20
 	dc	H'0A
 	dc	H'00
+?LC1:
+	dc	H'63
+	dc	H'72
+	dc	H'63
+	dc	H'33
+	dc	H'32
+	dc	H'3A
+	dc	H'25
+	dc	H'6C
+	dc	H'64
+	dc	H'20
+	dc	H'2C
+	dc	H'63
+	dc	H'68
+	dc	H'61
+	dc	H'6C
+	dc	H'6C
+	dc	H'65
+	dc	H'61
+	dc	H'6E
+	dc	H'67
+	dc	H'65
+	dc	H'5F
+	dc	H'61
+	dc	H'6E
+	dc	H'73
+	dc	H'77
+	dc	H'65
+	dc	H'72
+	dc	H'3A
+	dc	H'25
+	dc	H'6C
+	dc	H'64
+	dc	H'0A
+	dc	H'00
 	.CODE
 ;.stabn	192,0,0,?LBB2
 ;.stabn	192,0,0,?LBB3
@@ -4979,26 +5028,78 @@ _koovox_rcv_data_confirm:
 ;.stabn	192,0,0,?LBB4
 ;.stabn	224,0,0,?LBE4
 ;.stabn	192,0,0,?LBB5
-;.stabn	224,0,0,?LBE5
 ;.stabn	192,0,0,?LBB6
 ;.stabn	224,0,0,?LBE6
+;.stabn	224,0,0,?LBE5
 ;.stabn	192,0,0,?LBB7
 ;.stabn	224,0,0,?LBE7
 ;.stabn	192,0,0,?LBB8
 ;.stabn	224,0,0,?LBE8
+;.stabn	192,0,0,?LBB9
+;.stabn	224,0,0,?LBE9
 ;.stabn	224,0,0,?LBE2
 $_koovox_wechat_error_handle:
-; leaf function with empty stack frame
+	enterl	#3
 ?LBB_koovox_wechat_error_handle:
+	st	AL,@(0,Y)
+	ld	AL,#(?LC2)
+	bsr	$_printf
 ?LBE_koovox_wechat_error_handle:
-	rts
+	leavel	#3
+	.SEG	CONST
+?LC2:
+	dc	H'6B
+	dc	H'6F
+	dc	H'6F
+	dc	H'76
+	dc	H'6F
+	dc	H'78
+	dc	H'5F
+	dc	H'77
+	dc	H'65
+	dc	H'63
+	dc	H'68
+	dc	H'61
+	dc	H'74
+	dc	H'5F
+	dc	H'65
+	dc	H'72
+	dc	H'72
+	dc	H'6F
+	dc	H'72
+	dc	H'5F
+	dc	H'68
+	dc	H'61
+	dc	H'6E
+	dc	H'64
+	dc	H'6C
+	dc	H'65
+	dc	H'3A
+	dc	H'20
+	dc	H'45
+	dc	H'52
+	dc	H'52
+	dc	H'4F
+	dc	H'52
+	dc	H'5F
+	dc	H'43
+	dc	H'4F
+	dc	H'44
+	dc	H'45
+	dc	H'3D
+	dc	H'25
+	dc	H'78
+	dc	H'20
+	dc	H'0A
+	dc	H'00
+	.CODE
 $_koovox_write_from_wechat:
 	enterl	#7
 ?LBB_koovox_write_from_wechat:
 	st	AL,@(H'0001,Y)
 	st	AH,@(H'0002,Y)
-?LBB9:
 ?LBB10:
+?LBB11:
 	ld	AH,#H'0000
 	st	AH,@(H'0004,Y)
 	tst	@(H'0002,Y)
@@ -5008,7 +5109,7 @@ $_koovox_write_from_wechat:
 	add	X,@(H'0004,Y)
 	ld	AL,@(0,X)
 	st	AL,@(0,Y)
-	ld	AL,#(?LC1)
+	ld	AL,#(?LC3)
 	bsr	$_printf
 	ld	AL,@(H'0004,Y)
 	add	AL,#H'0001
@@ -5019,42 +5120,40 @@ $_koovox_write_from_wechat:
 	ld	AL,#H'000A
 	bsr	$_putchar
 	ld	AH,@(H'0002,Y)
-?LBE10:
+?LBE11:
 	cmp	AH,#H'0007
 	bcz	?L49
-	cmp	AH,#(H'0001+H'0014)
-	bcc	?L49
 	tst	@$_g_rcv_data+H'0001
-	bne	?L57
+	bne	?L56
 	ld	X,@(H'0001,Y)
-?LBB11:
+?LBB12:
 	ld	AL,@(H'0002,X)
 	asl	#H'0008
 	ld	AH,@$XAP_AL
 	add	AH,@(H'0003,X)
 	ld	AL,@(0,X)
 	cmp	AL,#H'00FE
-	beq	?L58
+	beq	?L57
 	ld	AL,@(H'0001,X)
 	cmp	AL,#H'0001
 	bne	?L49
-?L58:
+?L57:
 	st	AH,@$_g_rcv_data+H'0001
 	ld	AL,#H'0000
 	st	AL,@$_g_rcv_data+H'0002
 	ld	AL,@$XAP_AH
 	bsr	$_malloc
 	st	AL,@$_g_rcv_data
-?L57:
-?LBE11:
+?L56:
+?LBE12:
 	ld	AH,@$_g_rcv_data+H'0001
 	sub	AH,@$_g_rcv_data+H'0002
 	st	AH,@(H'0003,Y)
 	ld	AH,@(H'0002,Y)
 	cmp	AH,@(H'0003,Y)
-	bcz	?L59
+	bcz	?L58
 	ld	AH,@(H'0003,Y)
-?L59:
+?L58:
 	st	AH,@(H'0003,Y)
 	ld	AL,@$_g_rcv_data
 	add	AL,@$_g_rcv_data+H'0002
@@ -5072,35 +5171,63 @@ $_koovox_write_from_wechat:
 	ld	AL,@$_g_rcv_data
 	bsr	_koovox_rcv_data_confirm
 	bsr	$_koovox_wechat_error_handle
+	tst	@$_g_rcv_data
+	beq	?L60
+	ld	AL,#(?LC4)
+	bsr	$_puts
 	ld	AL,@$_g_rcv_data
 	bsr	$_free
 	ld	AL,#H'0000
 	st	AL,@$_g_rcv_data
+?L60:
+	ld	AL,#H'0000
 	st	AL,@$_g_rcv_data+H'0001
 	st	AL,@$_g_rcv_data+H'0002
 ?L49:
-?LBE9:
+?LBE10:
 ?LBE_koovox_write_from_wechat:
 	leavel	#7
 	.SEG	CONST
-?LC1:
+?LC3:
 	dc	H'25
 	dc	H'78
 	dc	H'20
 	dc	H'00
+?LC4:
+	dc	H'66
+	dc	H'72
+	dc	H'65
+	dc	H'65
+	dc	H'20
+	dc	H'67
+	dc	H'5F
+	dc	H'72
+	dc	H'63
+	dc	H'76
+	dc	H'5F
+	dc	H'64
+	dc	H'61
+	dc	H'74
+	dc	H'61
+	dc	H'2E
+	dc	H'64
+	dc	H'61
+	dc	H'74
+	dc	H'61
+	dc	H'00
 	.CODE
-;.stabn	192,0,0,?LBB9
 ;.stabn	192,0,0,?LBB10
-;.stabn	224,0,0,?LBE10
 ;.stabn	192,0,0,?LBB11
 ;.stabn	224,0,0,?LBE11
-;.stabn	224,0,0,?LBE9
+;.stabn	192,0,0,?LBB12
+;.stabn	224,0,0,?LBE12
+;.stabn	224,0,0,?LBE10
 $_koovox_handle_wechat_indicate:
 	enterl	#7
 ?LBB_koovox_handle_wechat_indicate:
 	st	AL,@(H'0003,Y)
 	st	AH,@(H'0004,Y)
-?LBB12:
+?LBB13:
 	ld	X,@$_theSink+H'0004
 	tst	@(H'0019,X)
 	bne	?L70
@@ -5118,7 +5245,7 @@ $_koovox_handle_wechat_indicate:
 	st	AL,@$_g_wechatble_state+H'0004
 	bra	(?L69)
 ?L70:
-?LBB13:
+?LBB14:
 	ld	AL,#H'0001
 	bsr	$_malloc
 	ld	X,@$XAP_AL
@@ -5133,19 +5260,19 @@ $_koovox_handle_wechat_indicate:
 	ld	AH,#H'40C0
 	bsr	$_MessageSendLater
 ?L69:
+?LBE14:
 ?LBE13:
-?LBE12:
 ?LBE_koovox_handle_wechat_indicate:
 	leavel	#7
 $_koovox_indicate_to_wechat:
 	enterl	#6
 ?LBB_koovox_indicate_to_wechat:
 	st	AL,@H'fff8
-?LBB14:
+?LBB15:
 	ld	AL,@$_g_send_data+H'0001
 	cmp	AL,@$_g_send_data+H'0002
 	bcz	?L74
-?LBB15:
+?LBB16:
 	sub	AL,@$_g_send_data+H'0002
 	cmp	AL,#H'0014
 	bcz	?L75
@@ -5173,15 +5300,15 @@ $_koovox_indicate_to_wechat:
 	add	AL,@$_g_send_data+H'0002
 	st	AL,@$_g_send_data+H'0002
 	st	AL,@(0,Y)
-	ld	AL,#(?LC2)
+	ld	AL,#(?LC5)
 	bsr	$_printf
-?LBE15:
+?LBE16:
 	bra	(?L73)
 ?L74:
 	ld	AL,@$_g_send_data+H'0001
 	cmp	AL,@$_g_send_data+H'0002
 	bne	?L73
-	ld	AL,#(?LC3)
+	ld	AL,#(?LC6)
 	bsr	$_puts
 	ld	AL,#H'0000
 	st	AL,@$_g_send_data+H'0001
@@ -5193,11 +5320,11 @@ $_koovox_indicate_to_wechat:
 	ld	X,@$_theSink+H'0004
 	st	AH,@(H'0019,X)
 ?L73:
-?LBE14:
+?LBE15:
 ?LBE_koovox_indicate_to_wechat:
 	leavel	#6
 	.SEG	CONST
-?LC2:
+?LC5:
 	dc	H'73
 	dc	H'65
 	dc	H'72
@@ -5243,7 +5370,7 @@ $_koovox_indicate_to_wechat:
 	dc	H'64
 	dc	H'0A
 	dc	H'00
-?LC3:
+?LC6:
 	dc	H'2A
 	dc	H'2A
 	dc	H'2A
@@ -5271,13 +5398,13 @@ $_koovox_indicate_to_wechat:
 	dc	H'2A
 	dc	H'00
 	.CODE
-;.stabn	192,0,0,?LBB15
-;.stabn	224,0,0,?LBE15
+;.stabn	192,0,0,?LBB16
+;.stabn	224,0,0,?LBE16
 $_koovox_pack_wechat_auth_req:
 	enterl	#33
 ?LBB_koovox_pack_wechat_auth_req:
 	ld	AL,#H'0018
-?LBB16:
+?LBB17:
 	st	AL,@(0,Y)
 	ld	AL,@$XAP_UY
 	add	AL,#H'0001
@@ -5319,6 +5446,7 @@ $_koovox_pack_wechat_auth_req:
 	add	AL,#H'0008
 	st	AL,@$_g_send_data+H'0001
 	bsr	$_malloc
+	ld	AH,@$XAP_AL
 	st	AL,@$_g_send_data
 	ld	AL,@$_g_wechatble_state+H'0008
 	add	AL,#H'0001
@@ -5335,56 +5463,21 @@ $_koovox_pack_wechat_auth_req:
 	bsr	$_epb_pack_auth_request
 	ld	AL,#H'0000
 	st	AL,@$_g_send_data+H'0002
-?LBE16:
+?LBE17:
 ?LBE_koovox_pack_wechat_auth_req:
 	leavel	#33
-;.stabn	192,0,0,?LBB16
-;.stabn	224,0,0,?LBE16
-	.SEG	CONST
-?LC4:
-	dc	H'002C
-	dc	H'0093
-	dc	H'004B
-	dc	H'0000
-	.CODE
+;.stabn	192,0,0,?LBB17
+;.stabn	224,0,0,?LBE17
 $_koovox_pack_wechat_init_req:
-	enterl	#18
+	enterl	#10
 ?LBB_koovox_pack_wechat_init_req:
 	ld	AL,#H'0007
-?LBB17:
+?LBB18:
 	st	AL,@(0,Y)
 	ld	AL,@$XAP_UY
 	add	AL,#H'0001
 	ld	AH,#H'0000
 	bsr	$_memset
-	ld	AL,#H'0000
-	st	AL,@H'fff9
-	ld	AL,#H'007F
-	st	AL,@(H'0008,Y)
-	ld	X,@$XAP_UY
-	add	X,#H'0008
-	st	AL,@H'ffff
-	ld	AL,@H'fff9
-	st	AL,@(H'0001,X)
-	ld	AL,@H'ffff
-	st	AL,@H'ffff
-	ld	AL,@H'fff9
-	st	AL,@(H'0002,X)
-	ld	AL,@H'ffff
-	st	AL,@H'ffff
-	ld	AL,@H'fff9
-	st	AL,@(H'0003,X)
-	ld	AL,@H'ffff
-	ld	AL,@?LC4
-	st	AL,@(H'000C,Y)
-	ld	X,@$XAP_UY
-	add	X,#H'000C
-	ld	AL,@?LC4+H'0001
-	st	AL,@(H'0001,X)
-	ld	AL,@?LC4+H'0002
-	st	AL,@(H'0002,X)
-	ld	AL,@?LC4+H'0003
-	st	AL,@(H'0003,X)
 	ld	AL,#H'0007
 	st	AL,@(0,Y)
 	ld	AL,@$XAP_UY
@@ -5394,17 +5487,12 @@ $_koovox_pack_wechat_init_req:
 	ld	AL,@$_g_wechatble_state+H'0008
 	add	AL,#H'0001
 	st	AL,@$_g_wechatble_state+H'0008
-	ld	X,#H'0001
-	st	X,@(H'0002,Y)
-	ld	AH,#H'0004
-	st	AH,@(H'0004,Y)
-	ld	AL,@$XAP_UY
-	add	AL,#H'0008
+	ld	AL,#H'0000
+	st	AL,@(H'0002,Y)
+	st	AL,@(H'0004,Y)
 	st	AL,@(H'0003,Y)
-	st	X,@(H'0005,Y)
-	st	AH,@(H'0007,Y)
-	ld	AL,@$XAP_UY
-	add	AL,#H'000C
+	st	AL,@(H'0005,Y)
+	st	AL,@(H'0007,Y)
 	st	AL,@(H'0006,Y)
 	ld	AL,@$XAP_UY
 	add	AL,#H'0001
@@ -5412,6 +5500,7 @@ $_koovox_pack_wechat_init_req:
 	add	AL,#H'0008
 	st	AL,@$_g_send_data+H'0001
 	bsr	$_malloc
+	ld	AH,@$XAP_AL
 	st	AL,@$_g_send_data
 	ld	AL,#H'2713
 	bsr	_koovox_pack_wechat_head
@@ -5425,18 +5514,18 @@ $_koovox_pack_wechat_init_req:
 	bsr	$_epb_pack_init_request
 	ld	AL,#H'0000
 	st	AL,@$_g_send_data+H'0002
-?LBE17:
+?LBE18:
 ?LBE_koovox_pack_wechat_init_req:
-	leavel	#18
-;.stabn	192,0,0,?LBB17
-;.stabn	224,0,0,?LBE17
+	leavel	#10
+;.stabn	192,0,0,?LBB18
+;.stabn	224,0,0,?LBE18
 $_koovox_pack_wechat_send_data_req:
 	enterl	#10
 ?LBB_koovox_pack_wechat_send_data_req:
 	st	AL,@(H'0006,Y)
 	st	AH,@(H'0007,Y)
 	ld	AL,#H'0005
-?LBB18:
+?LBB19:
 	st	AL,@(0,Y)
 	ld	AL,@$XAP_UY
 	add	AL,#H'0001
@@ -5468,6 +5557,7 @@ $_koovox_pack_wechat_send_data_req:
 	add	AL,#H'0008
 	st	AL,@$_g_send_data+H'0001
 	bsr	$_malloc
+	ld	AH,@$XAP_AL
 	st	AL,@$_g_send_data
 	ld	AL,#H'2712
 	bsr	_koovox_pack_wechat_head
@@ -5481,11 +5571,11 @@ $_koovox_pack_wechat_send_data_req:
 	bsr	$_epb_pack_send_data_request
 	ld	AL,#H'0000
 	st	AL,@$_g_send_data+H'0002
-?LBE18:
+?LBE19:
 ?LBE_koovox_pack_wechat_send_data_req:
 	leavel	#10
-;.stabn	192,0,0,?LBB18
-;.stabn	224,0,0,?LBE18
+;.stabn	192,0,0,?LBB19
+;.stabn	224,0,0,?LBE19
 $_koovox_device_wechat_disconnect:
 ; leaf function with empty stack frame
 ?LBB_koovox_device_wechat_disconnect:
@@ -5503,21 +5593,21 @@ $_koovox_device_wechat_disconnect:
 	rts
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 133 used[1] = 14 used[3] = 3 total = 150
-;# Function pattern *movqi3 used[0] = 153 total = 153
-;# Function pattern *movqi8 used[0] = 2 total = 2
-;# Function pattern *movhi used[2] = 3 total = 3
-;# Function pattern *addqi0 used[0] = 19 total = 19
+;# Function pattern *movqi2 used[0] = 134 used[1] = 14 total = 148
+;# Function pattern *movqi3 used[0] = 146 total = 146
+;# Function pattern *movqi8 used[0] = 1 total = 1
+;# Function pattern *movhi used[2] = 5 used[3] = 3 total = 8
+;# Function pattern *addqi0 used[0] = 15 total = 15
 ;# Function pattern *addqi2 used[0] = 26 total = 26
 ;# Function pattern *andqi3 used[0] = 6 total = 6
 ;# Function pattern *subqi3 used[0] = 12 total = 12
 ;# Function pattern *lshrqi3 used[0] = 3 total = 3
 ;# Function pattern *ashlqi3 used[0] = 2 total = 2
-;# Function pattern jump used[0] = 19 total = 19
+;# Function pattern jump used[0] = 20 total = 20
 ;# Function pattern *call1 used[0] = 17 total = 17
-;# Function pattern *call_value1 used[0] = 33 total = 33
-;# Function pattern movstrqi+3 used[0] = 6 used[1] = 9 total = 15
-;# Function pattern movstrqi+4 used[0] = 1 used[1] = 4 total = 5
+;# Function pattern *call_value1 used[0] = 36 total = 36
+;# Function pattern movstrqi+3 used[0] = 6 used[1] = 10 total = 16
+;# Function pattern movstrqi+4 used[0] = 1 used[1] = 3 total = 4
 ;# Function pattern movstrqi+5 used[0] = 14 total = 14
 ;# Function pattern movstrqi+6 used[0] = 3 total = 3
 ;# Function pattern movstrqi+7 used[1] = 1 total = 1
@@ -6065,23 +6155,20 @@ _handleUEMessage:
 	ld	AL,@(H'0006,Y)
 	add	AL,#-H'400D
 	cmp	AL,#(H'0001+H'0001)
-	bcc	?L53
+	bcc	?L51
 	ld	AL,@$_theSink+H'0035
 	and	AL,#H'0001
 	cmp	AL,#H'0000
-	beq	?L53
+	beq	?L51
 	ld	AH,@(H'0006,Y)
 	cmp	AH,#H'400D
 	bne	?L54
 	ld	AL,#H'400E
 	st	AL,@(H'0006,Y)
-	bra	(?L53)
+	bra	(?L51)
 ?L54:
 	ld	AH,#H'400D
 	st	AH,@(H'0006,Y)
-?L53:
-	ld	AL,@(H'0006,Y)
-	bsr	$_wechatReportUserEvent
 ?L51:
 	ld	AL,@(H'0006,Y)
 	cmp	AL,#H'4080
@@ -8297,7 +8384,7 @@ _handleUEMessage:
 	bsr	$_KoovoxUsrEventHandle
 ?L465:
 	tst	@(H'0008,Y)
-	beq	?L466
+	beq	?L50
 	ld	AH,@(H'0006,Y)
 	cmp	AH,#H'4706
 	beq	?L467
@@ -8308,9 +8395,7 @@ _handleUEMessage:
 	bsr	$_TonesPlayEvent
 	ld	AL,@(H'0006,Y)
 	bsr	$_ATCommandPlayEvent
-?L466:
-	ld	AL,@(H'0006,Y)
-	bsr	$_wechatReportEvent
+?L50:
 ?LBE4:
 ?LBE_handleUEMessage:
 	leavel	#15
@@ -8892,13 +8977,13 @@ $_main:
 	.SEG	CONST
 ?LC3:
 	dc	H'31
-	dc	H'38
-	dc	H'3A
-	dc	H'34
-	dc	H'30
+	dc	H'31
 	dc	H'3A
 	dc	H'30
-	dc	H'33
+	dc	H'32
+	dc	H'3A
+	dc	H'35
+	dc	H'35
 	dc	H'00
 ?LC2:
 	dc	H'4D
@@ -9048,7 +9133,7 @@ $_theSink:
 	DS	59
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 204 used[1] = 73 total = 277
+;# Function pattern *movqi2 used[0] = 204 used[1] = 71 total = 275
 ;# Function pattern *movqi3 used[0] = 618 total = 618
 ;# Function pattern *movqi8 used[0] = 3 total = 3
 ;# Function pattern *movhi used[2] = 3 used[3] = 18 total = 21
@@ -9063,7 +9148,7 @@ $_theSink:
 ;# Function pattern *ashlqi3 used[0] = 3 total = 3
 ;# Function pattern one_cmplqi2 used[0] = 1 total = 1
 ;# Function pattern jump used[0] = 300 total = 300
-;# Function pattern *call1 used[0] = 285 total = 285
+;# Function pattern *call1 used[0] = 283 total = 283
 ;# Function pattern *call_value1 used[0] = 112 total = 112
 ;# Function pattern tablejump_1 used[0] = 3 total = 3
 ;# Function pattern movstrqi+3 used[0] = 69 used[1] = 32 total = 101
@@ -42604,6395 +42689,6 @@ $_VolumePlayMuteToneQuery:
 
 	.ENHANCED
 	.CODE
-_wechat_send_packet:
-	enterl	#11
-?LBB_wechat_send_packet:
-	st	AL,@(H'0005,Y)
-	st	AH,@(H'0006,Y)
-?LBB2:
-	ld	X,@$_theSink+H'0004
-	ld	AL,@(0,X)
-	bsr	$_WechatTransportGetFlags
-	st	AL,@(H'0007,Y)
-	ld	AH,@(H'000C,Y)
-	add	AH,#H'000A
-	ld	AL,@$XAP_AH
-	bsr	$_malloc
-	st	AL,@(H'0008,Y)
-	cmp	AL,#H'0000
-	beq	?L1
-	ld	AL,@(H'0005,Y)
-	st	AL,@(0,Y)
-	ld	AL,@(H'0006,Y)
-	st	AL,@(H'0001,Y)
-	ld	AL,@(H'000B,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,@(H'000C,Y)
-	st	AL,@(H'0003,Y)
-	ld	AL,@(H'000D,Y)
-	st	AL,@(H'0004,Y)
-	ld	AL,@(H'0008,Y)
-	ld	AH,@(H'0007,Y)
-	bsr	$_WechatBuildResponse
-	ld	AH,@$XAP_AL
-	ld	X,@$_theSink+H'0004
-	ld	AL,@(H'0008,Y)
-	st	AL,@(0,Y)
-	ld	AL,@(0,X)
-	bsr	$_WechatSendPacket
-?L1:
-?LBE2:
-?LBE_wechat_send_packet:
-	leavel	#11
-;.stabn	192,0,0,?LBB2
-;.stabn	224,0,0,?LBE2
-$_wechat_send_response:
-	enterl	#5
-?LBB_wechat_send_response:
-	st	AL,@H'fff8
-	ld	X,@(H'0005,Y)
-	or	AH,#-H'8000
-	st	X,@(0,Y)
-	ld	AL,@(H'0006,Y)
-	st	AL,@(H'0001,Y)
-	ld	AL,@(H'0007,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,@H'fff8
-	bsr	_wechat_send_packet
-?LBE_wechat_send_response:
-	leavel	#5
-$_wechat_send_response_16:
-	enterl	#11
-?LBB_wechat_send_response_16:
-	st	AL,@(H'0005,Y)
-	st	AH,@(H'0006,Y)
-?LBB3:
-	ld	X,@$_theSink+H'0004
-	ld	AL,@(0,X)
-	bsr	$_WechatTransportGetFlags
-	st	AL,@(H'0007,Y)
-	ld	AH,@(H'000B,Y)
-	add	AH,@$XAP_AH
-	add	AH,#H'000A
-	ld	AL,@$XAP_AH
-	bsr	$_malloc
-	st	AL,@(H'0008,Y)
-	cmp	AL,#H'0000
-	beq	?L4
-	ld	AL,#H'000A
-	st	AL,@(0,Y)
-	ld	AL,@(H'0005,Y)
-	or	AL,#-H'8000
-	st	AL,@(H'0001,Y)
-	ld	AL,@(H'0006,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,@(H'000B,Y)
-	st	AL,@(H'0003,Y)
-	ld	AL,@(H'000C,Y)
-	st	AL,@(H'0004,Y)
-	ld	AL,@(H'0008,Y)
-	ld	AH,@(H'0007,Y)
-	bsr	$_WechatBuildResponse16
-	ld	AH,@$XAP_AL
-	ld	X,@$_theSink+H'0004
-	ld	AL,@(H'0008,Y)
-	st	AL,@(0,Y)
-	ld	AL,@(0,X)
-	bsr	$_WechatSendPacket
-?L4:
-?LBE3:
-?LBE_wechat_send_response_16:
-	leavel	#11
-;.stabn	192,0,0,?LBB3
-;.stabn	224,0,0,?LBE3
-_dump:
-	enterl	#5
-?LBB_dump:
-	st	AH,@(H'0002,Y)
-	st	AL,@(0,Y)
-	ld	AH,@(H'0005,Y)
-	st	AH,@(H'0001,Y)
-	ld	AL,#(?LC0)
-	bsr	$_printf
-	ld	AL,@(H'0005,Y)
-	add	AL,#-H'0001
-	st	AL,@(H'0005,Y)
-	cmp	AL,#-H'0001
-	beq	?L12
-?L10:
-	ld	X,@(H'0002,Y)
-	ld	AL,@(0,X)
-	st	AL,@(0,Y)
-	add	X,#H'0001
-	st	X,@(H'0002,Y)
-	ld	AL,#(?LC1)
-	bsr	$_printf
-	ld	AH,@(H'0005,Y)
-	add	AH,#-H'0001
-	st	AH,@(H'0005,Y)
-	cmp	AH,#-H'0001
-	bne	?L10
-?L12:
-	ld	AL,#H'000A
-	bsr	$_putchar
-?LBE_dump:
-	leavel	#5
-	.SEG	CONST
-?LC0:
-	dc	H'25
-	dc	H'73
-	dc	H'3A
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'3A
-	dc	H'00
-?LC1:
-	dc	H'20
-	dc	H'25
-	dc	H'30
-	dc	H'34
-	dc	H'78
-	dc	H'00
-	.CODE
-_wechat_send_notification:
-	enterl	#5
-?LBB_wechat_send_notification:
-	ld	X,@(H'0005,Y)
-	st	AL,@(0,Y)
-	st	AH,@(H'0001,Y)
-	st	X,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'4003
-	bsr	_wechat_send_packet
-?LBE_wechat_send_notification:
-	leavel	#5
-_wpack:
-	enterl	#2
-?LBB_wpack:
-	st	AL,@H'fff8
-	st	AH,@H'fff9
-	ld	AH,@(H'0002,Y)
-	ld	AL,#-H'0001
-	add	AL,@$XAP_AH
-	st	AL,@(-1,Y)
-	cmp	AL,#-H'0001
-	beq	?L22
-?L20:
-	ld	X,@H'fff9
-	ld	AL,@(0,X)
-	asl	#H'0008
-	ld	X,@H'fff8
-	st	AL,@(0,X)
-	ld	AH,#H'0001
-	add	AH,@H'fff9
-	ld	X,@$XAP_AH
-	or	AL,@(0,X)
-	ld	X,@H'fff8
-	st	AL,@(0,X)
-	add	AH,#H'0001
-	st	AH,@H'fff9
-	ld	AL,#H'0001
-	add	AL,@H'fff8
-	st	AL,@H'fff8
-	ld	X,#-H'0001
-	add	X,@(-1,Y)
-	st	X,@(-1,Y)
-	cmp	X,#-H'0001
-	bne	?L20
-?L22:
-?LBE_wpack:
-	leavel	#2
-_dwunpack:
-	enterl	#2
-?LBB_dwunpack:
-	ld	X,@$XAP_AL
-	ld	AH,@(H'0002,Y)
-	ld	AL,@(H'0003,Y)
-	st	AH,@H'fff8
-	st	AL,@H'fff9
-	lsr	#H'0018
-	st	AL,@(0,X)
-	add	X,#H'0001
-	ld	AH,@H'fff8
-	ld	AL,@H'fff9
-	lsr	#H'0010
-	and	AL,#H'00FF
-	st	AL,@(0,X)
-	add	X,#H'0001
-	ld	AH,@H'fff8
-	ld	AL,@H'fff9
-	lsr	#H'0008
-	and	AL,#H'00FF
-	st	AL,@(0,X)
-	ld	AL,@H'fff9
-	and	AL,#H'00FF
-	st	AL,@(H'0001,X)
-?LBE_dwunpack:
-	leavel	#2
-_pitch_length_tone:
-	enterl	#2
-?LBB_pitch_length_tone:
-	ld	X,@$XAP_AH
-	asl	#H'0007
-	or	AL,@$XAP_UXL
-?LBE_pitch_length_tone:
-	leavel	#2
-_get_config_lengths:
-	enterl	#3
-?LBB_get_config_lengths:
-	ld	AH,@$XAP_AL
-	ld	AL,#H'000C
-	st	AL,@(0,Y)
-	ld	AL,#H'0007
-	bsr	$_ConfigRetrieve
-?LBE_get_config_lengths:
-	leavel	#3
-_send_app_message:
-	enterl	#3
-?LBB_send_app_message:
-	ld	AH,@$XAP_AL
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	ld	AL,#($_theSink)
-	bsr	$_MessageSend
-?LBE_send_app_message:
-	leavel	#3
-_set_abs_eq_bank:
-	enterl	#6
-?LBB_set_abs_eq_bank:
-?LBB4:
-	add	AL,#H'0003
-	st	AL,@(H'0002,Y)
-	ld	X,@$_theSink+H'002E
-	ld	AL,@(H'0046,X)
-	st	AL,@(0,Y)
-	ld	AL,@(H'0002,Y)
-	st	AL,@(H'0001,Y)
-	ld	AL,#(?LC2)
-	bsr	$_printf
-	ld	X,@$_theSink+H'002E
-	ld	AL,@(H'0002,Y)
-	cmp	AL,@(H'0046,X)
-	beq	?L29
-?LBB5:
-	bsr	$_VolumeCheckA2dpMute
-	cmp	AL,#H'0000
-	beq	?L31
-	ld	AL,#H'0001
-	bra	(?L33)
-?L31:
-	ld	AL,#H'0004
-?L33:
-	st	AL,@(H'0003,Y)
-	ld	X,@$_theSink+H'002E
-	ld	AL,@(H'0002,Y)
-	st	AL,@(H'0046,X)
-	bsr	$_configManagerWriteSessionData
-	ld	AH,@$_theSink+H'002E
-	add	AH,#H'0046
-	ld	AL,@(H'0003,Y)
-	bsr	$_AudioSetMode
-?L29:
-?LBE5:
-?LBE4:
-?LBE_set_abs_eq_bank:
-	leavel	#6
-	.SEG	CONST
-?LC2:
-	dc	H'47
-	dc	H'3A
-	dc	H'20
-	dc	H'45
-	dc	H'51
-	dc	H'20
-	dc	H'25
-	dc	H'75
-	dc	H'20
-	dc	H'2D
-	dc	H'3E
-	dc	H'20
-	dc	H'25
-	dc	H'75
-	dc	H'0A
-	dc	H'00
-	.CODE
-;.stabn	192,0,0,?LBB5
-;.stabn	224,0,0,?LBE5
-_wechat_change_volume:
-	enterl	#6
-?LBB_wechat_change_volume:
-	ld	AH,@$XAP_AL
-?LBB6:
-	ld	X,#H'0000
-	ld	AL,@$_theSink+H'0035
-	and	AL,#H'0001
-	cmp	AL,#H'0000
-	beq	?L36
-	xor	AH,#H'0001
-?L36:
-	cmp	AH,#H'0000
-	bne	?L37
-	ld	X,#H'400D
-	bra	(?L43)
-?L37:
-	cmp	AH,#H'0001
-	bne	?L39
-	ld	X,#H'400E
-?L43:
-	ld	AL,#H'0000
-	bra	(?L42)
-?L39:
-	ld	AL,#H'0005
-?L42:
-	st	AL,@(H'0003,Y)
-	tst	@(H'0003,Y)
-	bne	?L41
-	ld	AL,@$XAP_UXL
-	bsr	_send_app_message
-?L41:
-	ld	AL,@(H'0003,Y)
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0201
-	bsr	$_wechat_send_response
-?LBE6:
-?LBE_wechat_change_volume:
-	leavel	#6
-;.stabn	192,0,0,?LBB6
-;.stabn	224,0,0,?LBE6
-_wechat_alert_leds:
-	enterl	#9
-?LBB_wechat_alert_leds:
-	st	AL,@(H'0003,Y)
-?LBB7:
-	ld	AH,#H'0000
-	st	AH,@(H'0005,Y)
-	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00BA,X)
-	lsr	#H'0006
-	and	AH,#H'001F
-	ld	AL,#H'0000
-	cmp	AL,@$XAP_AH
-	bcc	?L47
-	ld	X,@(H'004D,X)
-	ld	AL,@(0,X)
-	cmp	AL,#H'4726
-	beq	?L47
-	ld	X,@$_theSink+H'0003
-	st	X,@(H'0006,Y)
-?L50:
-	ld	AH,@(H'0005,Y)
-	add	AH,#H'0001
-	st	AH,@(H'0005,Y)
-	ld	X,@(H'0006,Y)
-	ld	AH,@(H'00BA,X)
-	lsr	#H'0006
-	and	AH,#H'001F
-	ld	AL,@(H'0005,Y)
-	cmp	AL,@$XAP_AH
-	bcc	?L47
-	smult	#H'0005
-	add	AL,@(H'004D,X)
-	ld	X,@$XAP_AL
-	ld	AL,@(0,X)
-	cmp	AL,#H'4726
-	bne	?L50
-?L47:
-	ld	AH,@(H'0005,Y)
-	st	AH,@(0,Y)
-	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00BA,X)
-	lsr	#H'0006
-	and	AH,#H'001F
-	st	AH,@(H'0001,Y)
-	ld	AL,#(?LC3)
-	bsr	$_printf
-	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00BA,X)
-	lsr	#H'0006
-	and	AH,#H'001F
-	ld	AL,@(H'0005,Y)
-	cmp	AL,@$XAP_AH
-	bne	?L51
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	bra	(?L53)
-?L51:
-	ld	X,@$_theSink+H'0003
-	ld	AL,@(H'0005,Y)
-	smult	#H'0005
-	add	AL,@(H'004D,X)
-	st	AL,@(H'0004,Y)
-	ld	X,@(H'0003,Y)
-	ld	AL,@(0,X)
-	asl	#H'0008
-	ld	AH,@$XAP_AL
-	or	AH,@(H'0001,X)
-	st	AH,@H'fff8
-	ld	AH,@$_theSink+H'0016
-	lsr	#H'0002
-	ld	X,@$XAP_AH
-	and	X,#H'0003
-	ld	AH,@H'fff8
-	lsr	@$XAP_UXL
-	ld	AL,@$XAP_AH
-	ld	AH,#H'0000
-	udiv	#H'000A
-	and	AL,#H'00FF
-	ld	X,@(H'0004,Y)
-	ld	AH,@(H'0001,X)
-	and	AH,#-H'0100
-	or	AH,@$XAP_AL
-	st	AH,@(H'0001,X)
-	ld	X,@(H'0003,Y)
-	ld	AL,@(H'0002,X)
-	asl	#H'0008
-	ld	AH,@$XAP_AL
-	or	AH,@(H'0003,X)
-	st	AH,@H'fff8
-	ld	AH,@$_theSink+H'0016
-	lsr	#H'0002
-	ld	X,@$XAP_AH
-	and	X,#H'0003
-	ld	AH,@H'fff8
-	lsr	@$XAP_UXL
-	ld	AL,@$XAP_AH
-	ld	AH,#H'0000
-	udiv	#H'000A
-	asl	#H'0008
-	ld	X,@(H'0004,Y)
-	ld	AH,@(H'0002,X)
-	and	AH,#H'00FF
-	or	AL,@$XAP_AH
-	st	AL,@H'fff9
-	st	AL,@(H'0002,X)
-	ld	X,@(H'0003,Y)
-	ld	AL,@(H'0004,X)
-	asl	#H'0008
-	ld	AH,@$XAP_AL
-	or	AH,@(H'0005,X)
-	st	AH,@H'fff8
-	ld	AH,@$_theSink+H'0016
-	lsr	#H'0002
-	ld	X,@$XAP_AH
-	and	X,#H'0003
-	ld	AH,@H'fff8
-	lsr	@$XAP_UXL
-	ld	AL,@$XAP_AH
-	ld	AH,#H'0000
-	udiv	#H'0032
-	and	AL,#H'00FF
-	ld	AH,@H'fff9
-	and	AH,#-H'0100
-	or	AH,@$XAP_AL
-	ld	X,@(H'0004,Y)
-	st	AH,@(H'0002,X)
-	ld	X,@(H'0003,Y)
-	ld	AL,@(H'0007,X)
-	asl	#H'0008
-	ld	X,@(H'0004,Y)
-	ld	AH,@(H'0003,X)
-	and	AH,#H'00FF
-	or	AL,@$XAP_AH
-	st	AL,@H'fff8
-	st	AL,@(H'0003,X)
-	ld	X,@(H'0003,Y)
-	ld	AL,@(H'0008,X)
-	asl	#H'000C
-	ld	X,@(H'0004,Y)
-	ld	AH,@(H'0004,X)
-	and	AH,#H'0FFF
-	or	AL,@$XAP_AH
-	st	AL,@H'fff9
-	st	AL,@(H'0004,X)
-	ld	X,@(H'0003,Y)
-	ld	AL,@(H'0009,X)
-	and	AL,#H'00FF
-	ld	AH,@H'fff8
-	and	AH,#-H'0100
-	or	AH,@$XAP_AL
-	ld	X,@(H'0004,Y)
-	st	AH,@(H'0003,X)
-	ld	X,@(H'0003,Y)
-	ld	AL,@(H'000A,X)
-	and	AL,#H'000F
-	asl	#H'0008
-	ld	AH,@H'fff9
-	and	AH,#-H'0F01
-	or	AL,@$XAP_AH
-	st	AL,@H'fff8
-	ld	X,@(H'0004,Y)
-	st	AL,@(H'0004,X)
-	ld	X,@(H'0003,Y)
-	ld	AL,@(H'000B,X)
-	and	AL,#H'000F
-	asl	#H'0004
-	ld	AH,@H'fff8
-	and	AH,#-H'00F1
-	or	AH,@$XAP_AL
-	ld	AL,@$XAP_AH
-	and	AL,#-H'0009
-	ld	X,@(H'0004,Y)
-	st	AL,@(H'0004,X)
-	ld	X,@(H'0003,Y)
-	ld	AL,@(H'000C,X)
-	and	AL,#H'0007
-	and	AH,#-H'0010
-	or	AH,@$XAP_AL
-	ld	X,@(H'0004,Y)
-	st	AH,@(H'0004,X)
-	ld	AL,#H'4726
-	bsr	$_LEDManagerIndicateEvent
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-?L53:
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'020D
-	bsr	$_wechat_send_response
-?LBE7:
-?LBE_wechat_alert_leds:
-	leavel	#9
-	.SEG	CONST
-?LC3:
-	dc	H'47
-	dc	H'3A
-	dc	H'20
-	dc	H'61
-	dc	H'6C
-	dc	H'3A
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'2F
-	dc	H'25
-	dc	H'64
-	dc	H'0A
-	dc	H'00
-	.CODE
-;.stabn	192,0,0,?LBB7
-;.stabn	224,0,0,?LBE7
-_wechat_alert_tone:
-	enterl	#13
-?LBB_wechat_alert_tone:
-	st	AL,@(H'0004,Y)
-	st	AH,@(H'0005,Y)
-?LBB8:
-	cmp	AL,#H'0003
-	bcz	?L61
-	and	AL,#H'0001
-	cmp	AL,#H'0000
-	beq	?L60
-?L61:
-	ld	AL,#H'0005
-	bra	(?L77)
-?L60:
-	ld	AL,@(H'0004,Y)
-	cmp	AL,#H'0004
-	beq	?L78
-	ld	X,@$_theSink+H'0004
-	st	X,@(H'0006,Y)
-	tst	@(H'0005,X)
-	bne	?L65
-	ld	AL,#H'005E
-	bsr	$_malloc
-	ld	X,@(H'0006,Y)
-	st	AL,@(H'0005,X)
-?L65:
-	ld	X,@$_theSink+H'0004
-	tst	@(H'0005,X)
-	beq	?L67
-	ld	AL,@(H'0004,Y)
-	cmp	AL,#H'002D
-	bcz	?L66
-?L67:
-	ld	AL,#H'0003
-?L77:
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	bra	(?L76)
-?L66:
-?LBB9:
-	ld	X,@$_theSink+H'0004
-	ld	X,@(H'0005,X)
-	st	X,@(H'0009,Y)
-	ld	X,@(H'0005,Y)
-	ld	AL,@(0,X)
-	st	AL,@(0,Y)
-	ld	AL,@(H'0001,X)
-	st	AL,@(H'0001,Y)
-	ld	AL,@(H'0002,X)
-	st	AL,@(H'0002,Y)
-	ld	AL,@(H'0003,X)
-	st	AL,@(H'0003,Y)
-	ld	AL,#(?LC4)
-	bsr	$_printf
-	bsr	$_AudioStopTone
-	ld	X,@(H'0005,Y)
-	ld	AL,@(0,X)
-	lsl	#H'0010
-	asr	#H'000E
-	or	AL,#-H'7000
-	ld	X,@(H'0009,Y)
-	st	AL,@(0,X)
-	add	X,#H'0001
-	st	X,@(H'0009,Y)
-	ld	X,@(H'0005,Y)
-	ld	X,@(H'0001,X)
-	st	X,@(H'0008,Y)
-	ld	X,@(H'0005,Y)
-	ld	AL,@(H'0002,X)
-	or	AL,#-H'5000
-	ld	X,@(H'0009,Y)
-	st	AL,@(0,X)
-	add	X,#H'0001
-	st	X,@(H'0009,Y)
-	ld	X,@(H'0005,Y)
-	ld	AL,@(H'0003,X)
-	or	AL,#-H'4000
-	ld	X,@(H'0009,Y)
-	st	AL,@(0,X)
-	add	X,#H'0001
-	st	X,@(H'0009,Y)
-	ld	AL,#H'0004
-	st	AL,@(H'0007,Y)
-	cmp	AL,@(H'0004,Y)
-	bcc	?L75
-?L73:
-	ld	X,@(H'0005,Y)
-	add	X,@(H'0007,Y)
-	st	X,@(H'000A,Y)
-	ld	AL,@(0,X)
-	st	AL,@(0,Y)
-	ld	AL,@(H'0001,X)
-	st	AL,@(H'0001,Y)
-	ld	AL,#(?LC5)
-	bsr	$_printf
-	ld	X,@(H'000A,Y)
-	ld	AL,@(0,X)
-	ld	AH,@(H'0001,X)
-	bsr	_pitch_length_tone
-	ld	X,@(H'0009,Y)
-	st	AL,@(0,X)
-	add	X,#H'0001
-	st	X,@(H'0009,Y)
-	ld	AL,@(H'0007,Y)
-	add	AL,#H'0002
-	st	AL,@(H'0007,Y)
-	cmp	AL,@(H'0004,Y)
-	bcs	?L73
-?L75:
-	ld	AL,#-H'8000
-	ld	X,@(H'0009,Y)
-	st	AL,@(0,X)
-	ld	AH,@$_theSink+H'0004
-	ld	AL,@$_theSink+H'0021
-	st	AL,@(0,Y)
-	ld	AL,@(H'0008,Y)
-	st	AL,@(H'0001,Y)
-	ld	X,@$_theSink+H'0006
-	ld	AL,@(0,X)
-	st	AL,@(H'0002,Y)
-	ld	X,@$XAP_AH
-	ld	AL,@(H'0005,X)
-	ld	AH,#H'0000
-	bsr	$_AudioPlayTone
-?L78:
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-?L76:
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'020E
-	bsr	$_wechat_send_response
-?LBE9:
-?LBE8:
-?LBE_wechat_alert_tone:
-	leavel	#13
-	.SEG	CONST
-?LC4:
-	dc	H'47
-	dc	H'3A
-	dc	H'20
-	dc	H'61
-	dc	H'74
-	dc	H'3A
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'0A
-	dc	H'00
-?LC5:
-	dc	H'20
-	dc	H'2D
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'0A
-	dc	H'00
-	.CODE
-;.stabn	192,0,0,?LBB9
-;.stabn	224,0,0,?LBE9
-_wechat_alert_event:
-	enterl	#6
-?LBB_wechat_alert_event:
-	st	AL,@(H'0003,Y)
-	st	AL,@(0,Y)
-	ld	AL,#(?LC6)
-	bsr	$_printf
-	ld	AL,@(H'0003,Y)
-	add	AL,#-H'4000
-	cmp	AL,#H'00C0
-	bcz	?L86
-	ld	AL,@(H'0003,Y)
-	add	AL,#-H'4700
-	cmp	AL,#(H'0001+H'0085)
-	bcc	?L85
-?L86:
-	ld	AL,@(H'0003,Y)
-	cmp	AL,#H'4706
-	beq	?L87
-	bsr	$_LEDManagerIndicateEvent
-?L87:
-	ld	AL,@(H'0003,Y)
-	bsr	$_TonesPlayEvent
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	bra	(?L89)
-?L85:
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-?L89:
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0210
-	bsr	$_wechat_send_response
-?LBE_wechat_alert_event:
-	leavel	#6
-	.SEG	CONST
-?LC6:
-	dc	H'47
-	dc	H'3A
-	dc	H'20
-	dc	H'61
-	dc	H'65
-	dc	H'3A
-	dc	H'20
-	dc	H'25
-	dc	H'30
-	dc	H'34
-	dc	H'58
-	dc	H'0A
-	dc	H'00
-	.CODE
-_wechat_alert_voice:
-	enterl	#20
-?LBB_wechat_alert_voice:
-	st	AL,@(H'000F,Y)
-	ld	X,@$XAP_AH
-?LBB10:
-	ld	AL,@(0,X)
-	asl	#H'0008
-	or	AL,@(H'0001,X)
-	st	AL,@(H'0011,Y)
-	ld	AL,@$XAP_UY
-	add	AL,#H'0003
-	bsr	_get_config_lengths
-	ld	AH,@$_theSink+H'0035
-	lsr	#H'0008
-	ld	X,@$XAP_AH
-	and	X,#H'000F
-	ld	AH,#H'0000
-	ld	AL,@(H'000A,Y)
-	udiv	@$XAP_UXL
-	st	AL,@(H'0010,Y)
-	ld	AL,@(H'0011,Y)
-	st	AL,@(0,Y)
-	ld	AL,@(H'0010,Y)
-	st	AL,@(H'0001,Y)
-	ld	AL,@(H'000F,Y)
-	add	AL,#-H'0002
-	st	AL,@(H'0002,Y)
-	ld	AL,#(?LC7)
-	bsr	$_printf
-	ld	AL,@(H'0011,Y)
-	cmp	AL,@(H'0010,Y)
-	bcc	?L93
-	ld	AL,#H'0001
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	ld	AL,#($_csr_voice_prompts_plugin)
-	ld	AH,@(H'0011,Y)
-	bsr	$_AudioPromptPlay
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	bra	(?L95)
-?L93:
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-?L95:
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0211
-	bsr	$_wechat_send_response
-?LBE10:
-?LBE_wechat_alert_voice:
-	leavel	#20
-	.SEG	CONST
-?LC7:
-	dc	H'47
-	dc	H'3A
-	dc	H'20
-	dc	H'74
-	dc	H'69
-	dc	H'3A
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'2F
-	dc	H'25
-	dc	H'64
-	dc	H'20
-	dc	H'2B
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'0A
-	dc	H'00
-	.CODE
-;.stabn	192,0,0,?LBB10
-;.stabn	224,0,0,?LBE10
-_wechat_set_led_config:
-	enterl	#55
-?LBB_wechat_set_led_config:
-	st	AL,@(H'0019,Y)
-	st	AH,@(H'001A,Y)
-	ld	X,@$XAP_AH
-?LBB11:
-	ld	X,@(0,X)
-	st	X,@(H'0022,Y)
-	ld	AL,@$XAP_UY
-	add	AL,#H'0006
-	bsr	_get_config_lengths
-	ld	AH,@(H'0022,Y)
-	cmp	AH,#H'0002
-	beq	?L109
-	cmp	AH,#(H'0001+H'0002)
-	bcc	?L112
-	cmp	AH,#H'0001
-	beq	?L108
-	bra	(?L110)
-?L112:
-	ld	AL,@(H'0022,Y)
-	cmp	AL,#H'0003
-	bne	?L110
-	ld	AH,@(H'0009,Y)
-	st	AH,@(H'001B,Y)
-	ld	AL,#H'0014
-	st	AL,@(H'001C,Y)
-	st	AL,@(H'001D,Y)
-	ld	X,@(H'001A,Y)
-	ld	AL,@(H'0003,X)
-	cmp	AL,#(H'0001+H'0005)
-	bcc	?L106
-	ld	X,@$XAP_AL
-	ld	X,@(?JTBASE107,X)
-	brxl
-	.SEG	CONST
-?JTBASE107:
-	.CODE
-?L107:
-	.SEG	CONST
-	dc	lwrd(?L106-?L107)
-	dc	lwrd(?L104-?L107)
-	dc	lwrd(?L105-?L107)
-	dc	lwrd(?L101-?L107)
-	dc	lwrd(?L104-?L107)
-	dc	lwrd(?L104-?L107)
-	.CODE
-?L101:
-	ld	AH,#H'0006
-	bra	(?L170)
-?L104:
-	ld	AL,#H'0007
-	bra	(?L169)
-?L105:
-	ld	AH,#H'0008
-	bra	(?L170)
-?L106:
-	ld	AL,#H'0000
-	bra	(?L169)
-?L108:
-	ld	AH,@(H'000A,Y)
-	st	AH,@(H'001B,Y)
-	ld	AL,#H'000F
-	st	AL,@(H'001C,Y)
-	ld	X,#H'0015
-	st	X,@(H'001D,Y)
-	bra	(?L168)
-?L109:
-	ld	AL,@(H'000B,Y)
-	st	AL,@(H'001B,Y)
-	ld	AH,#H'0014
-	st	AH,@(H'001C,Y)
-	ld	AL,#H'0017
-	st	AL,@(H'001D,Y)
-?L168:
-	ld	AH,#H'0011
-?L170:
-	st	AH,@(H'0021,Y)
-	bra	(?L98)
-?L110:
-	ld	AL,#H'0000
-	st	AL,@(H'001B,Y)
-	st	AL,@(H'001C,Y)
-	st	AL,@(H'001D,Y)
-?L169:
-	st	AL,@(H'0021,Y)
-?L98:
-	ld	X,@(H'0022,Y)
-	st	X,@(0,Y)
-	ld	X,@(H'001A,Y)
-	ld	AL,@(H'0002,X)
-	st	AL,@(H'0001,Y)
-	ld	AH,@(H'001B,Y)
-	st	AH,@(H'0002,Y)
-	ld	AL,@(H'001D,Y)
-	st	AL,@(H'0003,Y)
-	ld	AH,@(H'0019,Y)
-	st	AH,@(H'0004,Y)
-	ld	AL,@(H'0021,Y)
-	st	AL,@(H'0005,Y)
-	ld	AL,#(?LC8)
-	bsr	$_printf
-	ld	AH,@(H'0019,Y)
-	cmp	AH,@(H'0021,Y)
-	bne	?L116
-	ld	AL,@(H'0022,Y)
-	cmp	AL,#H'0003
-	bne	?L114
-	ld	X,@(H'001A,Y)
-?LBB12:
-	ld	X,@(H'0001,X)
-	add	X,#-H'0001
-	st	X,@(H'001F,Y)
-	ld	X,@(H'001A,Y)
-	ld	AL,@(H'0002,X)
-	asl	#H'0008
-	ld	AH,@$XAP_AL
-	or	AH,@(H'0003,X)
-	st	AH,@(H'0020,Y)
-	ld	AL,@(H'001F,Y)
-	cmp	AL,@(H'001B,Y)
-	beq	?L185
-	bcc	?L116
-?L185:
-	ld	AL,@$XAP_AH
-	add	AL,#-H'4000
-	cmp	AL,#H'00C0
-	bcz	?L115
-	ld	AL,@$XAP_AH
-	add	AL,#-H'4700
-	cmp	AL,#H'0085
-	bcz	?L115
-?L116:
-	ld	AL,#H'0005
-	bra	(?L179)
-?L115:
-	ld	X,@(H'001F,Y)
-	cmp	X,@(H'001B,Y)
-	bne	?L117
-	ld	AL,@(H'001B,Y)
-	smult	#H'0003
-	ld	AH,@$XAP_AL
-	add	AH,#H'0003
-	st	AH,@(H'001E,Y)
-	bra	(?L118)
-?L117:
-	ld	AL,@(H'001B,Y)
-	smult	#H'0003
-	st	AL,@(H'001E,Y)
-?L118:
-	ld	AL,@(H'001E,Y)
-	bsr	$_malloc
-	st	AL,@(H'0023,Y)
-	cmp	AL,#H'0000
-	bne	?L119
-	ld	AL,#H'0003
-	st	AL,@(0,Y)
-	ld	AL,@(H'0023,Y)
-	bra	(?L178)
-?L119:
-	ld	AH,@(H'001E,Y)
-	st	AH,@(0,Y)
-	ld	AL,@(H'001D,Y)
-	ld	AH,@(H'0023,Y)
-	bsr	$_ConfigRetrieve
-	ld	AL,#H'0000
-	st	AL,@H'fff8
-	ld	X,@(H'001F,Y)
-	cmp	X,@(H'001B,Y)
-	beq	?L121
-	ld	AL,@$XAP_UXL
-	smult	#H'0003
-	add	AL,@(H'0023,Y)
-	ld	X,@$XAP_AL
-	ld	AL,@(0,X)
-	cmp	AL,@(H'0020,Y)
-	beq	?L120
-?L121:
-	ld	AH,#H'0001
-	st	AH,@H'fff8
-?L120:
-	ld	X,@(H'001A,Y)
-	ld	AL,@(H'0004,X)
-	cmp	AL,#(H'0001+H'0005)
-	bcc	?L122
-	ld	X,@$XAP_AL
-	ld	X,@(?JTBASE139,X)
-	brxl
-	.SEG	CONST
-?JTBASE139:
-	.CODE
-?L139:
-	.SEG	CONST
-	dc	lwrd(?L122-?L139)
-	dc	lwrd(?L123-?L139)
-	dc	lwrd(?L126-?L139)
-	dc	lwrd(?L129-?L139)
-	dc	lwrd(?L132-?L139)
-	dc	lwrd(?L135-?L139)
-	.CODE
-?L123:
-	tst	@H'fff8
-	bne	?L125
-	ld	AL,@(H'001F,Y)
-	smult	#H'0003
-	ld	X,@(H'0023,Y)
-	add	X,@$XAP_AL
-	ld	AH,@(H'0001,X)
-	lsr	#H'000D
-	cmp	AH,#H'0001
-	bne	?L125
-	ld	AH,@(H'0001,X)
-	lsr	#H'0005
-	and	AH,#H'001F
-	ld	X,@(H'001A,Y)
-	cmp	AH,@(H'0006,X)
-	beq	?L122
-?L125:
-	ld	AL,@(H'001F,Y)
-	smult	#H'0003
-	add	AL,@(H'0023,Y)
-	st	AL,@(H'0024,Y)
-	ld	AL,#H'0000
-	ld	X,@(H'0024,Y)
-	st	AL,@(0,X)
-	st	AL,@(H'0002,X)
-	ld	AH,#H'2000
-	st	AH,@H'fff8
-	st	AH,@(H'0001,X)
-	ld	X,@(H'001A,Y)
-	ld	AL,@(H'0006,X)
-	and	AL,#H'001F
-	asl	#H'0005
-	or	AL,@H'fff8
-	ld	X,@(H'0024,Y)
-	bra	(?L176)
-?L126:
-	tst	@H'fff8
-	bne	?L128
-	ld	AL,@(H'001F,Y)
-	smult	#H'0003
-	add	AL,@(H'0023,Y)
-	st	AL,@(H'0034,Y)
-	ld	X,@$XAP_AL
-	ld	AH,@(H'0001,X)
-	lsr	#H'000D
-	cmp	AH,#H'0002
-	bne	?L128
-	ld	AH,@(H'0002,X)
-	lsr	#H'0008
-	and	AH,#H'0001
-	ld	X,@(H'001A,Y)
-	cmp	AH,@(H'0006,X)
-	bne	?L128
-	ld	X,@(H'0034,Y)
-	ld	AL,@(H'0002,X)
-	and	AL,#H'00FF
-	ld	X,@(H'001A,Y)
-	cmp	AL,@(H'0007,X)
-	beq	?L122
-?L128:
-	ld	AL,@(H'001F,Y)
-	smult	#H'0003
-	add	AL,@(H'0023,Y)
-	st	AL,@(H'0025,Y)
-	ld	AL,#H'0000
-	ld	X,@(H'0025,Y)
-	st	AL,@(0,X)
-	st	AL,@(H'0002,X)
-	ld	AL,#H'4000
-	st	AL,@(H'0001,X)
-	ld	X,@(H'001A,Y)
-	ld	AL,@(H'0006,X)
-	and	AL,#H'0001
-	asl	#H'0008
-	ld	X,@(H'0025,Y)
-	st	AL,@(H'0002,X)
-	ld	X,@(H'001A,Y)
-	ld	AH,@(H'0007,X)
-	and	AH,#H'00FF
-	and	AL,#-H'0100
-	or	AL,@$XAP_AH
-	ld	X,@(H'0025,Y)
-	bra	(?L177)
-?L129:
-	tst	@H'fff8
-	bne	?L131
-	ld	AL,@(H'001F,Y)
-	smult	#H'0003
-	add	AL,@(H'0023,Y)
-	ld	X,@$XAP_AL
-	ld	AH,@(H'0001,X)
-	lsr	#H'000D
-	cmp	AH,#H'0003
-	beq	?L122
-?L131:
-	ld	AL,@(H'001F,Y)
-	smult	#H'0003
-	ld	AH,@(H'0023,Y)
-	add	AH,@$XAP_AL
-	ld	AL,#H'0000
-	ld	X,@$XAP_AH
-	st	AL,@(0,X)
-	st	AL,@(H'0002,X)
-	ld	AL,#H'6000
-?L176:
-	st	AL,@(H'0001,X)
-	bra	(?L171)
-?L132:
-	tst	@H'fff8
-	bne	?L134
-	ld	AL,@(H'001F,Y)
-	smult	#H'0003
-	ld	X,@(H'0023,Y)
-	add	X,@$XAP_AL
-	ld	AH,@(H'0001,X)
-	lsr	#H'000D
-	cmp	AH,#H'0004
-	bne	?L134
-	ld	AH,@(H'0001,X)
-	lsr	#H'000A
-	and	AH,#H'0007
-	ld	X,@(H'001A,Y)
-	cmp	AH,@(H'0006,X)
-	beq	?L122
-?L134:
-	ld	AL,@(H'001F,Y)
-	smult	#H'0003
-	add	AL,@(H'0023,Y)
-	st	AL,@(H'0026,Y)
-	ld	AL,#H'0000
-	ld	X,@(H'0026,Y)
-	st	AL,@(0,X)
-	st	AL,@(H'0002,X)
-	ld	AH,#-H'8000
-	st	AH,@H'fff8
-	st	AH,@(H'0001,X)
-	ld	X,@(H'001A,Y)
-	ld	AL,@(H'0006,X)
-	and	AL,#H'0007
-	asl	#H'000A
-	or	AL,@H'fff8
-	ld	X,@(H'0026,Y)
-	bra	(?L176)
-?L135:
-	tst	@H'fff8
-	bne	?L137
-	ld	AL,@(H'001F,Y)
-	smult	#H'0003
-	ld	X,@(H'0023,Y)
-	add	X,@$XAP_AL
-	ld	AH,@(H'0001,X)
-	lsr	#H'000D
-	cmp	AH,#H'0005
-	bne	?L137
-	ld	AH,@(H'0002,X)
-	lsr	#H'0009
-	and	AH,#H'000F
-	ld	X,@(H'001A,Y)
-	cmp	AH,@(H'0006,X)
-	beq	?L122
-?L137:
-	ld	AL,@(H'001F,Y)
-	smult	#H'0003
-	add	AL,@(H'0023,Y)
-	st	AL,@(H'0027,Y)
-	ld	AL,#H'0000
-	ld	X,@(H'0027,Y)
-	st	AL,@(0,X)
-	st	AL,@(H'0002,X)
-	ld	AL,#-H'6000
-	st	AL,@(H'0001,X)
-	ld	X,@(H'001A,Y)
-	ld	AL,@(H'0006,X)
-	and	AL,#H'000F
-	asl	#H'0009
-	ld	X,@(H'0027,Y)
-?L177:
-	st	AL,@(H'0002,X)
-?L171:
-	ld	AH,#H'0001
-	st	AH,@H'fff8
-?L122:
-	tst	@H'fff8
-	beq	?L140
-	ld	AL,@(H'001F,Y)
-	smult	#H'0003
-	add	AL,@(H'0023,Y)
-	ld	AH,@(H'0020,Y)
-	ld	X,@$XAP_AL
-	st	AH,@(0,X)
-	ld	AL,@(H'001E,Y)
-	st	AL,@(0,Y)
-	ld	AL,@(H'001D,Y)
-	ld	AH,@(H'0023,Y)
-	bsr	$_ConfigStore
-	st	AL,@(H'001E,Y)
-	cmp	AL,#H'0000
-	beq	?L140
-	ld	AH,@(H'001B,Y)
-	cmp	AH,@(H'0009,Y)
-	beq	?L140
-	st	AH,@(H'0009,Y)
-	ld	AL,#H'000C
-	st	AL,@(0,Y)
-	ld	AL,#H'0007
-	ld	AH,@$XAP_UY
-	add	AH,#H'0006
-	bsr	$_ConfigStore
-	st	AL,@(H'001E,Y)
-	cmp	AL,#H'0000
-	bne	?L140
-	ld	AL,#(?LC9)
-	bsr	$_puts
-	bsr	$_Panic
-?L140:
-	ld	AL,@(H'0023,Y)
-	bra	(?L172)
-?L114:
-?LBE12:
-?LBB13:
-	ld	AL,#H'0000
-	st	AL,@(H'0028,Y)
-	st	AL,@(H'0029,Y)
-	ld	X,@(H'001A,Y)
-	ld	AL,@(H'0001,X)
-	asl	#H'0008
-	ld	AH,@$XAP_AL
-	or	AH,@(H'0002,X)
-	st	AH,@(H'0020,Y)
-	ld	AL,@(H'0022,Y)
-	cmp	AL,#H'0002
-	bne	?L144
-	ld	AL,@$XAP_AH
-	add	AL,#-H'4000
-	cmp	AL,#H'00C0
-	bcz	?L144
-	ld	AL,@$XAP_AH
-	add	AL,#-H'4700
-	cmp	AL,#H'0085
-	bcz	?L144
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	X,#H'0000
-	st	X,@(H'0001,Y)
-	st	X,@(H'0002,Y)
-	bra	(?L174)
-?L144:
-	ld	AL,@(H'001B,Y)
-	smult	#H'0005
-	st	AL,@(H'001E,Y)
-	add	AL,#H'0005
-	bsr	$_malloc
-	st	AL,@(H'0028,Y)
-	cmp	AL,#H'0000
-	bne	?L145
-	ld	AL,#H'0003
-	st	AL,@(0,Y)
-	ld	AH,@(H'0028,Y)
-	bra	(?L175)
-?L145:
-	ld	AL,@(H'001E,Y)
-	st	AL,@(0,Y)
-	ld	AL,@(H'001D,Y)
-	ld	AH,@(H'0028,Y)
-	bsr	$_ConfigRetrieve
-	ld	X,#H'0000
-	st	X,@(H'001F,Y)
-	cmp	X,@(H'001B,Y)
-	bcc	?L147
-	ld	X,@(H'0028,Y)
-	ld	AL,@(0,X)
-	cmp	AL,@(H'0020,Y)
-	beq	?L147
-?L150:
-	ld	AH,@(H'001F,Y)
-	add	AH,#H'0001
-	st	AH,@(H'001F,Y)
-	cmp	AH,@(H'001B,Y)
-	bcc	?L147
-	ld	AL,@$XAP_AH
-	smult	#H'0005
-	add	AL,@(H'0028,Y)
-	ld	X,@$XAP_AL
-	ld	AL,@(0,X)
-	cmp	AL,@(H'0020,Y)
-	bne	?L150
-?L147:
-	ld	AH,@(H'001F,Y)
-	st	AH,@(0,Y)
-	ld	AL,@(H'001B,Y)
-	st	AL,@(H'0001,Y)
-	ld	AH,@(H'001C,Y)
-	st	AH,@(H'0002,Y)
-	ld	AL,#(?LC10)
-	bsr	$_printf
-	ld	AL,@(H'001F,Y)
-	cmp	AL,@(H'001C,Y)
-	bne	?L151
-	ld	AL,@(H'0028,Y)
-	bsr	$_free
-	ld	AL,#H'0003
-?L179:
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-?L178:
-	st	AL,@(H'0001,Y)
-	bra	(?L173)
-?L151:
-	ld	X,@(H'001F,Y)
-	cmp	X,@(H'001B,Y)
-	bne	?L152
-	ld	AH,@(H'0022,Y)
-	st	AH,@(0,Y)
-	ld	AL,@(H'0020,Y)
-	st	AL,@(H'0001,Y)
-	ld	AH,@(H'001B,Y)
-	st	AH,@(H'0002,Y)
-	ld	AL,#(?LC11)
-	bsr	$_printf
-	ld	AL,#H'0001
-	st	AL,@(H'0029,Y)
-	ld	AH,@(H'001B,Y)
-	add	AH,#H'0001
-	st	AH,@(H'001B,Y)
-	ld	AL,@(H'001E,Y)
-	add	AL,#H'0005
-	st	AL,@(H'001E,Y)
-	bra	(?L153)
-?L152:
-	ld	X,@(H'0022,Y)
-	st	X,@(0,Y)
-	ld	AH,@(H'0020,Y)
-	st	AH,@(H'0001,Y)
-	ld	AL,@(H'001F,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#(?LC12)
-	bsr	$_printf
-?L153:
-	ld	X,@(H'001A,Y)
-	ld	AL,@(H'0003,X)
-	asl	#H'0008
-	ld	AH,@$XAP_AL
-	or	AH,@(H'0004,X)
-	ld	AL,@$XAP_AH
-	ld	AH,#H'0000
-	udiv	#H'000A
-	st	AL,@(H'002A,Y)
-	ld	AL,@(H'0005,X)
-	asl	#H'0008
-	or	AL,@(H'0006,X)
-	ld	AH,#H'0000
-	udiv	#H'000A
-	st	AL,@(H'002B,Y)
-	ld	AL,@(H'0007,X)
-	asl	#H'0008
-	ld	AH,@$XAP_AL
-	or	AH,@(H'0008,X)
-	ld	AL,@$XAP_AH
-	ld	AH,#H'0000
-	udiv	#H'0032
-	st	AL,@(H'002C,Y)
-	tst	@(H'0029,Y)
-	bne	?L155
-	ld	AL,@(H'001F,Y)
-	smult	#H'0005
-	add	AL,@(H'0028,Y)
-	st	AL,@(H'0034,Y)
-	ld	X,@$XAP_AL
-	ld	AL,@(H'0001,X)
-	and	AL,#H'00FF
-	cmp	AL,@(H'002A,Y)
-	bne	?L155
-	ld	AH,@(H'0002,X)
-	lsr	#H'0008
-	cmp	AH,@(H'002B,Y)
-	bne	?L155
-	ld	AL,@(H'0002,X)
-	and	AL,#H'00FF
-	cmp	AL,@(H'002C,Y)
-	bne	?L155
-	ld	AH,@(H'0003,X)
-	lsr	#H'0008
-	ld	X,@(H'001A,Y)
-	cmp	AH,@(H'000A,X)
-	bne	?L155
-	ld	X,@(H'0034,Y)
-	ld	AH,@(H'0004,X)
-	lsr	#H'000C
-	ld	X,@(H'001A,Y)
-	cmp	AH,@(H'000B,X)
-	bne	?L155
-	ld	X,@(H'0034,Y)
-	ld	AL,@(H'0003,X)
-	and	AL,#H'00FF
-	ld	X,@(H'001A,Y)
-	cmp	AL,@(H'000C,X)
-	bne	?L155
-	ld	X,@(H'0034,Y)
-	ld	AH,@(H'0004,X)
-	lsr	#H'0008
-	and	AH,#H'000F
-	ld	X,@(H'001A,Y)
-	cmp	AH,@(H'000D,X)
-	bne	?L155
-	ld	X,@(H'0034,Y)
-	ld	AH,@(H'0004,X)
-	lsr	#H'0004
-	and	AH,#H'000F
-	ld	X,@(H'001A,Y)
-	cmp	AH,@(H'000E,X)
-	bne	?L155
-	ld	X,@(H'0034,Y)
-	ld	AH,@(H'0004,X)
-	lsr	#H'0003
-	and	AH,#H'0001
-	ld	X,@(H'001A,Y)
-	cmp	AH,@(H'000F,X)
-	bne	?L155
-	ld	X,@(H'0034,Y)
-	ld	AL,@(H'0004,X)
-	and	AL,#H'0007
-	ld	X,@(H'001A,Y)
-	cmp	AL,@(H'0010,X)
-	beq	?L154
-?L155:
-	ld	AL,@(H'001F,Y)
-	smult	#H'0005
-	add	AL,@(H'0028,Y)
-	st	AL,@(H'002E,Y)
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,@(H'002E,Y)
-	ld	AH,#H'0000
-	bsr	$_memset
-	ld	AH,@(H'0020,Y)
-	ld	X,@(H'002E,Y)
-	st	AH,@(0,X)
-	ld	AH,@(H'002A,Y)
-	and	AH,#H'00FF
-	ld	AL,@(H'0001,X)
-	and	AL,#-H'0100
-	or	AL,@$XAP_AH
-	st	AL,@(H'0001,X)
-	ld	AL,@(H'002B,Y)
-	asl	#H'0008
-	ld	AH,@(H'002C,Y)
-	and	AH,#H'00FF
-	and	AL,#-H'0100
-	or	AL,@$XAP_AH
-	st	AL,@(H'0002,X)
-	ld	X,@(H'001A,Y)
-	ld	AL,@(H'000A,X)
-	asl	#H'0008
-	ld	X,@(H'002E,Y)
-	ld	AH,@(H'0003,X)
-	and	AH,#H'00FF
-	or	AL,@$XAP_AH
-	st	AL,@H'fff9
-	st	AL,@(H'0003,X)
-	ld	X,@(H'001A,Y)
-	ld	AL,@(H'000B,X)
-	asl	#H'000C
-	ld	X,@(H'002E,Y)
-	ld	X,@(H'0004,X)
-	st	X,@(H'002F,Y)
-	and	X,#H'0FFF
-	or	AL,@$XAP_UXL
-	st	AL,@H'fff8
-	ld	X,@(H'002E,Y)
-	st	AL,@(H'0004,X)
-	ld	X,@(H'001A,Y)
-	ld	AL,@(H'000C,X)
-	and	AL,#H'00FF
-	ld	AH,@H'fff9
-	and	AH,#-H'0100
-	or	AH,@$XAP_AL
-	ld	X,@(H'002E,Y)
-	st	AH,@(H'0003,X)
-	ld	X,@(H'001A,Y)
-	ld	AL,@(H'000D,X)
-	and	AL,#H'000F
-	asl	#H'0008
-	ld	AH,@H'fff8
-	and	AH,#-H'0F01
-	or	AL,@$XAP_AH
-	st	AL,@(H'0030,Y)
-	ld	X,@(H'002E,Y)
-	st	AL,@(H'0004,X)
-	ld	X,@(H'001A,Y)
-	ld	AL,@(H'000E,X)
-	and	AL,#H'000F
-	asl	#H'0004
-	ld	AH,@(H'0030,Y)
-	and	AH,#-H'00F1
-	or	AL,@$XAP_AH
-	st	AL,@(H'0031,Y)
-	ld	X,@(H'002E,Y)
-	st	AL,@(H'0004,X)
-	ld	X,@(H'001A,Y)
-	ld	AL,@(H'000F,X)
-	and	AL,#H'0001
-	asl	#H'0003
-	ld	AH,@(H'0031,Y)
-	and	AH,#-H'0009
-	or	AL,@$XAP_AH
-	st	AL,@(H'0032,Y)
-	ld	X,@(H'002E,Y)
-	st	AL,@(H'0004,X)
-	ld	X,@(H'001A,Y)
-	ld	AL,@(H'0010,X)
-	and	AL,#H'0007
-	ld	AH,@(H'0032,Y)
-	and	AH,#-H'0008
-	or	AL,@$XAP_AH
-	ld	X,@(H'002E,Y)
-	st	AL,@(H'0004,X)
-	ld	AH,@(H'001E,Y)
-	st	AH,@(0,Y)
-	ld	AL,@(H'001D,Y)
-	ld	AH,@(H'0028,Y)
-	bsr	$_ConfigStore
-	st	AL,@(H'001E,Y)
-	cmp	AL,#H'0000
-	beq	?L154
-	ld	AL,@(H'0022,Y)
-	cmp	AL,#H'0001
-	bne	?L157
-	ld	AH,#H'0000
-	st	AH,@(H'0029,Y)
-	ld	AL,@(H'001B,Y)
-	cmp	AL,@(H'000A,Y)
-	beq	?L158
-	ld	AH,#H'0001
-	st	AH,@(H'0029,Y)
-?L158:
-	ld	AL,@(H'001B,Y)
-	st	AL,@(H'000A,Y)
-	bra	(?L159)
-?L157:
-	ld	AH,#H'0000
-	st	AH,@(H'0029,Y)
-	ld	AL,@(H'001B,Y)
-	cmp	AL,@(H'000B,Y)
-	beq	?L160
-	ld	AH,#H'0001
-	st	AH,@(H'0029,Y)
-?L160:
-	ld	AL,@(H'001B,Y)
-	st	AL,@(H'000B,Y)
-?L159:
-	tst	@(H'0029,Y)
-	beq	?L154
-	ld	AL,#H'000C
-	st	AL,@(0,Y)
-	ld	AL,#H'0007
-	ld	AH,@$XAP_UY
-	add	AH,#H'0006
-	bsr	$_ConfigStore
-	st	AL,@(H'001E,Y)
-	cmp	AL,#H'0000
-	bne	?L154
-	ld	AL,#(?LC9)
-	bsr	$_puts
-	bsr	$_Panic
-?L154:
-	ld	AL,@(H'0028,Y)
-?L172:
-	bsr	$_free
-?LBE13:
-	tst	@(H'001E,Y)
-	bne	?L163
-	ld	AL,#H'0003
-	st	AL,@(0,Y)
-	ld	AH,@(H'001E,Y)
-?L175:
-	st	AH,@(H'0001,Y)
-	st	AH,@(H'0002,Y)
-	bra	(?L174)
-?L163:
-	ld	AL,@(H'0022,Y)
-	cmp	AL,#H'0003
-	bne	?L165
-	st	AL,@(H'0015,Y)
-	ld	X,@(H'001A,Y)
-?LBB14:
-	ld	AL,@(H'0001,X)
-	st	AL,@(H'0016,Y)
-	ld	AH,@(H'0020,Y)
-	lsr	#H'0008
-	st	AH,@(H'0017,Y)
-	ld	AL,@(H'0020,Y)
-	and	AL,#H'00FF
-	st	AL,@(H'0018,Y)
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	ld	AL,#H'0004
-	st	AL,@(H'0001,Y)
-	ld	AL,@$XAP_UY
-	add	AL,#H'0015
-	bra	(?L173)
-?L165:
-	ld	AH,@(H'0022,Y)
-?LBE14:
-?LBB15:
-	st	AH,@(H'0012,Y)
-	ld	AH,@(H'0020,Y)
-	lsr	#H'0008
-	st	AH,@(H'0013,Y)
-	ld	AL,@(H'0020,Y)
-	and	AL,#H'00FF
-	st	AL,@(H'0014,Y)
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	ld	AL,#H'0003
-	st	AL,@(H'0001,Y)
-	ld	AL,@$XAP_UY
-	add	AL,#H'0012
-?L173:
-	st	AL,@(H'0002,Y)
-?L174:
-	ld	AL,#H'000A
-	ld	AH,#H'0101
-	bsr	$_wechat_send_response
-?LBE15:
-?LBE11:
-?LBE_wechat_set_led_config:
-	leavel	#55
-	.SEG	CONST
-?LC8:
-	dc	H'47
-	dc	H'3A
-	dc	H'20
-	dc	H'6C
-	dc	H'63
-	dc	H'3A
-	dc	H'20
-	dc	H'74
-	dc	H'3D
-	dc	H'25
-	dc	H'64
-	dc	H'20
-	dc	H'69
-	dc	H'64
-	dc	H'3D
-	dc	H'25
-	dc	H'64
-	dc	H'20
-	dc	H'6E
-	dc	H'3D
-	dc	H'25
-	dc	H'64
-	dc	H'20
-	dc	H'6B
-	dc	H'3D
-	dc	H'25
-	dc	H'64
-	dc	H'20
-	dc	H'72
-	dc	H'3D
-	dc	H'25
-	dc	H'64
-	dc	H'20
-	dc	H'78
-	dc	H'3D
-	dc	H'25
-	dc	H'64
-	dc	H'0A
-	dc	H'00
-?LC9:
-	dc	H'57
-	dc	H'45
-	dc	H'43
-	dc	H'48
-	dc	H'41
-	dc	H'54
-	dc	H'3A
-	dc	H'20
-	dc	H'43
-	dc	H'6F
-	dc	H'6E
-	dc	H'66
-	dc	H'69
-	dc	H'67
-	dc	H'53
-	dc	H'74
-	dc	H'6F
-	dc	H'72
-	dc	H'65
-	dc	H'20
-	dc	H'6C
-	dc	H'65
-	dc	H'6E
-	dc	H'67
-	dc	H'74
-	dc	H'68
-	dc	H'73
-	dc	H'20
-	dc	H'66
-	dc	H'61
-	dc	H'69
-	dc	H'6C
-	dc	H'65
-	dc	H'64
-	dc	H'00
-?LC10:
-	dc	H'47
-	dc	H'3A
-	dc	H'20
-	dc	H'69
-	dc	H'64
-	dc	H'78
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'2F
-	dc	H'25
-	dc	H'64
-	dc	H'2F
-	dc	H'25
-	dc	H'64
-	dc	H'0A
-	dc	H'00
-?LC11:
-	dc	H'47
-	dc	H'3A
-	dc	H'20
-	dc	H'2B
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'20
-	dc	H'61
-	dc	H'74
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'0A
-	dc	H'00
-?LC12:
-	dc	H'47
-	dc	H'3A
-	dc	H'20
-	dc	H'3D
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'20
-	dc	H'61
-	dc	H'74
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'0A
-	dc	H'00
-	.CODE
-;.stabn	192,0,0,?LBB11
-;.stabn	192,0,0,?LBB12
-;.stabn	224,0,0,?LBE12
-;.stabn	192,0,0,?LBB13
-;.stabn	224,0,0,?LBE13
-;.stabn	192,0,0,?LBB14
-;.stabn	224,0,0,?LBE14
-;.stabn	192,0,0,?LBB15
-;.stabn	224,0,0,?LBE15
-;.stabn	224,0,0,?LBE11
-_wechat_send_led_config:
-	enterl	#41
-?LBB_wechat_send_led_config:
-	st	AL,@(H'0020,Y)
-	st	AH,@(H'0021,Y)
-?LBB16:
-	ld	AL,@$XAP_UY
-	add	AL,#H'0003
-	bsr	_get_config_lengths
-	ld	AL,@(H'0020,Y)
-	cmp	AL,#H'0002
-	beq	?L228
-	cmp	AL,#(H'0001+H'0002)
-	bcc	?L232
-	cmp	AL,#H'0001
-	beq	?L227
-	bra	(?L230)
-?L232:
-	ld	AL,@(H'0020,Y)
-	cmp	AL,#H'0003
-	beq	?L229
-	bra	(?L230)
-?L227:
-	ld	AL,@(H'0007,Y)
-	st	AL,@(H'0025,Y)
-	smult	#H'0005
-	st	AL,@(H'0023,Y)
-	ld	X,#H'0015
-	bra	(?L258)
-?L228:
-	ld	AL,@(H'0008,Y)
-	st	AL,@(H'0025,Y)
-	smult	#H'0005
-	st	AL,@(H'0023,Y)
-	ld	X,#H'0017
-	bra	(?L258)
-?L229:
-	ld	AL,@(H'0006,Y)
-	st	AL,@(H'0025,Y)
-	smult	#H'0003
-	st	AL,@(H'0023,Y)
-	ld	X,#H'0014
-?L258:
-	st	X,@(H'0024,Y)
-	bra	(?L226)
-?L230:
-	ld	AL,#H'0000
-	st	AL,@(H'0025,Y)
-	st	AL,@(H'0023,Y)
-	st	AL,@(H'0024,Y)
-?L226:
-	tst	@(H'0025,Y)
-	bne	?L233
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,@(H'0025,Y)
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	bra	(?L262)
-?L233:
-	ld	AL,@(H'0023,Y)
-	bsr	$_malloc
-	st	AL,@(H'0022,Y)
-	cmp	AL,#H'0000
-	bne	?L234
-	ld	AL,#H'0003
-	st	AL,@(0,Y)
-	ld	X,@(H'0022,Y)
-	st	X,@(H'0001,Y)
-	st	X,@(H'0002,Y)
-?L262:
-	ld	AL,#H'000A
-	ld	AH,#H'0181
-	bsr	$_wechat_send_response
-	bra	(?L225)
-?L234:
-	ld	AL,@(H'0023,Y)
-	st	AL,@(0,Y)
-	ld	AL,@(H'0024,Y)
-	ld	AH,@(H'0022,Y)
-	bsr	$_ConfigRetrieve
-	ld	AL,@(H'0020,Y)
-	st	AL,@(H'000F,Y)
-	ld	AH,@(H'0021,Y)
-	lsr	#H'0008
-	st	AH,@(H'0010,Y)
-	ld	AL,@(H'0021,Y)
-	and	AL,#H'00FF
-	st	AL,@(H'0011,Y)
-	ld	AL,@(H'0020,Y)
-	cmp	AL,#H'0003
-	bne	?L235
-	tst	@(H'0021,Y)
-	beq	?L264
-	ld	AL,@(H'0021,Y)
-	cmp	AL,@(H'0025,Y)
-	beq	?L269
-	bcc	?L264
-?L269:
-	ld	AL,@(H'0021,Y)
-	add	AL,#-H'0001
-	st	AL,@(H'0021,Y)
-	smult	#H'0003
-	ld	X,@(H'0022,Y)
-	add	X,@$XAP_AL
-	ld	AH,@(0,X)
-	lsr	#H'0008
-	st	AH,@(H'0012,Y)
-	ld	AL,@(0,X)
-	and	AL,#H'00FF
-	st	AL,@(H'0013,Y)
-	ld	AL,@(H'0001,X)
-	and	AL,#H'0001
-	st	AL,@(H'0015,Y)
-	ld	AH,@(H'0001,X)
-	lsr	#H'000D
-	cmp	AH,#(H'0001+H'0005)
-	bcc	?L245
-	ld	X,@$XAP_AH
-	ld	X,@(?JTBASE246,X)
-	brxl
-	.SEG	CONST
-?JTBASE246:
-	.CODE
-?L246:
-	.SEG	CONST
-	dc	lwrd(?L245-?L246)
-	dc	lwrd(?L240-?L246)
-	dc	lwrd(?L241-?L246)
-	dc	lwrd(?L242-?L246)
-	dc	lwrd(?L243-?L246)
-	dc	lwrd(?L244-?L246)
-	.CODE
-?L240:
-	ld	AL,#H'0001
-	st	AL,@(H'0014,Y)
-	ld	AL,@(H'0021,Y)
-	smult	#H'0003
-	ld	X,@(H'0022,Y)
-	add	X,@$XAP_AL
-	ld	AH,@(H'0001,X)
-	lsr	#H'0005
-	and	AH,#H'001F
-	bra	(?L259)
-?L241:
-	ld	AL,#H'0002
-	st	AL,@(H'0014,Y)
-	ld	AL,@(H'0021,Y)
-	smult	#H'0003
-	ld	X,@(H'0022,Y)
-	add	X,@$XAP_AL
-	ld	AH,@(H'0002,X)
-	lsr	#H'0008
-	and	AH,#H'0001
-	st	AH,@(H'0016,Y)
-	ld	AL,@(H'0002,X)
-	and	AL,#H'00FF
-	st	AL,@(H'0017,Y)
-	ld	AH,#H'0009
-	bra	(?L239)
-?L242:
-	ld	AL,#H'0003
-	st	AL,@(H'0014,Y)
-	ld	AH,#H'0007
-	bra	(?L239)
-?L243:
-	ld	AL,#H'0004
-	st	AL,@(H'0014,Y)
-	ld	AL,@(H'0021,Y)
-	smult	#H'0003
-	ld	X,@(H'0022,Y)
-	add	X,@$XAP_AL
-	ld	AH,@(H'0001,X)
-	lsr	#H'000A
-	and	AH,#H'0007
-	bra	(?L259)
-?L244:
-	ld	AL,#H'0005
-	st	AL,@(H'0014,Y)
-	ld	AL,@(H'0021,Y)
-	smult	#H'0003
-	ld	X,@(H'0022,Y)
-	add	X,@$XAP_AL
-	ld	AH,@(H'0002,X)
-	lsr	#H'0009
-	and	AH,#H'000F
-?L259:
-	st	AH,@(H'0016,Y)
-	ld	AH,#H'0008
-	bra	(?L239)
-?L245:
-	ld	AH,#H'0000
-?L239:
-	cmp	AH,#H'0000
-	bne	?L247
-	ld	AL,#H'0003
-	st	AL,@(0,Y)
-	st	AH,@(H'0001,Y)
-	st	AH,@(H'0002,Y)
-	bra	(?L261)
-?L247:
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	bra	(?L263)
-?L235:
-?LBB17:
-	ld	AL,#H'0000
-	st	AL,@(H'0026,Y)
-	cmp	AL,@(H'0025,Y)
-	bcc	?L251
-	ld	X,@(H'0022,Y)
-	ld	AL,@(0,X)
-	cmp	AL,@(H'0021,Y)
-	beq	?L251
-?L254:
-	ld	AL,@(H'0026,Y)
-	add	AL,#H'0001
-	st	AL,@(H'0026,Y)
-	cmp	AL,@(H'0025,Y)
-	bcc	?L251
-	smult	#H'0005
-	ld	X,@(H'0022,Y)
-	add	X,@$XAP_AL
-	ld	AL,@(0,X)
-	cmp	AL,@(H'0021,Y)
-	bne	?L254
-?L251:
-	ld	X,@(H'0026,Y)
-	cmp	X,@(H'0025,Y)
-	bne	?L255
-?L264:
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	bra	(?L260)
-?L255:
-	ld	AL,@(H'0020,Y)
-	st	AL,@(0,Y)
-	ld	X,@(H'0026,Y)
-	st	X,@(H'0001,Y)
-	ld	AL,@(H'0021,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#(?LC13)
-	bsr	$_printf
-	ld	AL,@(H'0026,Y)
-	smult	#H'0005
-	ld	X,@(H'0022,Y)
-	add	X,@$XAP_AL
-	ld	AL,@(H'0001,X)
-	and	AL,#H'00FF
-	smult	#H'000A
-	st	AL,@H'fff8
-	ld	AH,@$XAP_AL
-	lsr	#H'0008
-	st	AH,@(H'0012,Y)
-	ld	AL,@H'fff8
-	and	AL,#H'00FF
-	st	AL,@(H'0013,Y)
-	ld	AH,@(H'0002,X)
-	lsr	#H'0008
-	ld	AL,@$XAP_AH
-	smult	#H'000A
-	st	AL,@H'fff8
-	ld	AH,@$XAP_AL
-	lsr	#H'0008
-	st	AH,@(H'0014,Y)
-	ld	AL,@H'fff8
-	and	AL,#H'00FF
-	st	AL,@(H'0015,Y)
-	ld	AL,@(H'0002,X)
-	and	AL,#H'00FF
-	smult	#H'0032
-	st	AL,@H'fff8
-	ld	AH,@$XAP_AL
-	lsr	#H'0008
-	st	AH,@(H'0016,Y)
-	ld	AL,@H'fff8
-	and	AL,#H'00FF
-	st	AL,@(H'0017,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0018,Y)
-	ld	AH,@(H'0003,X)
-	lsr	#H'0008
-	st	AH,@(H'0019,Y)
-	ld	AH,@(H'0004,X)
-	lsr	#H'000C
-	st	AH,@(H'001A,Y)
-	ld	AL,@(H'0003,X)
-	and	AL,#H'00FF
-	st	AL,@(H'001B,Y)
-	ld	AH,@(H'0004,X)
-	lsr	#H'0008
-	and	AH,#H'000F
-	st	AH,@(H'001C,Y)
-	ld	AH,@(H'0004,X)
-	lsr	#H'0004
-	and	AH,#H'000F
-	st	AH,@(H'001D,Y)
-	ld	AH,@(H'0004,X)
-	lsr	#H'0003
-	and	AH,#H'0001
-	st	AH,@(H'001E,Y)
-	ld	AL,@(H'0004,X)
-	and	AL,#H'0007
-	st	AL,@(H'001F,Y)
-	ld	AH,#H'0011
-	ld	X,#H'0000
-	st	X,@(0,Y)
-?L263:
-	st	AH,@(H'0001,Y)
-	ld	AL,@$XAP_UY
-	add	AL,#H'000F
-?L260:
-	st	AL,@(H'0002,Y)
-?L261:
-	ld	AL,#H'000A
-	ld	AH,#H'0181
-	bsr	$_wechat_send_response
-?LBE17:
-	ld	AL,@(H'0022,Y)
-	bsr	$_free
-?L225:
-?LBE16:
-?LBE_wechat_send_led_config:
-	leavel	#41
-	.SEG	CONST
-?LC13:
-	dc	H'47
-	dc	H'3A
-	dc	H'20
-	dc	H'65
-	dc	H'3A
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'20
-	dc	H'61
-	dc	H'74
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'0A
-	dc	H'00
-	.CODE
-;.stabn	192,0,0,?LBB16
-;.stabn	192,0,0,?LBB17
-;.stabn	224,0,0,?LBE17
-;.stabn	224,0,0,?LBE16
-_wechat_retrieve_tone_config:
-	enterl	#17
-?LBB_wechat_retrieve_tone_config:
-	st	AL,@(H'000D,Y)
-?LBB18:
-	ld	AL,@$XAP_UY
-	add	AL,#H'0001
-	bsr	_get_config_lengths
-	ld	AL,@(H'0007,Y)
-	st	AL,@(0,Y)
-	ld	AL,#(?LC14)
-	bsr	$_printf
-	ld	AL,@(H'0007,Y)
-	add	AL,@$XAP_AL
-	st	AL,@(H'000E,Y)
-	bsr	$_malloc
-	ld	X,@(H'000D,Y)
-	st	AL,@(0,X)
-	cmp	AL,#H'0000
-	bne	?L276
-	ld	AL,#(?LC15)
-	bsr	$_puts
-	ld	AL,#H'0000
-	bra	(?L275)
-?L276:
-	ld	AL,@(H'000E,Y)
-	st	AL,@(0,Y)
-	ld	AL,#H'001B
-	ld	X,@(H'000D,Y)
-	ld	AH,@(0,X)
-	bsr	$_ConfigRetrieve
-	ld	AL,@(H'0007,Y)
-?L275:
-?LBE18:
-?LBE_wechat_retrieve_tone_config:
-	leavel	#17
-	.SEG	CONST
-?LC14:
-	dc	H'47
-	dc	H'3A
-	dc	H'20
-	dc	H'72
-	dc	H'74
-	dc	H'63
-	dc	H'3A
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'20
-	dc	H'74
-	dc	H'6F
-	dc	H'6E
-	dc	H'65
-	dc	H'73
-	dc	H'0A
-	dc	H'00
-?LC15:
-	dc	H'47
-	dc	H'3A
-	dc	H'20
-	dc	H'72
-	dc	H'74
-	dc	H'63
-	dc	H'3A
-	dc	H'20
-	dc	H'6E
-	dc	H'6F
-	dc	H'20
-	dc	H'73
-	dc	H'70
-	dc	H'61
-	dc	H'63
-	dc	H'65
-	dc	H'00
-	.CODE
-;.stabn	192,0,0,?LBB18
-;.stabn	224,0,0,?LBE18
-_wechat_set_tone_config:
-	enterl	#26
-?LBB_wechat_set_tone_config:
-	st	AL,@(H'0012,Y)
-	st	AH,@(H'0013,Y)
-?LBB19:
-	add	AL,#-H'4000
-	cmp	AL,#H'00C0
-	bcz	?L278
-	ld	AL,@(H'0012,Y)
-	add	AL,#-H'4700
-	cmp	AL,#H'0085
-	bcz	?L278
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	bra	(?L298)
-?L278:
-	ld	AL,@$XAP_UY
-	add	AL,#H'0003
-	bsr	_get_config_lengths
-	ld	AL,@(H'0009,Y)
-	st	AL,@(H'0014,Y)
-	st	AL,@(0,Y)
-	ld	AL,#(?LC16)
-	bsr	$_printf
-	tst	@(H'0014,Y)
-	bne	?L279
-	ld	AL,#H'0003
-	st	AL,@(0,Y)
-	ld	AL,@(H'0014,Y)
-?L298:
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	bra	(?L297)
-?L279:
-	ld	AL,@(H'0014,Y)
-?LBB20:
-	add	AL,@$XAP_AL
-	st	AL,@(H'0016,Y)
-	add	AL,#H'0002
-	bsr	$_malloc
-	st	AL,@(H'0015,Y)
-	cmp	AL,#H'0000
-	bne	?L281
-	ld	AL,#H'0003
-	st	AL,@(0,Y)
-	ld	X,@(H'0015,Y)
-	st	X,@(H'0001,Y)
-	st	X,@(H'0002,Y)
-?L297:
-	ld	AL,#H'000A
-	ld	AH,#H'0102
-	bsr	$_wechat_send_response
-	bra	(?L277)
-?L281:
-?LBB21:
-	ld	AL,#H'0000
-	st	AL,@(H'0017,Y)
-	ld	AL,@(H'0016,Y)
-	st	AL,@(0,Y)
-	ld	AL,#H'001B
-	ld	AH,@(H'0015,Y)
-	bsr	$_ConfigRetrieve
-	ld	X,@(H'0014,Y)
-	add	X,@$XAP_UXL
-	add	X,@(H'0015,Y)
-	ld	AL,@(H'0001,X)
-	and	AL,#-H'0100
-	st	AL,@(H'0001,X)
-	ld	AL,@(H'0017,Y)
-	cmp	AL,@(H'0014,Y)
-	bcc	?L284
-	ld	X,@(H'0015,Y)
-	ld	AL,@(0,X)
-	cmp	AL,@(H'0012,Y)
-	beq	?L284
-?L287:
-	ld	AL,@(H'0017,Y)
-	add	AL,#H'0001
-	st	AL,@(H'0017,Y)
-	cmp	AL,@(H'0014,Y)
-	bcc	?L284
-	ld	X,@$XAP_AL
-	add	X,@$XAP_AL
-	add	X,@(H'0015,Y)
-	ld	AL,@(0,X)
-	cmp	AL,@(H'0012,Y)
-	bne	?L287
-?L284:
-	ld	AL,@(H'0017,Y)
-	cmp	AL,@(H'0014,Y)
-	bne	?L288
-	ld	AL,@(H'0014,Y)
-	add	AL,#H'0001
-	st	AL,@(H'0014,Y)
-	ld	AL,@(H'0016,Y)
-	add	AL,#H'0002
-	st	AL,@(H'0016,Y)
-?L288:
-	ld	AL,@(H'0017,Y)
-	add	AL,@$XAP_AL
-	ld	X,@(H'0015,Y)
-	add	X,@$XAP_AL
-	ld	AL,@(H'0012,Y)
-	st	AL,@(0,X)
-	ld	AL,@(H'0001,X)
-	st	AL,@H'fff8
-	and	AL,#H'00FF
-	cmp	AL,@(H'0013,Y)
-	beq	?L289
-	ld	AH,@(H'0013,Y)
-	and	AH,#H'00FF
-	ld	AL,@H'fff8
-	and	AL,#-H'0100
-	or	AL,@$XAP_AH
-	st	AL,@(H'0001,X)
-	ld	AL,@(H'0016,Y)
-	st	AL,@(0,Y)
-	ld	AL,#H'001B
-	ld	AH,@(H'0015,Y)
-	bsr	$_ConfigStore
-	st	AL,@(H'0016,Y)
-?L289:
-	tst	@(H'0016,Y)
-	bne	?L290
-	ld	AL,#H'0003
-	st	AL,@(0,Y)
-	ld	AL,@(H'0016,Y)
-	st	AL,@(H'0001,Y)
-	bra	(?L296)
-?L290:
-	ld	AL,@(H'0014,Y)
-	cmp	AL,@(H'0009,Y)
-	beq	?L292
-	st	AL,@(H'0009,Y)
-	ld	AL,#H'000C
-	st	AL,@(0,Y)
-	ld	AL,#H'0007
-	ld	AH,@$XAP_UY
-	add	AH,#H'0003
-	bsr	$_ConfigStore
-	st	AL,@(H'0016,Y)
-?L292:
-	tst	@(H'0016,Y)
-	bne	?L293
-	ld	AL,#(?LC9)
-	bsr	$_puts
-	bsr	$_Panic
-	bra	(?L291)
-?L293:
-?LBB22:
-	ld	AH,@(H'0012,Y)
-	lsr	#H'0008
-	st	AH,@(H'000F,Y)
-	ld	AL,@(H'0012,Y)
-	and	AL,#H'00FF
-	st	AL,@(H'0010,Y)
-	ld	AL,@(H'0013,Y)
-	st	AL,@(H'0011,Y)
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	ld	AL,#H'0003
-	st	AL,@(H'0001,Y)
-	ld	AL,@$XAP_UY
-	add	AL,#H'000F
-?L296:
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0102
-	bsr	$_wechat_send_response
-?L291:
-?LBE22:
-	ld	AL,@(H'0015,Y)
-	bsr	$_free
-?L277:
-?LBE21:
-?LBE20:
-?LBE19:
-?LBE_wechat_set_tone_config:
-	leavel	#26
-	.SEG	CONST
-?LC16:
-	dc	H'47
-	dc	H'3A
-	dc	H'20
-	dc	H'73
-	dc	H'74
-	dc	H'63
-	dc	H'3A
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'20
-	dc	H'74
-	dc	H'6F
-	dc	H'6E
-	dc	H'65
-	dc	H'73
-	dc	H'0A
-	dc	H'00
-	.CODE
-;.stabn	192,0,0,?LBB19
-;.stabn	192,0,0,?LBB20
-;.stabn	192,0,0,?LBB21
-;.stabn	192,0,0,?LBB22
-;.stabn	224,0,0,?LBE22
-;.stabn	224,0,0,?LBE21
-;.stabn	224,0,0,?LBE20
-;.stabn	224,0,0,?LBE19
-_wechat_send_tone_config:
-	enterl	#11
-?LBB_wechat_send_tone_config:
-	st	AL,@(H'0007,Y)
-?LBB23:
-	ld	AL,#H'0000
-	st	AL,@(H'0008,Y)
-	ld	AL,@(H'0007,Y)
-	add	AL,#-H'4000
-	cmp	AL,#H'00C0
-	bcz	?L309
-	ld	AL,@(H'0007,Y)
-	add	AL,#-H'4700
-	cmp	AL,#H'0085
-	bcz	?L309
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0182
-	bsr	$_wechat_send_response
-	bra	(?L308)
-?L309:
-	ld	AL,@$XAP_UY
-	add	AL,#H'0006
-	bsr	_wechat_retrieve_tone_config
-	ld	AH,@$XAP_AL
-	cmp	AL,#H'0000
-	bne	?L310
-	ld	AL,#H'0003
-	st	AL,@(0,Y)
-	st	AH,@(H'0001,Y)
-	st	AH,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0102
-	bra	(?L322)
-?L310:
-	ld	AL,@(H'0008,Y)
-	cmp	AL,@$XAP_AH
-	bcc	?L313
-	ld	X,@$XAP_AL
-	add	X,@$XAP_AL
-	add	X,@(H'0006,Y)
-	ld	AL,@(0,X)
-	cmp	AL,@(H'0007,Y)
-	beq	?L313
-	ld	AL,@(H'0006,Y)
-	st	AL,@H'fff8
-?L316:
-	ld	AL,@(H'0008,Y)
-	add	AL,#H'0001
-	st	AL,@(H'0008,Y)
-	cmp	AL,@$XAP_AH
-	bcc	?L313
-	ld	X,@$XAP_AL
-	add	X,@$XAP_AL
-	add	X,@H'fff8
-	ld	AL,@(0,X)
-	cmp	AL,@(H'0007,Y)
-	bne	?L316
-?L313:
-	ld	AL,@(H'0008,Y)
-	cmp	AL,@$XAP_AH
-	bne	?L317
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	bra	(?L321)
-?L317:
-	ld	X,@(H'0008,Y)
-?LBB24:
-	add	X,@$XAP_UXL
-	add	X,@(H'0006,Y)
-	ld	AH,@(0,X)
-	lsr	#H'0008
-	st	AH,@(H'0003,Y)
-	ld	AL,@(0,X)
-	and	AL,#H'00FF
-	st	AL,@(H'0004,Y)
-	ld	AL,@(H'0001,X)
-	and	AL,#H'00FF
-	st	AL,@(H'0005,Y)
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	ld	AL,#H'0003
-	st	AL,@(H'0001,Y)
-	ld	AL,@$XAP_UY
-	add	AL,#H'0003
-?L321:
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0182
-?L322:
-	bsr	$_wechat_send_response
-?LBE24:
-	tst	@(H'0006,Y)
-	beq	?L308
-	ld	AL,@(H'0006,Y)
-	bsr	$_free
-?L308:
-?LBE23:
-?LBE_wechat_send_tone_config:
-	leavel	#11
-;.stabn	192,0,0,?LBB23
-;.stabn	192,0,0,?LBB24
-;.stabn	224,0,0,?LBE24
-;.stabn	224,0,0,?LBE23
-_wechat_retrieve_feature_block:
-	enterl	#4
-?LBB_wechat_retrieve_feature_block:
-?LBB25:
-	ld	AL,#H'0008
-	bsr	$_malloc
-	st	AL,@(H'0001,Y)
-	cmp	AL,#H'0000
-	beq	?L331
-	ld	AL,#H'0008
-	st	AL,@(0,Y)
-	ld	AL,#H'0006
-	ld	AH,@(H'0001,Y)
-	bsr	$_ConfigRetrieve
-?L331:
-?LBE25:
-	ld	AL,@(H'0001,Y)
-?LBE_wechat_retrieve_feature_block:
-	leavel	#4
-;.stabn	192,0,0,?LBB25
-;.stabn	224,0,0,?LBE25
-_wechat_send_default_volumes:
-	enterl	#9
-?LBB_wechat_send_default_volumes:
-?LBB26:
-	bsr	_wechat_retrieve_feature_block
-	st	AL,@(H'0006,Y)
-	cmp	AL,#H'0000
-	bne	?L333
-	ld	AL,#H'0003
-	st	AL,@(0,Y)
-	ld	AL,@(H'0006,Y)
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0183
-	bsr	$_wechat_send_response
-	bra	(?L332)
-?L333:
-	ld	X,@(H'0006,Y)
-?LBB27:
-	ld	AH,@(H'0004,X)
-	lsr	#H'000A
-	and	AH,#H'001F
-	st	AH,@(H'0003,Y)
-	ld	AH,@(H'0003,X)
-	lsr	#H'0004
-	and	AH,#H'000F
-	st	AH,@(H'0004,Y)
-	ld	AH,@(H'0005,X)
-	lsr	#H'000C
-	st	AH,@(H'0005,Y)
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	ld	AL,#H'0003
-	st	AL,@(H'0001,Y)
-	ld	AL,@$XAP_UY
-	add	AL,#H'0003
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0183
-	bsr	$_wechat_send_response
-	ld	AL,@(H'0006,Y)
-	bsr	$_free
-?L332:
-?LBE27:
-?LBE26:
-?LBE_wechat_send_default_volumes:
-	leavel	#9
-;.stabn	192,0,0,?LBB26
-;.stabn	192,0,0,?LBB27
-;.stabn	224,0,0,?LBE27
-;.stabn	224,0,0,?LBE26
-_wechat_set_default_volumes:
-	enterl	#7
-?LBB_wechat_set_default_volumes:
-	st	AL,@(H'0003,Y)
-	ld	X,@$XAP_AL
-?LBB28:
-	ld	AL,@(0,X)
-	cmp	AL,#(H'0001+H'0016)
-	bcc	?L337
-	ld	AL,@(H'0001,X)
-	cmp	AL,#(H'0001+H'000F)
-	bcc	?L337
-	ld	AL,@(H'0002,X)
-	cmp	AL,#H'000F
-	bcz	?L336
-?L337:
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	bra	(?L344)
-?L336:
-?LBB29:
-	bsr	_wechat_retrieve_feature_block
-	st	AL,@(H'0004,Y)
-	cmp	AL,#H'0000
-	bne	?L339
-	ld	AL,#H'0003
-	st	AL,@(0,Y)
-	ld	AL,@(H'0004,Y)
-?L344:
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0103
-	bsr	$_wechat_send_response
-	bra	(?L335)
-?L339:
-	ld	X,@(H'0003,Y)
-	ld	AL,@(0,X)
-	and	AL,#H'001F
-	asl	#H'000A
-	ld	X,@(H'0004,Y)
-	ld	AH,@(H'0004,X)
-	and	AH,#-H'7C01
-	or	AH,@$XAP_AL
-	st	AH,@(H'0004,X)
-	ld	X,@(H'0003,Y)
-	ld	AL,@(H'0001,X)
-	and	AL,#H'000F
-	asl	#H'0004
-	ld	X,@(H'0004,Y)
-	ld	AH,@(H'0003,X)
-	and	AH,#-H'00F1
-	or	AH,@$XAP_AL
-	st	AH,@(H'0003,X)
-	ld	X,@(H'0003,Y)
-	ld	AL,@(H'0002,X)
-	asl	#H'000C
-	ld	X,@(H'0004,Y)
-	ld	AH,@(H'0005,X)
-	and	AH,#H'0FFF
-	or	AH,@$XAP_AL
-	st	AH,@(H'0005,X)
-	ld	AL,#H'0008
-	st	AL,@(0,Y)
-	ld	AL,#H'0006
-	ld	AH,@$XAP_UXL
-	bsr	$_ConfigStore
-	cmp	AL,#H'0000
-	beq	?L341
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	bra	(?L343)
-?L341:
-	ld	AL,#H'0003
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-?L343:
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0103
-	bsr	$_wechat_send_response
-	ld	AL,@(H'0004,Y)
-	bsr	$_free
-?L335:
-?LBE29:
-?LBE28:
-?LBE_wechat_set_default_volumes:
-	leavel	#7
-;.stabn	192,0,0,?LBB29
-;.stabn	224,0,0,?LBE29
-_wechat_set_ap_config:
-	enterl	#25
-?LBB_wechat_set_ap_config:
-	st	AL,@(H'000F,Y)
-	ld	X,@$XAP_AL
-?LBB30:
-	ld	AL,@(0,X)
-	asl	#H'0008
-	or	AL,@(H'0001,X)
-	st	AL,@(H'0013,Y)
-	ld	X,#H'0000
-	st	X,@(H'0014,Y)
-	add	AL,#-H'4000
-	cmp	AL,#H'00C0
-	bcz	?L347
-	ld	AL,@(H'0013,Y)
-	add	AL,#-H'4700
-	cmp	AL,#H'0085
-	bcz	?L347
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	st	X,@(H'0001,Y)
-	st	X,@(H'0002,Y)
-	bra	(?L361)
-?L347:
-	ld	AL,@$XAP_UY
-	add	AL,#H'0003
-	bsr	_get_config_lengths
-	ld	AL,@(H'0004,Y)
-	st	AL,@(0,Y)
-	ld	AL,@(H'0013,Y)
-	st	AL,@(H'0001,Y)
-	ld	AL,#(?LC17)
-	bsr	$_printf
-	ld	X,@(H'0004,Y)
-	st	X,@(H'0012,Y)
-	ld	AL,@$XAP_UXL
-	smult	#H'0003
-	st	AL,@(H'0011,Y)
-	add	AL,#H'0003
-	bsr	$_malloc
-	st	AL,@(H'0010,Y)
-	cmp	AL,#H'0000
-	bne	?L348
-	ld	AL,#H'0003
-	st	AL,@(H'0014,Y)
-	bra	(?L349)
-?L348:
-?LBB31:
-	ld	X,#H'0000
-	st	X,@(H'0015,Y)
-	ld	AL,@(H'0011,Y)
-	st	AL,@(0,Y)
-	ld	AL,#H'001E
-	ld	AH,@(H'0010,Y)
-	bsr	$_ConfigRetrieve
-	ld	X,@(H'0015,Y)
-	cmp	X,@(H'0004,Y)
-	bcc	?L351
-	ld	X,@(H'0010,Y)
-	ld	AL,@(0,X)
-	cmp	AL,@(H'0013,Y)
-	beq	?L351
-	ld	AL,@(H'0004,Y)
-	st	AL,@H'fff8
-?L354:
-	ld	X,@(H'0015,Y)
-	add	X,#H'0001
-	st	X,@(H'0015,Y)
-	cmp	X,@H'fff8
-	bcc	?L351
-	ld	AL,@$XAP_UXL
-	smult	#H'0003
-	ld	X,@(H'0010,Y)
-	add	X,@$XAP_AL
-	ld	AL,@(0,X)
-	cmp	AL,@(H'0013,Y)
-	bne	?L354
-?L351:
-	ld	AL,@(H'0015,Y)
-	cmp	AL,@(H'0004,Y)
-	bne	?L355
-	ld	X,@(H'0012,Y)
-	add	X,#H'0001
-	st	X,@(H'0012,Y)
-	ld	AL,@(H'0011,Y)
-	add	AL,#H'0003
-	st	AL,@(H'0011,Y)
-?L355:
-	ld	AL,@(H'0015,Y)
-	smult	#H'0003
-	add	AL,@(H'0010,Y)
-	st	AL,@(H'0016,Y)
-	ld	AL,@(H'0013,Y)
-	ld	X,@(H'0016,Y)
-	st	AL,@(0,X)
-	ld	X,@(H'000F,Y)
-	ld	AH,@(H'0002,X)
-	and	AH,#H'00FF
-	ld	X,@(H'0016,Y)
-	ld	AL,@(H'0001,X)
-	and	AL,#-H'0100
-	or	AL,@$XAP_AH
-	st	AL,@(H'0001,X)
-	ld	X,@(H'000F,Y)
-	ld	AL,@(H'0003,X)
-	and	AL,#H'0001
-	asl	#H'000E
-	ld	X,@(H'0016,Y)
-	ld	AH,@(H'0002,X)
-	and	AH,#-H'4001
-	or	AL,@$XAP_AH
-	st	AL,@H'fff8
-	st	AL,@(H'0002,X)
-	ld	X,@(H'000F,Y)
-	ld	AL,@(H'0004,X)
-	asl	#H'0008
-	or	AL,@(H'0005,X)
-	and	AL,#H'3FFF
-	ld	AH,@H'fff8
-	and	AH,#-H'4000
-	or	AH,@$XAP_AL
-	ld	X,@(H'0016,Y)
-	st	AH,@(H'0002,X)
-	ld	AL,@(H'0011,Y)
-	st	AL,@(0,Y)
-	ld	AL,#H'001E
-	ld	AH,@(H'0010,Y)
-	bsr	$_ConfigStore
-	cmp	AL,#H'0000
-	bne	?L356
-	ld	X,#H'0003
-	st	X,@(H'0014,Y)
-	bra	(?L357)
-?L356:
-	ld	AL,@(H'0012,Y)
-	cmp	AL,@(H'0004,Y)
-	bcz	?L357
-	st	AL,@(H'0004,Y)
-	ld	AL,#H'000C
-	st	AL,@(0,Y)
-	ld	AL,#H'0007
-	ld	AH,@$XAP_UY
-	add	AH,#H'0003
-	bsr	$_ConfigStore
-	cmp	AL,#H'0000
-	bne	?L357
-	ld	AL,#(?LC9)
-	bsr	$_puts
-	bsr	$_Panic
-?L357:
-	ld	AL,@(H'0010,Y)
-	bsr	$_free
-?L349:
-?LBE31:
-	ld	X,@(H'0014,Y)
-	st	X,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-?L361:
-	ld	AL,#H'000A
-	ld	AH,#H'0106
-	bsr	$_wechat_send_response
-?LBE30:
-?LBE_wechat_set_ap_config:
-	leavel	#25
-	.SEG	CONST
-?LC17:
-	dc	H'47
-	dc	H'3A
-	dc	H'20
-	dc	H'41
-	dc	H'50
-	dc	H'3A
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'20
-	dc	H'25
-	dc	H'30
-	dc	H'32
-	dc	H'58
-	dc	H'0A
-	dc	H'00
-	.CODE
-;.stabn	192,0,0,?LBB30
-;.stabn	192,0,0,?LBB31
-;.stabn	224,0,0,?LBE31
-;.stabn	224,0,0,?LBE30
-_wechat_send_ap_config:
-	enterl	#29
-?LBB_wechat_send_ap_config:
-	st	AL,@(H'0015,Y)
-?LBB32:
-	ld	AL,#H'0000
-	st	AL,@(H'0016,Y)
-	ld	AL,@(H'0015,Y)
-	add	AL,#-H'4000
-	cmp	AL,#H'00C0
-	bcz	?L371
-	ld	AL,@(H'0015,Y)
-	add	AL,#-H'4700
-	cmp	AL,#H'0085
-	bcz	?L371
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	X,#H'0000
-	st	X,@(H'0001,Y)
-	st	X,@(H'0002,Y)
-	bra	(?L385)
-?L371:
-	ld	AL,@$XAP_UY
-	add	AL,#H'0003
-	bsr	_get_config_lengths
-	ld	AL,@(H'0004,Y)
-	st	AL,@(0,Y)
-	ld	AL,@(H'0015,Y)
-	st	AL,@(H'0001,Y)
-	ld	AL,#(?LC17)
-	bsr	$_printf
-	tst	@(H'0004,Y)
-	bne	?L372
-	ld	X,#H'0005
-	st	X,@(H'0017,Y)
-	bra	(?L373)
-?L372:
-?LBB33:
-	ld	AL,@(H'0004,Y)
-	smult	#H'0003
-	st	AL,@(H'0018,Y)
-	bsr	$_malloc
-	st	AL,@(H'0019,Y)
-	cmp	AL,#H'0000
-	bne	?L374
-	ld	AL,#H'0003
-	st	AL,@(H'0017,Y)
-	bra	(?L373)
-?L374:
-?LBB34:
-	ld	X,#H'0000
-	st	X,@(H'001A,Y)
-	ld	AL,@(H'0018,Y)
-	st	AL,@(0,Y)
-	ld	AL,#H'001E
-	ld	AH,@(H'0019,Y)
-	bsr	$_ConfigRetrieve
-	ld	X,@(H'001A,Y)
-	cmp	X,@(H'0004,Y)
-	bcc	?L377
-	ld	X,@(H'0019,Y)
-	ld	AL,@(0,X)
-	cmp	AL,@(H'0015,Y)
-	beq	?L377
-	ld	AL,@(H'0004,Y)
-	st	AL,@H'fff8
-?L380:
-	ld	X,@(H'001A,Y)
-	add	X,#H'0001
-	st	X,@(H'001A,Y)
-	cmp	X,@H'fff8
-	bcc	?L377
-	ld	AL,@$XAP_UXL
-	smult	#H'0003
-	ld	X,@(H'0019,Y)
-	add	X,@$XAP_AL
-	ld	AL,@(0,X)
-	cmp	AL,@(H'0015,Y)
-	bne	?L380
-?L377:
-	ld	AL,@(H'001A,Y)
-	cmp	AL,@(H'0004,Y)
-	bne	?L381
-	ld	X,#H'0005
-	bra	(?L384)
-?L381:
-	ld	AH,@(H'0015,Y)
-	lsr	#H'0008
-	st	AH,@(H'000F,Y)
-	ld	AL,@(H'0015,Y)
-	and	AL,#H'00FF
-	st	AL,@(H'0010,Y)
-	ld	AL,@(H'001A,Y)
-	smult	#H'0003
-	ld	X,@(H'0019,Y)
-	add	X,@$XAP_AL
-	ld	AL,@(H'0001,X)
-	and	AL,#H'00FF
-	st	AL,@(H'0011,Y)
-	ld	AH,@(H'0002,X)
-	lsr	#H'000E
-	and	AH,#H'0001
-	st	AH,@(H'0012,Y)
-	ld	AH,@(H'0002,X)
-	and	AH,#H'3FFF
-	asr	#H'0008
-	st	AH,@(H'0013,Y)
-	ld	AL,@(H'0002,X)
-	and	AL,#H'00FF
-	st	AL,@(H'0014,Y)
-	ld	AL,#H'0006
-	st	AL,@(H'0016,Y)
-	ld	X,#H'0000
-?L384:
-	st	X,@(H'0017,Y)
-	ld	AL,@(H'0019,Y)
-	bsr	$_free
-?L373:
-	ld	AL,@(H'0017,Y)
-?LBE34:
-?LBE33:
-	st	AL,@(0,Y)
-	ld	X,@(H'0016,Y)
-	st	X,@(H'0001,Y)
-	ld	AL,@$XAP_UY
-	add	AL,#H'000F
-	st	AL,@(H'0002,Y)
-?L385:
-	ld	AL,#H'000A
-	ld	AH,#H'0186
-	bsr	$_wechat_send_response
-?LBE32:
-?LBE_wechat_send_ap_config:
-	leavel	#29
-;.stabn	192,0,0,?LBB32
-;.stabn	192,0,0,?LBB33
-;.stabn	192,0,0,?LBB34
-;.stabn	224,0,0,?LBE34
-;.stabn	224,0,0,?LBE33
-;.stabn	224,0,0,?LBE32
-_wechat_set_timer_config:
-	enterl	#7
-?LBB_wechat_set_timer_config:
-	st	AH,@(H'0003,Y)
-?LBB35:
-	cmp	AL,#H'002C
-	beq	?L394
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	bra	(?L401)
-?L394:
-?LBB36:
-	ld	AL,#H'0016
-	bsr	$_malloc
-	st	AL,@(H'0004,Y)
-	cmp	AL,#H'0000
-	bne	?L396
-	ld	AL,#H'0003
-	st	AL,@(0,Y)
-	ld	AL,@(H'0004,Y)
-?L401:
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0109
-	bsr	$_wechat_send_response
-	bra	(?L393)
-?L396:
-	ld	AL,#H'0016
-	st	AL,@(0,Y)
-	ld	AL,@(H'0004,Y)
-	ld	AH,@(H'0003,Y)
-	bsr	_wpack
-	ld	AL,#H'0016
-	st	AL,@(0,Y)
-	ld	AL,#H'0008
-	ld	AH,@(H'0004,Y)
-	bsr	$_ConfigStore
-	cmp	AL,#H'0000
-	beq	?L398
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	bra	(?L400)
-?L398:
-	ld	AL,#H'0003
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-?L400:
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0109
-	bsr	$_wechat_send_response
-	ld	AL,@(H'0004,Y)
-	bsr	$_free
-?L393:
-?LBE36:
-?LBE35:
-?LBE_wechat_set_timer_config:
-	leavel	#7
-;.stabn	192,0,0,?LBB36
-;.stabn	224,0,0,?LBE36
-_wechat_send_timer_config:
-	enterl	#6
-?LBB_wechat_send_timer_config:
-?LBB37:
-	ld	AL,#H'0016
-	bsr	$_malloc
-	st	AL,@(H'0003,Y)
-	cmp	AL,#H'0000
-	bne	?L404
-	ld	AL,#H'0003
-	st	AL,@(0,Y)
-	ld	AL,@(H'0003,Y)
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0189
-	bsr	$_wechat_send_response
-	bra	(?L403)
-?L404:
-	ld	AL,#H'0016
-	st	AL,@(0,Y)
-	ld	AL,#H'0008
-	ld	AH,@(H'0003,Y)
-	bsr	$_ConfigRetrieve
-	ld	AL,#H'0016
-	st	AL,@(0,Y)
-	ld	AL,@(H'0003,Y)
-	st	AL,@(H'0001,Y)
-	ld	AL,#H'0189
-	ld	AH,#H'0000
-	bsr	$_wechat_send_response_16
-	ld	AL,@(H'0003,Y)
-	bsr	$_free
-?L403:
-?LBE37:
-?LBE_wechat_send_timer_config:
-	leavel	#6
-;.stabn	192,0,0,?LBB37
-;.stabn	224,0,0,?LBE37
-_wechat_set_audio_gain_config:
-	enterl	#8
-?LBB_wechat_set_audio_gain_config:
-	st	AH,@(H'0003,Y)
-?LBB38:
-	cmp	AL,#H'0050
-	beq	?L407
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	bra	(?L428)
-?L407:
-?LBB39:
-	ld	AL,#H'0030
-	bsr	$_malloc
-	st	AL,@(H'0004,Y)
-	cmp	AL,#H'0000
-	bne	?L409
-	ld	AL,#H'0003
-	st	AL,@(0,Y)
-	ld	AL,@(H'0004,Y)
-?L428:
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'010A
-	bsr	$_wechat_send_response
-	bra	(?L406)
-?L409:
-?LBB40:
-	ld	X,#H'0016
-	st	X,@H'fffb
-	ld	AL,@(H'0003,Y)
-	st	AL,@H'fff8
-	ld	X,#H'0000
-	st	X,@H'fffa
-	st	X,@H'fff9
-?L421:
-	ld	X,@H'fff8
-	ld	AL,@(0,X)
-	cmp	AL,#H'000F
-	bcz	?L416
-	ld	AL,#H'0001
-	st	AL,@H'fffa
-?L416:
-	ld	X,@H'fff9
-	add	X,@H'fff9
-	add	X,@(H'0004,Y)
-	st	X,@(H'0005,Y)
-	ld	X,@H'fff8
-	ld	AL,@(0,X)
-	asl	#H'000C
-	ld	X,@(H'0005,Y)
-	ld	AH,@(H'0010,X)
-	and	AH,#H'0FFF
-	or	AH,@$XAP_AL
-	st	AH,@(H'0010,X)
-	ld	AL,#H'0001
-	add	AL,@H'fff8
-	st	AL,@H'fff8
-	ld	X,@$XAP_AL
-	ld	AL,@(0,X)
-	cmp	AL,#H'000F
-	bcz	?L417
-	ld	AL,#H'0001
-	st	AL,@H'fffa
-?L417:
-	ld	X,@H'fff9
-	add	X,@H'fff9
-	add	X,@(H'0004,Y)
-	st	X,@(H'0005,Y)
-	ld	X,@H'fff8
-	ld	AL,@(0,X)
-	and	AL,#H'000F
-	asl	#H'0008
-	ld	X,@(H'0005,Y)
-	ld	AH,@(H'0010,X)
-	and	AH,#-H'0F01
-	or	AH,@$XAP_AL
-	st	AH,@(H'0010,X)
-	ld	AL,#H'0001
-	add	AL,@H'fff8
-	st	AL,@H'fff8
-	ld	X,@$XAP_AL
-	ld	AL,@(0,X)
-	cmp	AL,#H'00A1
-	bcz	?L418
-	ld	AL,#H'0001
-	st	AL,@H'fffa
-?L418:
-	ld	X,@H'fff9
-	add	X,@H'fff9
-	add	X,@(H'0004,Y)
-	st	X,@(H'0005,Y)
-	ld	X,@H'fff8
-	ld	AH,@(0,X)
-	and	AH,#H'00FF
-	ld	X,@(H'0005,Y)
-	ld	AL,@(H'0010,X)
-	and	AL,#-H'0100
-	or	AL,@$XAP_AH
-	st	AL,@(H'0010,X)
-	ld	AL,#H'0001
-	add	AL,@H'fff8
-	st	AL,@H'fff8
-	ld	X,@$XAP_AL
-	ld	AL,@(0,X)
-	cmp	AL,@H'fffb
-	bcz	?L419
-	ld	AL,#H'0001
-	st	AL,@H'fffa
-?L419:
-	ld	X,@H'fff9
-	add	X,@H'fff9
-	add	X,@(H'0004,Y)
-	st	X,@(H'0005,Y)
-	ld	X,@H'fff8
-	ld	AL,@(0,X)
-	asl	#H'0008
-	ld	X,@(H'0005,Y)
-	ld	AH,@(H'0011,X)
-	and	AH,#H'00FF
-	or	AH,@$XAP_AL
-	st	AH,@(H'0011,X)
-	ld	AL,#H'0001
-	add	AL,@H'fff8
-	st	AL,@H'fff8
-	ld	X,@$XAP_AL
-	ld	AL,@(0,X)
-	cmp	AL,@H'fffb
-	bcz	?L420
-	ld	AL,#H'0001
-	st	AL,@H'fffa
-?L420:
-	ld	X,@H'fff9
-	add	X,@H'fff9
-	add	X,@(H'0004,Y)
-	st	X,@(H'0005,Y)
-	ld	X,@H'fff8
-	ld	AH,@(0,X)
-	and	AH,#H'00FF
-	ld	X,@(H'0005,Y)
-	ld	AL,@(H'0011,X)
-	and	AL,#-H'0100
-	or	AL,@$XAP_AH
-	st	AL,@(H'0011,X)
-	ld	AL,#H'0001
-	add	AL,@H'fff8
-	st	AL,@H'fff8
-	ld	X,#H'0001
-	add	X,@H'fff9
-	st	X,@H'fff9
-	tst	@H'fffa
-	bne	?L412
-	cmp	X,#H'000F
-	bcz	?L421
-?L412:
-	tst	@H'fffa
-	beq	?L422
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	bra	(?L429)
-?L422:
-	ld	AL,#H'0030
-	st	AL,@(0,Y)
-	ld	AL,#H'000C
-	ld	AH,@(H'0004,Y)
-	bsr	$_ConfigStore
-	ld	AH,@$XAP_AL
-	cmp	AL,#H'0000
-	bne	?L424
-	ld	AL,#H'0003
-	st	AL,@(0,Y)
-	st	AH,@(H'0001,Y)
-	st	AH,@(H'0002,Y)
-	bra	(?L427)
-?L424:
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-?L429:
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-?L427:
-	ld	AL,#H'000A
-	ld	AH,#H'010A
-	bsr	$_wechat_send_response
-	ld	AL,@(H'0004,Y)
-	bsr	$_free
-?L406:
-?LBE40:
-?LBE39:
-?LBE38:
-?LBE_wechat_set_audio_gain_config:
-	leavel	#8
-;.stabn	192,0,0,?LBB39
-;.stabn	192,0,0,?LBB40
-;.stabn	224,0,0,?LBE40
-;.stabn	224,0,0,?LBE39
-_wechat_send_audio_gain_config:
-	enterl	#8
-?LBB_wechat_send_audio_gain_config:
-?LBB41:
-	ld	AL,#H'0050
-	bsr	$_malloc
-	st	AL,@(H'0003,Y)
-	ld	AL,#H'0030
-	bsr	$_malloc
-	st	AL,@(H'0004,Y)
-	cmp	AL,#H'0000
-	beq	?L439
-	tst	@(H'0003,Y)
-	beq	?L439
-	ld	AL,#H'0030
-	st	AL,@(0,Y)
-	ld	AL,#H'000C
-	ld	AH,@(H'0004,Y)
-	bsr	$_ConfigRetrieve
-	cmp	AL,#H'0030
-	beq	?L438
-?L439:
-	ld	AL,@(H'0004,Y)
-	bsr	$_free
-	ld	AL,@(H'0003,Y)
-	bsr	$_free
-	ld	AL,#H'0003
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'018A
-	bsr	$_wechat_send_response
-	bra	(?L437)
-?L438:
-	ld	AL,@(H'0003,Y)
-?LBB42:
-	st	AL,@H'fff9
-	ld	X,#H'0000
-	st	X,@H'fff8
-?L445:
-	ld	AL,@H'fff8
-	add	AL,@H'fff8
-	add	AL,@(H'0004,Y)
-	st	AL,@(H'0005,Y)
-	ld	X,@$XAP_AL
-	ld	AH,@(H'0010,X)
-	lsr	#H'000C
-	ld	X,@H'fff9
-	st	AH,@(0,X)
-	ld	AL,#H'0001
-	add	AL,@H'fff9
-	st	AL,@H'fff9
-	ld	X,@(H'0005,Y)
-	ld	AH,@(H'0010,X)
-	lsr	#H'0008
-	and	AH,#H'000F
-	ld	X,@H'fff9
-	st	AH,@(0,X)
-	ld	AL,#H'0001
-	add	AL,@H'fff9
-	st	AL,@H'fff9
-	ld	X,@(H'0005,Y)
-	ld	AL,@(H'0010,X)
-	and	AL,#H'00FF
-	ld	X,@H'fff9
-	st	AL,@(0,X)
-	ld	AL,#H'0001
-	add	AL,@H'fff9
-	st	AL,@H'fff9
-	ld	X,@(H'0005,Y)
-	ld	AH,@(H'0011,X)
-	lsr	#H'0008
-	ld	X,@H'fff9
-	st	AH,@(0,X)
-	ld	AL,#H'0001
-	add	AL,@H'fff9
-	st	AL,@H'fff9
-	ld	X,@(H'0005,Y)
-	ld	AL,@(H'0011,X)
-	and	AL,#H'00FF
-	ld	X,@H'fff9
-	st	AL,@(0,X)
-	ld	AL,#H'0001
-	add	AL,@H'fff9
-	st	AL,@H'fff9
-	ld	X,#H'0001
-	add	X,@H'fff8
-	st	X,@H'fff8
-	cmp	X,#H'000F
-	bcz	?L445
-	ld	AL,@(H'0004,Y)
-	bsr	$_free
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	ld	AL,#H'0050
-	st	AL,@(H'0001,Y)
-	ld	AL,@(H'0003,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'018A
-	bsr	$_wechat_send_response
-	ld	AL,@(H'0003,Y)
-	bsr	$_free
-?L437:
-?LBE42:
-?LBE41:
-?LBE_wechat_send_audio_gain_config:
-	leavel	#8
-;.stabn	192,0,0,?LBB41
-;.stabn	192,0,0,?LBB42
-;.stabn	224,0,0,?LBE42
-;.stabn	224,0,0,?LBE41
-_wechat_set_user_tone_config:
-	enterl	#25
-?LBB_wechat_set_user_tone_config:
-	st	AL,@(H'000F,Y)
-	st	AH,@(H'0010,Y)
-?LBB43:
-	cmp	AL,#H'0004
-	bcz	?L452
-	and	AL,#H'0001
-	cmp	AL,#H'0000
-	beq	?L452
-	ld	X,@$XAP_AH
-	tst	@(0,X)
-	beq	?L452
-	ld	AL,@(0,X)
-	cmp	AL,#H'0008
-	bcz	?L451
-?L452:
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	bra	(?L502)
-?L451:
-	ld	AL,#H'005E
-	bsr	$_malloc
-	st	AL,@(H'0012,Y)
-	cmp	AL,#H'0000
-	bne	?L453
-	ld	AL,#H'0003
-	st	AL,@(0,Y)
-	ld	AH,@(H'0012,Y)
-	st	AH,@(H'0001,Y)
-	st	AH,@(H'0002,Y)
-?L502:
-	ld	AL,#H'000A
-	ld	AH,#H'010E
-	bsr	$_wechat_send_response
-	bra	(?L450)
-?L453:
-	ld	AL,@$XAP_UY
-	add	AL,#H'0003
-	bsr	_get_config_lengths
-	ld	AL,@(H'000B,Y)
-	st	AL,@(H'0011,Y)
-	cmp	AL,#H'0000
-	bne	?L454
-	ld	AH,#H'0008
-	st	AH,@(H'0011,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0013,Y)
-?L459:
-	ld	X,@(H'0012,Y)
-	add	X,@(H'0013,Y)
-	st	AL,@(0,X)
-	ld	AH,@(H'0013,Y)
-	add	AH,#H'0001
-	st	AH,@(H'0013,Y)
-	cmp	AH,@(H'0011,Y)
-	bcs	?L459
-	bra	(?L460)
-?L454:
-	ld	AL,@(H'0011,Y)
-	st	AL,@(0,Y)
-	ld	AL,#H'001C
-	ld	AH,@(H'0012,Y)
-	bsr	$_ConfigRetrieve
-?L460:
-	ld	AH,@(H'0011,Y)
-	st	AH,@(0,Y)
-	ld	AL,#(?LC18)
-	ld	AH,@(H'0012,Y)
-	bsr	_dump
-	ld	X,@(H'0010,Y)
-	ld	AH,@(0,X)
-	add	AH,#-H'0001
-	st	AH,@(H'0014,Y)
-	ld	X,@(H'0012,Y)
-	add	X,@$XAP_AH
-	ld	AH,@(0,X)
-	cmp	AH,#H'0000
-	beq	?L461
-	st	AH,@(H'0013,Y)
-	ld	X,@(H'0012,Y)
-	add	X,@$XAP_AH
-	ld	AL,@(0,X)
-	cmp	AL,#-H'8000
-	beq	?L495
-?L465:
-	ld	AL,@(H'0013,Y)
-	add	AL,#H'0001
-	st	AL,@(H'0013,Y)
-	ld	X,@(H'0012,Y)
-	add	X,@$XAP_AL
-	ld	AL,@(0,X)
-	cmp	AL,#-H'8000
-	bne	?L465
-?L495:
-	ld	X,@(H'0013,Y)
-	sub	X,@$XAP_AH
-	ld	AL,#H'0001
-	add	AL,@$XAP_UXL
-	st	AL,@H'fff8
-	ld	AL,#H'0000
-	st	AL,@(H'0013,Y)
-?L471:
-	ld	X,@(H'0012,Y)
-	add	X,@(H'0013,Y)
-	ld	AL,@(0,X)
-	cmp	AL,@$XAP_AH
-	bcz	?L468
-	sub	AL,@H'fff8
-	st	AL,@(0,X)
-?L468:
-	ld	AL,@(H'0013,Y)
-	add	AL,#H'0001
-	st	AL,@(H'0013,Y)
-	cmp	AL,#H'0007
-	bcz	?L471
-	ld	AL,@(H'0011,Y)
-	sub	AL,@H'fff8
-	st	AL,@(H'0011,Y)
-	st	AH,@(H'0013,Y)
-	cmp	AH,@$XAP_AL
-	bcc	?L461
-?L476:
-	ld	AH,@(H'0012,Y)
-	add	AH,@(H'0013,Y)
-	ld	AL,@(H'0013,Y)
-	add	AL,@H'fff8
-	ld	X,@(H'0012,Y)
-	add	X,@$XAP_AL
-	ld	AL,@(0,X)
-	ld	X,@$XAP_AH
-	st	AL,@(0,X)
-	ld	AH,@(H'0013,Y)
-	add	AH,#H'0001
-	st	AH,@(H'0013,Y)
-	cmp	AH,@(H'0011,Y)
-	bcs	?L476
-?L461:
-	ld	AL,@(H'0011,Y)
-	st	AL,@(0,Y)
-	ld	AL,#(?LC19)
-	ld	AH,@(H'0012,Y)
-	bsr	_dump
-	ld	X,@(H'000F,Y)
-	add	X,#-H'0004
-	ld	AH,@$XAP_UXL
-	lsr	#H'0001
-	add	AH,#H'0001
-	ld	AL,@(H'0011,Y)
-	add	AL,@$XAP_AH
-	cmp	AL,#H'005E
-	bcz	?L477
-	ld	AL,#H'0003
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	bra	(?L503)
-?L477:
-	ld	X,@(H'0012,Y)
-	add	X,@(H'0014,Y)
-	ld	AL,@(H'0011,Y)
-	st	AL,@(0,X)
-	ld	X,@(H'0010,Y)
-	tst	@(H'0001,X)
-	beq	?L479
-	ld	AH,@(H'0012,Y)
-	add	AH,@$XAP_AL
-	st	AH,@(H'0016,Y)
-	ld	AL,@(H'0001,X)
-	lsl	#H'0010
-	asr	#H'000E
-	or	AL,#-H'7000
-	ld	X,@(H'0016,Y)
-	st	AL,@(0,X)
-	ld	AH,@(H'0011,Y)
-	add	AH,#H'0001
-	st	AH,@(H'0011,Y)
-?L479:
-	ld	X,@(H'0010,Y)
-	tst	@(H'0002,X)
-	beq	?L480
-	ld	AH,@(H'0012,Y)
-	add	AH,@(H'0011,Y)
-	ld	AL,@(H'0002,X)
-	or	AL,#-H'6000
-	ld	X,@$XAP_AH
-	st	AL,@(0,X)
-	ld	AH,@(H'0011,Y)
-	add	AH,#H'0001
-	st	AH,@(H'0011,Y)
-?L480:
-	ld	X,@(H'0010,Y)
-	tst	@(H'0003,X)
-	beq	?L481
-	ld	AH,@(H'0012,Y)
-	add	AH,@(H'0011,Y)
-	ld	AL,@(H'0003,X)
-	or	AL,#-H'5000
-	ld	X,@$XAP_AH
-	st	AL,@(0,X)
-	ld	AH,@(H'0011,Y)
-	add	AH,#H'0001
-	st	AH,@(H'0011,Y)
-?L481:
-	ld	X,@(H'0010,Y)
-	tst	@(H'0004,X)
-	beq	?L482
-	ld	AH,@(H'0012,Y)
-	add	AH,@(H'0011,Y)
-	ld	AL,@(H'0004,X)
-	or	AL,#-H'4000
-	ld	X,@$XAP_AH
-	st	AL,@(0,X)
-	ld	AH,@(H'0011,Y)
-	add	AH,#H'0001
-	st	AH,@(H'0011,Y)
-?L482:
-	ld	AL,#H'0005
-	st	AL,@(H'0013,Y)
-	cmp	AL,@(H'000F,Y)
-	bcc	?L500
-?L487:
-	ld	X,@(H'0012,Y)
-	add	X,@(H'0011,Y)
-	st	X,@(H'0015,Y)
-	ld	X,@(H'0010,Y)
-	add	X,@(H'0013,Y)
-	ld	AH,@(H'0011,Y)
-	add	AH,#H'0001
-	st	AH,@(H'0011,Y)
-	ld	AL,@(0,X)
-	ld	AH,@(H'0001,X)
-	bsr	_pitch_length_tone
-	ld	X,@(H'0015,Y)
-	st	AL,@(0,X)
-	ld	AH,@(H'0013,Y)
-	add	AH,#H'0002
-	st	AH,@(H'0013,Y)
-	cmp	AH,@(H'000F,Y)
-	bcs	?L487
-?L500:
-	ld	X,@(H'0012,Y)
-	add	X,@(H'0011,Y)
-	ld	AL,#-H'8000
-	st	AL,@(0,X)
-	ld	AL,@(H'0011,Y)
-	add	AL,#H'0001
-	st	AL,@(H'0011,Y)
-	st	AL,@(0,Y)
-	ld	AL,#(?LC20)
-	ld	AH,@(H'0012,Y)
-	bsr	_dump
-	ld	AH,@(H'0011,Y)
-	st	AH,@(0,Y)
-	ld	AL,#H'001C
-	ld	AH,@(H'0012,Y)
-	bsr	$_ConfigStore
-	ld	AH,@$XAP_AL
-	cmp	AL,#H'0000
-	bne	?L488
-	ld	AL,#H'0003
-	st	AL,@(0,Y)
-	st	AH,@(H'0001,Y)
-	st	AH,@(H'0002,Y)
-	bra	(?L501)
-?L488:
-	ld	AL,@(H'0011,Y)
-	cmp	AL,@(H'000B,Y)
-	beq	?L490
-	st	AL,@(H'000B,Y)
-	ld	AL,#H'000C
-	st	AL,@(0,Y)
-	ld	AL,#H'0007
-	ld	AH,@$XAP_UY
-	add	AH,#H'0003
-	bsr	$_ConfigStore
-	cmp	AL,#H'0000
-	bne	?L490
-	ld	AL,#(?LC9)
-	bsr	$_puts
-	bsr	$_Panic
-?L490:
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-?L503:
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-?L501:
-	ld	AL,#H'000A
-	ld	AH,#H'010E
-	bsr	$_wechat_send_response
-	ld	AL,@(H'0012,Y)
-	bsr	$_free
-?L450:
-?LBE43:
-?LBE_wechat_set_user_tone_config:
-	leavel	#25
-	.SEG	CONST
-?LC18:
-	dc	H'62
-	dc	H'65
-	dc	H'66
-	dc	H'6F
-	dc	H'72
-	dc	H'65
-	dc	H'00
-?LC19:
-	dc	H'64
-	dc	H'75
-	dc	H'72
-	dc	H'69
-	dc	H'6E
-	dc	H'67
-	dc	H'00
-?LC20:
-	dc	H'61
-	dc	H'66
-	dc	H'74
-	dc	H'65
-	dc	H'72
-	dc	H'20
-	dc	H'00
-	.CODE
-;.stabn	192,0,0,?LBB43
-;.stabn	224,0,0,?LBE43
-_wechat_send_user_tone_config:
-	enterl	#23
-?LBB_wechat_send_user_tone_config:
-	st	AL,@(H'000F,Y)
-?LBB44:
-	ld	AL,@$XAP_UY
-	add	AL,#H'0003
-	bsr	_get_config_lengths
-	ld	AL,@(H'000F,Y)
-	add	AL,#-H'0001
-	cmp	AL,#(H'0001+H'0007)
-	bcc	?L519
-	tst	@(H'000B,Y)
-	bne	?L518
-?L519:
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	bra	(?L550)
-?L518:
-	ld	AL,@(H'000B,Y)
-	st	AL,@(H'0010,Y)
-	bsr	$_malloc
-	st	AL,@(H'0011,Y)
-	cmp	AL,#H'0000
-	bne	?L520
-	ld	AL,#H'0003
-	st	AL,@(0,Y)
-	ld	X,@(H'0011,Y)
-	st	X,@(H'0001,Y)
-	st	X,@(H'0002,Y)
-?L550:
-	ld	AL,#H'000A
-	ld	AH,#H'018E
-	bsr	$_wechat_send_response
-	bra	(?L517)
-?L520:
-	ld	AL,@(H'0010,Y)
-	st	AL,@(0,Y)
-	ld	AL,#H'001C
-	ld	AH,@(H'0011,Y)
-	bsr	$_ConfigRetrieve
-	ld	X,@(H'0011,Y)
-	add	X,@(H'000F,Y)
-	tst	@(-H'0001,X)
-	bne	?L522
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	bra	(?L549)
-?L522:
-	ld	X,@(H'0011,Y)
-?LBB45:
-	add	X,@(H'000F,Y)
-	ld	AL,@(H'0011,Y)
-	add	AL,@(-H'0001,X)
-	st	AL,@H'fff8
-	st	AL,@(H'0012,Y)
-	ld	X,#H'0000
-	st	X,@(-1,Y)
-	st	X,@(H'0013,Y)
-	ld	AL,#H'001E
-	ld	X,@(H'0011,Y)
-	st	AL,@(0,X)
-	ld	AL,#H'001F
-	st	AL,@(H'0001,X)
-	ld	AL,@(H'0013,Y)
-	st	AL,@(H'0002,X)
-	ld	AL,#H'0020
-	st	AL,@(H'0003,X)
-	ld	X,@H'fff8
-	ld	AL,@(0,X)
-	cmp	AL,#-H'8000
-	beq	?L546
-?L537:
-	ld	X,@H'fff8
-	tst	@(0,X)
-	bpl	?L527
-	ld	AL,@(0,X)
-	and	AL,#-H'1000
-	cmp	AL,#-H'6000
-	beq	?L530
-	cmp	AL,#(H'0001-H'6000)
-	bcc	?L535
-	cmp	AL,#-H'7000
-	beq	?L529
-	bra	(?L536)
-?L535:
-	cmp	AL,#-H'5000
-	beq	?L531
-	cmp	AL,#-H'4000
-	beq	?L532
-	bra	(?L536)
-?L529:
-	ld	X,@H'fff8
-	ld	AH,@(0,X)
-	and	AH,#H'0FFF
-	add	AH,#H'0002
-	lsr	#H'0002
-	ld	X,@(H'0011,Y)
-	st	AH,@(0,X)
-	bra	(?L536)
-?L530:
-	ld	X,@H'fff8
-	ld	AL,@(0,X)
-	and	AL,#H'00FF
-	ld	X,@(H'0011,Y)
-	st	AL,@(H'0001,X)
-	bra	(?L536)
-?L531:
-	ld	X,@H'fff8
-	ld	AL,@(0,X)
-	and	AL,#H'00FF
-	ld	X,@(H'0011,Y)
-	st	AL,@(H'0002,X)
-	bra	(?L536)
-?L532:
-	ld	X,@H'fff8
-	ld	AL,@(0,X)
-	and	AL,#H'00FF
-	ld	X,@(H'0011,Y)
-	st	AL,@(H'0003,X)
-	bra	(?L536)
-?L527:
-	ld	AL,#H'0001
-	add	AL,@(-1,Y)
-	st	AL,@(-1,Y)
-?L536:
-	ld	X,#H'0001
-	add	X,@H'fff8
-	st	X,@H'fff8
-	ld	AL,@(0,X)
-	cmp	AL,#-H'8000
-	bne	?L537
-?L546:
-	ld	AL,@(-1,Y)
-	ld	X,@$XAP_AL
-	add	X,@$XAP_AL
-	ld	AL,#H'0005
-	add	AL,@$XAP_UXL
-	bsr	$_malloc
-	st	AL,@(H'0013,Y)
-	cmp	AL,#H'0000
-	bne	?L538
-	ld	AL,#H'0003
-	st	AL,@(0,Y)
-	ld	X,@(H'0013,Y)
-	st	X,@(H'0001,Y)
-	st	X,@(H'0002,Y)
-?L549:
-	ld	AL,#H'000A
-	ld	AH,#H'018E
-	bsr	$_wechat_send_response
-	bra	(?L523)
-?L538:
-	ld	AL,@(H'000F,Y)
-	ld	X,@(H'0013,Y)
-	st	AL,@(0,X)
-	ld	X,@(H'0011,Y)
-	ld	AL,@(0,X)
-	ld	X,@(H'0013,Y)
-	st	AL,@(H'0001,X)
-	ld	X,@(H'0011,Y)
-	ld	AL,@(H'0001,X)
-	ld	X,@(H'0013,Y)
-	st	AL,@(H'0002,X)
-	ld	X,@(H'0011,Y)
-	ld	AL,@(H'0002,X)
-	ld	X,@(H'0013,Y)
-	st	AL,@(H'0003,X)
-	ld	X,@(H'0011,Y)
-	ld	AL,@(H'0003,X)
-	ld	X,@(H'0013,Y)
-	st	AL,@(H'0004,X)
-	ld	AL,@(H'0012,Y)
-	st	AL,@H'fff8
-	ld	X,#H'0005
-	st	X,@H'fff9
-	ld	X,@$XAP_AL
-	ld	AL,@(0,X)
-	cmp	AL,#-H'8000
-	beq	?L548
-?L544:
-	ld	X,@H'fff8
-	tst	@(0,X)
-	bmi	?L543
-	ld	AL,@(H'0013,Y)
-	add	AL,@H'fff9
-	st	AL,@(H'0014,Y)
-	ld	AH,@(0,X)
-	and	AH,#H'3F80
-	lsr	#H'0007
-	ld	X,@(H'0014,Y)
-	st	AH,@(0,X)
-	ld	AL,#H'0001
-	add	AL,@H'fff9
-	st	AL,@H'fff9
-	ld	AH,@(H'0013,Y)
-	add	AH,@$XAP_AL
-	ld	X,@H'fff8
-	ld	AL,@(0,X)
-	and	AL,#H'007F
-	ld	X,@$XAP_AH
-	st	AL,@(0,X)
-	ld	AL,#H'0001
-	add	AL,@H'fff9
-	st	AL,@H'fff9
-?L543:
-	ld	X,#H'0001
-	add	X,@H'fff8
-	st	X,@H'fff8
-	ld	AL,@(0,X)
-	cmp	AL,#-H'8000
-	bne	?L544
-?L548:
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	st	AL,@H'ffff
-	ld	AL,@H'fff9
-	st	AL,@(H'0001,Y)
-	ld	AL,@H'ffff
-	ld	AL,@(H'0013,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'018E
-	bsr	$_wechat_send_response
-	ld	AL,@(H'0013,Y)
-	bsr	$_free
-?L523:
-?LBE45:
-	ld	AL,@(H'0011,Y)
-	bsr	$_free
-?L517:
-?LBE44:
-?LBE_wechat_send_user_tone_config:
-	leavel	#23
-;.stabn	192,0,0,?LBB44
-;.stabn	192,0,0,?LBB45
-;.stabn	224,0,0,?LBE45
-;.stabn	224,0,0,?LBE44
-_wechat_send_application_version:
-	enterl	#12
-?LBB_wechat_send_application_version:
-?LBB46:
-	ld	AL,#H'0008
-	st	AL,@(0,Y)
-	ld	AL,#H'0009
-	ld	AH,@$XAP_UY
-	add	AH,#H'0002
-	bsr	$_ConfigRetrieve
-	st	AL,@(0,Y)
-	ld	AL,@$XAP_UY
-	add	AL,#H'0002
-	st	AL,@(H'0001,Y)
-	ld	AL,#H'0304
-	ld	AH,#H'0000
-	bsr	$_wechat_send_response_16
-?LBE46:
-?LBE_wechat_send_application_version:
-	leavel	#12
-;.stabn	192,0,0,?LBB46
-;.stabn	224,0,0,?LBE46
-_wechat_set_feature:
-	enterl	#5
-?LBB_wechat_set_feature:
-	ld	X,@$XAP_AH
-	cmp	AL,#H'0000
-	beq	?L562
-	ld	AL,@(0,X)
-	cmp	AL,#H'003F
-	bcz	?L561
-?L562:
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	bra	(?L564)
-?L561:
-	ld	AL,#H'0002
-	st	AL,@(0,Y)
-	ld	AL,#H'0001
-	st	AL,@(H'0001,Y)
-	st	AH,@(H'0002,Y)
-?L564:
-	ld	AL,#H'000A
-	ld	AH,#H'0503
-	bsr	$_wechat_send_response
-?LBE_wechat_set_feature:
-	leavel	#5
-_wechat_get_feature:
-	enterl	#7
-?LBB_wechat_get_feature:
-	ld	X,@$XAP_AH
-?LBB47:
-	cmp	AL,#H'0001
-	bne	?L568
-	ld	AL,@(0,X)
-	cmp	AL,#H'003F
-	bcz	?L567
-?L568:
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0503
-	bra	(?L570)
-?L567:
-?LBB48:
-	ld	AL,@(0,X)
-	st	AL,@(H'0003,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0004,Y)
-	st	AL,@(0,Y)
-	ld	AL,#H'0002
-	st	AL,@(H'0001,Y)
-	ld	AL,@$XAP_UY
-	add	AL,#H'0003
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0583
-?L570:
-	bsr	$_wechat_send_response
-?LBE48:
-?LBE47:
-?LBE_wechat_get_feature:
-	leavel	#7
-;.stabn	192,0,0,?LBB48
-;.stabn	224,0,0,?LBE48
-_wechat_register_notification:
-	enterl	#8
-?LBB_wechat_register_notification:
-	st	AL,@(H'0004,Y)
-	st	AH,@(H'0005,Y)
-?LBB49:
-	cmp	AL,#H'0000
-	bne	?L574
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AH,@(H'0004,Y)
-	st	AH,@(H'0001,Y)
-	st	AH,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'4001
-	bsr	$_wechat_send_response
-	bra	(?L573)
-?L574:
-?LBB50:
-	ld	AL,#H'0005
-	st	AL,@(H'0003,Y)
-	ld	X,@(H'0005,Y)
-	ld	AL,@(0,X)
-	st	AL,@(0,Y)
-	ld	AH,@(H'0004,Y)
-	st	AH,@(H'0001,Y)
-	ld	AL,#(?LC21)
-	bsr	$_printf
-	ld	X,@(H'0005,Y)
-	ld	AL,@(0,X)
-	cmp	AL,#H'0008
-	beq	?L579
-	cmp	AL,#(H'0001+H'0008)
-	bcc	?L584
-	cmp	AL,#H'0006
-	beq	?L577
-	bra	(?L576)
-?L584:
-	cmp	AL,#H'0009
-	beq	?L580
-	cmp	AL,#H'000B
-	beq	?L581
-	bra	(?L576)
-?L577:
-	ld	AH,@(H'0004,Y)
-	cmp	AH,#H'0005
-	bne	?L576
-	ld	X,@(H'0005,Y)
-?LBB51:
-	ld	AH,#H'0000
-	ld	AL,@(H'0001,X)
-	asl	#H'0008
-	st	AH,@H'fff8
-	st	AL,@H'fff9
-	ld	AH,#H'0000
-	ld	AL,@(H'0002,X)
-	or	AL,@H'fff9
-	or	AH,@H'fff8
-	asl	#H'0008
-	st	AH,@H'fff8
-	st	AL,@H'fff9
-	ld	AH,#H'0000
-	ld	AL,@(H'0003,X)
-	or	AL,@H'fff9
-	or	AH,@H'fff8
-	asl	#H'0008
-	st	AH,@H'fff8
-	st	AL,@H'fff9
-	ld	AH,#H'0000
-	ld	AL,@(H'0004,X)
-	or	AL,@H'fff9
-	or	AH,@H'fff8
-	ld	X,@$_theSink+H'0004
-	st	AH,@(H'0001,X)
-	st	AL,@(H'0002,X)
-	st	AH,@(0,Y)
-	st	AL,@(1,Y)
-	ld	AL,#(?LC22)
-	bsr	$_printf
-	bra	(?L587)
-?L579:
-?LBE51:
-	ld	X,@$_theSink+H'0004
-	ld	AL,@(H'0006,X)
-	or	AL,#H'2000
-	bra	(?L586)
-?L580:
-	ld	X,@$_theSink+H'0004
-	ld	AL,@(H'0006,X)
-	or	AL,#H'4000
-	bra	(?L586)
-?L581:
-	ld	X,@$_theSink+H'0004
-	ld	AL,@(H'0006,X)
-	or	AL,#-H'8000
-?L586:
-	st	AL,@(H'0006,X)
-?L587:
-	ld	AL,#H'0000
-	st	AL,@(H'0003,Y)
-?L576:
-	ld	AL,@(H'0003,Y)
-	st	AL,@(0,Y)
-	ld	AL,#H'0001
-	st	AL,@(H'0001,Y)
-	ld	AL,@(H'0005,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'4001
-	bsr	$_wechat_send_response
-	ld	X,@(H'0005,Y)
-	ld	AL,@(0,X)
-	cmp	AL,#H'0009
-	bne	?L573
-	bsr	$_powerManagerIsChargerConnected
-	st	AL,@(H'0003,Y)
-	ld	AL,@$XAP_UY
-	add	AL,#H'0003
-	st	AL,@(0,Y)
-	ld	AL,#H'0009
-	ld	AH,#H'0001
-	bsr	_wechat_send_notification
-?L573:
-?LBE50:
-?LBE49:
-?LBE_wechat_register_notification:
-	leavel	#8
-	.SEG	CONST
-?LC21:
-	dc	H'47
-	dc	H'3A
-	dc	H'20
-	dc	H'72
-	dc	H'65
-	dc	H'67
-	dc	H'3A
-	dc	H'20
-	dc	H'25
-	dc	H'30
-	dc	H'32
-	dc	H'58
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'0A
-	dc	H'00
-?LC22:
-	dc	H'47
-	dc	H'3A
-	dc	H'20
-	dc	H'70
-	dc	H'6D
-	dc	H'3A
-	dc	H'20
-	dc	H'25
-	dc	H'30
-	dc	H'38
-	dc	H'6C
-	dc	H'58
-	dc	H'0A
-	dc	H'00
-	.CODE
-;.stabn	192,0,0,?LBB50
-;.stabn	192,0,0,?LBB51
-;.stabn	224,0,0,?LBE51
-;.stabn	224,0,0,?LBE50
-_wechat_get_notification:
-	enterl	#14
-?LBB_wechat_get_notification:
-	ld	X,@$XAP_AH
-?LBB52:
-	ld	AH,#H'0000
-	st	AH,@(H'0009,Y)
-	ld	AH,#H'0005
-	st	AH,@(H'000A,Y)
-	cmp	AL,#H'0000
-	beq	?L595
-	ld	AL,@(0,X)
-	st	AL,@(H'0003,Y)
-	ld	AL,#H'0001
-	st	AL,@(H'0009,Y)
-	ld	AH,@(0,X)
-	cmp	AH,#H'0008
-	beq	?L599
-	cmp	AH,#(H'0001+H'0008)
-	bcc	?L604
-	cmp	AH,#H'0006
-	beq	?L597
-	bra	(?L595)
-?L604:
-	cmp	AH,#H'0009
-	beq	?L600
-	cmp	AH,#H'000B
-	beq	?L601
-	bra	(?L595)
-?L597:
-	ld	AH,#H'0000
-	st	AH,@(H'000B,Y)
-	ld	X,@$_theSink+H'0004
-	ld	AH,@(H'0001,X)
-	ld	AL,@(H'0002,X)
-	cmp	AH,#H'0000
-	bne	?L612
-	cmp	AL,#H'0000
-	beq	?L598
-?L612:
-	ld	AL,#H'0001
-	st	AL,@(H'000B,Y)
-?L598:
-	ld	AH,@(H'000B,Y)
-	st	AH,@(H'0004,Y)
-	ld	X,@$_theSink+H'0004
-	ld	AH,@(H'0001,X)
-	ld	AL,@(H'0002,X)
-	st	AH,@(0,Y)
-	st	AL,@(1,Y)
-	ld	AL,@$XAP_UY
-	add	AL,#H'0005
-	bsr	_dwunpack
-	ld	AL,#H'0006
-	bra	(?L606)
-?L599:
-	ld	X,@$_theSink+H'0004
-	ld	AH,@(H'0006,X)
-	lsr	#H'000D
-	bra	(?L607)
-?L600:
-	ld	X,@$_theSink+H'0004
-	ld	AH,@(H'0006,X)
-	lsr	#H'000E
-?L607:
-	and	AH,#H'0001
-	bra	(?L605)
-?L601:
-	ld	X,@$_theSink+H'0004
-	ld	AH,@(H'0006,X)
-	lsr	#H'000F
-?L605:
-	st	AH,@(H'0004,Y)
-	ld	AL,#H'0002
-?L606:
-	st	AL,@(H'0009,Y)
-	ld	AH,#H'0000
-	st	AH,@(H'000A,Y)
-?L595:
-	ld	AL,@(H'000A,Y)
-	st	AL,@(0,Y)
-	ld	AH,@(H'0009,Y)
-	st	AH,@(H'0001,Y)
-	ld	AL,@$XAP_UY
-	add	AL,#H'0003
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'4081
-	bsr	$_wechat_send_response
-?LBE52:
-?LBE_wechat_get_notification:
-	leavel	#14
-;.stabn	192,0,0,?LBB52
-;.stabn	224,0,0,?LBE52
-_wechat_cancel_notification:
-	enterl	#5
-?LBB_wechat_cancel_notification:
-?LBB53:
-	cmp	AL,#H'0001
-	beq	?L614
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	bra	(?L625)
-?L614:
-	ld	X,@$XAP_AH
-?LBB54:
-	ld	AL,@(0,X)
-	cmp	AL,#H'0008
-	beq	?L618
-	cmp	AL,#(H'0001+H'0008)
-	bcc	?L623
-	cmp	AL,#H'0006
-	beq	?L617
-	bra	(?L621)
-?L623:
-	cmp	AL,#H'0009
-	beq	?L619
-	cmp	AL,#H'000B
-	beq	?L620
-	bra	(?L621)
-?L617:
-	ld	X,@$_theSink+H'0004
-	ld	AL,#H'0000
-	st	AL,@(H'0002,X)
-	st	AL,@(H'0001,X)
-	bra	(?L616)
-?L618:
-	ld	X,@$_theSink+H'0004
-	ld	AL,@(H'0006,X)
-	and	AL,#-H'2001
-	bra	(?L624)
-?L619:
-	ld	X,@$_theSink+H'0004
-	ld	AL,@(H'0006,X)
-	and	AL,#-H'4001
-	bra	(?L624)
-?L620:
-	ld	X,@$_theSink+H'0004
-	ld	AL,@(H'0006,X)
-	and	AL,#H'7FFF
-?L624:
-	st	AL,@(H'0006,X)
-	ld	AL,#H'0000
-	bra	(?L616)
-?L621:
-	ld	AL,#H'0005
-?L616:
-	st	AL,@(0,Y)
-	ld	AL,#H'0001
-	st	AL,@(H'0001,Y)
-	st	AH,@(H'0002,Y)
-?L625:
-	ld	AL,#H'000A
-	ld	AH,#H'4002
-	bsr	$_wechat_send_response
-?LBE54:
-?LBE53:
-?LBE_wechat_cancel_notification:
-	leavel	#5
-;.stabn	192,0,0,?LBB54
-;.stabn	224,0,0,?LBE54
-_wechat_handle_configuration_command:
-	enterl	#5
-?LBB_wechat_handle_configuration_command:
-	ld	X,@$XAP_AH
-	ld	AL,@(H'0004,X)
-	cmp	AL,#H'010E
-	beq	?L661
-	cmp	AL,#(H'0001+H'010E)
-	bcc	?L667
-	cmp	AL,#H'0103
-	beq	?L645
-	cmp	AL,#(H'0001+H'0103)
-	bcc	?L668
-	cmp	AL,#H'0101
-	beq	?L633
-	cmp	AL,#H'0102
-	beq	?L639
-	bra	(?L665)
-?L668:
-	cmp	AL,#H'0109
-	beq	?L655
-	cmp	AL,#(H'0001+H'0109)
-	bcc	?L669
-	cmp	AL,#H'0106
-	beq	?L649
-	bra	(?L665)
-?L669:
-	cmp	AL,#H'010A
-	beq	?L657
-	bra	(?L665)
-?L667:
-	cmp	AL,#H'0186
-	beq	?L652
-	cmp	AL,#(H'0001+H'0186)
-	bcc	?L670
-	cmp	AL,#H'0182
-	beq	?L642
-	cmp	AL,#(H'0001+H'0182)
-	bcc	?L671
-	cmp	AL,#H'0181
-	beq	?L636
-	bra	(?L665)
-?L671:
-	cmp	AL,#H'0183
-	beq	?L648
-	bra	(?L665)
-?L670:
-	cmp	AL,#H'018A
-	beq	?L660
-	cmp	AL,#(H'0001+H'018A)
-	bcc	?L672
-	cmp	AL,#H'0189
-	beq	?L656
-	bra	(?L665)
-?L672:
-	cmp	AL,#H'018E
-	beq	?L662
-	bra	(?L665)
-?L633:
-	ld	AL,@(H'0002,X)
-	cmp	AL,#(H'0001+H'0006)
-	bcc	?L634
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0101
-	bra	(?L673)
-?L634:
-	add	AH,#H'0005
-	ld	AL,@(H'0002,X)
-	bsr	_wechat_set_led_config
-	bra	(?L664)
-?L636:
-	ld	AL,@(H'0002,X)
-	cmp	AL,#H'0003
-	bne	?L637
-	ld	AL,@(H'0006,X)
-	asl	#H'0008
-	ld	AH,@$XAP_AL
-	or	AH,@(H'0007,X)
-	ld	AL,@(H'0005,X)
-	bsr	_wechat_send_led_config
-	bra	(?L664)
-?L637:
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0181
-	bra	(?L673)
-?L639:
-	ld	AL,@(H'0002,X)
-	cmp	AL,#H'0003
-	bne	?L640
-	ld	AL,@(H'0005,X)
-	asl	#H'0008
-	or	AL,@(H'0006,X)
-	ld	AH,@(H'0007,X)
-	bsr	_wechat_set_tone_config
-	bra	(?L664)
-?L640:
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0102
-	bra	(?L673)
-?L642:
-	ld	AL,@(H'0002,X)
-	cmp	AL,#H'0002
-	bne	?L643
-	ld	AL,@(H'0005,X)
-	asl	#H'0008
-	or	AL,@(H'0006,X)
-	bsr	_wechat_send_tone_config
-	bra	(?L664)
-?L643:
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0182
-	bra	(?L673)
-?L645:
-	ld	AL,@(H'0002,X)
-	cmp	AL,#H'0003
-	bne	?L646
-	ld	AL,#H'0005
-	add	AL,@$XAP_AH
-	bsr	_wechat_set_default_volumes
-	bra	(?L664)
-?L646:
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0103
-	bra	(?L673)
-?L648:
-	bsr	_wechat_send_default_volumes
-	bra	(?L664)
-?L649:
-	ld	AL,@(H'0002,X)
-	cmp	AL,#H'0006
-	bne	?L650
-	ld	AL,#H'0005
-	add	AL,@$XAP_AH
-	bsr	_wechat_set_ap_config
-	bra	(?L664)
-?L650:
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0106
-	bra	(?L673)
-?L652:
-	ld	AL,@(H'0002,X)
-	cmp	AL,#H'0002
-	bne	?L653
-	ld	AL,@(H'0005,X)
-	asl	#H'0008
-	or	AL,@(H'0006,X)
-	bsr	_wechat_send_ap_config
-	bra	(?L664)
-?L653:
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0186
-	bra	(?L673)
-?L655:
-	add	AH,#H'0005
-	ld	AL,@(H'0002,X)
-	bsr	_wechat_set_timer_config
-	bra	(?L664)
-?L656:
-	bsr	_wechat_send_timer_config
-	bra	(?L664)
-?L657:
-	ld	AL,@(H'0002,X)
-	cmp	AL,#H'0050
-	beq	?L658
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'010A
-	bra	(?L673)
-?L658:
-	add	AH,#H'0005
-	ld	AL,@(H'0002,X)
-	bsr	_wechat_set_audio_gain_config
-	bra	(?L664)
-?L660:
-	bsr	_wechat_send_audio_gain_config
-	bra	(?L664)
-?L661:
-	add	AH,#H'0005
-	ld	AL,@(H'0002,X)
-	bsr	_wechat_set_user_tone_config
-	bra	(?L664)
-?L662:
-	ld	AL,@(H'0002,X)
-	cmp	AL,#H'0001
-	bne	?L663
-	ld	AL,@(H'0005,X)
-	bsr	_wechat_send_user_tone_config
-	bra	(?L664)
-?L663:
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'018E
-?L673:
-	bsr	$_wechat_send_response
-?L664:
-	ld	AL,#H'0001
-	bra	(?L631)
-?L665:
-	ld	AL,#H'0000
-?L631:
-?LBE_wechat_handle_configuration_command:
-	leavel	#5
-_updatePEQ:
-	enterl	#3
-?LBB_updatePEQ:
-	ld	X,@$XAP_AL
-?LBB55:
-	cmp	AL,#H'0000
-	beq	?L696
-?LBB56:
-	ld	AL,@(H'0001,X)
-	and	AL,#H'00FF
-	st	AL,@H'fff8
-	ld	AL,@(0,X)
-	and	AL,#H'00FF
-	asl	#H'0008
-	or	AL,@H'fff8
-	st	AL,@H'fff8
-	ld	AL,@(H'0003,X)
-	and	AL,#H'00FF
-	st	AL,@H'fff9
-	ld	AL,@(H'0002,X)
-	and	AL,#H'00FF
-	asl	#H'0008
-	or	AL,@H'fff9
-	st	AL,@H'fff9
-	ld	AH,#H'0000
-	tst	@H'fff8
-	bne	?L698
-	st	AH,@(0,Y)
-	ld	AL,#(?LC23)
-	bra	(?L715)
-?L698:
-	ld	AL,@H'fff8
-	and	AL,#-H'0F01
-	cmp	AL,#H'0000
-	bne	?L700
-	st	AL,@H'ffff
-	ld	AL,@H'fff8
-	st	AL,@(0,Y)
-	ld	AL,@H'ffff
-	ld	AL,#(?LC24)
-?L715:
-	bsr	$_printf
-	bra	(?L696)
-?L700:
-	ld	AL,@H'fff8
-	and	AL,#-H'0F02
-	cmp	AL,#H'0000
-	bne	?L702
-	ld	AH,@H'fff8
-	lsr	#H'0008
-	ld	X,@$XAP_AH
-	and	X,#H'000F
-	cmp	X,#H'0001
-	bne	?L696
-	ld	X,@$_theSink+H'0033
-	bra	(?L714)
-?L702:
-	ld	AL,@H'fff8
-	and	AL,#-H'1000
-	cmp	AL,#H'0000
-	bne	?L696
-	ld	AH,@H'fff8
-	lsr	#H'0008
-	ld	X,@$XAP_AH
-	and	X,#H'000F
-	ld	AH,@H'fff8
-	lsr	#H'0004
-	and	AH,#H'000F
-	cmp	X,#H'0001
-	bne	?L696
-	cmp	AH,#H'0000
-	beq	?L696
-	cmp	AH,#(H'0001+H'0005)
-	bcc	?L696
-	ld	AL,@H'fff8
-	and	AL,#H'000F
-	cmp	AL,#H'0001
-	beq	?L709
-	cmp	AL,#H'0001
-	bcs	?L708
-	cmp	AL,#H'0002
-	beq	?L710
-	cmp	AL,#H'0003
-	beq	?L711
-	bra	(?L696)
-?L708:
-	ld	AL,@$XAP_AH
-	lsl	#H'0010
-	asr	#H'000E
-	ld	X,@$_theSink+H'0033
-	add	X,@$XAP_AL
-	st	AL,@H'ffff
-	ld	AL,@H'fff9
-	st	AL,@(-H'0003,X)
-	ld	AL,@H'ffff
-	bra	(?L696)
-?L709:
-	ld	AL,@$XAP_AH
-	lsl	#H'0010
-	asr	#H'000E
-	ld	X,@$_theSink+H'0033
-	add	X,@$XAP_AL
-	st	AL,@H'ffff
-	ld	AL,@H'fff9
-	st	AL,@(-H'0002,X)
-	ld	AL,@H'ffff
-	bra	(?L696)
-?L710:
-	ld	AL,@$XAP_AH
-	lsl	#H'0010
-	asr	#H'000E
-	ld	X,@$_theSink+H'0033
-	add	X,@$XAP_AL
-	st	AL,@H'ffff
-	ld	AL,@H'fff9
-	st	AL,@(-H'0001,X)
-	ld	AL,@H'ffff
-	bra	(?L696)
-?L711:
-	ld	AL,@$XAP_AH
-	lsl	#H'0010
-	asr	#H'000E
-	ld	X,@$_theSink+H'0033
-	add	X,@$XAP_AL
-?L714:
-	st	AL,@H'ffff
-	ld	AL,@H'fff9
-	st	AL,@(0,X)
-	ld	AL,@H'ffff
-?L696:
-?LBE56:
-?LBE55:
-?LBE_updatePEQ:
-	leavel	#3
-	.SEG	CONST
-?LC23:
-	dc	H'57
-	dc	H'45
-	dc	H'43
-	dc	H'48
-	dc	H'41
-	dc	H'54
-	dc	H'3A
-	dc	H'20
-	dc	H'4E
-	dc	H'75
-	dc	H'6D
-	dc	H'62
-	dc	H'65
-	dc	H'72
-	dc	H'20
-	dc	H'6F
-	dc	H'66
-	dc	H'20
-	dc	H'41
-	dc	H'63
-	dc	H'74
-	dc	H'69
-	dc	H'76
-	dc	H'65
-	dc	H'20
-	dc	H'42
-	dc	H'61
-	dc	H'6E
-	dc	H'6B
-	dc	H'73
-	dc	H'20
-	dc	H'2C
-	dc	H'20
-	dc	H'70
-	dc	H'61
-	dc	H'72
-	dc	H'61
-	dc	H'6D
-	dc	H'2D
-	dc	H'3E
-	dc	H'25
-	dc	H'30
-	dc	H'34
-	dc	H'78
-	dc	H'00
-?LC24:
-	dc	H'57
-	dc	H'45
-	dc	H'43
-	dc	H'48
-	dc	H'41
-	dc	H'54
-	dc	H'3A
-	dc	H'20
-	dc	H'4E
-	dc	H'75
-	dc	H'6D
-	dc	H'62
-	dc	H'65
-	dc	H'72
-	dc	H'20
-	dc	H'6F
-	dc	H'66
-	dc	H'20
-	dc	H'42
-	dc	H'61
-	dc	H'6E
-	dc	H'64
-	dc	H'73
-	dc	H'20
-	dc	H'69
-	dc	H'6E
-	dc	H'20
-	dc	H'74
-	dc	H'68
-	dc	H'65
-	dc	H'20
-	dc	H'53
-	dc	H'70
-	dc	H'65
-	dc	H'63
-	dc	H'69
-	dc	H'66
-	dc	H'69
-	dc	H'65
-	dc	H'64
-	dc	H'20
-	dc	H'42
-	dc	H'61
-	dc	H'6E
-	dc	H'6B
-	dc	H'20
-	dc	H'2C
-	dc	H'20
-	dc	H'70
-	dc	H'61
-	dc	H'72
-	dc	H'61
-	dc	H'6D
-	dc	H'2D
-	dc	H'3E
-	dc	H'25
-	dc	H'30
-	dc	H'34
-	dc	H'78
-	dc	H'00
-	.CODE
-;.stabn	192,0,0,?LBB56
-;.stabn	224,0,0,?LBE56
-_wechat_handle_control_command:
-	enterl	#17
-?LBB_wechat_handle_control_command:
-	st	AH,@(H'0004,Y)
-	ld	X,@$XAP_AH
-?LBB57:
-	ld	AL,@(H'0004,X)
-	add	AL,#-H'0201
-	cmp	AL,#(H'0001+H'009F)
-	bcc	?L830
-	ld	X,@$XAP_AL
-	ld	X,@(?JTBASE831,X)
-	brxl
-	.SEG	CONST
-?JTBASE831:
-	.CODE
-?L831:
-	.SEG	CONST
-	dc	lwrd(?L724-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L738-?L831)
-	dc	lwrd(?L739-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L747-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L753-?L831)
-	dc	lwrd(?L756-?L831)
-	dc	lwrd(?L761-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L727-?L831)
-	dc	lwrd(?L730-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L731-?L831)
-	dc	lwrd(?L734-?L831)
-	dc	lwrd(?L763-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L770-?L831)
-	dc	lwrd(?L776-?L831)
-	dc	lwrd(?L783-?L831)
-	dc	lwrd(?L769-?L831)
-	dc	lwrd(?L782-?L831)
-	dc	lwrd(?L789-?L831)
-	dc	lwrd(?L797-?L831)
-	dc	lwrd(?L800-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L826-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L791-?L831)
-	dc	lwrd(?L796-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L746-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L752-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L760-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L767-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L773-?L831)
-	dc	lwrd(?L781-?L831)
-	dc	lwrd(?L788-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L815-?L831)
-	dc	lwrd(?L817-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L830-?L831)
-	dc	lwrd(?L790-?L831)
-	.CODE
-?L724:
-	ld	X,@(H'0004,Y)
-	ld	AL,@(H'0002,X)
-	cmp	AL,#H'0001
-	bne	?L725
-	ld	AL,@(H'0005,X)
-	bsr	_wechat_change_volume
-	bra	(?L851)
-?L725:
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0201
-	bra	(?L853)
-?L727:
-	ld	X,@(H'0004,Y)
-	ld	AL,@(H'0002,X)
-	cmp	AL,#H'000D
-	bne	?L728
-	ld	AL,@$XAP_UXL
-	add	AL,#H'0005
-	bsr	_wechat_alert_leds
-	bra	(?L851)
-?L728:
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'020D
-	bra	(?L853)
-?L730:
-	ld	AH,@(H'0004,Y)
-	add	AH,#H'0005
-	ld	X,@(H'0004,Y)
-	ld	AL,@(H'0002,X)
-	bsr	_wechat_alert_tone
-	bra	(?L851)
-?L731:
-	ld	X,@(H'0004,Y)
-	ld	AL,@(H'0002,X)
-	cmp	AL,#H'0002
-	bne	?L732
-	ld	AL,@(H'0005,X)
-	asl	#H'0008
-	or	AL,@(H'0006,X)
-	bsr	_wechat_alert_event
-	bra	(?L851)
-?L732:
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0210
-	bra	(?L853)
-?L734:
-	ld	AH,@$_theSink+H'0035
-	lsr	#H'0008
-	and	AH,#H'000F
-	cmp	AH,#H'0000
-	beq	?L830
-	ld	X,@(H'0004,Y)
-	ld	AL,@(H'0002,X)
-	cmp	AL,#H'0001
-	bcz	?L736
-	ld	AH,@$XAP_UXL
-	add	AH,#H'0005
-	bsr	_wechat_alert_voice
-	bra	(?L851)
-?L736:
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0211
-	bra	(?L853)
-?L738:
-	ld	AL,#H'4002
-	bsr	_send_app_message
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0204
-	bra	(?L853)
-?L739:
-	ld	X,@(H'0004,Y)
-	ld	AL,@(H'0002,X)
-	cmp	AL,#H'0001
-	bne	?L740
-	tst	@(H'0005,X)
-	bne	?L740
-	ld	AH,@$_theSink+H'0035
-	ld	AL,@$XAP_AH
-	and	AL,#H'0001
-	cmp	AL,#H'0000
-	beq	?L744
-	ld	AL,@$XAP_AH
-	and	AL,#-H'0002
-	bra	(?L854)
-?L740:
-	ld	X,@(H'0004,Y)
-	ld	AL,@(H'0002,X)
-	cmp	AL,#H'0001
-	bne	?L743
-	ld	AL,@(H'0005,X)
-	cmp	AL,#H'0001
-	bne	?L743
-	ld	AH,@$_theSink+H'0035
-	ld	AL,@$XAP_AH
-	and	AL,#H'0001
-	cmp	AL,#H'0000
-	bne	?L744
-	ld	AL,@$XAP_AH
-	or	AL,#H'0001
-?L854:
-	st	AL,@$_theSink+H'0035
-	bsr	$_configManagerWriteSessionData
-?L744:
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	bra	(?L838)
-?L743:
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-?L838:
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0205
-	bra	(?L853)
-?L746:
-	ld	AL,@$_theSink+H'0035
-	and	AL,#H'0001
-	st	AL,@(H'0003,Y)
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	ld	AL,#H'0001
-	st	AL,@(H'0001,Y)
-	ld	AL,@$XAP_UY
-	add	AL,#H'0003
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0285
-	bra	(?L853)
-?L747:
-	ld	X,@(H'0004,Y)
-	ld	AL,@(H'0002,X)
-	cmp	AL,#H'0001
-	bne	?L748
-	tst	@(H'0005,X)
-	bne	?L748
-	ld	AL,#(?LC25)
-	bsr	$_puts
-	bsr	$_LedManagerDisableLEDS
-	ld	AH,#H'0000
-	st	AH,@(0,Y)
-	ld	AL,#H'0000
-	bsr	$_LedConfigure
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	ld	AL,#H'0001
-	ld	AH,#H'0000
-	bsr	$_LedConfigure
-	ld	X,#H'0000
-	st	X,@(0,Y)
-	ld	AL,#H'0002
-	ld	AH,#H'0000
-	bsr	$_LedConfigure
-	ld	AH,#H'0000
-	st	AH,@(0,Y)
-	st	AH,@(H'0001,Y)
-	st	AH,@(H'0002,Y)
-	bra	(?L840)
-?L748:
-	ld	X,@(H'0004,Y)
-	ld	AL,@(H'0002,X)
-	cmp	AL,#H'0001
-	bne	?L750
-	ld	AL,@(H'0005,X)
-	cmp	AL,#H'0001
-	bne	?L750
-	ld	AL,#(?LC26)
-	bsr	$_puts
-	bsr	$_LedManagerEnableLEDS
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	bra	(?L839)
-?L750:
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-?L839:
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-?L840:
-	ld	AL,#H'000A
-	ld	AH,#H'0207
-	bra	(?L853)
-?L752:
-	ld	X,@$_theSink+H'0003
-	ld	AH,@(H'00BB,X)
-	lsr	#H'000C
-	and	AH,#H'0001
-	st	AH,@(H'0003,Y)
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	ld	AL,#H'0001
-	st	AL,@(H'0001,Y)
-	ld	AL,@$XAP_UY
-	add	AL,#H'0003
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0287
-	bra	(?L853)
-?L753:
-	ld	X,@(H'0004,Y)
-	ld	AL,@(H'0002,X)
-	cmp	AL,#H'0001
-	bne	?L754
-	ld	AH,#H'0000
-	st	AH,@(0,Y)
-	ld	AL,@(H'0005,X)
-	ld	AH,#H'0001
-	bsr	$_TonesPlayTone
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	bra	(?L841)
-?L754:
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-?L841:
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0209
-	bra	(?L853)
-?L756:
-	ld	X,@(H'0004,Y)
-	ld	AL,@(H'0002,X)
-	cmp	AL,#H'0001
-	bne	?L757
-	ld	AL,@(H'0005,X)
-	cmp	AL,#(H'0001+H'0001)
-	bcc	?L757
-	st	AL,@(0,Y)
-	ld	AL,#(?LC27)
-	bsr	$_printf
-	ld	AH,@$_theSink+H'0034
-	lsr	#H'0004
-	and	AH,#H'0001
-	ld	X,@(H'0004,Y)
-	cmp	AH,@(H'0005,X)
-	beq	?L758
-	ld	AL,@(H'0005,X)
-	and	AL,#H'0001
-	asl	#H'0004
-	ld	AH,@$_theSink+H'0034
-	and	AH,#-H'0011
-	or	AH,@$XAP_AL
-	st	AH,@$_theSink+H'0034
-	bsr	$_configManagerWriteSessionData
-?L758:
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	bra	(?L842)
-?L757:
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-?L842:
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'020A
-	bra	(?L853)
-?L760:
-	ld	AH,@$_theSink+H'0034
-	lsr	#H'0004
-	and	AH,#H'0001
-	st	AH,@(H'0003,Y)
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	ld	AL,#H'0001
-	st	AL,@(H'0001,Y)
-	ld	AL,@$XAP_UY
-	add	AL,#H'0003
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'028A
-	bra	(?L853)
-?L761:
-	ld	AH,@$_theSink+H'0035
-	lsr	#H'0008
-	and	AH,#H'000F
-	cmp	AH,#H'0000
-	beq	?L830
-	ld	AL,#H'402B
-	bsr	_send_app_message
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'020B
-	bra	(?L853)
-?L763:
-	ld	AH,@$_theSink+H'0035
-	lsr	#H'0008
-	and	AH,#H'000F
-	cmp	AH,#H'0000
-	beq	?L830
-	ld	X,@(H'0004,Y)
-	ld	AL,@(H'0002,X)
-	cmp	AL,#H'0001
-	bne	?L765
-	ld	AH,@$_theSink+H'0035
-	lsr	#H'0008
-	and	AH,#H'000F
-	ld	AL,@(H'0005,X)
-	cmp	AL,@$XAP_AH
-	bcc	?L765
-	asl	#H'000C
-	ld	AH,@$_theSink+H'0035
-	and	AH,#H'0FFF
-	or	AH,@$XAP_AL
-	st	AH,@$_theSink+H'0035
-	bsr	$_configManagerWriteSessionData
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	bra	(?L843)
-?L765:
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-?L843:
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0212
-	bra	(?L853)
-?L767:
-	ld	AH,@$_theSink+H'0035
-	lsr	#H'0008
-	and	AH,#H'000F
-	cmp	AH,#H'0000
-	beq	?L830
-	ld	AH,@$_theSink+H'0035
-	lsr	#H'000C
-	st	AH,@(H'0003,Y)
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	ld	AL,#H'0001
-	st	AL,@(H'0001,Y)
-	ld	AL,@$XAP_UY
-	add	AL,#H'0003
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0292
-	bra	(?L853)
-?L769:
-	ld	AL,#H'402F
-	bsr	_send_app_message
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0217
-	bra	(?L853)
-?L770:
-	ld	X,@(H'0004,Y)
-	ld	AL,@(H'0002,X)
-	cmp	AL,#H'0001
-	bne	?L771
-	ld	AL,@(H'0005,X)
-	cmp	AL,#(H'0001+H'0006)
-	bcc	?L771
-	bsr	_set_abs_eq_bank
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	bra	(?L844)
-?L771:
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-?L844:
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0214
-	bra	(?L853)
-?L773:
-	ld	X,@$_theSink+H'002E
-	ld	AL,@(H'0046,X)
-	st	AL,@(H'0003,Y)
-	cmp	AL,#(H'0001+H'0002)
-	bcc	?L774
-	ld	AL,#H'0003
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	bra	(?L845)
-?L774:
-	ld	AL,@(H'0003,Y)
-	add	AL,#-H'0003
-	st	AL,@(H'0003,Y)
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	ld	AL,#H'0001
-	st	AL,@(H'0001,Y)
-	ld	AL,@$XAP_UY
-	add	AL,#H'0003
-?L845:
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0294
-	bra	(?L853)
-?L776:
-	ld	X,@(H'0004,Y)
-	ld	AL,@(H'0002,X)
-	cmp	AL,#H'0001
-	bne	?L777
-	ld	AH,@(H'0005,X)
-	cmp	AH,#(H'0001+H'0001)
-	bcc	?L777
-	cmp	AH,#H'0000
-	beq	?L778
-	ld	AL,#H'4035
-	bra	(?L779)
-?L778:
-	ld	AL,#H'4036
-?L779:
-	bsr	_send_app_message
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	bra	(?L846)
-?L777:
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-?L846:
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0215
-	bra	(?L853)
-?L781:
-	ld	X,@$_theSink+H'002E
-	ld	AH,@(H'0047,X)
-	lsr	#H'0007
-	and	AH,#H'0001
-	st	AH,@(H'0003,Y)
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	ld	AL,#H'0001
-	st	AL,@(H'0001,Y)
-	ld	AL,@$XAP_UY
-	add	AL,#H'0003
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0295
-	bra	(?L853)
-?L782:
-	ld	AL,#H'401D
-	bsr	_send_app_message
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0218
-	bra	(?L853)
-?L783:
-	ld	X,@(H'0004,Y)
-	ld	AL,@(H'0002,X)
-	cmp	AL,#H'0001
-	bne	?L784
-	ld	AH,@(H'0005,X)
-	cmp	AH,#(H'0001+H'0001)
-	bcc	?L784
-	cmp	AH,#H'0000
-	beq	?L785
-	ld	AL,#H'4037
-	bra	(?L786)
-?L785:
-	ld	AL,#H'4038
-?L786:
-	bsr	_send_app_message
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	bra	(?L847)
-?L784:
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-?L847:
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0216
-	bra	(?L853)
-?L788:
-	ld	X,@$_theSink+H'002E
-	ld	AH,@(H'0047,X)
-	lsr	#H'0006
-	and	AH,#H'0001
-	st	AH,@(H'0003,Y)
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	ld	AL,#H'0001
-	st	AL,@(H'0001,Y)
-	ld	AL,@$XAP_UY
-	add	AL,#H'0003
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0296
-	bra	(?L853)
-?L789:
-	ld	AL,#H'4091
-	bsr	_send_app_message
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0219
-	bra	(?L853)
-?L790:
-	ld	X,@$_theSink+H'002E
-	ld	AH,@(H'0047,X)
-	lsr	#H'0008
-	and	AH,#H'0001
-	st	AH,@(H'0003,Y)
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	ld	AL,#H'0001
-	st	AL,@(H'0001,Y)
-	ld	AL,@$XAP_UY
-	add	AL,#H'0003
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'02A0
-	bra	(?L853)
-?L791:
-	ld	X,@(H'0004,Y)
-	ld	AL,@(H'0002,X)
-	cmp	AL,#H'0001
-	bne	?L792
-	ld	AH,@(H'0005,X)
-	cmp	AH,#(H'0001+H'0001)
-	bcc	?L792
-	cmp	AH,#H'0000
-	beq	?L793
-	ld	AL,#H'409E
-	bra	(?L794)
-?L793:
-	ld	AL,#H'409F
-?L794:
-	bsr	_send_app_message
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	bra	(?L848)
-?L792:
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-?L848:
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0220
-	bra	(?L853)
-?L796:
-	ld	AL,#H'40A0
-	bsr	_send_app_message
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'0221
-	bra	(?L853)
-?L797:
-	ld	X,@(H'0004,Y)
-	ld	AL,@(H'0006,X)
-	and	AL,#H'00FF
-	st	AL,@H'fff8
-	ld	AL,@(H'0005,X)
-	and	AL,#H'00FF
-	asl	#H'0008
-	or	AL,@H'fff8
-	st	AL,@(-1,Y)
-	ld	AL,@(H'0008,X)
-	and	AL,#H'00FF
-	st	AL,@H'fff8
-	ld	AL,@(H'0007,X)
-	and	AL,#H'00FF
-	asl	#H'0008
-	ld	X,@H'fff8
-	or	X,@$XAP_AL
-	st	X,@(0,Y)
-	ld	X,@(H'0004,Y)
-	ld	AL,@(H'0009,X)
-	st	AL,@(H'0001,Y)
-	ld	AH,#H'0000
-	st	AH,@(H'0002,Y)
-	ld	AL,#H'121A
-	ld	AH,@(-1,Y)
-	bsr	$_KalimbaSendMessage
-	cmp	AL,#H'0000
-	beq	?L798
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'021A
-	bsr	$_wechat_send_response
-	ld	AL,@(H'0004,Y)
-	add	AL,#H'0005
-	bsr	_updatePEQ
-	bra	(?L851)
-?L798:
-	ld	AL,#H'0006
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'021A
-	bra	(?L853)
-?L800:
-	ld	X,@(H'0004,Y)
-?LBB58:
-	ld	X,@(H'0002,X)
-	st	X,@(H'0005,Y)
-	ld	AH,@$XAP_UXL
-	lsr	#H'0001
-	st	AH,@(H'0007,Y)
-	ld	AL,@$XAP_AH
-	add	AL,#H'0001
-	bsr	$_malloc
-	st	AL,@(H'0006,Y)
-	cmp	AL,#H'0000
-	beq	?L801
-	ld	AH,#H'0000
-	st	AH,@(H'0008,Y)
-	cmp	AH,@(H'0007,Y)
-	bcc	?L833
-?L806:
-	ld	AL,@(H'0006,Y)
-	add	AL,@(H'0008,Y)
-	st	AL,@(H'0009,Y)
-	ld	X,@(H'0008,Y)
-	add	X,@$XAP_UXL
-	add	X,@(H'0004,Y)
-	ld	AL,@(H'0006,X)
-	and	AL,#H'00FF
-	st	AL,@H'fff8
-	ld	AL,@(H'0005,X)
-	and	AL,#H'00FF
-	asl	#H'0008
-	or	AL,@H'fff8
-	ld	X,@(H'0009,Y)
-	st	AL,@(0,X)
-	ld	AH,@(H'0008,Y)
-	add	AH,#H'0001
-	st	AH,@(H'0008,Y)
-	ld	AH,@(H'0005,Y)
-	lsr	#H'0001
-	ld	AL,@(H'0008,Y)
-	cmp	AL,@$XAP_AH
-	bcs	?L806
-?L833:
-	ld	AH,@(H'0006,Y)
-	add	AH,@(H'0008,Y)
-	ld	X,@(H'0008,Y)
-	add	X,@$XAP_UXL
-	add	X,@(H'0004,Y)
-	ld	AL,@(H'0005,X)
-	ld	X,@$XAP_AH
-	st	AL,@(0,X)
-	ld	AH,#H'0000
-	st	AH,@(H'0008,Y)
-	ld	AH,@(H'0005,Y)
-	add	AH,#-H'0002
-	lsr	#H'0002
-	ld	AL,#H'0000
-	cmp	AL,@$XAP_AH
-	bcc	?L835
-	ld	X,@(H'0005,Y)
-	add	X,#-H'0002
-	st	X,@(H'000A,Y)
-?L811:
-	ld	AL,@(H'0008,Y)
-	lsl	#H'0010
-	asr	#H'000E
-	ld	AH,@(H'0004,Y)
-	add	AL,@$XAP_AH
-	add	AL,#H'0007
-	bsr	_updatePEQ
-	ld	AL,@(H'0008,Y)
-	add	AL,#H'0001
-	st	AL,@(H'0008,Y)
-	ld	AH,@(H'000A,Y)
-	lsr	#H'0002
-	ld	AL,@(H'0008,Y)
-	cmp	AL,@$XAP_AH
-	bcs	?L811
-?L835:
-	ld	AH,@(H'0005,Y)
-	lsr	#H'0001
-	add	AH,#H'0001
-	ld	AL,@(H'0006,Y)
-	st	AL,@(0,Y)
-	ld	AL,#H'121B
-	bsr	$_KalimbaSendLongMessage
-	cmp	AL,#H'0000
-	beq	?L812
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	bra	(?L849)
-?L812:
-	ld	AL,#H'0006
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-?L849:
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'021B
-	bsr	$_wechat_send_response
-	ld	AL,@(H'0006,Y)
-?L852:
-	bsr	$_free
-	bra	(?L851)
-?L801:
-	ld	AL,#H'0003
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'021B
-	bra	(?L853)
-?L815:
-	ld	X,@(H'0004,Y)
-?LBE58:
-	ld	AL,@(H'0005,X)
-	asl	#H'0008
-	ld	AH,@$XAP_AL
-	xor	AH,@(H'0006,X)
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'129A
-	bsr	$_KalimbaSendMessage
-	ld	AH,@$XAP_AL
-	cmp	AL,#H'0000
-	bne	?L851
-	ld	AL,#H'0006
-	st	AL,@(0,Y)
-	st	AH,@(H'0001,Y)
-	st	AH,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'029A
-	bra	(?L853)
-?L817:
-	ld	X,@(H'0004,Y)
-?LBB59:
-	ld	X,@(H'0002,X)
-	st	X,@(H'000B,Y)
-	ld	AH,@$XAP_UXL
-	lsr	#H'0001
-	st	AH,@(H'000D,Y)
-	ld	AL,@$XAP_AH
-	bsr	$_malloc
-	st	AL,@(H'000C,Y)
-	cmp	AL,#H'0000
-	beq	?L818
-	ld	AH,#H'0000
-	st	AH,@H'fff8
-	cmp	AH,@(H'000D,Y)
-	bcc	?L837
-?L823:
-	ld	AL,@(H'000C,Y)
-	add	AL,@H'fff8
-	st	AL,@(H'000E,Y)
-	ld	X,@H'fff8
-	add	X,@H'fff8
-	add	X,@(H'0004,Y)
-	ld	AL,@(H'0005,X)
-	asl	#H'0008
-	xor	AL,@(H'0006,X)
-	ld	X,@(H'000E,Y)
-	st	AL,@(0,X)
-	ld	AH,#H'0001
-	add	AH,@H'fff8
-	st	AH,@H'fff8
-	ld	AH,@(H'000B,Y)
-	lsr	#H'0001
-	ld	AL,@H'fff8
-	cmp	AL,@$XAP_AH
-	bcs	?L823
-?L837:
-	ld	AH,@(H'000B,Y)
-	lsr	#H'0001
-	ld	AL,@(H'000C,Y)
-	st	AL,@(0,Y)
-	ld	AL,#H'129B
-	bsr	$_KalimbaSendLongMessage
-	ld	AH,@$XAP_AL
-	cmp	AL,#H'0000
-	bne	?L824
-	ld	AL,#H'0006
-	st	AL,@(0,Y)
-	st	AH,@(H'0001,Y)
-	st	AH,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'029B
-	bsr	$_wechat_send_response
-?L824:
-	ld	AL,@(H'000C,Y)
-	bra	(?L852)
-?L818:
-	ld	AL,#H'0003
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'029B
-	bra	(?L853)
-?L826:
-?LBE59:
-?LBB60:
-	bsr	$_stateManagerGetState
-	cmp	AL,#H'0000
-	beq	?L828
-	cmp	AL,#H'0002
-	bne	?L827
-?L828:
-	ld	AL,#H'0006
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	bra	(?L850)
-?L827:
-	ld	AL,#H'4003
-	bsr	_send_app_message
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-?L850:
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'021D
-?L853:
-	bsr	$_wechat_send_response
-?L851:
-?LBE60:
-	ld	AL,#H'0001
-	bra	(?L722)
-?L830:
-	ld	AL,#H'0000
-?L722:
-?LBE57:
-?LBE_wechat_handle_control_command:
-	leavel	#17
-	.SEG	CONST
-?LC25:
-	dc	H'47
-	dc	H'3A
-	dc	H'20
-	dc	H'53
-	dc	H'45
-	dc	H'54
-	dc	H'5F
-	dc	H'4C
-	dc	H'45
-	dc	H'44
-	dc	H'5F
-	dc	H'43
-	dc	H'4F
-	dc	H'4E
-	dc	H'54
-	dc	H'52
-	dc	H'4F
-	dc	H'4C
-	dc	H'3A
-	dc	H'20
-	dc	H'30
-	dc	H'00
-?LC26:
-	dc	H'47
-	dc	H'3A
-	dc	H'20
-	dc	H'53
-	dc	H'45
-	dc	H'54
-	dc	H'5F
-	dc	H'4C
-	dc	H'45
-	dc	H'44
-	dc	H'5F
-	dc	H'43
-	dc	H'4F
-	dc	H'4E
-	dc	H'54
-	dc	H'52
-	dc	H'4F
-	dc	H'4C
-	dc	H'3A
-	dc	H'20
-	dc	H'31
-	dc	H'00
-?LC27:
-	dc	H'47
-	dc	H'3A
-	dc	H'20
-	dc	H'53
-	dc	H'45
-	dc	H'54
-	dc	H'5F
-	dc	H'56
-	dc	H'4F
-	dc	H'49
-	dc	H'43
-	dc	H'45
-	dc	H'5F
-	dc	H'50
-	dc	H'52
-	dc	H'4F
-	dc	H'4D
-	dc	H'50
-	dc	H'54
-	dc	H'5F
-	dc	H'43
-	dc	H'4F
-	dc	H'4E
-	dc	H'54
-	dc	H'52
-	dc	H'4F
-	dc	H'4C
-	dc	H'3A
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'0A
-	dc	H'00
-	.CODE
-;.stabn	192,0,0,?LBB57
-;.stabn	192,0,0,?LBB58
-;.stabn	224,0,0,?LBE58
-;.stabn	192,0,0,?LBB59
-;.stabn	224,0,0,?LBE59
-;.stabn	192,0,0,?LBB60
-;.stabn	224,0,0,?LBE60
-;.stabn	224,0,0,?LBE57
-_wechat_handle_status_command:
-	enterl	#2
-?LBB_wechat_handle_status_command:
-	ld	X,@$XAP_AH
-	ld	AL,@(H'0004,X)
-	cmp	AL,#H'0304
-	bne	?L884
-	bsr	_wechat_send_application_version
-	ld	AL,#H'0001
-	bra	(?L881)
-?L884:
-	ld	AL,#H'0000
-?L881:
-?LBE_wechat_handle_status_command:
-	leavel	#2
-_wechat_handle_feature_command:
-	enterl	#2
-?LBB_wechat_handle_feature_command:
-	ld	X,@$XAP_AH
-	ld	AL,@(H'0004,X)
-	cmp	AL,#H'0503
-	beq	?L889
-	cmp	AL,#H'0583
-	beq	?L890
-	bra	(?L891)
-?L889:
-	add	AH,#H'0005
-	ld	AL,@(H'0002,X)
-	bsr	_wechat_set_feature
-	bra	(?L893)
-?L890:
-	add	AH,#H'0005
-	ld	AL,@(H'0002,X)
-	bsr	_wechat_get_feature
-?L893:
-	ld	AL,#H'0001
-	bra	(?L887)
-?L891:
-	ld	AL,#H'0000
-?L887:
-?LBE_wechat_handle_feature_command:
-	leavel	#2
-_wechat_handle_notification_command:
-	enterl	#5
-?LBB_wechat_handle_notification_command:
-	ld	X,@$XAP_AH
-	tst	@(H'0004,X)
-	bpl	?L897
-	ld	AL,#(?LC28)
-	bsr	$_puts
-	bra	(?L906)
-?L897:
-	ld	AL,@(H'0004,X)
-	cmp	AL,#H'4002
-	beq	?L901
-	cmp	AL,#(H'0001+H'4002)
-	bcc	?L905
-	cmp	AL,#H'4001
-	beq	?L899
-	bra	(?L903)
-?L905:
-	cmp	AL,#H'4003
-	beq	?L902
-	cmp	AL,#H'4081
-	beq	?L900
-	bra	(?L903)
-?L899:
-	add	AH,#H'0005
-	ld	AL,@(H'0002,X)
-	bsr	_wechat_register_notification
-	bra	(?L906)
-?L900:
-	add	AH,#H'0005
-	ld	AL,@(H'0002,X)
-	bsr	_wechat_get_notification
-	bra	(?L906)
-?L901:
-	add	AH,#H'0005
-	ld	AL,@(H'0002,X)
-	bsr	_wechat_cancel_notification
-	bra	(?L906)
-?L902:
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'000A
-	ld	AH,#H'4003
-	bsr	$_wechat_send_response
-?L906:
-	ld	AL,#H'0001
-	bra	(?L896)
-?L903:
-	ld	AL,#H'0000
-?L896:
-?LBE_wechat_handle_notification_command:
-	leavel	#5
-	.SEG	CONST
-?LC28:
-	dc	H'47
-	dc	H'3A
-	dc	H'20
-	dc	H'4E
-	dc	H'4F
-	dc	H'54
-	dc	H'49
-	dc	H'46
-	dc	H'20
-	dc	H'41
-	dc	H'43
-	dc	H'4B
-	dc	H'00
-	.CODE
-_wechat_handle_command:
-	enterl	#8
-?LBB_wechat_handle_command:
-	st	AL,@(H'0003,Y)
-	st	AH,@(H'0004,Y)
-?LBB61:
-	ld	AL,#H'0000
-	st	AL,@(H'0005,Y)
-	ld	X,@$XAP_AH
-	ld	AL,@(H'0003,X)
-	st	AL,@(0,Y)
-	ld	AL,@(H'0004,X)
-	st	AL,@(H'0001,Y)
-	ld	AL,@(H'0002,X)
-	st	AL,@(H'0002,Y)
-	ld	AL,#(?LC29)
-	bsr	$_printf
-	ld	X,@(H'0004,Y)
-	ld	AL,@(H'0003,X)
-	cmp	AL,#H'000A
-	bne	?L912
-	ld	AL,@(H'0004,X)
-	and	AL,#H'7F00
-	cmp	AL,#H'0300
-	beq	?L916
-	cmp	AL,#(H'0001+H'0300)
-	bcc	?L921
-	cmp	AL,#H'0100
-	beq	?L914
-	cmp	AL,#H'0200
-	beq	?L915
-	bra	(?L919)
-?L921:
-	cmp	AL,#H'0500
-	beq	?L917
-	cmp	AL,#H'4000
-	beq	?L918
-	bra	(?L919)
-?L914:
-	ld	AL,@(H'0003,Y)
-	ld	AH,@(H'0004,Y)
-	bsr	_wechat_handle_configuration_command
-	bra	(?L923)
-?L915:
-	ld	AL,@(H'0003,Y)
-	ld	AH,@(H'0004,Y)
-	bsr	_wechat_handle_control_command
-	bra	(?L923)
-?L916:
-	ld	AL,@(H'0003,Y)
-	ld	AH,@(H'0004,Y)
-	bsr	_wechat_handle_status_command
-	bra	(?L923)
-?L917:
-	ld	AL,@(H'0003,Y)
-	ld	AH,@(H'0004,Y)
-	bsr	_wechat_handle_feature_command
-	bra	(?L923)
-?L918:
-	ld	AL,@(H'0003,Y)
-	ld	AH,@(H'0004,Y)
-	bsr	_wechat_handle_notification_command
-?L923:
-	st	AL,@(H'0005,Y)
-	bra	(?L912)
-?L919:
-	ld	AL,#(?LC30)
-	bsr	$_puts
-?L912:
-	tst	@(H'0005,Y)
-	bne	?L911
-	ld	AL,#H'0001
-	st	AL,@(0,Y)
-	ld	AL,@(H'0005,Y)
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	X,@(H'0004,Y)
-	ld	AL,@(H'0003,X)
-	ld	AH,@(H'0004,X)
-	bsr	$_wechat_send_response
-?L911:
-?LBE61:
-?LBE_wechat_handle_command:
-	leavel	#8
-	.SEG	CONST
-?LC29:
-	dc	H'47
-	dc	H'3A
-	dc	H'20
-	dc	H'63
-	dc	H'6D
-	dc	H'64
-	dc	H'3A
-	dc	H'20
-	dc	H'25
-	dc	H'30
-	dc	H'34
-	dc	H'78
-	dc	H'3A
-	dc	H'25
-	dc	H'30
-	dc	H'34
-	dc	H'78
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'0A
-	dc	H'00
-?LC30:
-	dc	H'47
-	dc	H'3A
-	dc	H'20
-	dc	H'74
-	dc	H'79
-	dc	H'70
-	dc	H'65
-	dc	H'20
-	dc	H'75
-	dc	H'6E
-	dc	H'6B
-	dc	H'6E
-	dc	H'6F
-	dc	H'77
-	dc	H'6E
-	dc	H'00
-	.CODE
-;.stabn	192,0,0,?LBB61
-;.stabn	224,0,0,?LBE61
 _wechat_handle_disconnect:
 	enterl	#2
 ?LBB_wechat_handle_disconnect:
@@ -49020,56 +42716,67 @@ _wechat_handle_disconnect:
 	st	AH,@(0,X)
 ?LBE_wechat_handle_disconnect:
 	leavel	#2
+	.SEG	VAR
+_test_flag?0?:
+	DS	1
+	.SEG	CONST
+?LC6:
+	dc	H'004B
+	dc	H'004F
+	dc	H'004F
+	dc	H'0056
+	dc	H'004F
+	dc	H'0058
+	.CODE
 $_handleWechatMessage:
-	enterl	#10
+	enterl	#12
 ?LBB_handleWechatMessage:
-	st	AL,@(H'0003,Y)
-?LBB62:
+?LBB2:
 	ld	AL,#-H'7D00
 	add	AL,@$XAP_AH
 	cmp	AL,#(H'0001+H'000B)
-	bcc	?L949
+	bcc	?L17
 	ld	X,@$XAP_AL
-	ld	X,@(?JTBASE950,X)
+	ld	X,@(?JTBASE18,X)
 	brxl
 	.SEG	CONST
-?JTBASE950:
+?JTBASE18:
 	.CODE
-?L950:
+?L18:
 	.SEG	CONST
-	dc	lwrd(?L933-?L950)
-	dc	lwrd(?L949-?L950)
-	dc	lwrd(?L935-?L950)
-	dc	lwrd(?L937-?L950)
-	dc	lwrd(?L938-?L950)
-	dc	lwrd(?L939-?L950)
-	dc	lwrd(?L949-?L950)
-	dc	lwrd(?L940-?L950)
-	dc	lwrd(?L941-?L950)
-	dc	lwrd(?L949-?L950)
-	dc	lwrd(?L949-?L950)
-	dc	lwrd(?L943-?L950)
+	dc	lwrd(?L4-?L18)
+	dc	lwrd(?L17-?L18)
+	dc	lwrd(?L6-?L18)
+	dc	lwrd(?L9-?L18)
+	dc	lwrd(?L10-?L18)
+	dc	lwrd(?L11-?L18)
+	dc	lwrd(?L17-?L18)
+	dc	lwrd(?L17-?L18)
+	dc	lwrd(?L12-?L18)
+	dc	lwrd(?L17-?L18)
+	dc	lwrd(?L17-?L18)
+	dc	lwrd(?L14-?L18)
 	.CODE
-?L933:
-	ld	X,@(H'000A,Y)
-?LBB63:
+?L4:
+	ld	X,@(H'000C,Y)
+?LBB3:
 	ld	AL,@(0,X)
 	st	AL,@(0,Y)
-	ld	AL,#(?LC31)
+	ld	AL,#(?LC0)
 	bsr	$_printf
-	ld	X,@(H'000A,Y)
+	ld	X,@(H'000C,Y)
 	tst	@(0,X)
-	beq	?L931
+	beq	?L2
 	ld	AL,#H'0002
 	bsr	$_WechatSetApiMinorVersion
 	ld	AL,#H'0002
 	bsr	$_WechatStartService
-?LBE63:
-	bra	(?L931)
-?L935:
-	ld	AL,@(H'000A,Y)
-?LBB64:
-	st	AL,@(H'0004,Y)
+?LBE3:
+	bra	(?L2)
+?L6:
+	ld	AL,@(H'000C,Y)
+?LBB4:
+	st	AL,@(H'0009,Y)
 	ld	X,@$XAP_AL
 	ld	AL,@(0,X)
 	st	AL,@(0,Y)
@@ -49079,124 +42786,150 @@ $_handleWechatMessage:
 	lsr	#H'0004
 	and	AH,#H'0001
 	st	AH,@(H'0002,Y)
-	ld	AL,#(?LC32)
+	ld	AL,#(?LC1)
 	bsr	$_printf
-	ld	X,@(H'000A,Y)
+	ld	X,@(H'000C,Y)
 	tst	@(H'0001,X)
-	beq	?L936
+	beq	?L7
 	ld	AH,@$_theSink+H'0004
 	ld	AL,@(0,X)
 	ld	X,@$XAP_AH
 	st	AL,@(0,X)
 	ld	AH,@$_theSink+H'001C
 	lsr	#H'0004
-	ld	X,@(H'000A,Y)
+	ld	X,@(H'000C,Y)
 	ld	AL,@(0,X)
 	and	AH,#H'0001
 	bsr	$_WechatSetSessionEnable
-?L936:
+?L7:
+	ld	AL,#H'0001
+	st	AL,@$_g_wechatble_state+H'0001
+	tst	@$_g_wechatble_state+H'0002
+	bne	?L2
+	tst	@$_g_wechatble_state+H'0004
+	bne	?L2
 	bsr	$_koovox_pack_wechat_auth_req
 	ld	AL,@$_g_send_data
 	st	AL,@(0,Y)
-	ld	X,@(H'0004,Y)
+	ld	X,@(H'0009,Y)
 	ld	AL,@(0,X)
 	ld	AH,@$_g_send_data+H'0001
 	bsr	$_WechatSendPacket
-?LBE64:
-	bra	(?L931)
-?L937:
-	ld	X,@(H'000A,Y)
-?LBB65:
+	ld	AL,#H'0001
+	st	AL,@$_g_wechatble_state+H'0004
+?LBE4:
+	bra	(?L2)
+?L9:
+	ld	X,@(H'000C,Y)
+?LBB5:
 	ld	AL,@(0,X)
 	st	AL,@(0,Y)
-	ld	AL,#(?LC33)
+	ld	AL,#(?LC2)
 	bsr	$_printf
 	bsr	_wechat_handle_disconnect
-	ld	X,@(H'000A,Y)
+	ld	X,@(H'000C,Y)
 	ld	AL,@(0,X)
 	bsr	$_WechatDisconnectResponse
-?LBE65:
-	bra	(?L931)
-?L938:
-	ld	X,@(H'000A,Y)
-?LBB66:
+?LBE5:
+	bra	(?L2)
+?L10:
+	ld	X,@(H'000C,Y)
+?LBB6:
 	ld	AL,@(0,X)
 	st	AL,@(0,Y)
-	ld	AL,#(?LC34)
+	ld	AL,#(?LC3)
 	bsr	$_printf
 	bsr	_wechat_handle_disconnect
-?LBE66:
-	bra	(?L931)
-?L939:
-	ld	X,@(H'000A,Y)
+?LBE6:
+	bra	(?L2)
+?L11:
+	ld	X,@(H'000C,Y)
 	ld	AL,@(H'0002,X)
 	st	AL,@(0,Y)
-	ld	AL,#(?LC35)
-	bra	(?L953)
-?L940:
-	ld	AL,#(?LC36)
-	bsr	$_puts
-	ld	AL,@(H'0003,Y)
-	ld	AH,@(H'000A,Y)
-	bsr	_wechat_handle_command
-	bra	(?L931)
-?L941:
-?LBB67:
-	bsr	$_VmGetAvailableAllocations
-	st	AL,@(0,Y)
-	ld	AL,#(?LC37)
-	bsr	$_printf
-	ld	X,@(H'000A,Y)
+	ld	AL,#(?LC4)
+	bra	(?L19)
+?L12:
+	ld	X,@(H'000C,Y)
+?LBB7:
 	tst	@(H'0001,X)
-	beq	?L931
+	beq	?L2
 	ld	AL,@(H'0001,X)
 	bsr	$_free
-?LBE67:
-	bra	(?L931)
-?L943:
-	ld	AL,@(H'000A,Y)
-?LBB68:
-	st	AL,@(H'0005,Y)
-	ld	X,@$XAP_AL
+?LBE7:
+	bra	(?L2)
+?L14:
+	ld	X,@(H'000C,Y)
+?LBB8:
 	ld	AL,@(0,X)
-	st	AL,@(H'0006,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0007,Y)
-	ld	AL,@(H'0006,Y)
 	st	AL,@(0,Y)
-	ld	AL,#(?LC38)
+	ld	AL,#(?LC5)
 	bsr	$_printf
-	ld	AL,@(H'0007,Y)
-	cmp	AL,@(H'0006,Y)
-	bcc	?L952
-?L948:
-	ld	X,@(H'0005,Y)
-	add	X,@(H'0007,Y)
-	ld	AL,@(H'0001,X)
-	st	AL,@(0,Y)
-	ld	AL,#(?LC39)
-	bsr	$_printf
-	ld	AL,@(H'0007,Y)
+	ld	AL,@(H'000C,Y)
 	add	AL,#H'0001
-	st	AL,@(H'0007,Y)
-	cmp	AL,@(H'0006,Y)
-	bcs	?L948
-?L952:
-	ld	AL,#H'000A
-	bsr	$_putchar
-?LBE68:
-	bra	(?L931)
-?L949:
+	ld	X,@(H'000C,Y)
+	ld	AH,@(0,X)
+	bsr	$_koovox_write_from_wechat
+	tst	@$_g_wechatble_state+H'0002
+	beq	?L15
+	tst	@$_g_wechatble_state+H'0003
+	bne	?L15
+	tst	@$_g_wechatble_state+H'0005
+	bne	?L15
+	bsr	$_koovox_pack_wechat_init_req
+	ld	X,@$_theSink+H'0004
+	ld	AL,@$_g_send_data
+	st	AL,@(0,Y)
+	ld	AL,@(0,X)
+	ld	AH,@$_g_send_data+H'0001
+	bsr	$_WechatSendPacket
+	ld	AL,#H'0001
+	st	AL,@$_g_wechatble_state+H'0005
+?L15:
+?LBB9:
+	tst	@$_g_wechatble_state+H'0003
+	beq	?L2
+	tst	@_test_flag?0?
+	bne	?L2
+?LBB10:
+	ld	AL,#H'0006
+	st	AL,@(0,Y)
+	ld	AL,@$XAP_UY
+	add	AL,#H'0003
+	ld	AH,#(?LC6)
+	bsr	$_memcpy
+	ld	AL,#(?LC7)
+	bsr	$_puts
+	ld	AL,#H'0001
+	st	AL,@(0,Y)
+	ld	AL,#H'0000
+	st	AL,@(H'0001,Y)
+	ld	AL,@$XAP_UY
+	add	AL,#H'0003
+	ld	AH,#H'0006
+	bsr	$_koovox_pack_wechat_send_data_req
+	ld	X,@$_theSink+H'0004
+	ld	AL,@$_g_send_data
+	st	AL,@(0,Y)
+	ld	AL,@(0,X)
+	ld	AH,@$_g_send_data+H'0001
+	bsr	$_WechatSendPacket
+	ld	X,#H'0001
+	st	X,@_test_flag?0?
+?LBE10:
+?LBE9:
+?LBE8:
+	bra	(?L2)
+?L17:
 	st	AH,@(0,Y)
-	ld	AL,#(?LC40)
-?L953:
+	ld	AL,#(?LC8)
+?L19:
 	bsr	$_printf
-?L931:
-?LBE62:
+?L2:
+?LBE2:
 ?LBE_handleWechatMessage:
-	leavel	#10
+	leavel	#12
 	.SEG	CONST
-?LC31:
+?LC0:
 	dc	H'47
 	dc	H'3A
 	dc	H'20
@@ -49215,7 +42948,7 @@ $_handleWechatMessage:
 	dc	H'64
 	dc	H'0A
 	dc	H'00
-?LC32:
+?LC1:
 	dc	H'47
 	dc	H'3A
 	dc	H'20
@@ -49249,7 +42982,7 @@ $_handleWechatMessage:
 	dc	H'75
 	dc	H'0A
 	dc	H'00
-?LC33:
+?LC2:
 	dc	H'47
 	dc	H'3A
 	dc	H'20
@@ -49276,7 +43009,7 @@ $_handleWechatMessage:
 	dc	H'78
 	dc	H'0A
 	dc	H'00
-?LC34:
+?LC3:
 	dc	H'47
 	dc	H'3A
 	dc	H'20
@@ -49309,7 +43042,7 @@ $_handleWechatMessage:
 	dc	H'78
 	dc	H'0A
 	dc	H'00
-?LC35:
+?LC4:
 	dc	H'47
 	dc	H'3A
 	dc	H'20
@@ -49337,62 +43070,7 @@ $_handleWechatMessage:
 	dc	H'64
 	dc	H'0A
 	dc	H'00
-?LC36:
-	dc	H'47
-	dc	H'3A
-	dc	H'20
-	dc	H'5F
-	dc	H'55
-	dc	H'4E
-	dc	H'48
-	dc	H'41
-	dc	H'4E
-	dc	H'44
-	dc	H'4C
-	dc	H'45
-	dc	H'44
-	dc	H'5F
-	dc	H'43
-	dc	H'4F
-	dc	H'4D
-	dc	H'4D
-	dc	H'41
-	dc	H'4E
-	dc	H'44
-	dc	H'5F
-	dc	H'49
-	dc	H'4E
-	dc	H'44
-	dc	H'00
-?LC37:
-	dc	H'47
-	dc	H'3A
-	dc	H'20
-	dc	H'5F
-	dc	H'53
-	dc	H'45
-	dc	H'4E
-	dc	H'44
-	dc	H'5F
-	dc	H'50
-	dc	H'41
-	dc	H'43
-	dc	H'4B
-	dc	H'45
-	dc	H'54
-	dc	H'5F
-	dc	H'43
-	dc	H'46
-	dc	H'4D
-	dc	H'3A
-	dc	H'20
-	dc	H'73
-	dc	H'3D
-	dc	H'25
-	dc	H'64
-	dc	H'0A
-	dc	H'00
-?LC38:
+?LC5:
 	dc	H'57
 	dc	H'45
 	dc	H'43
@@ -49429,12 +43107,23 @@ $_handleWechatMessage:
 	dc	H'64
 	dc	H'0A
 	dc	H'00
-?LC39:
-	dc	H'25
-	dc	H'78
+?LC7:
+	dc	H'53
+	dc	H'65
+	dc	H'6E
+	dc	H'64
+	dc	H'20
+	dc	H'64
+	dc	H'61
+	dc	H'74
+	dc	H'61
+	dc	H'20
+	dc	H'72
+	dc	H'65
+	dc	H'71
 	dc	H'20
 	dc	H'00
-?LC40:
+?LC8:
 	dc	H'47
 	dc	H'3A
 	dc	H'20
@@ -49463,277 +43152,32 @@ $_handleWechatMessage:
 	dc	H'0A
 	dc	H'00
 	.CODE
-;.stabn	192,0,0,?LBB64
-;.stabn	224,0,0,?LBE64
-;.stabn	192,0,0,?LBB68
-;.stabn	224,0,0,?LBE68
-$_handleDfuSqifStatus:
-	enterl	#3
-?LBB_handleDfuSqifStatus:
-	ld	X,@$XAP_AL
-	ld	AL,@$_theSink+H'0004
-	st	AL,@(0,Y)
-	ld	AL,@(0,X)
-	and	AL,#H'0003
-	asl	#H'0006
-	ld	X,@(0,Y)
-	ld	AH,@(H'0006,X)
-	and	AH,#-H'00C1
-	or	AH,@$XAP_AL
-	st	AH,@(H'0006,X)
-	ld	AL,#H'4001
-	bsr	_send_app_message
-?LBE_handleDfuSqifStatus:
-	leavel	#3
-$_wechatReportPioChange:
-	enterl	#14
-?LBB_wechatReportPioChange:
-	st	AH,@(H'000A,Y)
-	st	AL,@(H'000B,Y)
-?LBB69:
-	ld	X,@$_theSink+H'0004
-	xor	AL,@(H'0004,X)
-	xor	AH,@(H'0003,X)
-	and	AL,@(H'0002,X)
-	and	AH,@(H'0001,X)
-	cmp	AH,#H'0000
-	bne	?L959
-	cmp	AL,#H'0000
-	beq	?L958
-?L959:
-	bsr	$_VmGetClock
-	st	AH,@(0,Y)
-	st	AL,@(1,Y)
-	ld	AL,@$XAP_UY
-	add	AL,#H'0006
-	bsr	_dwunpack
-	ld	AH,@(H'000A,Y)
-	ld	AL,@(H'000B,Y)
-	st	AH,@(0,Y)
-	st	AL,@(1,Y)
-	ld	AL,@$XAP_UY
-	add	AL,#H'0002
-	bsr	_dwunpack
-	ld	AH,@(H'000A,Y)
-	ld	AL,@(H'000B,Y)
-	st	AH,@(0,Y)
-	st	AL,@(1,Y)
-	ld	AL,#(?LC41)
-	bsr	$_printf
-	ld	AL,@$XAP_UY
-	add	AL,#H'0002
-	st	AL,@(0,Y)
-	ld	AL,#H'0006
-	ld	AH,#H'0008
-	bsr	_wechat_send_notification
-?L958:
-	ld	X,@$_theSink+H'0004
-	ld	AH,@(H'000A,Y)
-	ld	AL,@(H'000B,Y)
-	st	AH,@(H'0003,X)
-	st	AL,@(H'0004,X)
-?LBE69:
-?LBE_wechatReportPioChange:
-	leavel	#14
-	.SEG	CONST
-?LC41:
-	dc	H'47
-	dc	H'3A
-	dc	H'20
-	dc	H'5F
-	dc	H'45
-	dc	H'56
-	dc	H'45
-	dc	H'4E
-	dc	H'54
-	dc	H'5F
-	dc	H'50
-	dc	H'49
-	dc	H'4F
-	dc	H'5F
-	dc	H'43
-	dc	H'48
-	dc	H'41
-	dc	H'4E
-	dc	H'47
-	dc	H'45
-	dc	H'44
-	dc	H'3A
-	dc	H'20
-	dc	H'25
-	dc	H'30
-	dc	H'38
-	dc	H'6C
-	dc	H'78
-	dc	H'0A
-	dc	H'00
-	.CODE
-;.stabn	192,0,0,?LBB69
-;.stabn	224,0,0,?LBE69
-$_wechatReportEvent:
-	enterl	#4
-?LBB_wechatReportEvent:
-?LBB70:
-	cmp	AL,#H'4096
-	beq	?L966
-	cmp	AL,#(H'0001+H'4096)
-	bcc	?L970
-	cmp	AL,#H'4095
-	beq	?L964
-	bra	(?L960)
-?L970:
-	cmp	AL,#H'4708
-	bne	?L960
-	ld	X,@$_theSink+H'0004
-	ld	AH,@(H'0006,X)
-	lsr	#H'000D
-	and	AH,#H'0001
-	cmp	AH,#H'0000
-	beq	?L960
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	ld	AL,#H'0008
-	ld	AH,#H'0000
-	bra	(?L972)
-?L964:
-	ld	X,@$_theSink+H'0004
-	ld	AH,@(H'0006,X)
-	lsr	#H'000E
-	and	AH,#H'0001
-	cmp	AH,#H'0000
-	beq	?L960
-	ld	AL,#H'0001
-	bra	(?L971)
-?L966:
-	ld	X,@$_theSink+H'0004
-	ld	AH,@(H'0006,X)
-	lsr	#H'000E
-	and	AH,#H'0001
-	cmp	AH,#H'0000
-	beq	?L960
-	ld	AL,#H'0000
-?L971:
-	st	AL,@(H'0001,Y)
-	ld	AL,@$XAP_UY
-	add	AL,#H'0001
-	st	AL,@(0,Y)
-	ld	AL,#H'0009
-	ld	AH,#H'0001
-?L972:
-	bsr	_wechat_send_notification
-?L960:
-?LBE70:
-?LBE_wechatReportEvent:
-	leavel	#4
-;.stabn	192,0,0,?LBB70
-;.stabn	224,0,0,?LBE70
-$_wechatReportUserEvent:
-	enterl	#7
-?LBB_wechatReportUserEvent:
-	st	AL,@(H'0004,Y)
-?LBB71:
-	ld	X,@$_theSink+H'0004
-	tst	@(0,X)
-	beq	?L976
-	st	AL,@(0,Y)
-	ld	AH,@(H'0006,X)
-	lsr	#H'000F
-	st	AH,@(H'0001,Y)
-	ld	AL,#(?LC42)
-	bsr	$_printf
-	ld	X,@$_theSink+H'0004
-	ld	AH,@(H'0006,X)
-	lsr	#H'000F
-	cmp	AH,#H'0000
-	beq	?L976
-	ld	AL,@(H'0004,Y)
-?LBB72:
-	cmp	AL,#H'4015
-	beq	?L976
-	cmp	AL,#H'4015
-	bcs	?L983
-	add	AL,#-H'471E
-	cmp	AL,#H'0001
-	bcz	?L976
-?L983:
-	ld	AH,@(H'0004,Y)
-	lsr	#H'0008
-	st	AH,@(H'0002,Y)
-	ld	AL,@(H'0004,Y)
-	and	AL,#H'00FF
-	st	AL,@(H'0003,Y)
-	ld	AL,@$XAP_UY
-	add	AL,#H'0002
-	st	AL,@(0,Y)
-	ld	AL,#H'000B
-	ld	AH,#H'0002
-	bsr	_wechat_send_notification
-?L976:
-?LBE72:
-?LBE71:
-?LBE_wechatReportUserEvent:
-	leavel	#7
-	.SEG	CONST
-?LC42:
-	dc	H'47
-	dc	H'3A
-	dc	H'20
-	dc	H'65
-	dc	H'76
-	dc	H'20
-	dc	H'25
-	dc	H'30
-	dc	H'34
-	dc	H'78
-	dc	H'20
-	dc	H'65
-	dc	H'6E
-	dc	H'20
-	dc	H'25
-	dc	H'75
-	dc	H'0A
-	dc	H'00
-	.CODE
-;.stabn	192,0,0,?LBB72
-;.stabn	224,0,0,?LBE72
-$_wechatDfuRequest:
-	enterl	#3
-?LBB_wechatDfuRequest:
-	ld	X,@$_theSink+H'0004
-	tst	@(0,X)
-	beq	?L988
-	ld	AH,@(H'0006,X)
-	lsr	#H'0008
-	ld	AL,@$XAP_AH
-	and	AL,#H'000F
-	cmp	AL,#H'000F
-	beq	?L988
-	ld	AL,#H'001E
-	st	AL,@(0,Y)
-	ld	AL,@(0,X)
-	and	AH,#H'000F
-	bsr	$_WechatDfuRequest
-?L988:
-?LBE_wechatDfuRequest:
-	leavel	#3
+;.stabn	192,0,0,?LBB4
+;.stabn	224,0,0,?LBE4
+;.stabn	192,0,0,?LBB8
+;.stabn	192,0,0,?LBB9
+;.stabn	192,0,0,?LBB10
+;.stabn	224,0,0,?LBE10
+;.stabn	224,0,0,?LBE9
+;.stabn	224,0,0,?LBE8
 $_wechatDisconnect:
 	enterl	#3
 ?LBB_wechatDisconnect:
 	ld	X,@$_theSink+H'0004
 	ld	AL,@(0,X)
 	st	AL,@(0,Y)
-	ld	AL,#(?LC43)
+	ld	AL,#(?LC9)
 	bsr	$_printf
 	ld	X,@$_theSink+H'0004
 	tst	@(0,X)
-	beq	?L991
+	beq	?L20
 	ld	AL,@(0,X)
 	bsr	$_WechatDisconnectRequest
-?L991:
+?L20:
 ?LBE_wechatDisconnect:
 	leavel	#3
 	.SEG	CONST
-?LC43:
+?LC9:
 	dc	H'47
 	dc	H'3A
 	dc	H'20
@@ -49757,38 +43201,18 @@ $_wechatDisconnect:
 	.CODE
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 1075 used[1] = 159 used[3] = 6 total = 1240
-;# Function pattern *movqi3 used[0] = 1444 total = 1444
-;# Function pattern *movqi8 used[0] = 51 total = 51
-;# Function pattern *movhi used[2] = 8 used[3] = 12 total = 20
-;# Function pattern *andhi3 used[0] = 1 total = 1
-;# Function pattern *iorhi3 used[0] = 3 total = 3
-;# Function pattern *xorhi3 used[0] = 1 total = 1
-;# Function pattern *addqi0 used[0] = 41 total = 41
-;# Function pattern *addqi2 used[0] = 155 used[2] = 55 total = 210
-;# Function pattern *andqi3 used[0] = 181 total = 181
-;# Function pattern *iorqi3 used[0] = 72 total = 72
-;# Function pattern *xorqi3 used[0] = 3 total = 3
-;# Function pattern *subqi3 used[0] = 3 total = 3
-;# Function pattern *udivqi3_const used[0] = 6 total = 6
-;# Function pattern *udivqi3 used[0] = 1 total = 1
-;# Function pattern *mulqi3_const used[0] = 46 total = 46
-;# Function pattern *ashlhi3 used[0] = 3 total = 3
-;# Function pattern *lshrqi3 used[0] = 92 total = 92
-;# Function pattern *ashrqi3 used[0] = 1 total = 1
-;# Function pattern *ashlqi3 used[0] = 50 total = 50
-;# Function pattern *lshrhi3 used[0] = 3 total = 3
-;# Function pattern *zero_extendqihi2 used[0] = 5 total = 5
-;# Function pattern *zero_extendqihi2_1 used[0] = 6 total = 6
-;# Function pattern jump used[0] = 232 total = 232
-;# Function pattern *call1 used[0] = 159 total = 159
-;# Function pattern *call_value1 used[0] = 123 total = 123
-;# Function pattern tablejump_1 used[0] = 5 total = 5
-;# Function pattern movstrqi+2 used[0] = 4 total = 4
-;# Function pattern movstrqi+3 used[0] = 67 used[1] = 42 total = 109
-;# Function pattern movstrqi+4 used[1] = 32 used[2] = 2 total = 34
-;# Function pattern movstrqi+5 used[0] = 229 total = 229
-;# Function pattern movstrqi+6 used[0] = 2 total = 2
+;# Function pattern *movqi2 used[0] = 32 total = 32
+;# Function pattern *movqi3 used[0] = 75 total = 75
+;# Function pattern *addqi0 used[0] = 2 total = 2
+;# Function pattern *addqi2 used[0] = 1 used[2] = 1 total = 2
+;# Function pattern *andqi3 used[0] = 6 total = 6
+;# Function pattern *lshrqi3 used[0] = 2 total = 2
+;# Function pattern jump used[0] = 7 total = 7
+;# Function pattern *call1 used[0] = 14 total = 14
+;# Function pattern *call_value1 used[0] = 10 total = 10
+;# Function pattern tablejump_1 used[0] = 1 total = 1
+;# Function pattern movstrqi+3 used[1] = 11 total = 11
+;# Function pattern movstrqi+4 used[1] = 1 total = 1
 	MODULE	sink_wired
 	.LARGE
 ; GNU C version 3.3.3 (CSR version 30 for xapnative)

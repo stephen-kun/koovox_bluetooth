@@ -75,95 +75,6 @@ static void sdp_register_rfcomm(uint8 channel)
 }
 
 
-static void process_transport_data(wechat_transport *transport)
-{
-    Source source = wechatTransportGetSource(transport);
-    uint16 idx = 0;
-    uint16 expected = WECHAT_OFFS_PAYLOAD;
-    uint16 packet_length = 0;
-    uint16 data_length = SourceSize(source);
-    uint8 *data = (uint8 *) SourceMap(source);
-    uint8 *packet = NULL;
-    uint8 flags = 0;
-    uint8 check = 0;
-
-    WECHAT_TRANS_DEBUG(("wechat: process_source_data: %d\n", data_length));
-
-#ifdef DEBUG_WECHAT_TRANSPORT
-    if (data_length == 0)
-        WECHAT_DEBUG(("wechat: done\n"));
-
-    else
-    {
-        uint16 i;
-        WECHAT_DEBUG(("wechat: got"));
-        for (i = 0; i < data_length; ++i)
-            WECHAT_DEBUG((" %02x", data[i]));
-        WECHAT_DEBUG(("\n"));
-    }
-#endif
-
-    if (data_length >= WECHAT_OFFS_PAYLOAD)    
-    {
-        while ((idx < data_length) && (packet_length < expected))
-        {
-            if (packet_length > 0)
-            {
-                if (packet_length == WECHAT_OFFS_FLAGS)
-                    flags = data[idx];
-
-                else if (packet_length == WECHAT_OFFS_PAYLOAD_LENGTH)
-                {
-                    expected = WECHAT_OFFS_PAYLOAD + data[idx] + ((flags & WECHAT_PROTOCOL_FLAG_CHECK) ? 1 : 0);
-                    WECHAT_TRANS_DEBUG(("wechat: expect %d + %d + %d = %d\n", 
-                                WECHAT_OFFS_PAYLOAD, data[idx], (flags & WECHAT_PROTOCOL_FLAG_CHECK) ? 1 : 0, expected));
-                }
-
-                check ^= data[idx];
-                ++packet_length;
-            }
-
-            else if (data[idx] == WECHAT_SOF)
-            {
-                packet = data + idx;
-                packet_length = 1;
-                check = WECHAT_SOF;
-            }
-
-            ++idx;
-        }
-
-
-        if (packet_length == expected)
-        {
-            if (((flags & WECHAT_PROTOCOL_FLAG_CHECK) == 0) || (check == 0))
-                process_packet(transport, packet);
-
-            else
-                WECHAT_TRANS_DEBUG(("wechat: bad chk\n"));
-
-            SourceDrop(source, idx);
-        }
-        
-        else if (packet_length == 0)
-        {
-        /*  No start-of-frame; drop the lot  */
-            WECHAT_TRANS_DEBUG(("wechat: no sof\n"));
-            SourceDrop(source, data_length);
-        }
-        
-        
-        if (idx < data_length)
-        {
-            MESSAGE_PMAKE(more, WECHAT_INTERNAL_MORE_DATA_T);
-            WECHAT_TRANS_DEBUG(("wechat: more: %d < %d\n", idx, data_length));
-            more->transport = transport;
-            MessageSendLater(&wechat->task_data, WECHAT_INTERNAL_MORE_DATA, more, APP_BUSY_WAIT_MILLIS);
-        }
-    }
-}
-
-
 /*************************************************************************
 NAME
     wechatTransportRfcommDropState
@@ -197,7 +108,7 @@ void wechatTransportRfcommSendPacket(Task task, wechat_transport *transport, uin
     
     if (wechat)
     {
-        Sink sink = wechatTransportGetSink(transport);
+        Sink sink = wechatTransportRfcommGetSink(transport);
         
         if (SinkClaim(sink, length) == BAD_SINK_CLAIM)
         {
@@ -209,15 +120,6 @@ void wechatTransportRfcommSendPacket(Task task, wechat_transport *transport, uin
             uint8 *sink_data = SinkMap(sink);
             memcpy (sink_data, data, length);
 
-#ifdef DEBUG_WECHAT_TRANSPORT
-            {
-                uint16 idx;
-                WECHAT_DEBUG(("wechat: put"));
-                for (idx = 0; idx < length; ++idx)
-                    WECHAT_DEBUG((" %02x", data[idx]));
-                WECHAT_DEBUG(("\n"));
-            }
-#endif
             status = SinkFlush(sink, length);
         }   
     }
@@ -230,34 +132,13 @@ void wechatTransportRfcommSendPacket(Task task, wechat_transport *transport, uin
 }
 
 
-/*! @brief
- */
-void wechatTransportRfcommInit(wechat_transport *transport)
-{
-    memset(transport, 0, sizeof (wechat_transport));
-    transport->type = wechat_transport_rfcomm;
-}
 
-
-/*! @brief
- */
-void wechatTransportRfcommConnectRes(wechat_transport *transport)
-{
-
-}
 
 /*! @brief
  */
 void wechatTransportRfcommDisconnectReq(wechat_transport *transport)
 {
     ConnectionRfcommDisconnectRequest(&wechat->task_data, wechatTransportRfcommGetSink(transport));
-}
-
-/*! @brief
- */
-void wechatTransportRfcommDisconnectRes(wechat_transport *transport)
-{
-
 }
 
 /*! @brief
@@ -285,24 +166,25 @@ bool wechatTransportRfcommHandleMessage(Task task, MessageId id, Message message
     {
         case WECHAT_INTERNAL_MORE_DATA:
             {
-                WECHAT_INTERNAL_MORE_DATA_T *m = (WECHAT_INTERNAL_MORE_DATA_T *) message;
-                WECHAT_TRANS_DEBUG(("wechat: WECHAT_INTERNAL_MORE_DATA: t=%04x\n", (uint16) m->transport));
-                process_transport_data(m->transport);
             }
             break;
             
             
         case MESSAGE_MORE_DATA:
             {
-                MessageMoreData *m = (MessageMoreData *) message;
-                wechat_transport *t = wechatTransportFromSink(StreamSinkFromSource(m->source));
-                WECHAT_TRANS_DEBUG(("wechat: MESSAGE_MORE_DATA: t=%04x\n", (uint16) t));
-                
-                if (t && (t->type == wechat_transport_rfcomm))
-                    process_transport_data(t);
-                
-                else
-                    msg_handled = FALSE;
+
+				MessageMoreData *m = (MessageMoreData *) message;
+				uint16 size = SourceSize(m->source);
+				const uint8* data = SourceMap(m->source);
+				uint16 size_msg = sizeof(WECHAT_MESSAGE_MORE_DATA_T) + (size ? size - 1 : 0);
+				WECHAT_MESSAGE_MORE_DATA_T* msg = (WECHAT_MESSAGE_MORE_DATA_T*)PanicUnlessMalloc(size_msg);
+				
+				msg->size_value = size;
+				memmove(msg->value, data, size);
+				
+				MessageSend(wechat->app_task, WECHAT_MESSAGE_MORE_DATA, msg);
+				
+				SourceDrop(m->source, size);
 			
             }
             break;

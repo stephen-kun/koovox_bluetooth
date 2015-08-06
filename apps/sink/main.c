@@ -575,9 +575,6 @@ static void handleUEMessage  ( Task task, MessageId id, Message message )
             gaiaReportUserEvent(id);
 #endif
 
-#ifdef ENABLE_WECHAT
-			wechatReportUserEvent(id);
-#endif
     }
      
 /*    MAIN_DEBUG (( "HS : UE[%x]\n", id )); */
@@ -3359,10 +3356,6 @@ static void handleUEMessage  ( Task task, MessageId id, Message message )
     
 #ifdef ENABLE_GAIA
     gaiaReportEvent(id);
-#endif
-
-#ifdef ENABLE_WECHAT
-	wechatReportEvent(id);
 #endif
     
 #ifdef TEST_HARNESS 

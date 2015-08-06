@@ -7,12 +7,15 @@ Copyright (C) Cambridge Silicon Radio Ltd. 2011-2014
 #ifndef _WECHAT_TRANSPORT_COMMON_H
 #define _WECHAT_TRANSPORT_COMMON_H
 
-/*! @brief Utility function to send a WECHAT_CONNECT_CFM message to client task.
+
+/*! @brief Utility function to send a GAIA_SEND_PACKET_CFM message to client task.
  *
- *  @param transport The wechat transport on which the event occurred.
- *  @param success Boolean indicating success (TRUE) or failure (FALSE) of connection attempt.
+ *  @param transport The gaia transport on which the event occurred.
+ *  @param packet Pointer to the packet data that was transmitted.
+ *  @param success Boolean indicating success or failure of Gaia command transmission.
  */
-void wechatTransportCommonSendWechatConnectCfm(wechat_transport* transport, bool success);
+void wechatTransportCommonSendWechatSendPacketCfm(wechat_transport *transport, uint8 *packet, bool success);
+
 
 /*! @brief Utility function to send a WECHAT_CONNECT_IND message to client task.
  *
@@ -33,13 +36,6 @@ void wechatTransportCommonSendWechatDisconnectInd(wechat_transport* transport);
  */
 void wechatTransportCommonSendWechatDisconnectCfm(wechat_transport* transport);
 
-/*! @brief Utility function to send a WECHAT_SEND_PACKET_CFM message to client task.
- *
- *  @param transport The wechat transport on which the event occurred.
- *  @param packet Pointer to the packet data that was transmitted.
- *  @param success Boolean indicating success or failure of Wechat command transmission.
- */
-void wechatTransportCommonSendWechatSendPacketCfm(wechat_transport *transport, uint8 *packet, bool success);
 
 /*! @brief Utility function to send a WECHAT_START_SERVICE_CFM message to client task.
  *

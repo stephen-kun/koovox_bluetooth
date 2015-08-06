@@ -175,14 +175,7 @@ typedef enum
     WECHAT_INTERNAL_INIT = 1,
     WECHAT_INTERNAL_MORE_DATA,
     WECHAT_INTERNAL_SEND_REQ,
-    WECHAT_INTERNAL_BATTERY_MONITOR_TIMER,
-    WECHAT_INTERNAL_CHECK_BATTERY_THRESHOLD_REQ,
-    WECHAT_INTERNAL_CHECK_RSSI_THRESHOLD_REQ,
-    WECHAT_INTERNAL_DISCONNECT_REQ,
-    WECHAT_INTERNAL_REBOOT_REQ,
-    WECHAT_INTERNAL_POWER_OFF_REQ,
-    WECHAT_INTERNAL_DFU_REQ,
-    WECHAT_INTERNAL_DFU_TIMEOUT
+    WECHAT_INTERNAL_DISCONNECT_REQ
 } wechat_internal_message;
 
 typedef struct _wechat_transport wechat_transport;
@@ -338,8 +331,6 @@ struct _WECHAT_T
 {
     TaskData task_data;
     Task app_task;
-    uint32 command_locus_bits;
-    uint16 event_locus_bits;
     wechat_transport *outstanding_request;
     int16 battery_reference;
     int16 battery_voltage;
@@ -378,7 +369,5 @@ struct _WECHAT_T
 
 extern WECHAT_T* wechat; 
 
-/* Common Wechat packet handler, called by a transport once it has got one from whatever source */
-void process_packet(wechat_transport *transport, uint8 *packet);
 
 #endif /* ifdef _WECHAT_PRIVATE_H_ */

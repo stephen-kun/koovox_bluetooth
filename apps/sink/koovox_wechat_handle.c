@@ -35,16 +35,16 @@ DESCRIPTION
 RETURN
     void
 */
-static void koovox_pack_wechat_head(uint16 cmdid)
+static void koovox_pack_wechat_head(uint16 cmdid, uint8* data)
 {
-	g_send_data.data[0] = 0xfe;
-	g_send_data.data[1] = 0x01;
-	g_send_data.data[2] = (g_send_data.len >> 8) & 0xff;
-	g_send_data.data[3] = g_send_data.len & 0xff;
-	g_send_data.data[4] = (cmdid >> 8) & 0xff;
-	g_send_data.data[5] = cmdid & 0xff;
-	g_send_data.data[6] =(g_wechatble_state.seq >> 8) & 0xff;
-	g_send_data.data[7] = g_wechatble_state.seq & 0xff;
+	data[0] = 0xfe;
+	data[1] = 0x01;
+	data[2] = (g_send_data.len >> 8) & 0xff;
+	data[3] = g_send_data.len & 0xff;
+	data[4] = (cmdid >> 8) & 0xff;
+	data[5] = cmdid & 0xff;
+	data[6] =(g_wechatble_state.seq >> 8) & 0xff;
+	data[7] = g_wechatble_state.seq & 0xff;
 }
 
 /*************************************************************************
@@ -133,10 +133,14 @@ static uint16 koovox_rcv_data_confirm(uint8* data, uint16 size_data)
 			{
 				if(initResp->has_challeange_answer)
 				{
-					if(crc32(0,challeange,CHALLENAGE_LENGTH) == initResp->challeange_answer)
+					uint32 ret = crc32(0,challeange,CHALLENAGE_LENGTH);
+					if(ret == initResp->challeange_answer)
 					{
 						g_wechatble_state.init_state = TRUE;
 					}
+
+					DEBUG(("crc32:%ld ,challeange_answer:%ld\n", ret, initResp->challeange_answer));
+
 				}
 				else 
 					g_wechatble_state.init_state = TRUE;
@@ -224,6 +228,8 @@ RETURN
 */
 void koovox_wechat_error_handle(uint16 error_code)
 {
+	DEBUG(("koovox_wechat_error_handle: ERROR_CODE=%x \n", error_code));
+
 	if(error_code)
 	{
 
@@ -260,7 +266,9 @@ void koovox_write_from_wechat(uint8* data, uint16 size_data)
 	if(size_data < FRAME_SIZE_FIX_HEAD)
 		return;
 
+#if 0
 	if(size_data <= SIZE_GATT_MTU)
+#endif
 	{
 		if((g_rcv_data.len == 0))
 		{
@@ -288,8 +296,13 @@ void koovox_write_from_wechat(uint8* data, uint16 size_data)
 			/* 出错处理 */
 			koovox_wechat_error_handle(error_code);
 
-			freePanic(g_rcv_data.data);
-			g_rcv_data.data = NULL;
+			if(g_rcv_data.data)
+			{
+				DEBUG(("free g_rcv_data.data\n"));
+				freePanic(g_rcv_data.data);
+				g_rcv_data.data = NULL;
+			}
+
 			g_rcv_data.len = 0;
 			g_rcv_data.offset = 0;
 			
@@ -409,7 +422,8 @@ void koovox_pack_wechat_auth_req(void)
 	
 	g_wechatble_state.seq++;
 	
-	koovox_pack_wechat_head(ECI_req_auth);
+	koovox_pack_wechat_head(ECI_req_auth, g_send_data.data);
+
 	
 	epb_pack_auth_request(&authReq, g_send_data.data + fix_head_len, g_send_data.len - fix_head_len);
 
@@ -434,23 +448,25 @@ void koovox_pack_wechat_init_req(void)
 	uint16 fix_head_len = FRAME_SIZE_FIX_HEAD;
 
 	/* 需要根据实际情况修改 */
+#if 0
 	uint8 resp_field[] = {0x7f, 0x0, 0x0, 0x0};
 	uint8 challenge[] = {0x2c, 0x93, 0x4b, 0x0};
+#endif
 	
 	memset(&initReq, 0, sizeof(initReq));
 	g_wechatble_state.seq++;
 	
-	initReq.has_resp_field_filter = TRUE;
-	initReq.resp_field_filter.len = 0x04;
-	initReq.resp_field_filter.data = (uint8*)resp_field;
-	initReq.has_challenge = TRUE;
-	initReq.challenge.len = 0x04;
-	initReq.challenge.data = (uint8*)challenge;
+	initReq.has_resp_field_filter = FALSE;
+	initReq.resp_field_filter.len = 0;
+	initReq.resp_field_filter.data = NULL;
+	initReq.has_challenge = FALSE;
+	initReq.challenge.len = 0;
+	initReq.challenge.data = NULL;
 	
 	g_send_data.len = epb_init_request_pack_size(&initReq)+ fix_head_len;
 	g_send_data.data = (uint8*)mallocPanic(g_send_data.len);
 
-	koovox_pack_wechat_head(ECI_req_init);
+	koovox_pack_wechat_head(ECI_req_init, g_send_data.data);
 	
 	epb_pack_init_request(&initReq, g_send_data.data + fix_head_len, g_send_data.len - fix_head_len);
 	
@@ -486,7 +502,7 @@ void koovox_pack_wechat_send_data_req(uint8* data, uint16 size_data, bool has_ty
 	g_send_data.len = epb_send_data_request_pack_size(&data_request)+ fix_head_len;
 	g_send_data.data = (uint8*)mallocPanic(g_send_data.len);
 
-	koovox_pack_wechat_head(ECI_req_sendData);
+	koovox_pack_wechat_head(ECI_req_sendData, g_send_data.data);
 
 	epb_pack_send_data_request(&data_request, g_send_data.data + fix_head_len, g_send_data.len - fix_head_len);
 	

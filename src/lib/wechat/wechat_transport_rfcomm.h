@@ -7,25 +7,16 @@ Copyright (C) Cambridge Silicon Radio Ltd. 2011-2014
 
 #ifdef WECHAT_TRANSPORT_RFCOMM
 
-/*! @brief
- */
-void wechatTransportRfcommInit(wechat_transport *transport);
 
 /*! @brief
  */
 void wechatTransportRfcommConnectReq(wechat_transport *transport, bdaddr *address);
 
-/*! @brief
- */
-void wechatTransportRfcommConnectRes(wechat_transport *transport);
 
 /*! @brief
  */
 void wechatTransportRfcommDisconnectReq(wechat_transport *transport);
 
-/*! @brief
- */
-void wechatTransportRfcommDisconnectRes(wechat_transport *transport);
 
 /*! @brief
  */

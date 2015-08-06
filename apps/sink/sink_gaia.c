@@ -3254,9 +3254,6 @@ void handleGaiaMessage(Task task, MessageId id, Message message)
                 gaia_data.gaia_transport = m->transport;
                 GaiaSetSessionEnable(m->transport, theSink.features.GaiaEnableSession);
             }
-
-			koovox_pack_wechat_auth_req();
-			GaiaSendPacket(m->transport, g_send_data.len, g_send_data.data);
         }
         break;
         
