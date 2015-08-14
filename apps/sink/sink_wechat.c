@@ -137,8 +137,7 @@ void handleWechatMessage(Task task, MessageId id, Message message)
 	case WECHAT_MESSAGE_MORE_DATA:
 		{
 			WECHAT_MESSAGE_MORE_DATA_T* m = (WECHAT_MESSAGE_MORE_DATA_T*)message;	
-			uint16 size = m->size_value;
-            WECHAT_DEBUG(("WECHAT_MESSAGE_MORE_DATA:size = %d\n", size));
+            WECHAT_DEBUG(("WECHAT_MESSAGE_MORE_DATA:size = %d\n", m->size_value));
 
 			{
 				/* 处理消息 */

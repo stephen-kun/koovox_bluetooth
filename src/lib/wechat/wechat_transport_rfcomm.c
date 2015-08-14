@@ -145,7 +145,7 @@ void wechatTransportRfcommDisconnectReq(wechat_transport *transport)
  */
 void wechatTransportRfcommStartService(void)
 {
-    ConnectionRfcommAllocateChannel(&wechat->task_data, SPP_DEFAULT_CHANNEL);
+    ConnectionRfcommAllocateChannel(&wechat->task_data, WECHAT_DEFAULT_CHANNEL);
 }
 
 /*! @brief

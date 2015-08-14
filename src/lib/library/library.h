@@ -54,6 +54,8 @@ all Bluelab libraries.
 /* @brief   Default HSP service channel */
 #define     HSP_DEFAULT_CHANNEL   (0x0B)
 
+#define 	WECHAT_DEFAULT_CHANNEL	(0x0C)
+
 
 
 

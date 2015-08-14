@@ -248,6 +248,9 @@ void BMButtonDetected ( uint32 pButtonMask , ButtonsTime_t pTime  )
 {
  
     BM_DEBUG(("BM : But [%lx] [%s]\n" ,pButtonMask ,  gDebugTimeStrings[pTime]  )) ;
+
+	if(pButtonMask & 0xFFFF)
+		pButtonMask &= ~VREG_PIN_MASK;
  
     /*perform the search over both blocks*/
     BMCheckForButtonMatch ( pButtonMask  , pTime ) ;
@@ -326,10 +329,7 @@ static void BMCheckForButtonMatch ( uint32 pButtonMask , ButtonsTime_t  pDuratio
     uint16 lBlockIndex = 0 ; 
     uint16 lEvIndex = 0 ;        
     uint32 lMask = 0;
-
-	if(pButtonMask & 0xFFFF)
-		pButtonMask &= ~VREG_PIN_MASK;
-		
+	
         /*each block*/
     for (lBlockIndex = 0 ; lBlockIndex < BM_NUM_BLOCKS ; lBlockIndex++)
     {       /*Each Entry*/        
@@ -378,6 +378,23 @@ static void BMCheckForButtonMatch ( uint32 pButtonMask , ButtonsTime_t  pDuratio
                             }
                         }
                     }
+					else
+					{
+						if(pButtonMask == VREG_PIN_MASK)
+						{
+							if((!theSink.theButtonsTask->gOldPIOState)&&(deviceLimbo != stateManagerGetState()))
+							{
+								DEBUG(("send poweroff event\n"));
+								MessageSend(theSink.theButtonsTask->client, EventUsrPowerOff, 0);
+							}
+							else if((theSink.theButtonsTask->gOldPIOState == VREG_PIN_MASK)&&(deviceLimbo == stateManagerGetState()))
+							{
+								DEBUG(("send poweron event\n"));
+								MessageSend(theSink.theButtonsTask->client, EventUsrPowerOn, 0);
+							}
+								
+						}
+					}
                 }
             }
         }

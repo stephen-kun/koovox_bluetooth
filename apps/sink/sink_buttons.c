@@ -166,7 +166,9 @@ static void ButtonsMessageHandler ( Task pTask, MessageId pId, Message pMessage 
 {   
     ButtonsTaskData * lBTask = (ButtonsTaskData*)pTask ;
 
-    B_DEBUG(("B:Message\n")) ;
+    B_DEBUG(("B:Message \n")) ;
+	DEBUG(("PIO status:%lx\n", lBTask->gOldPIOState));
+	
     switch ( pId )
     {
 #ifdef ENABLE_CAPSENSE
@@ -389,7 +391,7 @@ static void ButtonsButtonDetected (  ButtonsTaskData * pButtonsTask, uint32 pBut
 {
     B_DEBUG(("B:But Det[%lx]\n", pButtonMask)) ;
     
-    if( pButtonMask == 0 )
+    if((pButtonMask == 0)||((pTime == B_VERY_LONG)&&(pButtonMask == VREG_PIN_MASK)))
     {
         MessageCancelAll ( &pButtonsTask->task , B_REPEAT_TIMER ) ;
     }

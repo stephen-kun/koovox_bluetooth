@@ -34,7 +34,7 @@ DESCRIPTION
             /* RSSI pairing */
         #define DEBUG_INQx
                 /*The button manager */
-        #define DEBUG_BUT_MAN
+        #define DEBUG_BUT_MANx
             /*The low level button parsing*/
         #define DEBUG_BUTTONSx
             /*The call manager*/
@@ -132,9 +132,9 @@ DESCRIPTION
             /* Battery Reporting debug */
         #define DEBUG_BAT_REPx
 
-		#define DEBUG_KOOVOX_TASK
-		#define DEBUG_KOOVOX_CORE
-		#define DEBUG_KOOVOX_MESSAGE
+		#define DEBUG_KOOVOX_TASKx
+		#define DEBUG_KOOVOX_COREx
+		#define DEBUG_KOOVOX_MESSAGEx
 		#define DEBUG_KOOVOX_UARTx
 
     #else

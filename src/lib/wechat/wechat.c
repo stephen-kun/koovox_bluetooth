@@ -178,7 +178,6 @@ static void message_handler(Task task, MessageId id, Message message)
         }
         break;
         
-
     case WECHAT_INTERNAL_INIT:
         wechat_init();
         break;

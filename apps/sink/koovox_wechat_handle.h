@@ -66,6 +66,7 @@ typedef struct
 	uint16 offset;
 }Data_info;
 
+/* 可自定义 */
 typedef struct
 {
 	uint8 	m_magicCode[2];

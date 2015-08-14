@@ -2670,6 +2670,7 @@ static void message_handler(Task task, MessageId id, Message message)
         return;
     }
 
+	#if 0
 	if(id == MESSAGE_MORE_DATA)
 	{
 		MessageMoreData *m = (MessageMoreData *) message;
@@ -2678,10 +2679,11 @@ static void message_handler(Task task, MessageId id, Message message)
 		uint16 i = 0;
 
 		for(; i<size; i++)
-			printf("%x ", data[i]);
+			printf(("%x ", data[i]));
 			
-		printf("\n");
+		printf(("\n"));
 	}
+	#endif
     
 	if (id == MESSAGE_MORE_DATA && gaia->pfs_raw_size)
 	{

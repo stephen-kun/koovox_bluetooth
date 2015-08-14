@@ -40,4 +40,5 @@
 -lswat
 -lcsr_i2s_audio_plugin
 -lwechat
+-lgaia
 assisted

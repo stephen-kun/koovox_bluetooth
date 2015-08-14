@@ -159,16 +159,30 @@ static uint16 koovox_rcv_data_confirm(uint8* data, uint16 size_data)
 	case ECI_push_recvData:
 	{
 		RecvDataPush *recvDatPush = epb_unpack_recv_data_push(data + fix_head_len, size_data - fix_head_len);
-        WeChatBleHead *bledemohead = (WeChatBleHead*)(recvDatPush->data.data);
+		uint16 cmdid = recvDatPush->data.data[6] ;
+
+		cmdid += (uint16)recvDatPush->data.data[7] << 8;
 		
 		if(!recvDatPush)
 		{
 			return errorCodeUnpackRecvDataPush;
 		}
 
-		switch(ntohs(bledemohead->m_cmdid))
+		{
+		uint16 i = 0;
+
+		DEBUG(("cmdid = %x\n", cmdid));
+		for(; i<recvDatPush->data.len; i++ )
+			DEBUG(("%x ", recvDatPush->data.data[i]));
+
+		DEBUG(("\n"));
+		}
+		
+		switch(cmdid)
 		{
 		/* Ìî³ä×Ô¼ºµÄÃüÁî */
+
+		
 
 		default:
 			break;
