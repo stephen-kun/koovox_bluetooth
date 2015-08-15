@@ -21,12 +21,6 @@ Part of ADK 3.5
 #include <bdaddr.h>
 #include <message.h>
 
-/*  API Version 2.0  */
-#define WECHAT_API_VERSION_MAJOR (2)
-#define WECHAT_API_VERSION_MINOR (0)
-
-
-#define WECHAT_ACK_MASK (0x8000)
 
 
 /*! @brief Enumeration of types of transport which Wechat supports.
@@ -162,18 +156,6 @@ void WechatInit(Task task, uint16 max_connections);
 */
 void WechatSendPacket(WECHAT_TRANSPORT *transport, uint16 packet_length, uint8 *packet);
 
-
-/*!
-    @brief Changes the API Minor Version reported by WECHAT_COMMAND_GET_API_VERSION
-
-    @param version the API Minor Version to be reported, 0 to 15
-    
-    Changes the API Minor Version reported by WECHAT_COMMAND_GET_API_VERSION.
-    
-    Returns TRUE on success, FALSE if the value is out of range (0..15) or
-    the WECHAT library is not initialised.
-*/
-bool WechatSetApiMinorVersion(uint8 version);
 
 
 /*! 

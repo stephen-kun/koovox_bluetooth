@@ -28,7 +28,6 @@ wechat_transport *wechatTransportFindFree(void)
     return NULL;
 }
 
-#if defined WECHAT_TRANSPORT_RFCOMM || defined WECHAT_TRANSPORT_SPP
 /*! @brief Attempt to find the tranport associated with an RFCOMM channel
  */
 wechat_transport *wechatTransportFromRfcommChannel(uint16 channel)
@@ -37,13 +36,11 @@ wechat_transport *wechatTransportFromRfcommChannel(uint16 channel)
     
     for (idx = 0; idx < wechat->transport_count; ++idx)
     {
-        if (((wechat->transport[idx].type == wechat_transport_rfcomm) || (wechat->transport[idx].type == wechat_transport_spp))
-            && (wechat->transport[idx].state.spp.rfcomm_channel == channel))
+        if ((wechat->transport[idx].type == wechat_transport_rfcomm)&& (wechat->transport[idx].spp.rfcomm_channel == channel))
             return &wechat->transport[idx];
     }
     return NULL;
 }
-#endif /* def WECHAT_TRANSPORT_SPP */
 
 /*! @brief Attempt to find the tranport associated with a sink
  */
@@ -63,18 +60,7 @@ wechat_transport *wechatTransportFromSink(Sink sink)
  */
 void wechatTransportDisconnectReq(wechat_transport *transport)
 {
-    switch (transport->type)
-    {
-#ifdef WECHAT_TRANSPORT_RFCOMM
-        case wechat_transport_rfcomm:
-            wechatTransportRfcommDisconnectReq(transport);
-            break;
-#endif
-        default:
-            WECHAT_TRANS_DEBUG(("Unknown Wechat transport %d\n", transport->type));
-            WECHAT_PANIC();
-            break;
-    }
+    wechatTransportRfcommDisconnectReq(transport);
 }
 
 /*! @brief Clear down state of given transport.
@@ -87,51 +73,18 @@ void wechatTransportDropState(wechat_transport *transport)
     if (wechat->outstanding_request == transport)
         wechat->outstanding_request = NULL;
 
-    if (wechat->pfs_state != PFS_NONE)
-    {
-        WECHAT_TRANS_DEBUG(("wechat: drop pfs %d s=%lu r=%lu\n", 
-            wechat->pfs_state, wechat->pfs_sequence, wechat->pfs_raw_size));
-
-        wechat->pfs_sequence = 0;
-        wechat->pfs_raw_size = 0;
-        SinkClose(wechat->pfs.sink);
-        wechat->pfs_state = PFS_NONE;
-    }
-
     if (IsAudioBusy() == &wechat->task_data)
         SetAudioBusy(NULL);
  
-    switch (transport->type)
-    {
-#ifdef WECHAT_TRANSPORT_RFCOMM
-    case wechat_transport_rfcomm:
-        wechatTransportRfcommDropState(transport);
-        break;
-#endif
-    default:
-        WECHAT_TRANS_DEBUG(("Unknown Wechat transport %d\n", transport->type));
-        WECHAT_PANIC();
-        break;
-    }    
+    wechatTransportRfcommDropState(transport);
+	
 }
 
 /*! @brief Start Wechat as a server on a given transport.
  */
 void wechatTransportStartService(wechat_transport_type transport_type)
 {
-    switch (transport_type)
-    {
-#ifdef WECHAT_TRANSPORT_RFCOMM
-    case wechat_transport_rfcomm:
-        wechatTransportRfcommStartService();
-        break;
-#endif
-    default:
-        WECHAT_TRANS_DEBUG(("Unknown Wechat transport %d\n", transport_type));
-        WECHAT_PANIC();
-        break;
-    }
-
+    wechatTransportRfcommStartService();
 }
 
 
@@ -139,30 +92,15 @@ void wechatTransportStartService(wechat_transport_type transport_type)
  */
 Sink wechatTransportGetSink(wechat_transport *transport)
 {
-    switch (transport->type)
-    {            
-#ifdef WECHAT_TRANSPORT_RFCOMM
-    case wechat_transport_rfcomm:
-        return wechatTransportRfcommGetSink(transport);
-        break;
-#endif
-    default:
-        WECHAT_TRANS_DEBUG(("Unknown Wechat transport %d\n", transport->type));
-        WECHAT_PANIC();
-        break;
-    }
-
-    return NULL;
+    return wechatTransportRfcommGetSink(transport);
 }
 
 /*! @brief Pass incoming message for handling by a given transport.
  */
 bool wechatTransportHandleMessage(Task task, MessageId id, Message message)
 {
-#ifdef WECHAT_TRANSPORT_RFCOMM
     if (wechatTransportRfcommHandleMessage(task, id, message))
         return TRUE;
-#endif
 
     return FALSE;
 }

@@ -46,10 +46,17 @@ typedef enum
 	closeLightPush = 0x2002
 }WeChatCmdID;
 
+typedef enum
+{
+	TYPE_NONE,
+	TYPE_RFCOMM,
+	TYPE_BLE
+}WechatTramsportType;
+
 typedef struct 
 {
+	bool	connect_state;
 	bool 	wechats_switch_state; /* 公众账号切换到前台的状态 */
-	bool 	indication_state;
 	bool 	auth_state;
 	bool 	init_state;
 	bool 	auth_send;
@@ -65,6 +72,28 @@ typedef struct
 	uint16 len;
 	uint16 offset;
 }Data_info;
+
+typedef struct
+{
+	uint16 cid;
+	uint16 handle;
+}Ble;
+
+typedef struct
+{
+	WechatTramsportType type;		/* 连接微信的方式 */
+	Wechatble_state 	state;
+	uint8				challeange[CHALLENAGE_LENGTH];
+	Data_info			rcv_data;
+	Data_info			send_data;
+
+	union
+	{
+		Ble 				ble;
+		WECHAT_TRANSPORT* 	rfcomm;
+	}transport;
+	
+}WECHAT_DATA_T;
 
 /* 可自定义 */
 typedef struct
@@ -85,21 +114,20 @@ typedef struct{
 	uint16 	nSeq;
 }BpFixHead;
 
+typedef struct
+{
+	uint8 cmd;
+	uint8 obj;
+	uint8 len;
+	uint8 data[1];
+}KoovoxData;
 
-void koovox_indicate_to_wechat(uint16 cid, uint16 handle);
-void koovox_write_from_wechat(uint8* data, uint16 size_data);
-void koovox_pack_wechat_auth_req(void);
-void koovox_pack_wechat_init_req(void);
+void koovox_wechat_connect(WechatTramsportType type, Ble* ble, WECHAT_TRANSPORT* rfcomm);
+void koovox_rcv_data_from_wechat(uint8* data, uint16 size_data);
 void koovox_pack_wechat_send_data_req(uint8* data, uint16 size_data, bool has_type, EmDeviceDataType type);
-void koovox_wechat_error_handle(uint16 error_code);
-void koovox_device_wechat_disconnect(void);
-void koovox_handle_wechat_indicate(uint16 cid, uint16 handle);
+void koovox_send_data_to_wechat(void);
+void koovox_wechat_disconnect(void);
 
-
-
-extern Wechatble_state g_wechatble_state;
-extern Data_info g_send_data;
-extern Data_info g_rcv_data;
 
 #endif /* __KOOVOX_WECHAT_HANDLE_H */
 

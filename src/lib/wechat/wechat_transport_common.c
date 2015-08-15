@@ -74,26 +74,3 @@ void wechatTransportCommonSendWechatStartServiceCfm(wechat_transport_type transp
 }
 
 
-/*! @brief Cleanup battery and RSSI threshold state for a given transport.
- 
-    Used once a Wechat transport has closed, as we no longer need to perform the
-    checking or resend the timer messages.
-*/
-void wechatTransportCommonCleanupThresholdState(wechat_transport *transport)
-{
-    /* reset battery threshold state */
-    transport->threshold_count_lo_battery = 0;
-    transport->sent_notification_lo_battery_0 = FALSE;
-    transport->sent_notification_lo_battery_1 = FALSE;
-    transport->threshold_count_hi_battery = 0;
-    transport->sent_notification_hi_battery_0 = FALSE;
-    transport->sent_notification_hi_battery_1 = FALSE;
-
-    /* reset RSSI threshold state */
-    transport->threshold_count_lo_rssi = 0;
-    transport->sent_notification_lo_rssi_0 = FALSE;
-    transport->sent_notification_lo_rssi_1 = FALSE;
-    transport->threshold_count_hi_rssi = 0;
-    transport->sent_notification_hi_rssi_0 = FALSE;
-    transport->sent_notification_hi_rssi_1 = FALSE;
-}

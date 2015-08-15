@@ -4667,444 +4667,60 @@ $_epb_unpack_switch_backgroud_push_free:
 
 	.ENHANCED
 	.SEG	VAR
-$_g_wechatble_state:
-	DS	9
-	.SEG	INIT
-$_challeange:
-	DS	4
-	.SEG	INITC
-	dc	H'0011
-	dc	H'0022
-	dc	H'0033
-	dc	H'0044
-	.SEG	VAR
-$_g_send_data:
-	DS	3
-$_g_rcv_data:
-	DS	3
+$_g_wechat:
+	DS	1
 	.CODE
 _koovox_pack_wechat_head:
 	enterl	#2
 ?LBB_koovox_pack_wechat_head:
-	st	AL,@H'fff8
-	ld	X,@$XAP_AH
+	st	AL,@H'fff9
+	st	AH,@H'fff8
 	ld	AL,#H'00FE
+	ld	X,@$XAP_AH
 	st	AL,@(0,X)
 	ld	AL,#H'0001
 	st	AL,@(H'0001,X)
-	ld	AH,@$_g_send_data+H'0001
+	ld	X,@$_g_wechat
+	ld	AH,@(H'0012,X)
 	lsr	#H'0008
 	and	AH,#H'00FF
+	ld	X,@H'fff8
 	st	AH,@(H'0002,X)
-	ld	AL,@$_g_send_data+H'0001
+	ld	X,@$_g_wechat
+	ld	AL,@(H'0012,X)
 	and	AL,#H'00FF
+	ld	X,@H'fff8
 	st	AL,@(H'0003,X)
-	ld	AH,@H'fff8
+	ld	AH,@H'fff9
 	lsr	#H'0008
 	and	AH,#H'00FF
 	st	AH,@(H'0004,X)
-	ld	AH,@H'fff8
+	ld	AH,@H'fff9
 	and	AH,#H'00FF
 	st	AH,@(H'0005,X)
-	ld	AH,@$_g_wechatble_state+H'0008
+	ld	X,@$_g_wechat
+	ld	AH,@(H'0009,X)
 	lsr	#H'0008
 	and	AH,#H'00FF
+	ld	X,@H'fff8
 	st	AH,@(H'0006,X)
-	ld	AL,@$_g_wechatble_state+H'0008
+	ld	X,@$_g_wechat
+	ld	AL,@(H'0009,X)
 	and	AL,#H'00FF
+	ld	X,@H'fff8
 	st	AL,@(H'0007,X)
 ?LBE_koovox_pack_wechat_head:
 	leavel	#2
-_koovox_rcv_data_confirm:
-	enterl	#14
-?LBB_koovox_rcv_data_confirm:
-	st	AL,@(H'0004,Y)
-	st	AH,@(H'0005,Y)
-?LBB2:
-	ld	AH,#H'0000
-	st	AH,@(H'0006,Y)
-	ld	AL,@(H'0005,Y)
-	cmp	AL,#(H'0001+H'0007)
-	bcc	?L3
-	ld	AL,#-H'6669
-	bra	(?L2)
-?L3:
-	ld	X,@(H'0004,Y)
-	ld	AL,@(H'0004,X)
-	asl	#H'0008
-	ld	AH,@$XAP_AL
-	add	AH,@(H'0005,X)
-	st	AH,@(H'0007,Y)
-	st	AH,@(0,Y)
-	ld	AL,#(?LC0)
-	bsr	$_printf
-	ld	AL,@(H'0007,Y)
-	cmp	AL,#H'4E23
-	beq	?L14
-	cmp	AL,#(H'0001+H'4E23)
-	bcc	?L40
-	cmp	AL,#H'4E21
-	beq	?L6
-	cmp	AL,#(H'0001+H'4E21)
-	bcc	?L11
-	bra	(?L4)
-?L40:
-	ld	AH,@(H'0007,Y)
-	cmp	AH,#H'7531
-	beq	?L22
-	cmp	AH,#H'7531
-	bcz	?L4
-	cmp	AH,#H'7532
-	beq	?L32
-	cmp	AH,#H'7533
-	beq	?L35
-	bra	(?L4)
-?L6:
-	ld	AL,@(H'0004,Y)
-?LBB3:
-	add	AL,#H'0008
-	ld	AH,@(H'0005,Y)
-	sub	AH,#H'0008
-	bsr	$_epb_unpack_auth_response
-	st	AL,@H'fff8
-	cmp	AL,#H'0000
-	bne	?L7
-	ld	AL,#-H'6670
-	bra	(?L2)
-?L7:
-	ld	X,@$XAP_AL
-	tst	@(0,X)
-	beq	?L8
-	ld	AL,@(0,X)
-	ld	X,@$XAP_AL
-	ld	AH,@(0,X)
-	ld	AL,@(1,X)
-	cmp	AH,#H'0000
-	bne	?L9
-	cmp	AL,#H'0000
-	bne	?L9
-	ld	AL,#H'0001
-	st	AL,@$_g_wechatble_state+H'0002
-	bra	(?L8)
-?L9:
-	ld	X,@H'fff8
-	ld	AL,@(0,X)
-	ld	X,@$XAP_AL
-	ld	AL,@(H'0001,X)
-	st	AL,@(H'0006,Y)
-?L8:
-	ld	AL,@H'fff8
-	bsr	$_epb_unpack_auth_response_free
-?LBE3:
-	bra	(?L4)
-?L11:
-	ld	AL,@(H'0004,Y)
-?LBB4:
-	add	AL,#H'0008
-	ld	AH,@(H'0005,Y)
-	sub	AH,#H'0008
-	bsr	$_epb_unpack_send_data_response
-	st	AL,@H'fff8
-	cmp	AL,#H'0000
-	bne	?L12
-	ld	AL,#-H'666E
-	bra	(?L2)
-?L12:
-	ld	X,@$XAP_AL
-	ld	X,@(0,X)
-	st	X,@(H'0008,Y)
-	ld	AH,@(0,X)
-	ld	AL,@(1,X)
-	cmp	AH,#H'0000
-	bne	?L51
-	cmp	AL,#H'0000
-	beq	?L13
-?L51:
-	ld	AH,@(H'0001,X)
-	st	AH,@(H'0006,Y)
-?L13:
-	ld	AL,@H'fff8
-	bsr	$_epb_unpack_send_data_response_free
-?LBE4:
-	bra	(?L4)
-?L14:
-	ld	AL,@(H'0004,Y)
-?LBB5:
-	add	AL,#H'0008
-	ld	AH,@(H'0005,Y)
-	sub	AH,#H'0008
-	bsr	$_epb_unpack_init_response
-	st	AL,@(H'0009,Y)
-	cmp	AL,#H'0000
-	bne	?L15
-	ld	AL,#-H'666F
-	bra	(?L2)
-?L15:
-	ld	X,@(H'0009,Y)
-	tst	@(0,X)
-	beq	?L16
-	ld	AL,@(0,X)
-	ld	X,@$XAP_AL
-	ld	AH,@(0,X)
-	ld	AL,@(1,X)
-	cmp	AH,#H'0000
-	bne	?L17
-	cmp	AL,#H'0000
-	bne	?L17
-	ld	X,@(H'0009,Y)
-	tst	@(H'0005,X)
-	beq	?L18
-?LBB6:
-	ld	AL,#($_challeange)
-	st	AL,@(0,Y)
-	ld	AL,#H'0004
-	st	AL,@(H'0001,Y)
-	ld	AL,#H'0000
-	ld	AH,#H'0000
-	bsr	$_crc32
-	st	AH,@H'fff8
-	st	AL,@H'fff9
-	ld	X,@(H'0009,Y)
-	cmp	AH,@(H'0006,X)
-	bne	?L19
-	cmp	AL,@(H'0007,X)
-	bne	?L19
-	ld	AL,#H'0001
-	st	AL,@$_g_wechatble_state+H'0003
-?L19:
-	ld	AH,@H'fff8
-	ld	AL,@H'fff9
-	st	AH,@(0,Y)
-	st	AL,@(1,Y)
-	ld	X,@(H'0009,Y)
-	ld	AH,@(H'0006,X)
-	ld	AL,@(H'0007,X)
-	st	AH,@(H'0002,Y)
-	st	AL,@(H'0003,Y)
-	ld	AL,#(?LC1)
-	bsr	$_printf
-?LBE6:
-	bra	(?L20)
-?L18:
-	ld	AL,#H'0001
-	st	AL,@$_g_wechatble_state+H'0003
-?L20:
-	ld	AL,#H'0001
-	st	AL,@$_g_wechatble_state
-	bra	(?L16)
-?L17:
-	ld	X,@(H'0009,Y)
-	ld	AL,@(0,X)
-	ld	X,@$XAP_AL
-	ld	AL,@(H'0001,X)
-	st	AL,@(H'0006,Y)
-?L16:
-	ld	AL,@(H'0009,Y)
-	bsr	$_epb_unpack_init_response_free
-?LBE5:
-	bra	(?L4)
-?L22:
-	ld	AL,@(H'0004,Y)
-?LBB7:
-	add	AL,#H'0008
-	ld	AH,@(H'0005,Y)
-	sub	AH,#H'0008
-	bsr	$_epb_unpack_recv_data_push
-	st	AL,@(H'000A,Y)
-	ld	X,@$XAP_AL
-	ld	AH,@(H'0001,X)
-	ld	X,@$XAP_AH
-	ld	X,@(H'0006,X)
-	st	X,@(-1,Y)
-	ld	X,@$XAP_AH
-	ld	AL,@(H'0007,X)
-	asl	#H'0008
-	add	AL,@(-1,Y)
-	tst	@(H'000A,Y)
-	bne	?L23
-	ld	AL,#-H'666C
-	bra	(?L2)
-?L23:
-?LBB8:
-	ld	AH,#H'0000
-	st	AH,@(H'000B,Y)
-	st	AL,@(0,Y)
-	ld	AL,#(?LC2)
-	bsr	$_printf
-	ld	AH,@(H'000B,Y)
-	ld	X,@(H'000A,Y)
-	cmp	AH,@(H'0002,X)
-	bcc	?L43
-?L28:
-	ld	X,@(H'000A,Y)
-	ld	AL,@(H'0001,X)
-	ld	X,@(H'000B,Y)
-	add	X,@$XAP_AL
-	ld	AL,@(0,X)
-	st	AL,@(0,Y)
-	ld	AL,#(?LC3)
-	bsr	$_printf
-	ld	AH,@(H'000B,Y)
-	add	AH,#H'0001
-	st	AH,@(H'000B,Y)
-	ld	X,@(H'000A,Y)
-	cmp	AH,@(H'0002,X)
-	bcs	?L28
-?L43:
-	ld	AL,#H'000A
-	bsr	$_putchar
-?LBE8:
-	ld	AL,@(H'000A,Y)
-	bsr	$_epb_unpack_recv_data_push_free
-	ld	AL,@$_g_wechatble_state+H'0007
-	add	AL,#H'0001
-	st	AL,@$_g_wechatble_state+H'0007
-?LBE7:
-	bra	(?L4)
-?L32:
-	ld	AL,@(H'0004,Y)
-?LBB9:
-	add	AL,#H'0008
-	ld	AH,@(H'0005,Y)
-	sub	AH,#H'0008
-	bsr	$_epb_unpack_switch_view_push
-	ld	AH,#H'0000
-	tst	@$_g_wechatble_state
-	bne	?L33
-	ld	AH,#H'0001
-?L33:
-	st	AH,@$_g_wechatble_state
-	cmp	AL,#H'0000
-	bne	?L34
-	ld	AL,#-H'666B
-	bra	(?L2)
-?L34:
-	bsr	$_epb_unpack_switch_view_push_free
-?LBE9:
-	bra	(?L4)
-?L35:
-	ld	AL,@(H'0004,Y)
-?LBB10:
-	add	AL,#H'0008
-	ld	AH,@(H'0005,Y)
-	sub	AH,#H'0008
-	bsr	$_epb_unpack_switch_backgroud_push
-	cmp	AL,#H'0000
-	bne	?L36
-	ld	AL,#-H'666A
-	bra	(?L2)
-?L36:
-	bsr	$_epb_unpack_switch_backgroud_push_free
-?L4:
-?LBE10:
-	ld	AL,@(H'0006,Y)
-?L2:
-?LBE2:
-?LBE_koovox_rcv_data_confirm:
-	leavel	#14
-	.SEG	CONST
-?LC0:
-	dc	H'3D
-	dc	H'3D
-	dc	H'3D
-	dc	H'3D
-	dc	H'3D
-	dc	H'3D
-	dc	H'3D
-	dc	H'3D
-	dc	H'63
-	dc	H'6D
-	dc	H'64
-	dc	H'69
-	dc	H'64
-	dc	H'3A
-	dc	H'25
-	dc	H'78
-	dc	H'20
-	dc	H'0A
-	dc	H'00
-?LC1:
-	dc	H'63
-	dc	H'72
-	dc	H'63
-	dc	H'33
-	dc	H'32
-	dc	H'3A
-	dc	H'25
-	dc	H'6C
-	dc	H'64
-	dc	H'20
-	dc	H'2C
-	dc	H'63
-	dc	H'68
-	dc	H'61
-	dc	H'6C
-	dc	H'6C
-	dc	H'65
-	dc	H'61
-	dc	H'6E
-	dc	H'67
-	dc	H'65
-	dc	H'5F
-	dc	H'61
-	dc	H'6E
-	dc	H'73
-	dc	H'77
-	dc	H'65
-	dc	H'72
-	dc	H'3A
-	dc	H'25
-	dc	H'6C
-	dc	H'64
-	dc	H'0A
-	dc	H'00
-?LC2:
-	dc	H'63
-	dc	H'6D
-	dc	H'64
-	dc	H'69
-	dc	H'64
-	dc	H'20
-	dc	H'3D
-	dc	H'20
-	dc	H'25
-	dc	H'78
-	dc	H'0A
-	dc	H'00
-?LC3:
-	dc	H'25
-	dc	H'78
-	dc	H'20
-	dc	H'00
-	.CODE
-;.stabn	192,0,0,?LBB2
-;.stabn	192,0,0,?LBB3
-;.stabn	224,0,0,?LBE3
-;.stabn	192,0,0,?LBB4
-;.stabn	224,0,0,?LBE4
-;.stabn	192,0,0,?LBB5
-;.stabn	192,0,0,?LBB6
-;.stabn	224,0,0,?LBE6
-;.stabn	224,0,0,?LBE5
-;.stabn	192,0,0,?LBB7
-;.stabn	192,0,0,?LBB8
-;.stabn	224,0,0,?LBE8
-;.stabn	224,0,0,?LBE7
-;.stabn	192,0,0,?LBB9
-;.stabn	224,0,0,?LBE9
-;.stabn	192,0,0,?LBB10
-;.stabn	224,0,0,?LBE10
-;.stabn	224,0,0,?LBE2
-$_koovox_wechat_error_handle:
+_koovox_wechat_error_handle:
 	enterl	#3
 ?LBB_koovox_wechat_error_handle:
 	st	AL,@(0,Y)
-	ld	AL,#(?LC4)
+	ld	AL,#(?LC0)
 	bsr	$_printf
 ?LBE_koovox_wechat_error_handle:
 	leavel	#3
 	.SEG	CONST
-?LC4:
+?LC0:
 	dc	H'6B
 	dc	H'6F
 	dc	H'6F
@@ -5150,233 +4766,79 @@ $_koovox_wechat_error_handle:
 	dc	H'0A
 	dc	H'00
 	.CODE
-$_koovox_write_from_wechat:
-	enterl	#7
-?LBB_koovox_write_from_wechat:
-	st	AL,@(H'0001,Y)
-	st	AH,@(H'0002,Y)
-?LBB11:
-?LBB12:
-	ld	AH,#H'0000
-	st	AH,@(H'0004,Y)
-	tst	@(H'0002,Y)
-	beq	?L71
-?L63:
-	ld	X,@(H'0001,Y)
-	add	X,@(H'0004,Y)
-	ld	AL,@(0,X)
-	st	AL,@(0,Y)
-	ld	AL,#(?LC3)
-	bsr	$_printf
-	ld	AL,@(H'0004,Y)
-	add	AL,#H'0001
-	st	AL,@(H'0004,Y)
-	cmp	AL,@(H'0002,Y)
-	bcs	?L63
-?L71:
-	ld	AL,#H'000A
-	bsr	$_putchar
-	ld	AH,@(H'0002,Y)
-?LBE12:
-	cmp	AH,#H'0007
-	bcz	?L58
-	tst	@$_g_rcv_data+H'0001
-	bne	?L65
-	ld	X,@(H'0001,Y)
-?LBB13:
-	ld	AL,@(H'0002,X)
-	asl	#H'0008
-	ld	AH,@$XAP_AL
-	add	AH,@(H'0003,X)
-	ld	AL,@(0,X)
-	cmp	AL,#H'00FE
-	beq	?L66
-	ld	AL,@(H'0001,X)
-	cmp	AL,#H'0001
-	bne	?L58
-?L66:
-	st	AH,@$_g_rcv_data+H'0001
-	ld	AL,#H'0000
-	st	AL,@$_g_rcv_data+H'0002
-	ld	AL,@$XAP_AH
-	bsr	$_malloc
-	st	AL,@$_g_rcv_data
-?L65:
-?LBE13:
-	ld	AH,@$_g_rcv_data+H'0001
-	sub	AH,@$_g_rcv_data+H'0002
-	st	AH,@(H'0003,Y)
-	ld	AH,@(H'0002,Y)
-	cmp	AH,@(H'0003,Y)
-	bcz	?L67
-	ld	AH,@(H'0003,Y)
-?L67:
-	st	AH,@(H'0003,Y)
-	ld	AL,@$_g_rcv_data
-	add	AL,@$_g_rcv_data+H'0002
-	st	AH,@(0,Y)
-	ld	AH,@(H'0001,Y)
-	bsr	$_memcpy
-	ld	AL,@(H'0003,Y)
-	add	AL,@$_g_rcv_data+H'0002
-	st	AL,@$_g_rcv_data+H'0002
-	ld	AH,@$_g_rcv_data+H'0001
-	cmp	AH,@$XAP_AL
-	beq	?L77
-	bcc	?L58
-?L77:
-	ld	AL,@$_g_rcv_data
-	bsr	_koovox_rcv_data_confirm
-	bsr	$_koovox_wechat_error_handle
-	tst	@$_g_rcv_data
-	beq	?L69
-	ld	AL,#(?LC5)
-	bsr	$_puts
-	ld	AL,@$_g_rcv_data
-	bsr	$_free
-	ld	AL,#H'0000
-	st	AL,@$_g_rcv_data
-?L69:
-	ld	AL,#H'0000
-	st	AL,@$_g_rcv_data+H'0001
-	st	AL,@$_g_rcv_data+H'0002
-?L58:
-?LBE11:
-?LBE_koovox_write_from_wechat:
-	leavel	#7
-	.SEG	CONST
-?LC5:
-	dc	H'66
-	dc	H'72
-	dc	H'65
-	dc	H'65
-	dc	H'20
-	dc	H'67
-	dc	H'5F
-	dc	H'72
-	dc	H'63
-	dc	H'76
-	dc	H'5F
-	dc	H'64
-	dc	H'61
-	dc	H'74
-	dc	H'61
-	dc	H'2E
-	dc	H'64
-	dc	H'61
-	dc	H'74
-	dc	H'61
-	dc	H'00
-	.CODE
-;.stabn	192,0,0,?LBB11
-;.stabn	192,0,0,?LBB12
-;.stabn	224,0,0,?LBE12
-;.stabn	192,0,0,?LBB13
-;.stabn	224,0,0,?LBE13
-;.stabn	224,0,0,?LBE11
-$_koovox_handle_wechat_indicate:
-	enterl	#7
-?LBB_koovox_handle_wechat_indicate:
-	st	AL,@(H'0003,Y)
-	st	AH,@(H'0004,Y)
-?LBB14:
-	ld	X,@$_theSink+H'0004
-	tst	@(H'0020,X)
-	bne	?L79
-	ld	AL,#H'0001
-	st	AL,@$_g_wechatble_state+H'0001
-	tst	@$_g_wechatble_state+H'0002
-	bne	?L78
-	tst	@$_g_wechatble_state+H'0004
-	bne	?L78
-	bsr	$_koovox_pack_wechat_auth_req
-	ld	AL,@(H'0003,Y)
-	ld	AH,@(H'0004,Y)
-	bsr	$_koovox_indicate_to_wechat
-	ld	AL,#H'0001
-	st	AL,@$_g_wechatble_state+H'0004
-	bra	(?L78)
-?L79:
-?LBB15:
-	ld	AL,#H'0001
-	bsr	$_malloc
-	ld	X,@$XAP_AL
-	ld	AL,@(H'0003,Y)
-	st	AL,@(0,X)
-	st	X,@(0,Y)
-	ld	AL,#H'03E8
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	ld	AL,#($_theSink)
-	ld	AH,#H'40C0
-	bsr	$_MessageSendLater
-?L78:
-?LBE15:
-?LBE14:
-?LBE_koovox_handle_wechat_indicate:
-	leavel	#7
-$_koovox_indicate_to_wechat:
+_koovox_indicate_to_wechat:
 	enterl	#6
 ?LBB_koovox_indicate_to_wechat:
 	st	AL,@H'fff8
-?LBB16:
-	ld	AL,@$_g_send_data+H'0001
-	cmp	AL,@$_g_send_data+H'0002
-	bcz	?L83
-?LBB17:
-	sub	AL,@$_g_send_data+H'0002
+?LBB2:
+	ld	X,@$_g_wechat
+	ld	AL,@(H'0012,X)
+	cmp	AL,@(H'0013,X)
+	bcz	?L8
+?LBB3:
+	sub	AL,@(H'0013,X)
 	cmp	AL,#H'0014
-	bcz	?L84
+	bcz	?L9
 	ld	AL,#H'0014
-	bra	(?L88)
-?L84:
-	ld	AL,@$_g_send_data+H'0001
-	sub	AL,@$_g_send_data+H'0002
-?L88:
+	bra	(?L13)
+?L9:
+	ld	X,@$_g_wechat
+	ld	AL,@(H'0012,X)
+	st	AL,@(H'0003,Y)
+	sub	AL,@(H'0013,X)
+?L13:
 	st	AL,@(H'0003,Y)
 	ld	X,@$_theSink+H'0004
 	ld	AL,#H'0002
-	st	AL,@(H'0020,X)
+	st	AL,@(H'001A,X)
 	ld	AL,@$_theSink+H'0004
-	add	AL,#H'0018
+	add	AL,#H'0012
 	st	AH,@(0,Y)
 	ld	AH,@(H'0003,Y)
 	st	AH,@(H'0001,Y)
-	ld	AH,@$_g_send_data
-	add	AH,@$_g_send_data+H'0002
+	ld	X,@$_g_wechat
+	ld	AH,@(H'0011,X)
+	add	AH,@(H'0013,X)
 	st	AH,@(H'0002,Y)
 	ld	AH,@H'fff8
 	bsr	$_GattIndicationRequest
+	ld	X,@$_g_wechat
 	ld	AL,@(H'0003,Y)
-	add	AL,@$_g_send_data+H'0002
-	st	AL,@$_g_send_data+H'0002
+	add	AL,@(H'0013,X)
+	st	AL,@(H'0013,X)
+	ld	X,@$_g_wechat
+	ld	AL,@(H'0013,X)
 	st	AL,@(0,Y)
-	ld	AL,#(?LC6)
+	ld	AL,#(?LC1)
 	bsr	$_printf
-?LBE17:
-	bra	(?L82)
-?L83:
-	ld	AL,@$_g_send_data+H'0001
-	cmp	AL,@$_g_send_data+H'0002
-	bne	?L82
-	ld	AL,#(?LC7)
+?LBE3:
+	bra	(?L7)
+?L8:
+	ld	X,@$_g_wechat
+	ld	AL,@(H'0012,X)
+	cmp	AL,@(H'0013,X)
+	bne	?L7
+	ld	AL,#(?LC2)
 	bsr	$_puts
+	ld	X,@$_g_wechat
 	ld	AL,#H'0000
-	st	AL,@$_g_send_data+H'0001
-	st	AL,@$_g_send_data+H'0002
-	ld	AL,@$_g_send_data
+	st	AL,@(H'0012,X)
+	ld	X,@$_g_wechat
+	st	AL,@(H'0013,X)
+	ld	X,@$_g_wechat
+	ld	AL,@(H'0011,X)
 	bsr	$_free
+	ld	X,@$_g_wechat
 	ld	AH,#H'0000
-	st	AH,@$_g_send_data
+	st	AH,@(H'0011,X)
 	ld	X,@$_theSink+H'0004
-	st	AH,@(H'0020,X)
-?L82:
-?LBE16:
+	st	AH,@(H'001A,X)
+?L7:
+?LBE2:
 ?LBE_koovox_indicate_to_wechat:
 	leavel	#6
 	.SEG	CONST
-?LC6:
+?LC1:
 	dc	H'73
 	dc	H'65
 	dc	H'72
@@ -5422,7 +4884,7 @@ $_koovox_indicate_to_wechat:
 	dc	H'64
 	dc	H'0A
 	dc	H'00
-?LC7:
+?LC2:
 	dc	H'2A
 	dc	H'2A
 	dc	H'2A
@@ -5450,20 +4912,20 @@ $_koovox_indicate_to_wechat:
 	dc	H'2A
 	dc	H'00
 	.CODE
-;.stabn	192,0,0,?LBB17
-;.stabn	224,0,0,?LBE17
-$_koovox_pack_wechat_auth_req:
-	enterl	#33
+;.stabn	192,0,0,?LBB3
+;.stabn	224,0,0,?LBE3
+_koovox_pack_wechat_auth_req:
+	enterl	#35
 ?LBB_koovox_pack_wechat_auth_req:
 	ld	AL,#H'0018
-?LBB18:
+?LBB4:
 	st	AL,@(0,Y)
 	ld	AL,@$XAP_UY
 	add	AL,#H'0001
 	ld	AH,#H'0000
 	bsr	$_memset
-	ld	AL,#H'0006
-	st	AL,@(0,Y)
+	ld	X,#H'0006
+	st	X,@(0,Y)
 	ld	AL,@$XAP_UY
 	add	AL,#H'0019
 	ld	AH,#H'0000
@@ -5482,185 +4944,967 @@ $_koovox_pack_wechat_auth_req:
 	ld	AH,#H'0001
 	st	AH,@(H'0005,Y)
 	st	AH,@(H'0008,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0007,Y)
+	ld	X,#H'0000
+	st	X,@(H'0007,Y)
 	ld	AL,#H'0002
 	st	AL,@(H'0009,Y)
 	st	AH,@(H'000D,Y)
 	ld	AL,#H'0006
 	st	AL,@(H'000F,Y)
-	ld	AL,@$XAP_UY
-	add	AL,#H'0019
-	st	AL,@(H'000E,Y)
+	ld	X,@$XAP_UY
+	add	X,#H'0019
+	st	X,@(H'000E,Y)
+	ld	AL,@$_g_wechat
+	st	AL,@(H'001F,Y)
 	ld	AL,@$XAP_UY
 	add	AL,#H'0001
 	bsr	$_epb_auth_request_pack_size
 	add	AL,#H'0008
-	st	AL,@$_g_send_data+H'0001
+	ld	X,@(H'001F,Y)
+	st	AL,@(H'0012,X)
+	ld	AL,@$_g_wechat
+	st	AL,@(H'0020,Y)
+	ld	X,@$XAP_AL
+	ld	AL,@(H'0012,X)
 	bsr	$_malloc
-	ld	AH,@$XAP_AL
-	st	AL,@$_g_send_data
-	ld	AL,@$_g_wechatble_state+H'0008
+	ld	X,@(H'0020,Y)
+	st	AL,@(H'0011,X)
+	ld	X,@$_g_wechat
+	ld	AL,@(H'0009,X)
 	add	AL,#H'0001
-	st	AL,@$_g_wechatble_state+H'0008
+	st	AL,@(H'0009,X)
+	ld	X,@$_g_wechat
 	ld	AL,#H'2711
+	ld	AH,@(H'0011,X)
 	bsr	_koovox_pack_wechat_head
+	ld	X,@$_g_wechat
 	ld	AH,#H'0008
-	add	AH,@$_g_send_data
-	ld	AL,@$_g_send_data+H'0001
+	add	AH,@(H'0011,X)
+	ld	AL,@(H'0012,X)
 	sub	AL,#H'0008
 	st	AL,@(0,Y)
 	ld	AL,@$XAP_UY
 	add	AL,#H'0001
 	bsr	$_epb_pack_auth_request
+	ld	X,@$_g_wechat
 	ld	AL,#H'0000
-	st	AL,@$_g_send_data+H'0002
-?LBE18:
+	st	AL,@(H'0013,X)
+?LBE4:
 ?LBE_koovox_pack_wechat_auth_req:
-	leavel	#33
-;.stabn	192,0,0,?LBB18
-;.stabn	224,0,0,?LBE18
-$_koovox_pack_wechat_init_req:
-	enterl	#10
+	leavel	#35
+;.stabn	192,0,0,?LBB4
+;.stabn	224,0,0,?LBE4
+_koovox_pack_wechat_init_req:
+	enterl	#16
 ?LBB_koovox_pack_wechat_init_req:
 	ld	AL,#H'0007
-?LBB19:
+?LBB5:
 	st	AL,@(0,Y)
 	ld	AL,@$XAP_UY
 	add	AL,#H'0001
 	ld	AH,#H'0000
 	bsr	$_memset
+	ld	AL,#H'0000
+	st	AL,@H'fff9
+	ld	AL,#H'007F
+	st	AL,@(H'0008,Y)
+	ld	X,@$XAP_UY
+	add	X,#H'0008
+	st	AL,@H'ffff
+	ld	AL,@H'fff9
+	st	AL,@(H'0001,X)
+	ld	AL,@H'ffff
+	st	AL,@H'ffff
+	ld	AL,@H'fff9
+	st	AL,@(H'0002,X)
+	ld	AL,@H'ffff
+	st	AL,@H'ffff
+	ld	AL,@H'fff9
+	st	AL,@(H'0003,X)
+	ld	AL,@H'ffff
 	ld	AL,#H'0007
 	st	AL,@(0,Y)
 	ld	AL,@$XAP_UY
 	add	AL,#H'0001
 	ld	AH,#H'0000
 	bsr	$_memset
-	ld	AL,@$_g_wechatble_state+H'0008
+	ld	X,@$_g_wechat
+	ld	AL,@(H'0009,X)
 	add	AL,#H'0001
-	st	AL,@$_g_wechatble_state+H'0008
-	ld	AL,#H'0000
-	st	AL,@(H'0002,Y)
-	st	AL,@(H'0004,Y)
+	st	AL,@(H'0009,X)
+	ld	X,#H'0001
+	st	X,@(H'0002,Y)
+	ld	AH,#H'0004
+	st	AH,@(H'0004,Y)
+	ld	AL,@$XAP_UY
+	add	AL,#H'0008
 	st	AL,@(H'0003,Y)
-	st	AL,@(H'0005,Y)
-	st	AL,@(H'0007,Y)
+	st	X,@(H'0005,Y)
+	st	AH,@(H'0007,Y)
+	ld	X,@$_g_wechat
+	st	X,@(H'000C,Y)
+	ld	AL,@$XAP_UXL
+	add	AL,#H'000A
 	st	AL,@(H'0006,Y)
 	ld	AL,@$XAP_UY
 	add	AL,#H'0001
 	bsr	$_epb_init_request_pack_size
 	add	AL,#H'0008
-	st	AL,@$_g_send_data+H'0001
+	ld	X,@(H'000C,Y)
+	st	AL,@(H'0012,X)
+	ld	AL,@$_g_wechat
+	st	AL,@(H'000D,Y)
+	ld	X,@$XAP_AL
+	ld	AL,@(H'0012,X)
 	bsr	$_malloc
-	ld	AH,@$XAP_AL
-	st	AL,@$_g_send_data
+	ld	X,@(H'000D,Y)
+	st	AL,@(H'0011,X)
+	ld	X,@$_g_wechat
 	ld	AL,#H'2713
+	ld	AH,@(H'0011,X)
 	bsr	_koovox_pack_wechat_head
+	ld	X,@$_g_wechat
 	ld	AH,#H'0008
-	add	AH,@$_g_send_data
-	ld	AL,@$_g_send_data+H'0001
+	add	AH,@(H'0011,X)
+	ld	AL,@(H'0012,X)
 	sub	AL,#H'0008
 	st	AL,@(0,Y)
 	ld	AL,@$XAP_UY
 	add	AL,#H'0001
 	bsr	$_epb_pack_init_request
+	ld	X,@$_g_wechat
 	ld	AL,#H'0000
-	st	AL,@$_g_send_data+H'0002
-?LBE19:
+	st	AL,@(H'0013,X)
+?LBE5:
 ?LBE_koovox_pack_wechat_init_req:
-	leavel	#10
-;.stabn	192,0,0,?LBB19
-;.stabn	224,0,0,?LBE19
+	leavel	#16
+;.stabn	192,0,0,?LBB5
+;.stabn	224,0,0,?LBE5
+_koovox_rcv_data_handle:
+	enterl	#15
+?LBB_koovox_rcv_data_handle:
+	st	AL,@(H'0004,Y)
+	st	AH,@(H'0005,Y)
+?LBB6:
+	ld	AH,#H'0000
+	st	AH,@(H'0006,Y)
+	ld	AL,@(H'0005,Y)
+	cmp	AL,#(H'0001+H'0007)
+	bcc	?L20
+	ld	AL,#-H'6669
+	bra	(?L19)
+?L20:
+	ld	X,@(H'0004,Y)
+	ld	AL,@(H'0004,X)
+	asl	#H'0008
+	ld	AH,@$XAP_AL
+	add	AH,@(H'0005,X)
+	st	AH,@(H'0007,Y)
+	st	AH,@(0,Y)
+	ld	AL,#(?LC3)
+	bsr	$_printf
+	ld	AL,@(H'0007,Y)
+	cmp	AL,#H'4E23
+	beq	?L32
+	cmp	AL,#(H'0001+H'4E23)
+	bcc	?L62
+	cmp	AL,#H'4E21
+	beq	?L23
+	cmp	AL,#(H'0001+H'4E21)
+	bcc	?L29
+	bra	(?L21)
+?L62:
+	ld	AH,@(H'0007,Y)
+	cmp	AH,#H'7531
+	beq	?L40
+	cmp	AH,#H'7531
+	bcz	?L21
+	cmp	AH,#H'7532
+	beq	?L54
+	cmp	AH,#H'7533
+	beq	?L57
+	bra	(?L21)
+?L23:
+	ld	AL,@(H'0004,Y)
+?LBB7:
+	add	AL,#H'0008
+	ld	AH,@(H'0005,Y)
+	sub	AH,#H'0008
+	bsr	$_epb_unpack_auth_response
+	st	AL,@H'fff8
+	cmp	AL,#H'0000
+	bne	?L24
+	ld	AL,#-H'6670
+	bra	(?L19)
+?L24:
+	ld	X,@$XAP_AL
+	tst	@(0,X)
+	beq	?L25
+	ld	AL,@(0,X)
+	ld	X,@$XAP_AL
+	ld	AH,@(0,X)
+	ld	AL,@(1,X)
+	cmp	AH,#H'0000
+	bne	?L26
+	cmp	AL,#H'0000
+	bne	?L26
+	ld	X,@$_g_wechat
+	ld	AL,#H'0001
+	st	AL,@(H'0003,X)
+	bra	(?L25)
+?L26:
+	ld	X,@H'fff8
+	ld	AL,@(0,X)
+	ld	X,@$XAP_AL
+	ld	AL,@(H'0001,X)
+	st	AL,@(H'0006,Y)
+?L25:
+	ld	AL,@H'fff8
+	bsr	$_epb_unpack_auth_response_free
+	ld	X,@$_g_wechat
+	tst	@(H'0003,X)
+	beq	?L21
+	tst	@(H'0004,X)
+	bne	?L21
+	tst	@(H'0006,X)
+	bne	?L21
+	bsr	_koovox_pack_wechat_init_req
+	bsr	$_koovox_send_data_to_wechat
+?LBE7:
+	bra	(?L21)
+?L29:
+	ld	AL,@(H'0004,Y)
+?LBB8:
+	add	AL,#H'0008
+	ld	AH,@(H'0005,Y)
+	sub	AH,#H'0008
+	bsr	$_epb_unpack_send_data_response
+	st	AL,@H'fff8
+	cmp	AL,#H'0000
+	bne	?L30
+	ld	AL,#-H'666E
+	bra	(?L19)
+?L30:
+	ld	X,@$XAP_AL
+	ld	X,@(0,X)
+	st	X,@(H'0008,Y)
+	ld	AH,@(0,X)
+	ld	AL,@(1,X)
+	cmp	AH,#H'0000
+	bne	?L74
+	cmp	AL,#H'0000
+	beq	?L31
+?L74:
+	ld	AH,@(H'0001,X)
+	st	AH,@(H'0006,Y)
+?L31:
+	ld	AL,@H'fff8
+	bsr	$_epb_unpack_send_data_response_free
+?LBE8:
+	bra	(?L21)
+?L32:
+	ld	AL,@(H'0004,Y)
+?LBB9:
+	add	AL,#H'0008
+	ld	AH,@(H'0005,Y)
+	sub	AH,#H'0008
+	bsr	$_epb_unpack_init_response
+	st	AL,@(H'0009,Y)
+	cmp	AL,#H'0000
+	bne	?L33
+	ld	AL,#-H'666F
+	bra	(?L19)
+?L33:
+	ld	X,@(H'0009,Y)
+	tst	@(0,X)
+	beq	?L34
+	ld	AL,@(0,X)
+	ld	X,@$XAP_AL
+	ld	AH,@(0,X)
+	ld	AL,@(1,X)
+	cmp	AH,#H'0000
+	bne	?L35
+	cmp	AL,#H'0000
+	bne	?L35
+	ld	X,@(H'0009,Y)
+	tst	@(H'0005,X)
+	beq	?L36
+?LBB10:
+	ld	AL,@$_g_wechat
+	add	AL,#H'000A
+	st	AL,@(0,Y)
+	ld	AL,#H'0004
+	st	AL,@(H'0001,Y)
+	ld	AL,#H'0000
+	ld	AH,#H'0000
+	bsr	$_crc32
+	st	AH,@H'fff8
+	st	AL,@H'fff9
+	ld	X,@(H'0009,Y)
+	cmp	AH,@(H'0006,X)
+	bne	?L37
+	cmp	AL,@(H'0007,X)
+	bne	?L37
+	ld	X,@$_g_wechat
+	ld	AL,#H'0001
+	st	AL,@(H'0004,X)
+?L37:
+	ld	AH,@H'fff8
+	ld	AL,@H'fff9
+	st	AH,@(0,Y)
+	st	AL,@(1,Y)
+	ld	X,@(H'0009,Y)
+	ld	AH,@(H'0006,X)
+	ld	AL,@(H'0007,X)
+	st	AH,@(H'0002,Y)
+	st	AL,@(H'0003,Y)
+	ld	AL,#(?LC4)
+	bsr	$_printf
+?LBE10:
+	bra	(?L38)
+?L36:
+	ld	X,@$_g_wechat
+	ld	AL,#H'0001
+	st	AL,@(H'0004,X)
+?L38:
+	ld	X,@$_g_wechat
+	ld	AL,#H'0001
+	st	AL,@(H'0002,X)
+	bra	(?L34)
+?L35:
+	ld	X,@(H'0009,Y)
+	ld	AL,@(0,X)
+	ld	X,@$XAP_AL
+	ld	AL,@(H'0001,X)
+	st	AL,@(H'0006,Y)
+?L34:
+	ld	AL,@(H'0009,Y)
+	bsr	$_epb_unpack_init_response_free
+?LBE9:
+	bra	(?L21)
+?L40:
+	ld	AL,@(H'0004,Y)
+?LBB11:
+	add	AL,#H'0008
+	ld	AH,@(H'0005,Y)
+	sub	AH,#H'0008
+	bsr	$_epb_unpack_recv_data_push
+	st	AL,@(H'000A,Y)
+	ld	X,@$XAP_AL
+	ld	X,@(H'0001,X)
+	st	X,@(H'000B,Y)
+	cmp	AL,#H'0000
+	bne	?L41
+	ld	AL,#-H'666C
+	bra	(?L19)
+?L41:
+?LBB12:
+	ld	AH,#H'0000
+	st	AH,@(H'000C,Y)
+	ld	X,@(H'000B,Y)
+	ld	AL,@(H'0001,X)
+	st	AL,@(0,Y)
+	ld	AL,#(?LC5)
+	bsr	$_printf
+	ld	AH,@(H'000C,Y)
+	ld	X,@(H'000A,Y)
+	cmp	AH,@(H'0002,X)
+	bcc	?L65
+?L46:
+	ld	X,@(H'000A,Y)
+	ld	AL,@(H'0001,X)
+	ld	X,@(H'000C,Y)
+	add	X,@$XAP_AL
+	ld	AL,@(0,X)
+	st	AL,@(0,Y)
+	ld	AL,#(?LC6)
+	bsr	$_printf
+	ld	AH,@(H'000C,Y)
+	add	AH,#H'0001
+	st	AH,@(H'000C,Y)
+	ld	X,@(H'000A,Y)
+	cmp	AH,@(H'0002,X)
+	bcs	?L46
+?L65:
+	ld	AL,#H'000A
+	bsr	$_putchar
+	ld	X,@(H'000B,Y)
+?LBE12:
+	ld	AL,@(H'0001,X)
+	cmp	AL,#H'0008
+	bne	?L47
+	ld	AL,@(0,X)
+	cmp	AL,#H'0001
+	bne	?L49
+	ld	AL,#(?LC7)
+	bra	(?L66)
+?L49:
+	ld	X,@(H'000B,Y)
+	ld	AL,@(0,X)
+	cmp	AL,#H'0002
+	bne	?L47
+	ld	AL,#(?LC8)
+?L66:
+	bsr	$_puts
+?L47:
+	ld	AL,@(H'000A,Y)
+	bsr	$_epb_unpack_recv_data_push_free
+	ld	X,@$_g_wechat
+	ld	AL,@(H'0008,X)
+	add	AL,#H'0001
+	st	AL,@(H'0008,X)
+?LBE11:
+	bra	(?L21)
+?L54:
+	ld	AL,@(H'0004,Y)
+?LBB13:
+	add	AL,#H'0008
+	ld	AH,@(H'0005,Y)
+	sub	AH,#H'0008
+	bsr	$_epb_unpack_switch_view_push
+	ld	X,@$_g_wechat
+	ld	AH,#H'0000
+	tst	@(H'0002,X)
+	bne	?L55
+	ld	AH,#H'0001
+?L55:
+	st	AH,@(H'0002,X)
+	cmp	AL,#H'0000
+	bne	?L56
+	ld	AL,#-H'666B
+	bra	(?L19)
+?L56:
+	bsr	$_epb_unpack_switch_view_push_free
+?LBE13:
+	bra	(?L21)
+?L57:
+	ld	AL,@(H'0004,Y)
+?LBB14:
+	add	AL,#H'0008
+	ld	AH,@(H'0005,Y)
+	sub	AH,#H'0008
+	bsr	$_epb_unpack_switch_backgroud_push
+	cmp	AL,#H'0000
+	bne	?L58
+	ld	AL,#-H'666A
+	bra	(?L19)
+?L58:
+	bsr	$_epb_unpack_switch_backgroud_push_free
+?L21:
+?LBE14:
+	ld	AL,@(H'0006,Y)
+?L19:
+?LBE6:
+?LBE_koovox_rcv_data_handle:
+	leavel	#15
+	.SEG	CONST
+?LC3:
+	dc	H'3D
+	dc	H'3D
+	dc	H'3D
+	dc	H'3D
+	dc	H'3D
+	dc	H'3D
+	dc	H'3D
+	dc	H'3D
+	dc	H'63
+	dc	H'6D
+	dc	H'64
+	dc	H'69
+	dc	H'64
+	dc	H'3A
+	dc	H'25
+	dc	H'78
+	dc	H'20
+	dc	H'0A
+	dc	H'00
+?LC4:
+	dc	H'63
+	dc	H'72
+	dc	H'63
+	dc	H'33
+	dc	H'32
+	dc	H'3A
+	dc	H'25
+	dc	H'6C
+	dc	H'64
+	dc	H'20
+	dc	H'2C
+	dc	H'63
+	dc	H'68
+	dc	H'61
+	dc	H'6C
+	dc	H'6C
+	dc	H'65
+	dc	H'61
+	dc	H'6E
+	dc	H'67
+	dc	H'65
+	dc	H'5F
+	dc	H'61
+	dc	H'6E
+	dc	H'73
+	dc	H'77
+	dc	H'65
+	dc	H'72
+	dc	H'3A
+	dc	H'25
+	dc	H'6C
+	dc	H'64
+	dc	H'0A
+	dc	H'00
+?LC5:
+	dc	H'6F
+	dc	H'62
+	dc	H'6A
+	dc	H'20
+	dc	H'3D
+	dc	H'20
+	dc	H'25
+	dc	H'78
+	dc	H'0A
+	dc	H'00
+?LC6:
+	dc	H'25
+	dc	H'78
+	dc	H'20
+	dc	H'00
+?LC7:
+	dc	H'45
+	dc	H'6E
+	dc	H'61
+	dc	H'62
+	dc	H'6C
+	dc	H'65
+	dc	H'20
+	dc	H'68
+	dc	H'65
+	dc	H'61
+	dc	H'72
+	dc	H'74
+	dc	H'20
+	dc	H'72
+	dc	H'61
+	dc	H'74
+	dc	H'65
+	dc	H'00
+?LC8:
+	dc	H'44
+	dc	H'69
+	dc	H'73
+	dc	H'61
+	dc	H'62
+	dc	H'6C
+	dc	H'65
+	dc	H'20
+	dc	H'68
+	dc	H'65
+	dc	H'61
+	dc	H'72
+	dc	H'74
+	dc	H'20
+	dc	H'72
+	dc	H'61
+	dc	H'74
+	dc	H'65
+	dc	H'00
+	.CODE
+;.stabn	192,0,0,?LBB6
+;.stabn	192,0,0,?LBB7
+;.stabn	224,0,0,?LBE7
+;.stabn	192,0,0,?LBB8
+;.stabn	224,0,0,?LBE8
+;.stabn	192,0,0,?LBB9
+;.stabn	192,0,0,?LBB10
+;.stabn	224,0,0,?LBE10
+;.stabn	224,0,0,?LBE9
+;.stabn	192,0,0,?LBB11
+;.stabn	192,0,0,?LBB12
+;.stabn	224,0,0,?LBE12
+;.stabn	224,0,0,?LBE11
+;.stabn	192,0,0,?LBB13
+;.stabn	224,0,0,?LBE13
+;.stabn	192,0,0,?LBB14
+;.stabn	224,0,0,?LBE14
+;.stabn	224,0,0,?LBE6
 $_koovox_pack_wechat_send_data_req:
-	enterl	#10
+	enterl	#12
 ?LBB_koovox_pack_wechat_send_data_req:
 	st	AL,@(H'0006,Y)
 	st	AH,@(H'0007,Y)
 	ld	AL,#H'0005
-?LBB20:
+?LBB15:
 	st	AL,@(0,Y)
 	ld	AL,@$XAP_UY
 	add	AL,#H'0001
 	ld	AH,#H'0000
 	bsr	$_memset
-	ld	AL,#H'0005
-	st	AL,@(0,Y)
+	ld	X,#H'0005
+	st	X,@(0,Y)
 	ld	AL,@$XAP_UY
 	add	AL,#H'0001
 	ld	AH,#H'0000
 	bsr	$_memset
-	ld	AL,@$_g_wechatble_state+H'0008
+	ld	X,@$_g_wechat
+	ld	AL,@(H'0009,X)
 	add	AL,#H'0001
-	st	AL,@$_g_wechatble_state+H'0008
-	ld	AL,@$_g_wechatble_state+H'0006
+	st	AL,@(H'0009,X)
+	ld	X,@$_g_wechat
+	ld	AL,@(H'0007,X)
 	add	AL,#H'0001
-	st	AL,@$_g_wechatble_state+H'0006
+	st	AL,@(H'0007,X)
 	ld	AL,@(H'0006,Y)
 	st	AL,@(H'0002,Y)
 	ld	AL,@(H'0007,Y)
 	st	AL,@(H'0003,Y)
-	ld	AL,@(H'000A,Y)
-	st	AL,@(H'0004,Y)
-	ld	AL,@(H'000B,Y)
+	ld	X,@(H'000C,Y)
+	st	X,@(H'0004,Y)
+	ld	AL,@(H'000D,Y)
 	st	AL,@(H'0005,Y)
+	ld	X,@$_g_wechat
+	st	X,@(H'0008,Y)
 	ld	AL,@$XAP_UY
 	add	AL,#H'0001
 	bsr	$_epb_send_data_request_pack_size
 	add	AL,#H'0008
-	st	AL,@$_g_send_data+H'0001
+	ld	X,@(H'0008,Y)
+	st	AL,@(H'0012,X)
+	ld	AL,@$_g_wechat
+	st	AL,@(H'0009,Y)
+	ld	X,@$XAP_AL
+	ld	AL,@(H'0012,X)
 	bsr	$_malloc
-	ld	AH,@$XAP_AL
-	st	AL,@$_g_send_data
+	ld	X,@(H'0009,Y)
+	st	AL,@(H'0011,X)
+	ld	X,@$_g_wechat
 	ld	AL,#H'2712
+	ld	AH,@(H'0011,X)
 	bsr	_koovox_pack_wechat_head
+	ld	X,@$_g_wechat
 	ld	AH,#H'0008
-	add	AH,@$_g_send_data
-	ld	AL,@$_g_send_data+H'0001
+	add	AH,@(H'0011,X)
+	ld	AL,@(H'0012,X)
 	sub	AL,#H'0008
 	st	AL,@(0,Y)
 	ld	AL,@$XAP_UY
 	add	AL,#H'0001
 	bsr	$_epb_pack_send_data_request
+	ld	X,@$_g_wechat
 	ld	AL,#H'0000
-	st	AL,@$_g_send_data+H'0002
-?LBE20:
+	st	AL,@(H'0013,X)
+?LBE15:
 ?LBE_koovox_pack_wechat_send_data_req:
-	leavel	#10
-;.stabn	192,0,0,?LBB20
-;.stabn	224,0,0,?LBE20
-$_koovox_device_wechat_disconnect:
-; leaf function with empty stack frame
-?LBB_koovox_device_wechat_disconnect:
+	leavel	#12
+;.stabn	192,0,0,?LBB15
+;.stabn	224,0,0,?LBE15
+_koovox_init_wechat:
+	enterl	#3
+?LBB_koovox_init_wechat:
+	tst	@$_g_wechat
+	bne	?L84
+	ld	AL,#H'0016
+	bsr	$_malloc
+	st	AL,@$_g_wechat
+?L84:
+	ld	AL,@$_g_wechat
+	ld	AH,#H'0016
+	st	AH,@(0,Y)
+	ld	AH,#H'0000
+	bsr	$_memset
+	ld	X,@$_g_wechat
+	ld	AL,#H'0011
+	st	AL,@(H'000A,X)
+	ld	X,@$_g_wechat
+	ld	AL,#H'0022
+	st	AL,@(H'000B,X)
+	ld	X,@$_g_wechat
+	ld	AL,#H'0033
+	st	AL,@(H'000C,X)
+	ld	X,@$_g_wechat
+	ld	AL,#H'0044
+	st	AL,@(H'000D,X)
+?LBE_koovox_init_wechat:
+	leavel	#3
+_koovox_free_wechat:
+	enterl	#2
+?LBB_koovox_free_wechat:
+	tst	@$_g_wechat
+	beq	?L85
+	ld	AL,@$_g_wechat
+	bsr	$_free
 	ld	AL,#H'0000
-	st	AL,@$_g_wechatble_state
-	st	AL,@$_g_wechatble_state+H'0002
-	st	AL,@$_g_wechatble_state+H'0003
-	st	AL,@$_g_wechatble_state+H'0004
-	st	AL,@$_g_wechatble_state+H'0005
-	st	AL,@$_g_wechatble_state+H'0001
-	st	AL,@$_g_wechatble_state+H'0008
-	st	AL,@$_g_wechatble_state+H'0006
-	st	AL,@$_g_wechatble_state+H'0007
-?LBE_koovox_device_wechat_disconnect:
-	rts
+	st	AL,@$_g_wechat
+?L85:
+?LBE_koovox_free_wechat:
+	leavel	#2
+$_koovox_wechat_connect:
+	enterl	#7
+?LBB_koovox_wechat_connect:
+	st	AL,@(H'0003,Y)
+	st	AH,@(H'0004,Y)
+	bsr	_koovox_init_wechat
+	ld	X,@$_g_wechat
+	tst	@(H'0001,X)
+	bne	?L87
+	ld	AL,#H'0001
+	st	AL,@(H'0001,X)
+	ld	X,@$_g_wechat
+	ld	AL,@(H'0003,Y)
+	st	AL,@(0,X)
+	bsr	_koovox_pack_wechat_auth_req
+	ld	AL,@(H'0003,Y)
+	cmp	AL,#H'0002
+	bne	?L89
+	ld	AH,@$_g_wechat
+	ld	X,@(H'0004,Y)
+	ld	AL,@(0,X)
+	ld	X,@$XAP_AH
+	st	AL,@(H'0014,X)
+	ld	AH,@$_g_wechat
+	ld	X,@(H'0004,Y)
+	ld	AL,@(H'0001,X)
+	ld	X,@$XAP_AH
+	st	AL,@(H'0015,X)
+	ld	X,@$_theSink+H'0004
+	tst	@(H'001A,X)
+	beq	?L94
+	ld	AH,#H'0000
+	st	AH,@(0,Y)
+	ld	AL,#H'03E8
+	st	AL,@(H'0002,Y)
+	st	AH,@(H'0001,Y)
+	ld	AL,#($_theSink)
+	ld	AH,#H'40C0
+	bsr	$_MessageSendLater
+	bra	(?L92)
+?L89:
+	ld	AL,@(H'0003,Y)
+	cmp	AL,#H'0001
+	bne	?L92
+	ld	X,@$_g_wechat
+	ld	AL,@(H'0007,Y)
+	st	AL,@(H'0014,X)
+?L94:
+	bsr	$_koovox_send_data_to_wechat
+?L92:
+	ld	X,@$_g_wechat
+	ld	AL,#H'0001
+	st	AL,@(H'0005,X)
+?L87:
+?LBE_koovox_wechat_connect:
+	leavel	#7
+$_koovox_rcv_data_from_wechat:
+	enterl	#10
+?LBB_koovox_rcv_data_from_wechat:
+	st	AL,@(H'0001,Y)
+	st	AH,@(H'0002,Y)
+?LBB16:
+	ld	AH,#H'0000
+	st	AH,@(H'0005,Y)
+	st	AH,@(H'0006,Y)
+?LBB17:
+	tst	@(H'0002,Y)
+	beq	?L115
+?L102:
+	ld	X,@(H'0001,Y)
+	add	X,@(H'0006,Y)
+	ld	AL,@(0,X)
+	st	AL,@(0,Y)
+	ld	AL,#(?LC6)
+	bsr	$_printf
+	ld	AL,@(H'0006,Y)
+	add	AL,#H'0001
+	st	AL,@(H'0006,Y)
+	cmp	AL,@(H'0002,Y)
+	bcs	?L102
+?L115:
+	ld	AL,#H'000A
+	bsr	$_putchar
+	ld	AH,@(H'0002,Y)
+?LBE17:
+	cmp	AH,#H'0007
+	bcz	?L97
+	cmp	AH,#H'0000
+	beq	?L97
+?L113:
+	ld	X,@$_g_wechat
+	tst	@(H'000F,X)
+	bne	?L107
+	ld	X,@(H'0001,Y)
+?LBB18:
+	add	X,@(H'0005,Y)
+	ld	AL,@(H'0002,X)
+	asl	#H'0008
+	ld	AH,@(H'0003,X)
+	add	AH,@$XAP_AL
+	ld	X,@(H'0001,Y)
+	ld	AL,@(0,X)
+	cmp	AL,#H'00FE
+	beq	?L108
+	ld	AL,@(H'0001,X)
+	cmp	AL,#H'0001
+	bne	?L97
+?L108:
+	ld	X,@$_g_wechat
+	st	AH,@(H'000F,X)
+	ld	X,@$_g_wechat
+	ld	AH,#H'0000
+	st	AH,@(H'0010,X)
+	ld	AL,@$_g_wechat
+	st	AL,@(H'0007,Y)
+	ld	X,@$XAP_AL
+	ld	AL,@(H'000F,X)
+	bsr	$_malloc
+	ld	X,@(H'0007,Y)
+	st	AL,@(H'000E,X)
+?L107:
+?LBE18:
+	ld	X,@$_g_wechat
+	ld	AH,@(H'000F,X)
+	st	AH,@(H'0003,Y)
+	sub	AH,@(H'0010,X)
+	st	AH,@(H'0003,Y)
+	ld	AL,@(H'0002,Y)
+	cmp	AL,@$XAP_AH
+	bcz	?L109
+	ld	AL,@$XAP_AH
+?L109:
+	st	AL,@(H'0003,Y)
+	ld	X,@$_g_wechat
+	ld	AL,@(H'000E,X)
+	ld	X,@(H'0010,X)
+	add	X,@$XAP_AL
+	ld	AH,@(H'0001,Y)
+	add	AH,@(H'0005,Y)
+	ld	AL,@(H'0003,Y)
+	st	AL,@(0,Y)
+	ld	AL,@$XAP_UXL
+	bsr	$_memcpy
+	ld	AH,@(H'0002,Y)
+	sub	AH,@(H'0003,Y)
+	st	AH,@(H'0002,Y)
+	ld	AL,@(H'0005,Y)
+	add	AL,@(H'0003,Y)
+	st	AL,@(H'0005,Y)
+	ld	X,@$_g_wechat
+	ld	AL,@(H'0003,Y)
+	add	AL,@(H'0010,X)
+	st	AL,@(H'0010,X)
+	ld	X,@$_g_wechat
+	ld	AH,@(H'000F,X)
+	cmp	AH,@(H'0010,X)
+	beq	?L122
+	bcc	?L104
+?L122:
+	ld	AL,@(H'000E,X)
+	bsr	_koovox_rcv_data_handle
+	st	AL,@(H'0004,Y)
+	bsr	_koovox_wechat_error_handle
+	ld	X,@$_g_wechat
+	tst	@(H'000E,X)
+	beq	?L111
+	ld	AL,#(?LC9)
+	bsr	$_puts
+	ld	X,@$_g_wechat
+	ld	AL,@(H'000E,X)
+	bsr	$_free
+	ld	X,@$_g_wechat
+	ld	AH,#H'0000
+	st	AH,@(H'000E,X)
+?L111:
+	ld	X,@$_g_wechat
+	ld	AL,#H'0000
+	st	AL,@(H'000F,X)
+	ld	X,@$_g_wechat
+	st	AL,@(H'0010,X)
+	tst	@(H'0004,Y)
+	beq	?L104
+	st	AL,@(H'0002,Y)
+?L104:
+	tst	@(H'0002,Y)
+	bne	?L113
+?L97:
+?LBE16:
+?LBE_koovox_rcv_data_from_wechat:
+	leavel	#10
+	.SEG	CONST
+?LC9:
+	dc	H'66
+	dc	H'72
+	dc	H'65
+	dc	H'65
+	dc	H'20
+	dc	H'67
+	dc	H'5F
+	dc	H'72
+	dc	H'63
+	dc	H'76
+	dc	H'5F
+	dc	H'64
+	dc	H'61
+	dc	H'74
+	dc	H'61
+	dc	H'2E
+	dc	H'64
+	dc	H'61
+	dc	H'74
+	dc	H'61
+	dc	H'00
+	.CODE
+;.stabn	192,0,0,?LBB16
+;.stabn	192,0,0,?LBB17
+;.stabn	224,0,0,?LBE17
+;.stabn	192,0,0,?LBB18
+;.stabn	224,0,0,?LBE18
+;.stabn	224,0,0,?LBE16
+$_koovox_send_data_to_wechat:
+	enterl	#3
+?LBB_koovox_send_data_to_wechat:
+	ld	X,@$_g_wechat
+	ld	AL,@(0,X)
+	cmp	AL,#H'0002
+	bne	?L124
+	ld	AL,@(H'0014,X)
+	ld	AH,@(H'0015,X)
+	bsr	_koovox_indicate_to_wechat
+	bra	(?L123)
+?L124:
+	ld	X,@$_g_wechat
+	ld	AL,@(0,X)
+	cmp	AL,#H'0001
+	bne	?L123
+	ld	AL,@(H'0011,X)
+	st	AL,@(0,Y)
+	ld	AL,@(H'0014,X)
+	ld	AH,@(H'0012,X)
+	bsr	$_WechatSendPacket
+?L123:
+?LBE_koovox_send_data_to_wechat:
+	leavel	#3
+$_koovox_wechat_disconnect:
+	enterl	#2
+?LBB_koovox_wechat_disconnect:
+	bsr	_koovox_free_wechat
+?LBE_koovox_wechat_disconnect:
+	leavel	#2
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 140 used[1] = 14 total = 154
-;# Function pattern *movqi3 used[0] = 156 total = 156
-;# Function pattern *movqi8 used[0] = 3 total = 3
+;# Function pattern *movqi2 used[0] = 160 used[1] = 14 used[3] = 3 total = 177
+;# Function pattern *movqi3 used[0] = 254 total = 254
+;# Function pattern *movqi8 used[0] = 22 total = 22
 ;# Function pattern *movhi used[2] = 5 used[3] = 3 total = 8
-;# Function pattern *addqi0 used[0] = 15 total = 15
-;# Function pattern *addqi2 used[0] = 27 used[2] = 2 total = 29
+;# Function pattern *addqi0 used[0] = 17 total = 17
+;# Function pattern *addqi2 used[0] = 30 used[2] = 3 total = 33
 ;# Function pattern *andqi3 used[0] = 6 total = 6
-;# Function pattern *subqi3 used[0] = 12 total = 12
+;# Function pattern *subqi3 used[0] = 13 total = 13
 ;# Function pattern *lshrqi3 used[0] = 3 total = 3
-;# Function pattern *ashlqi3 used[0] = 3 total = 3
-;# Function pattern jump used[0] = 20 total = 20
-;# Function pattern *call1 used[0] = 17 total = 17
-;# Function pattern *call_value1 used[0] = 38 total = 38
-;# Function pattern movstrqi+3 used[0] = 5 used[1] = 11 total = 16
-;# Function pattern movstrqi+4 used[0] = 1 used[1] = 3 total = 4
-;# Function pattern movstrqi+5 used[0] = 16 total = 16
+;# Function pattern *ashlqi3 used[0] = 2 total = 2
+;# Function pattern jump used[0] = 22 total = 22
+;# Function pattern *call1 used[0] = 24 total = 24
+;# Function pattern *call_value1 used[0] = 40 total = 40
+;# Function pattern movstrqi+3 used[0] = 7 used[1] = 16 total = 23
+;# Function pattern movstrqi+4 used[1] = 3 used[2] = 1 total = 4
+;# Function pattern movstrqi+5 used[0] = 23 total = 23
 ;# Function pattern movstrqi+6 used[0] = 3 total = 3
 ;# Function pattern movstrqi+7 used[1] = 1 total = 1
 	MODULE	koovox_wechat_util
@@ -6148,7 +6392,7 @@ _handleCLMessage:
 	tst	@(0,X)
 	beq	?L1
 	ld	AL,@$_theSink+H'0004
-	add	AL,#H'0018
+	add	AL,#H'0012
 	ld	AH,#H'0005
 	st	AH,@(0,Y)
 	ld	AH,#H'0000
@@ -9081,7 +9325,7 @@ $_main:
 	st	AL,@(H'0002,Y)
 	bsr	$_BootGetPreservedWord
 	ld	X,@(H'0002,Y)
-	st	AL,@(H'0011,X)
+	st	AL,@(H'000B,X)
 	bsr	$_LedManagerMemoryInit
 	bsr	$_LEDManagerInit
 	bsr	$_AuthResetConfirmationFlags
@@ -9133,13 +9377,13 @@ $_main:
 	.SEG	CONST
 ?LC3:
 	dc	H'31
-	dc	H'33
+	dc	H'31
 	dc	H'3A
-	dc	H'32
-	dc	H'30
+	dc	H'31
+	dc	H'37
 	dc	H'3A
-	dc	H'34
-	dc	H'32
+	dc	H'31
+	dc	H'37
 	dc	H'00
 ?LC2:
 	dc	H'4D
@@ -9174,7 +9418,7 @@ _sinkInitCodecTask:
 	enterl	#2
 ?LBB_sinkInitCodecTask:
 	ld	AL,@$_theSink+H'0004
-	add	AL,#H'0015
+	add	AL,#H'000F
 	ld	AH,#($_theSink)
 	bsr	$_CodecInitCsrInternal
 ?LBE_sinkInitCodecTask:
@@ -10215,7 +10459,7 @@ $_handleA2DPSignallingConnected:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,@$_theSink+H'0004
-	add	AL,#H'0012
+	add	AL,#H'000C
 	st	AL,@(H'0001,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'4740
@@ -14370,7 +14614,7 @@ $_audioActiveCallScoAvailable:
 	ld	X,@$_theSink+H'0004
 	ld	AL,#H'0006
 ?L57:
-	st	AL,@(H'0014,X)
+	st	AL,@(H'000E,X)
 	bra	(?L44)
 ?L48:
 	ld	X,@(0,Y)
@@ -14669,7 +14913,7 @@ $_audioA2dpStreamAvailable:
 	ld	X,@$_theSink+H'0004
 	ld	AL,#H'0006
 ?L99:
-	st	AL,@(H'0014,X)
+	st	AL,@(H'000E,X)
 ?L95:
 	ld	AH,#H'0001
 	st	AH,@(H'0003,Y)
@@ -14850,7 +15094,7 @@ $_audioSuspendDisconnectSource:
 	bne	?L159
 	ld	X,@$_theSink+H'0004
 	ld	AL,#H'0000
-	st	AL,@(H'0014,X)
+	st	AL,@(H'000E,X)
 ?L159:
 ?LBE8:
 	ld	AL,@$XAP_AH
@@ -19191,14 +19435,14 @@ $_handle_set_ble_ad_data_cfm:
 	ld	X,@$_theSink+H'0004
 	ld	AL,#H'0000
 ?L24:
-	st	AL,@(H'001F,X)
+	st	AL,@(H'0019,X)
 ?LBE_handle_set_ble_ad_data_cfm:
 	leavel	#2
 $_start_ble_advertising:
 	enterl	#2
 ?LBB_start_ble_advertising:
 	ld	X,@$_theSink+H'0004
-	tst	@(H'001F,X)
+	tst	@(H'0019,X)
 	beq	?L26
 	ld	AL,#H'0001
 	bsr	$_ConnectionDmBleSetAdvertiseEnable
@@ -22019,7 +22263,7 @@ _configManagerKeyLengths:
 	ld	X,@(H'0001,Y)
 	ld	AL,@(H'000A,X)
 	ld	X,@$XAP_AH
-	st	AL,@(H'0010,X)
+	st	AL,@(H'000A,X)
 ?LBE_configManagerKeyLengths:
 	leavel	#5
 _configManagerButtons:
@@ -23080,7 +23324,7 @@ $_configManagerFillPs:
 ?LBB_configManagerFillPs:
 ?LBB15:
 	ld	X,@$_theSink+H'0004
-	ld	AH,@(H'0010,X)
+	ld	AH,@(H'000A,X)
 	lsr	#H'0008
 	cmp	AH,#H'0000
 	beq	?L108
@@ -23089,13 +23333,13 @@ $_configManagerFillPs:
 	bsr	$_PsFreeCount
 	st	AL,@(H'0001,Y)
 	ld	X,@$_theSink+H'0004
-	ld	AH,@(H'0010,X)
+	ld	AH,@(H'000A,X)
 	lsr	#H'0008
 	ld	AL,@$XAP_AH
 	bsr	$_malloc
 	st	AL,@(H'0002,Y)
 	ld	X,@$_theSink+H'0004
-	ld	AL,@(H'0010,X)
+	ld	AL,@(H'000A,X)
 	and	AL,#H'00FF
 	ld	AH,@(H'0001,Y)
 	cmp	AH,@$XAP_AL
@@ -23109,7 +23353,7 @@ $_configManagerFillPs:
 	ld	X,@(H'0002,Y)
 	st	AH,@(0,X)
 	ld	X,@$_theSink+H'0004
-	ld	AH,@(H'0010,X)
+	ld	AH,@(H'000A,X)
 	lsr	#H'0008
 	st	AH,@(0,Y)
 	ld	AL,#H'002F
@@ -23132,7 +23376,7 @@ $_configManagerDefragCheck:
 ?LBB_configManagerDefragCheck:
 ?LBB17:
 	ld	X,@$_theSink+H'0004
-	ld	AH,@(H'0010,X)
+	ld	AH,@(H'000A,X)
 	lsr	#H'0008
 	cmp	AH,#H'0000
 	beq	?L119
@@ -23140,7 +23384,7 @@ $_configManagerDefragCheck:
 	ld	AL,@$XAP_AH
 	bsr	$_PsFreeCount
 	ld	X,@$_theSink+H'0004
-	ld	AH,@(H'0010,X)
+	ld	AH,@(H'000A,X)
 	and	AH,#H'00FF
 	cmp	AL,@$XAP_AH
 	beq	?L121
@@ -23172,10 +23416,10 @@ $_configManagerDefrag:
 $_configManagerInitMemory:
 	enterl	#3
 ?LBB_configManagerInitMemory:
-	ld	AL,#H'0028
+	ld	AL,#H'0022
 	bsr	$_malloc
 	st	AL,@$_theSink+H'0004
-	ld	AH,#H'0028
+	ld	AH,#H'0022
 	st	AH,@(0,Y)
 	ld	AH,#H'0000
 	bsr	$_memset
@@ -23186,7 +23430,7 @@ $_configManagerGattInit:
 ?LBB_configManagerGattInit:
 ?LBB19:
 	ld	AH,@$_theSink+H'0004
-	add	AH,#H'001A
+	add	AH,#H'0014
 	ld	AL,#H'0002
 	st	AL,@(0,Y)
 	ld	AL,#H'001D
@@ -23195,13 +23439,13 @@ $_configManagerGattInit:
 	bne	?L126
 	ld	X,@$_theSink+H'0004
 	ld	AL,#H'0000
-	st	AL,@(H'001C,X)
+	st	AL,@(H'0016,X)
 	ld	AL,#H'0001
 	bra	(?L125)
 ?L126:
 	ld	X,@$_theSink+H'0004
 	ld	AL,#H'0000
-	st	AL,@(H'001A,X)
+	st	AL,@(H'0014,X)
 ?L125:
 ?LBE19:
 ?LBE_configManagerGattInit:
@@ -31120,14 +31364,14 @@ $_initialise_gatt_for_device:
 	st	AH,@(H'0003,Y)
 ?LBB2:
 	ld	X,@$_theSink+H'0004
-	tst	@(H'001C,X)
+	tst	@(H'0016,X)
 	bne	?L1
 	ld	AH,#hwrd($_gatt_message_handler)
 	ld	AL,#lwrd($_gatt_message_handler)
-	st	AH,@(H'0018,X)
-	st	AL,@(H'0019,X)
+	st	AH,@(H'0012,X)
+	st	AL,@(H'0013,X)
 	ld	X,@$_theSink+H'0004
-	ld	AL,@(H'001A,X)
+	ld	AL,@(H'0014,X)
 	cmp	AL,#H'0002
 	bne	?L1
 ?LBB3:
@@ -31136,15 +31380,15 @@ $_initialise_gatt_for_device:
 	bsr	$_GattGetDatabase
 	ld	AH,@$XAP_AL
 	ld	AL,@$_theSink+H'0004
-	add	AL,#H'0018
+	add	AL,#H'0012
 	st	AH,@(0,Y)
 	ld	AH,@(H'0001,Y)
 	bsr	$_GattInit
 	ld	X,@$_theSink+H'0004
 	ld	AL,#H'0000
-	st	AL,@(H'0021,X)
+	st	AL,@(H'001B,X)
 	ld	X,@$_theSink+H'0004
-	st	AL,@(H'0022,X)
+	st	AL,@(H'001C,X)
 	ld	AL,@(H'0003,Y)
 	ld	AH,@(H'0002,Y)
 	bsr	$_setup_ble_ad_data
@@ -31432,7 +31676,7 @@ _add_client_device:
 	ld	X,@$XAP_AH
 	add	X,@$XAP_AH
 	add	X,@H'fff8
-	ld	AL,@(H'0024,X)
+	ld	AL,@(H'001E,X)
 	cmp	AL,@H'fff9
 	bne	?L4
 	ld	AL,#H'0001
@@ -31447,16 +31691,16 @@ _add_client_device:
 	add	AL,@$XAP_AH
 	ld	X,@$_theSink+H'0004
 	add	X,@$XAP_AL
-	tst	@(H'0025,X)
+	tst	@(H'001F,X)
 	bne	?L10
 	st	AL,@H'ffff
 	ld	AL,@H'fff9
-	st	AL,@(H'0024,X)
+	st	AL,@(H'001E,X)
 	ld	AL,@H'ffff
 	ld	X,@$_theSink+H'0004
 	add	X,@$XAP_AL
 	ld	AL,#H'0001
-	st	AL,@(H'0025,X)
+	st	AL,@(H'001F,X)
 	ld	AL,#H'0000
 	bra	(?L1)
 ?L10:
@@ -31482,14 +31726,14 @@ _remove_client_device:
 	st	AL,@(-1,Y)
 	ld	X,@$_theSink+H'0004
 	add	X,@$XAP_AL
-	ld	AL,@(H'0024,X)
+	ld	AL,@(H'001E,X)
 	cmp	AL,@H'fff8
 	bne	?L22
 	ld	AL,#H'0000
-	st	AL,@(H'0024,X)
+	st	AL,@(H'001E,X)
 	ld	X,@$_theSink+H'0004
 	add	X,@(-1,Y)
-	st	AL,@(H'0025,X)
+	st	AL,@(H'001F,X)
 ?L22:
 	add	AH,#H'0001
 	cmp	AH,#H'0000
@@ -31509,13 +31753,13 @@ $_server_handle_gatt_init_cfm:
 	ld	AH,@$_theSink+H'0004
 	ld	AL,#H'0001
 	ld	X,@$XAP_AH
-	st	AL,@(H'001C,X)
+	st	AL,@(H'0016,X)
 ?L30:
 	ld	X,@H'fff8
 	tst	@(0,X)
 	bne	?L29
 	ld	AL,@$_theSink+H'0004
-	add	AL,#H'0018
+	add	AL,#H'0012
 	ld	AH,#H'0005
 	st	AH,@(0,Y)
 	ld	AH,#H'0000
@@ -31555,45 +31799,33 @@ $_server_handle_gatt_disconnect_ind:
 	bsr	_remove_client_device
 	bsr	$_start_ble_advertising
 	ld	AL,@$_theSink+H'0004
-	add	AL,#H'0018
+	add	AL,#H'0012
 	ld	AH,#H'0005
 	st	AH,@(0,Y)
 	ld	AH,#H'0000
 	st	AH,@(H'0001,Y)
 	bsr	$_GattConnectRequest
-	bsr	$_koovox_device_wechat_disconnect
+	bsr	$_koovox_wechat_disconnect
 ?LBE_server_handle_gatt_disconnect_ind:
 	leavel	#4
-	.SEG	VAR
-_test_flag?0?:
-	DS	1
-	.SEG	CONST
-?LC2:
-	dc	H'004B
-	dc	H'004F
-	dc	H'004F
-	dc	H'0056
-	dc	H'004F
-	dc	H'0058
-	.CODE
 $_server_handle_gatt_access_ind:
-	enterl	#12
+	enterl	#14
 ?LBB_server_handle_gatt_access_ind:
-	st	AL,@(H'0009,Y)
+	st	AL,@(H'000B,Y)
 	ld	X,@$XAP_AL
 ?LBB4:
 	ld	AL,@(H'0001,X)
 	st	AL,@(0,Y)
 	ld	AL,#(?LC0)
 	bsr	$_printf
-	ld	X,@(H'0009,Y)
+	ld	X,@(H'000B,Y)
 	ld	AL,@(H'0001,X)
 	cmp	AL,#H'0001
 	bne	?L44
 	ld	AL,@$XAP_UXL
 	bsr	$_handle_gatt_service_access
 ?L44:
-	ld	X,@(H'0009,Y)
+	ld	X,@(H'000B,Y)
 	ld	AL,@(H'0001,X)
 	cmp	AL,#H'000A
 	bne	?L45
@@ -31601,7 +31833,7 @@ $_server_handle_gatt_access_ind:
 	bsr	$_handle_gap_service_access
 	bra	(?L46)
 ?L45:
-	ld	X,@(H'0009,Y)
+	ld	X,@(H'000B,Y)
 	ld	AL,@(H'0001,X)
 	cmp	AL,#H'000C
 	bne	?L47
@@ -31609,14 +31841,14 @@ $_server_handle_gatt_access_ind:
 	bsr	$_handle_device_name_access
 	bra	(?L46)
 ?L47:
-	ld	X,@(H'0009,Y)
+	ld	X,@(H'000B,Y)
 	ld	AL,@(H'0001,X)
 	cmp	AL,#H'000E
 	bne	?L46
 	ld	AL,@$XAP_UXL
 	bsr	$_handle_device_appearance_access
 ?L46:
-	ld	X,@(H'0009,Y)
+	ld	X,@(H'000B,Y)
 	ld	AL,@(H'0001,X)
 	cmp	AL,#H'0002
 	bne	?L50
@@ -31626,9 +31858,9 @@ $_server_handle_gatt_access_ind:
 	st	AL,@(H'0002,Y)
 	ld	AL,@(0,X)
 	ld	AH,#H'0002
-	bra	(?L68)
+	bra	(?L66)
 ?L50:
-	ld	X,@(H'0009,Y)
+	ld	X,@(H'000B,Y)
 	ld	AL,@(H'0001,X)
 	cmp	AL,#H'0004
 	bne	?L52
@@ -31642,11 +31874,11 @@ $_server_handle_gatt_access_ind:
 	st	AL,@(0,Y)
 	st	AL,@(H'0001,Y)
 	st	AL,@(H'0002,Y)
-	ld	X,@(H'0009,Y)
+	ld	X,@(H'000B,Y)
 	ld	AL,@(0,X)
 	ld	AH,@(H'0001,X)
 	bsr	$_GattAccessResponse
-	ld	X,@(H'0009,Y)
+	ld	X,@(H'000B,Y)
 	ld	AL,@(H'0002,X)
 	and	AL,#H'0002
 	cmp	AL,#H'0000
@@ -31654,57 +31886,15 @@ $_server_handle_gatt_access_ind:
 	ld	AL,@$XAP_UXL
 	add	AL,#H'0005
 	ld	AH,@(H'0004,X)
-	bsr	$_koovox_write_from_wechat
-	tst	@$_g_wechatble_state+H'0002
-	beq	?L54
-	tst	@$_g_wechatble_state+H'0003
-	bne	?L54
-	tst	@$_g_wechatble_state+H'0005
-	bne	?L54
-	bsr	$_koovox_pack_wechat_init_req
-	ld	X,@(H'0009,Y)
-	ld	AL,@(0,X)
-	ld	AH,#H'0007
-	bsr	$_koovox_indicate_to_wechat
-	ld	AL,#H'0001
-	st	AL,@$_g_wechatble_state+H'0005
-?L54:
-?LBB5:
-	tst	@$_g_wechatble_state+H'0003
-	beq	?L43
-	tst	@_test_flag?0?
-	bne	?L43
-?LBB6:
-	ld	AL,#H'0006
-	st	AL,@(0,Y)
-	ld	AL,@$XAP_UY
-	add	AL,#H'0003
-	ld	AH,#(?LC2)
-	bsr	$_memcpy
-	ld	AL,#H'0001
-	st	AL,@(0,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0001,Y)
-	ld	AL,@$XAP_UY
-	add	AL,#H'0003
-	ld	AH,#H'0006
-	bsr	$_koovox_pack_wechat_send_data_req
-	ld	X,@(H'0009,Y)
-	ld	AL,@(0,X)
-	ld	AH,#H'0007
-	bsr	$_koovox_indicate_to_wechat
-	ld	AL,#H'0001
-	st	AL,@_test_flag?0?
-?LBE6:
-?LBE5:
+	bsr	$_koovox_rcv_data_from_wechat
 	bra	(?L43)
 ?L52:
-	ld	X,@(H'0009,Y)
+	ld	X,@(H'000B,Y)
 	ld	AL,@(H'0001,X)
 	cmp	AL,#H'0009
-	bne	?L57
+	bne	?L55
 	ld	AL,#H'0006
-?LBB7:
+?LBB5:
 	st	AL,@(0,Y)
 	ld	AL,@$XAP_UY
 	add	AL,#H'0003
@@ -31719,46 +31909,50 @@ $_server_handle_gatt_access_ind:
 	st	X,@(H'0001,Y)
 	ld	AL,@$XAP_UY
 	add	AL,#H'0003
-	st	AL,@(H'0002,Y)
-	bra	(?L69)
-?L57:
-	ld	X,@(H'0009,Y)
-?LBE7:
+	bra	(?L67)
+?L55:
+	ld	X,@(H'000B,Y)
+?LBE5:
 	ld	AL,@(H'0001,X)
 	cmp	AL,#H'0006
-	bne	?L59
+	bne	?L57
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	st	AL,@(H'0001,Y)
 	st	AL,@(H'0002,Y)
 	ld	AL,@(0,X)
 	ld	AH,#H'0006
-	bra	(?L68)
-?L59:
-	ld	X,@(H'0009,Y)
+	bra	(?L66)
+?L57:
+	ld	X,@(H'000B,Y)
 	ld	AL,@(H'0001,X)
 	cmp	AL,#H'0007
 	bne	?L43
 	ld	AL,@(H'0002,X)
 	and	AL,#H'0001
 	cmp	AL,#H'0000
-	beq	?L62
+	beq	?L60
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	st	AL,@(H'0001,Y)
 	st	AL,@(H'0002,Y)
 	ld	AL,@(0,X)
 	ld	AH,#H'0007
-	bra	(?L68)
-?L62:
-	ld	X,@(H'0009,Y)
+	bra	(?L66)
+?L60:
+	ld	X,@(H'000B,Y)
 	ld	AL,@(H'0002,X)
 	and	AL,#H'0002
 	cmp	AL,#H'0000
 	beq	?L43
 	ld	AL,@(H'0004,X)
 	cmp	AL,#H'0002
-	bne	?L65
+	bne	?L63
+?LBB6:
+	ld	AL,@(0,X)
+	st	AL,@(H'0009,Y)
+	ld	AL,@(H'0001,X)
+	st	AL,@(H'000A,Y)
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	st	AL,@(H'0001,Y)
@@ -31766,28 +31960,30 @@ $_server_handle_gatt_access_ind:
 	ld	AL,@(0,X)
 	ld	AH,@(H'0001,X)
 	bsr	$_GattAccessResponse
-	ld	X,@(H'0009,Y)
-	ld	AL,@(0,X)
-	ld	AH,@(H'0001,X)
-	bsr	$_koovox_handle_wechat_indicate
+	ld	X,#H'0000
+	st	X,@(0,Y)
+	ld	AL,#H'0002
+	ld	AH,@$XAP_UY
+	add	AH,#H'0009
+	bsr	$_koovox_wechat_connect
+?LBE6:
 	bra	(?L43)
-?L65:
-	ld	AH,#H'0000
-	st	AH,@$_g_wechatble_state+H'0001
+?L63:
 	ld	AL,#H'000D
 	st	AL,@(0,Y)
-	st	AH,@(H'0001,Y)
-	st	AH,@(H'0002,Y)
-?L69:
-	ld	X,@(H'0009,Y)
+	ld	AL,#H'0000
+	st	AL,@(H'0001,Y)
+?L67:
+	st	AL,@(H'0002,Y)
+	ld	X,@(H'000B,Y)
 	ld	AL,@(0,X)
 	ld	AH,@(H'0001,X)
-?L68:
+?L66:
 	bsr	$_GattAccessResponse
 ?L43:
 ?LBE4:
 ?LBE_server_handle_gatt_access_ind:
-	leavel	#12
+	leavel	#14
 	.SEG	CONST
 ?LC0:
 	dc	H'73
@@ -31851,68 +32047,65 @@ $_server_handle_gatt_access_ind:
 	dc	H'00
 	.CODE
 ;.stabn	192,0,0,?LBB5
+;.stabn	224,0,0,?LBE5
 ;.stabn	192,0,0,?LBB6
 ;.stabn	224,0,0,?LBE6
-;.stabn	224,0,0,?LBE5
-;.stabn	192,0,0,?LBB7
-;.stabn	224,0,0,?LBE7
 $_server_handle_gatt_indication_cfm:
 	enterl	#2
 ?LBB_server_handle_gatt_indication_cfm:
 	ld	AH,@$XAP_AL
 	ld	X,@$_theSink+H'0004
-	ld	AL,@(H'0020,X)
+	ld	AL,@(H'001A,X)
 	cmp	AL,#H'0001
-	bcz	?L80
+	bcz	?L78
 	cmp	AL,#H'0002
-	bne	?L80
+	bne	?L78
 	ld	X,@$XAP_AH
 	tst	@(0,X)
-	bne	?L80
-	ld	AL,@(H'0001,X)
-	ld	AH,#H'0007
-	bsr	$_koovox_indicate_to_wechat
-?L80:
+	bne	?L78
+	bsr	$_koovox_send_data_to_wechat
+?L78:
 ?LBE_server_handle_gatt_indication_cfm:
 	leavel	#2
 $_disconnect_all_gatt_clients:
 	enterl	#3
 ?LBB_disconnect_all_gatt_clients:
-?LBB8:
+?LBB7:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
-?L96:
+?L94:
 	ld	AL,@(0,Y)
 	add	AL,@$XAP_AL
 	ld	X,@$_theSink+H'0004
 	add	X,@$XAP_AL
-	tst	@(H'0025,X)
-	beq	?L93
-	ld	AL,@(H'0024,X)
+	tst	@(H'001F,X)
+	beq	?L91
+	ld	AL,@(H'001E,X)
 	bsr	$_GattDisconnectRequest
-?L93:
+?L91:
 	ld	AL,@(0,Y)
 	add	AL,#H'0001
 	st	AL,@(0,Y)
 	cmp	AL,#H'0000
-	beq	?L96
-?LBE8:
+	beq	?L94
+?LBE7:
 ?LBE_disconnect_all_gatt_clients:
 	leavel	#3
-;.stabn	192,0,0,?LBB8
-;.stabn	224,0,0,?LBE8
+;.stabn	192,0,0,?LBB7
+;.stabn	224,0,0,?LBE7
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 59 used[1] = 1 used[3] = 1 total = 61
-;# Function pattern *movqi3 used[0] = 95 total = 95
+;# Function pattern *movqi2 used[0] = 54 used[1] = 1 used[3] = 1 total = 56
+;# Function pattern *movqi3 used[0] = 79 total = 79
 ;# Function pattern *movqi8 used[0] = 6 total = 6
-;# Function pattern *addqi0 used[0] = 5 total = 5
+;# Function pattern *addqi0 used[0] = 4 total = 4
 ;# Function pattern *addqi2 used[0] = 9 used[2] = 8 total = 17
 ;# Function pattern *andqi3 used[0] = 3 total = 3
 ;# Function pattern jump used[0] = 11 total = 11
-;# Function pattern *call1 used[0] = 21 total = 21
-;# Function pattern *call_value1 used[0] = 8 total = 8
-;# Function pattern movstrqi+3 used[0] = 9 used[1] = 10 total = 19
+;# Function pattern *call1 used[0] = 17 total = 17
+;# Function pattern *call_value1 used[0] = 7 total = 7
+;# Function pattern movstrqi+2 used[0] = 1 total = 1
+;# Function pattern movstrqi+3 used[0] = 9 used[1] = 5 total = 14
 ;# Function pattern movstrqi+5 used[0] = 16 total = 16
 	MODULE	sink_gatt_server_bas
 	.LARGE
@@ -32012,25 +32205,25 @@ $_handle_device_name_access:
 	cmp	AL,#H'0000
 	beq	?L4
 	ld	X,@$_theSink+H'0004
-	tst	@(H'0021,X)
+	tst	@(H'001B,X)
 	bne	?L4
 	ld	X,@$_theSink+H'0004
 	ld	AL,#H'0001
-	st	AL,@(H'0021,X)
+	st	AL,@(H'001B,X)
 	ld	AL,@$_theSink+H'0004
 	st	AL,@(H'0003,Y)
 	ld	X,@$XAP_AH
 	ld	AL,@(0,X)
 	ld	X,@(H'0003,Y)
-	st	AL,@(H'0022,X)
+	st	AL,@(H'001C,X)
 	ld	AL,@$_theSink+H'0004
 	st	AL,@(H'0003,Y)
 	ld	X,@$XAP_AH
 	ld	AL,@(H'0003,X)
 	ld	X,@(H'0003,Y)
-	st	AL,@(H'0023,X)
+	st	AL,@(H'001D,X)
 	ld	AL,@$_theSink+H'0004
-	add	AL,#H'0018
+	add	AL,#H'0012
 	bsr	$_ConnectionReadLocalName
 	bra	(?L3)
 ?L4:
@@ -32052,28 +32245,28 @@ $_respond_gap_local_name_req:
 	ld	AL,@$_theSink+H'0004
 	st	AL,@(H'0003,Y)
 	ld	X,@$XAP_AL
-	tst	@(H'0021,X)
+	tst	@(H'001B,X)
 	beq	?L9
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	X,@$XAP_AH
 	ld	AL,@(H'0001,X)
 	ld	X,@(H'0003,Y)
-	sub	AL,@(H'0023,X)
+	sub	AL,@(H'001D,X)
 	st	AL,@(H'0001,Y)
-	ld	AL,@(H'0023,X)
+	ld	AL,@(H'001D,X)
 	add	AL,@$XAP_AH
 	add	AL,#H'0002
 	st	AL,@(H'0002,Y)
-	ld	AL,@(H'0022,X)
+	ld	AL,@(H'001C,X)
 	ld	AH,#H'000C
 	bsr	$_GattAccessResponse
 ?L9:
 	ld	X,@$_theSink+H'0004
 	ld	AL,#H'0000
-	st	AL,@(H'0022,X)
+	st	AL,@(H'001C,X)
 	ld	X,@$_theSink+H'0004
-	st	AL,@(H'0021,X)
+	st	AL,@(H'001B,X)
 ?LBE_respond_gap_local_name_req:
 	leavel	#6
 $_handle_device_appearance_access:
@@ -33116,7 +33309,7 @@ $_InitUserFeatures:
 	cmp	AH,#H'0000
 	beq	?L31
 	ld	X,@$_theSink+H'0004
-	tst	@(H'0011,X)
+	tst	@(H'000B,X)
 	beq	?L32
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
@@ -34271,10 +34464,9 @@ $_KoovoxGetBluetoothAdrress:
 ;.stabn	192,0,0,?LBB4
 ;.stabn	224,0,0,?LBE4
 $_KoovoxUsrEventHandle:
-	enterl	#6
+	enterl	#5
 ?LBB_KoovoxUsrEventHandle:
 	st	AL,@(H'0002,Y)
-	st	AH,@(H'0003,Y)
 ?LBB5:
 	bsr	$_stateManagerGetState
 	ld	AH,@(H'0002,Y)
@@ -34456,23 +34648,18 @@ $_KoovoxUsrEventHandle:
 	bsr	$_MessageSend
 	bra	(?L20)
 ?L60:
-	ld	X,@(H'0003,Y)
-?LBB6:
-	ld	AL,@(0,X)
-	ld	AH,#H'0007
-	bsr	$_koovox_handle_wechat_indicate
+	bsr	$_koovox_send_data_to_wechat
 ?L20:
-?LBE6:
 ?LBE5:
 ?LBE_KoovoxUsrEventHandle:
-	leavel	#6
+	leavel	#5
 ;.stabn	192,0,0,?LBB5
 ;.stabn	224,0,0,?LBE5
 $_KoovoxResultI2cTest:
 	enterl	#6
 ?LBB_KoovoxResultI2cTest:
 	st	AL,@(H'0003,Y)
-?LBB7:
+?LBB6:
 	ld	AL,#H'0000
 	st	AL,@(H'0002,Y)
 	ld	AL,#H'0001
@@ -34540,7 +34727,7 @@ $_KoovoxResultI2cTest:
 ?L76:
 	st	AL,@$_koovox+H'000A
 ?L70:
-?LBE7:
+?LBE6:
 ?LBE_KoovoxResultI2cTest:
 	leavel	#6
 	.SEG	CONST
@@ -34603,8 +34790,8 @@ $_KoovoxResultI2cTest:
 	dc	H'0A
 	dc	H'00
 	.CODE
-;.stabn	192,0,0,?LBB7
-;.stabn	224,0,0,?LBE7
+;.stabn	192,0,0,?LBB6
+;.stabn	224,0,0,?LBE6
 $_KoovoxStoreLastCmd:
 ; leaf function with empty stack frame
 ?LBB_KoovoxStoreLastCmd:
@@ -34617,8 +34804,8 @@ $_KoovoxStoreLastCmd:
 	rts
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 74 used[1] = 5 total = 79
-;# Function pattern *movqi3 used[0] = 103 total = 103
+;# Function pattern *movqi2 used[0] = 73 used[1] = 5 total = 78
+;# Function pattern *movqi3 used[0] = 100 total = 100
 ;# Function pattern *movhi used[2] = 1 total = 1
 ;# Function pattern *addqi0 used[0] = 1 total = 1
 ;# Function pattern *addqi2 used[0] = 9 total = 9
@@ -41766,16 +41953,16 @@ $_powerManagerConfig:
 	beq	?L4
 	ld	X,@$_theSink+H'0004
 	ld	AL,@(H'0002,Y)
-	st	AL,@(H'000E,X)
+	st	AL,@(H'0008,X)
 	ld	AH,@$_theSink+H'0004
-	add	AH,#H'000E
+	add	AH,#H'0008
 	ld	AL,#H'0001
 	st	AL,@(0,Y)
 	ld	AL,#H'25B6
 	bsr	$_PsFullRetrieve
 	ld	X,@$_theSink+H'0004
 	ld	AL,@(H'0002,Y)
-	st	AL,@(H'000F,X)
+	st	AL,@(H'0009,X)
 ?L11:
 	ld	X,@(H'0002,Y)
 	add	X,@$XAP_UXL
@@ -41791,7 +41978,7 @@ $_powerManagerConfig:
 	and	AL,#H'00FF
 	smult	#H'0014
 	ld	X,@(H'0003,Y)
-	st	AL,@(H'000F,X)
+	st	AL,@(H'0009,X)
 	bra	(?L4)
 ?L8:
 	ld	AL,@(H'0002,Y)
@@ -43185,7 +43372,7 @@ _slcConnectionSetup:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,@$_theSink+H'0004
-	add	AL,#H'0012
+	add	AL,#H'000C
 	st	AL,@(H'0001,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'4740
@@ -43676,7 +43863,7 @@ $_slcEstablishSLCRequest:
 	st	AL,@(0,Y)
 	ld	X,@$_theSink+H'0004
 	ld	AL,#H'0001
-	st	AL,@(H'0012,X)
+	st	AL,@(H'000C,X)
 	ld	AL,@(0,Y)
 	and	AL,#H'0002
 	cmp	AL,#H'0000
@@ -43746,7 +43933,7 @@ $_slcEstablishSLCRequest:
 ?L106:
 	ld	X,@$_theSink+H'0004
 	ld	AL,#H'0000
-	st	AL,@(H'0012,X)
+	st	AL,@(H'000C,X)
 ?L98:
 ?LBE8:
 ?LBE7:
@@ -43810,7 +43997,7 @@ $_slcContinueEstablishSLCRequest:
 	ld	X,@$_theSink+H'0004
 	ld	AL,#H'0000
 ?L122:
-	st	AL,@(H'0012,X)
+	st	AL,@(H'000C,X)
 ?L118:
 	ld	AL,#H'0000
 	st	AL,@_gSlcData
@@ -44778,7 +44965,7 @@ $_stateManagerPowerOn:
 	cmp	AH,#H'0000
 	beq	?L97
 	ld	X,@$_theSink+H'0004
-	ld	AL,@(H'0011,X)
+	ld	AL,@(H'000B,X)
 	cmp	AL,#H'0002
 	bcz	?L102
 	cmp	AL,#H'0007
@@ -47659,79 +47846,48 @@ $_VolumePlayMuteToneQuery:
 
 	.ENHANCED
 	.CODE
-_wechat_handle_disconnect:
-	enterl	#2
-?LBB_wechat_handle_disconnect:
-	ld	X,@$_theSink+H'0004
-	ld	AH,#H'0000
-	st	AH,@(H'0009,X)
-	st	AH,@(H'0008,X)
-	ld	X,@$_theSink+H'0004
-	ld	AL,@(H'000D,X)
-	and	AL,#-H'2001
-	st	AL,@(H'000D,X)
-	ld	X,@$_theSink+H'0004
-	ld	AL,@(H'000D,X)
-	and	AL,#-H'4001
-	st	AL,@(H'000D,X)
-	ld	X,@$_theSink+H'0004
-	ld	AL,@(H'000D,X)
-	and	AL,#H'7FFF
-	st	AL,@(H'000D,X)
-	ld	X,@$_theSink+H'0004
-	ld	AL,@(H'000D,X)
-	and	AL,#-H'1001
-	st	AL,@(H'000D,X)
-	ld	X,@$_theSink+H'0004
-	st	AH,@(H'0007,X)
-?LBE_wechat_handle_disconnect:
-	leavel	#2
 $_handleWechatMessage:
-	enterl	#6
+	enterl	#5
 ?LBB_handleWechatMessage:
 ?LBB2:
 	ld	AL,#-H'7D00
 	add	AL,@$XAP_AH
 	cmp	AL,#(H'0001+H'0007)
-	bcc	?L16
+	bcc	?L13
 	ld	X,@$XAP_AL
-	ld	X,@(?JTBASE17,X)
+	ld	X,@(?JTBASE14,X)
 	brxl
 	.SEG	CONST
-?JTBASE17:
+?JTBASE14:
 	.CODE
-?L17:
+?L14:
 	.SEG	CONST
-	dc	lwrd(?L4-?L17)
-	dc	lwrd(?L16-?L17)
-	dc	lwrd(?L6-?L17)
-	dc	lwrd(?L9-?L17)
-	dc	lwrd(?L10-?L17)
-	dc	lwrd(?L11-?L17)
-	dc	lwrd(?L12-?L17)
-	dc	lwrd(?L14-?L17)
+	dc	lwrd(?L3-?L14)
+	dc	lwrd(?L13-?L14)
+	dc	lwrd(?L5-?L14)
+	dc	lwrd(?L7-?L14)
+	dc	lwrd(?L8-?L14)
+	dc	lwrd(?L9-?L14)
+	dc	lwrd(?L10-?L14)
+	dc	lwrd(?L12-?L14)
 	.CODE
-?L4:
-	ld	X,@(H'0006,Y)
+?L3:
+	ld	X,@(H'0005,Y)
 ?LBB3:
 	ld	AL,@(0,X)
 	st	AL,@(0,Y)
 	ld	AL,#(?LC0)
 	bsr	$_printf
-	ld	X,@(H'0006,Y)
+	ld	X,@(H'0005,Y)
 	tst	@(0,X)
-	beq	?L2
-	ld	AL,#H'0002
-	bsr	$_WechatSetApiMinorVersion
+	beq	?L1
 	ld	AL,#H'0002
 	bsr	$_WechatStartService
 ?LBE3:
-	bra	(?L2)
-?L6:
-	ld	AL,@(H'0006,Y)
+	bra	(?L1)
+?L5:
+	ld	X,@(H'0005,Y)
 ?LBB4:
-	st	AL,@(H'0003,Y)
-	ld	X,@$XAP_AL
 	ld	AL,@(0,X)
 	st	AL,@(0,Y)
 	ld	AL,@(H'0001,X)
@@ -47742,114 +47898,86 @@ $_handleWechatMessage:
 	st	AH,@(H'0002,Y)
 	ld	AL,#(?LC1)
 	bsr	$_printf
-	ld	X,@(H'0006,Y)
+	ld	X,@(H'0005,Y)
 	tst	@(H'0001,X)
-	beq	?L7
+	beq	?L1
 	ld	AH,@$_theSink+H'0004
 	ld	AL,@(0,X)
 	ld	X,@$XAP_AH
 	st	AL,@(H'0007,X)
 	ld	AH,@$_theSink+H'001C
 	lsr	#H'0004
-	ld	X,@(H'0006,Y)
+	ld	X,@(H'0005,Y)
 	ld	AL,@(0,X)
 	and	AH,#H'0001
 	bsr	$_WechatSetSessionEnable
-?L7:
-	ld	AL,#H'0001
-	st	AL,@$_g_wechatble_state+H'0001
-	tst	@$_g_wechatble_state+H'0002
-	bne	?L2
-	tst	@$_g_wechatble_state+H'0004
-	bne	?L2
-	bsr	$_koovox_pack_wechat_auth_req
-	ld	AL,@$_g_send_data
-	st	AL,@(0,Y)
-	ld	X,@(H'0003,Y)
+	ld	X,@(H'0005,Y)
 	ld	AL,@(0,X)
-	ld	AH,@$_g_send_data+H'0001
-	bsr	$_WechatSendPacket
+	st	AL,@(0,Y)
 	ld	AL,#H'0001
-	st	AL,@$_g_wechatble_state+H'0004
+	ld	AH,#H'0000
+	bsr	$_koovox_wechat_connect
 ?LBE4:
-	bra	(?L2)
-?L9:
-	ld	X,@(H'0006,Y)
+	bra	(?L1)
+?L7:
+	ld	X,@(H'0005,Y)
 ?LBB5:
 	ld	AL,@(0,X)
 	st	AL,@(0,Y)
 	ld	AL,#(?LC2)
 	bsr	$_printf
-	bsr	_wechat_handle_disconnect
-	ld	X,@(H'0006,Y)
+	ld	X,@(H'0005,Y)
 	ld	AL,@(0,X)
 	bsr	$_WechatDisconnectResponse
-	bsr	$_koovox_device_wechat_disconnect
+	bsr	$_koovox_wechat_disconnect
 ?LBE5:
-	bra	(?L2)
-?L10:
-	ld	X,@(H'0006,Y)
+	bra	(?L1)
+?L8:
+	ld	X,@(H'0005,Y)
 ?LBB6:
 	ld	AL,@(0,X)
 	st	AL,@(0,Y)
 	ld	AL,#(?LC3)
-	bsr	$_printf
-	bsr	_wechat_handle_disconnect
+	bra	(?L15)
+?L9:
+	ld	X,@(H'0005,Y)
 ?LBE6:
-	bra	(?L2)
-?L11:
-	ld	X,@(H'0006,Y)
 	ld	AL,@(H'0002,X)
 	st	AL,@(0,Y)
 	ld	AL,#(?LC4)
-	bra	(?L18)
-?L12:
-	ld	X,@(H'0006,Y)
+	bra	(?L15)
+?L10:
+	ld	X,@(H'0005,Y)
 ?LBB7:
 	tst	@(H'0001,X)
-	beq	?L2
+	beq	?L1
 	ld	AL,@(H'0001,X)
 	bsr	$_free
 ?LBE7:
-	bra	(?L2)
-?L14:
-	ld	X,@(H'0006,Y)
+	bra	(?L1)
+?L12:
+	ld	X,@(H'0005,Y)
 ?LBB8:
 	ld	AL,@(0,X)
 	st	AL,@(0,Y)
 	ld	AL,#(?LC5)
 	bsr	$_printf
-	ld	AL,@(H'0006,Y)
+	ld	AL,@(H'0005,Y)
 	add	AL,#H'0001
-	ld	X,@(H'0006,Y)
+	ld	X,@(H'0005,Y)
 	ld	AH,@(0,X)
-	bsr	$_koovox_write_from_wechat
-	tst	@$_g_wechatble_state+H'0002
-	beq	?L2
-	tst	@$_g_wechatble_state+H'0003
-	bne	?L2
-	tst	@$_g_wechatble_state+H'0005
-	bne	?L2
-	bsr	$_koovox_pack_wechat_init_req
-	ld	X,@$_theSink+H'0004
-	ld	AL,@$_g_send_data
-	st	AL,@(0,Y)
-	ld	AL,@(H'0007,X)
-	ld	AH,@$_g_send_data+H'0001
-	bsr	$_WechatSendPacket
-	ld	AL,#H'0001
-	st	AL,@$_g_wechatble_state+H'0005
+	bsr	$_koovox_rcv_data_from_wechat
 ?LBE8:
-	bra	(?L2)
-?L16:
+	bra	(?L1)
+?L13:
 	st	AH,@(0,Y)
 	ld	AL,#(?LC6)
-?L18:
+?L15:
 	bsr	$_printf
-?L2:
+?L1:
 ?LBE2:
 ?LBE_handleWechatMessage:
-	leavel	#6
+	leavel	#5
 	.SEG	CONST
 ?LC0:
 	dc	H'47
@@ -48058,8 +48186,6 @@ $_handleWechatMessage:
 	dc	H'0A
 	dc	H'00
 	.CODE
-;.stabn	192,0,0,?LBB4
-;.stabn	224,0,0,?LBE4
 $_wechatDisconnect:
 	enterl	#3
 ?LBB_wechatDisconnect:
@@ -48070,10 +48196,10 @@ $_wechatDisconnect:
 	bsr	$_printf
 	ld	X,@$_theSink+H'0004
 	tst	@(H'0007,X)
-	beq	?L19
+	beq	?L16
 	ld	AL,@(H'0007,X)
 	bsr	$_WechatDisconnectRequest
-?L19:
+?L16:
 ?LBE_wechatDisconnect:
 	leavel	#3
 	.SEG	CONST
@@ -48101,16 +48227,16 @@ $_wechatDisconnect:
 	.CODE
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 27 total = 27
-;# Function pattern *movqi3 used[0] = 64 total = 64
+;# Function pattern *movqi2 used[0] = 14 total = 14
+;# Function pattern *movqi3 used[0] = 45 total = 45
 ;# Function pattern *addqi2 used[0] = 1 used[2] = 1 total = 2
-;# Function pattern *andqi3 used[0] = 6 total = 6
+;# Function pattern *andqi3 used[0] = 2 total = 2
 ;# Function pattern *lshrqi3 used[0] = 2 total = 2
 ;# Function pattern jump used[0] = 7 total = 7
-;# Function pattern *call1 used[0] = 13 total = 13
-;# Function pattern *call_value1 used[0] = 8 total = 8
+;# Function pattern *call1 used[0] = 8 total = 8
+;# Function pattern *call_value1 used[0] = 6 total = 6
 ;# Function pattern tablejump_1 used[0] = 1 total = 1
-;# Function pattern movstrqi+3 used[1] = 9 total = 9
+;# Function pattern movstrqi+3 used[1] = 4 total = 4
 ;# Function pattern movstrqi+4 used[1] = 1 total = 1
 	MODULE	sink_wired
 	.LARGE
@@ -150884,9 +151010,8 @@ _register_custom_sdp:
 	ld	X,@(H'0004,Y)
 	st	AH,@(0,X)
 	ld	X,@$_wechat
-	ld	AL,@(H'000A,X)
-	or	AL,#H'0200
-	st	AL,@(H'000A,X)
+	ld	AL,#H'0001
+	st	AL,@(H'0007,X)
 	ld	AL,@(H'0004,Y)
 	st	AL,@(0,Y)
 	ld	AL,@$_wechat
@@ -150915,10 +151040,6 @@ _wechat_init:
 	ld	AL,#H'0001
 	bsr	$_PanicUnlessMalloc
 	st	AL,@(H'0001,Y)
-	ld	X,@$_wechat
-	ld	AL,@(H'000A,X)
-	and	AL,#H'0FFF
-	st	AL,@(H'000A,X)
 	bsr	$_AudioLibraryInit
 	ld	AL,#H'025E
 	bsr	_register_custom_sdp
@@ -150939,25 +151060,19 @@ _wechat_init:
 _message_handler:
 	enterl	#5
 ?LBB_message_handler:
-	st	AL,@H'fff8
 	st	AH,@(H'0002,Y)
 ?LBB7:
 	cmp	AH,#H'502D
 	bne	?L16
 	ld	X,@$_wechat
-	ld	AH,@(H'000A,X)
-	lsr	#H'0009
-	and	AH,#H'0001
-	cmp	AH,#H'0000
+	tst	@(H'0007,X)
 	beq	?L16
-	ld	AL,@(H'000A,X)
-	and	AL,#-H'0201
-	st	AL,@(H'000A,X)
+	ld	AL,#H'0000
+	st	AL,@(H'0007,X)
 	bra	(?L15)
 ?L16:
-	ld	AL,@(H'0005,Y)
-	st	AL,@(0,Y)
-	ld	AL,@H'fff8
+	ld	AH,@(H'0005,Y)
+	st	AH,@(0,Y)
 	ld	AH,@(H'0002,Y)
 	bsr	$_wechatTransportHandleMessage
 	cmp	AL,#H'0000
@@ -150973,10 +151088,10 @@ _message_handler:
 	beq	?L21
 	bra	(?L15)
 ?L26:
-	ld	AL,@(H'0002,Y)
-	cmp	AL,#H'502C
+	ld	AH,@(H'0002,Y)
+	cmp	AH,#H'502C
 	beq	?L15
-	cmp	AL,#H'7D06
+	cmp	AH,#H'7D06
 	bne	?L15
 	ld	X,@(H'0005,Y)
 ?LBB8:
@@ -151016,9 +151131,10 @@ $_WechatInit:
 	st	AH,@(H'0002,Y)
 ?LBB11:
 	ld	AL,@$XAP_AH
-	smult	#H'000D
+	lsl	#H'0010
+	asr	#H'000E
 	ld	AH,@$XAP_AL
-	add	AH,#H'0012
+	add	AH,#H'0009
 	st	AH,@(H'0003,Y)
 	tst	@$_wechat
 	bne	?L34
@@ -151046,7 +151162,7 @@ $_WechatInit:
 	st	AL,@(H'0002,X)
 	ld	X,@$_wechat
 	ld	AH,@(H'0002,Y)
-	st	AH,@(H'0011,X)
+	st	AH,@(H'0008,X)
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,@$_wechat
@@ -151112,27 +151228,6 @@ $_WechatSendPacket:
 ?L42:
 ?LBE_WechatSendPacket:
 	leavel	#4
-$_WechatSetApiMinorVersion:
-	enterl	#2
-?LBB_WechatSetApiMinorVersion:
-	tst	@$_wechat
-	beq	?L46
-	cmp	AL,#H'000F
-	bcz	?L45
-?L46:
-	ld	AL,#H'0000
-	bra	(?L44)
-?L45:
-	ld	X,@$_wechat
-	asl	#H'000C
-	ld	AH,@(H'000A,X)
-	and	AH,#H'0FFF
-	or	AH,@$XAP_AL
-	st	AH,@(H'000A,X)
-	ld	AL,#H'0001
-?L44:
-?LBE_WechatSetApiMinorVersion:
-	leavel	#2
 $_WechatGetSessionEnable:
 	enterl	#2
 ?LBB_WechatGetSessionEnable:
@@ -151158,23 +151253,23 @@ $_WechatSetSessionEnable:
 	leavel	#2
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 59 used[1] = 11 total = 70
-;# Function pattern *movqi3 used[0] = 72 total = 72
+;# Function pattern *movqi2 used[0] = 56 used[1] = 10 total = 66
+;# Function pattern *movqi3 used[0] = 65 total = 65
 ;# Function pattern *movqi8 used[0] = 1 total = 1
 ;# Function pattern *movhi used[2] = 1 used[3] = 1 total = 2
 ;# Function pattern *addqi2 used[0] = 6 used[2] = 1 total = 7
-;# Function pattern *andqi3 used[0] = 8 total = 8
-;# Function pattern *iorqi3 used[0] = 3 total = 3
+;# Function pattern *andqi3 used[0] = 4 total = 4
+;# Function pattern *iorqi3 used[0] = 1 total = 1
 ;# Function pattern *subqi3 used[0] = 1 total = 1
 ;# Function pattern *mulqi3_const used[0] = 1 total = 1
-;# Function pattern *lshrqi3 used[0] = 4 total = 4
-;# Function pattern *ashlqi3 used[0] = 2 total = 2
-;# Function pattern jump used[0] = 8 total = 8
+;# Function pattern *lshrqi3 used[0] = 3 total = 3
+;# Function pattern *ashlqi3 used[0] = 1 total = 1
+;# Function pattern jump used[0] = 7 total = 7
 ;# Function pattern *call1 used[0] = 15 total = 15
 ;# Function pattern *call_value1 used[0] = 9 total = 9
-;# Function pattern movstrqi+3 used[0] = 5 used[1] = 6 total = 11
+;# Function pattern movstrqi+3 used[0] = 4 used[1] = 6 total = 10
 ;# Function pattern movstrqi+4 used[1] = 4 total = 4
-;# Function pattern movstrqi+5 used[0] = 8 total = 8
+;# Function pattern movstrqi+5 used[0] = 7 total = 7
 	MODULE	wechat_transport
 	.LARGE
 ; GNU C version 3.3.3 (CSR version 30 for xapnative)
@@ -151208,17 +151303,18 @@ $_wechatTransportFindFree:
 	st	AL,@(-1,Y)
 	ld	X,@$_wechat
 	st	X,@H'fff8
-	cmp	AL,@(H'0011,X)
+	cmp	AL,@(H'0008,X)
 	bcc	?L9
 ?L7:
 	ld	AL,@(-1,Y)
-	smult	#H'000D
+	lsl	#H'0010
+	asr	#H'000E
 	ld	X,@H'fff8
 	add	X,@$XAP_AL
-	tst	@(H'0012,X)
+	tst	@(H'0009,X)
 	bne	?L4
 	add	AL,@$_wechat
-	add	AL,#H'0012
+	add	AL,#H'0009
 	bra	(?L1)
 ?L4:
 	ld	X,#H'0001
@@ -151228,7 +151324,7 @@ $_wechatTransportFindFree:
 	st	AL,@H'fff8
 	ld	AL,@$XAP_UXL
 	ld	X,@H'fff8
-	cmp	AL,@(H'0011,X)
+	cmp	AL,@(H'0008,X)
 	bcs	?L7
 ?L9:
 	ld	AL,#H'0000
@@ -151247,24 +151343,24 @@ $_wechatTransportFromRfcommChannel:
 	st	AL,@(-1,Y)
 	ld	X,@$_wechat
 	st	X,@H'fff9
-	cmp	AL,@(H'0011,X)
+	cmp	AL,@(H'0008,X)
 	bcc	?L20
 ?L18:
 	ld	AL,@(-1,Y)
-	smult	#H'000D
+	lsl	#H'0010
+	asr	#H'000E
 	ld	AH,@$XAP_AL
 	ld	X,@H'fff9
 	add	X,@$XAP_AL
-	ld	AL,@(H'0012,X)
-	add	AL,#-H'0001
-	cmp	AL,#(H'0001+H'0001)
-	bcc	?L15
-	ld	AL,@(H'001D,X)
+	ld	AL,@(H'0009,X)
+	cmp	AL,#H'0002
+	bne	?L15
+	ld	AL,@(H'000B,X)
 	cmp	AL,@H'fff8
 	bne	?L15
 	ld	AL,@$_wechat
 	add	AL,@$XAP_AH
-	add	AL,#H'0012
+	add	AL,#H'0009
 	bra	(?L12)
 ?L15:
 	ld	AL,#H'0001
@@ -151272,7 +151368,7 @@ $_wechatTransportFromRfcommChannel:
 	st	AL,@(-1,Y)
 	ld	X,@$_wechat
 	st	X,@H'fff9
-	cmp	AL,@(H'0011,X)
+	cmp	AL,@(H'0008,X)
 	bcs	?L18
 ?L20:
 	ld	AL,#H'0000
@@ -151290,31 +151386,32 @@ $_wechatTransportFromSink:
 	ld	AL,#H'0000
 	st	AL,@(H'0001,Y)
 	ld	X,@$_wechat
-	cmp	AL,@(H'0011,X)
-	bcc	?L32
-?L30:
+	cmp	AL,@(H'0008,X)
+	bcc	?L33
+?L31:
 	ld	AL,@(H'0001,Y)
-	smult	#H'000D
+	lsl	#H'0010
+	asr	#H'000E
 	st	AL,@(H'0002,Y)
 	add	AL,@$_wechat
-	add	AL,#H'0012
+	add	AL,#H'0009
 	bsr	$_wechatTransportGetSink
 	cmp	AL,@(0,Y)
-	bne	?L27
+	bne	?L28
 	ld	AL,@(H'0002,Y)
 	add	AL,@$_wechat
-	add	AL,#H'0012
-	bra	(?L24)
-?L27:
+	add	AL,#H'0009
+	bra	(?L25)
+?L28:
 	ld	AL,@(H'0001,Y)
 	add	AL,#H'0001
 	st	AL,@(H'0001,Y)
 	ld	X,@$_wechat
-	cmp	AL,@(H'0011,X)
-	bcs	?L30
-?L32:
+	cmp	AL,@(H'0008,X)
+	bcs	?L31
+?L33:
 	ld	AL,#H'0000
-?L24:
+?L25:
 ?LBE4:
 ?LBE_wechatTransportFromSink:
 	leavel	#5
@@ -151323,13 +151420,7 @@ $_wechatTransportFromSink:
 $_wechatTransportDisconnectReq:
 	enterl	#2
 ?LBB_wechatTransportDisconnectReq:
-	ld	X,@$XAP_AL
-	ld	AL,@(0,X)
-	cmp	AL,#H'0002
-	bne	?L36
-	ld	AL,@$XAP_UXL
 	bsr	$_wechatTransportRfcommDisconnectReq
-?L36:
 ?LBE_wechatTransportDisconnectReq:
 	leavel	#2
 $_wechatTransportDropState:
@@ -151339,66 +151430,30 @@ $_wechatTransportDropState:
 	ld	X,@$_wechat
 	ld	AL,@(H'0003,X)
 	cmp	AL,@(0,Y)
-	bne	?L43
+	bne	?L39
 	ld	AL,#H'0000
 	st	AL,@(H'0003,X)
-?L43:
-	ld	X,@$_wechat
-	ld	AL,@(H'000A,X)
-	and	AL,#H'0060
-	cmp	AL,#H'0000
-	beq	?L44
-	ld	AL,#H'0000
-	st	AL,@(H'000E,X)
-	st	AL,@(H'000D,X)
-	ld	X,@$_wechat
-	st	AL,@(H'0010,X)
-	st	AL,@(H'000F,X)
-	ld	X,@$_wechat
-	ld	AL,@(H'000C,X)
-	bsr	$_SinkClose
-	ld	X,@$_wechat
-	ld	AL,@(H'000A,X)
-	and	AL,#-H'0061
-	st	AL,@(H'000A,X)
-?L44:
+?L39:
 	bsr	$_IsAudioBusy
 	cmp	AL,@$_wechat
-	bne	?L45
+	bne	?L40
 	ld	AL,#H'0000
 	bsr	$_SetAudioBusy
-?L45:
-	ld	X,@(0,Y)
-	ld	AL,@(0,X)
-	cmp	AL,#H'0002
-	bne	?L42
-	ld	AL,@$XAP_UXL
+?L40:
+	ld	AL,@(0,Y)
 	bsr	$_wechatTransportRfcommDropState
-?L42:
 ?LBE_wechatTransportDropState:
 	leavel	#3
 $_wechatTransportStartService:
 	enterl	#2
 ?LBB_wechatTransportStartService:
-	cmp	AL,#H'0002
-	bne	?L53
 	bsr	$_wechatTransportRfcommStartService
-?L53:
 ?LBE_wechatTransportStartService:
 	leavel	#2
 $_wechatTransportGetSink:
 	enterl	#2
 ?LBB_wechatTransportGetSink:
-	ld	X,@$XAP_AL
-	ld	AL,@(0,X)
-	cmp	AL,#H'0002
-	bne	?L60
-	ld	AL,@$XAP_UXL
 	bsr	$_wechatTransportRfcommGetSink
-	bra	(?L59)
-?L60:
-	ld	AL,#H'0000
-?L59:
 ?LBE_wechatTransportGetSink:
 	leavel	#2
 $_wechatTransportHandleMessage:
@@ -151408,28 +151463,26 @@ $_wechatTransportHandleMessage:
 	st	X,@(0,Y)
 	bsr	$_wechatTransportRfcommHandleMessage
 	cmp	AL,#H'0000
-	beq	?L66
+	beq	?L46
 	ld	AL,#H'0001
-	bra	(?L65)
-?L66:
+	bra	(?L45)
+?L46:
 	ld	AL,#H'0000
-?L65:
+?L45:
 ?LBE_wechatTransportHandleMessage:
 	leavel	#3
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 28 used[1] = 4 total = 32
-;# Function pattern *movqi3 used[0] = 31 total = 31
+;# Function pattern *movqi2 used[0] = 18 used[1] = 5 total = 23
+;# Function pattern *movqi3 used[0] = 18 total = 18
 ;# Function pattern *movqi8 used[0] = 5 total = 5
-;# Function pattern *addqi2 used[0] = 9 used[2] = 5 total = 14
-;# Function pattern *andqi3 used[0] = 2 total = 2
+;# Function pattern *addqi2 used[0] = 8 used[2] = 5 total = 13
 ;# Function pattern *mulqi3_const used[0] = 3 total = 3
-;# Function pattern jump used[0] = 5 total = 5
+;# Function pattern jump used[0] = 4 total = 4
 ;# Function pattern *call1 used[0] = 4 total = 4
-;# Function pattern *call_value1 used[0] = 5 total = 5
-;# Function pattern movstrqi+3 used[0] = 2 used[1] = 1 total = 3
-;# Function pattern movstrqi+4 used[1] = 1 total = 1
-;# Function pattern movstrqi+5 used[0] = 14 total = 14
+;# Function pattern *call_value1 used[0] = 4 total = 4
+;# Function pattern movstrqi+3 used[0] = 1 used[1] = 1 total = 2
+;# Function pattern movstrqi+5 used[0] = 11 total = 11
 	MODULE	wechat_transport_rfcomm
 	.LARGE
 ; GNU C version 3.3.3 (CSR version 30 for xapnative)
@@ -151550,7 +151603,7 @@ _sdp_register_rfcomm:
 	ld	X,@(H'0002,Y)
 	st	AL,@(H'0026,X)
 	ld	X,@$_wechat
-	st	AL,@(H'0009,X)
+	st	AL,@(H'0006,X)
 	ld	X,@(H'0002,Y)
 	st	X,@(0,Y)
 	ld	AL,@$_wechat
@@ -151565,13 +151618,11 @@ $_wechatTransportRfcommDropState:
 ?LBB_wechatTransportRfcommDropState:
 	ld	X,@$XAP_AL
 	ld	AH,#H'0000
-	st	AH,@(H'000C,X)
+	st	AH,@(H'0003,X)
 	ld	AL,@(H'0001,X)
 	and	AL,#H'5FFF
 	st	AL,@(H'0001,X)
 	st	AH,@(0,X)
-	ld	AL,@$XAP_UXL
-	bsr	$_wechatTransportCommonCleanupThresholdState
 ?LBE_wechatTransportRfcommDropState:
 	leavel	#2
 $_wechatTransportRfcommSendPacket:
@@ -151648,7 +151699,7 @@ $_wechatTransportRfcommGetSink:
 	enterl	#2
 ?LBB_wechatTransportRfcommGetSink:
 	ld	X,@$XAP_AL
-	ld	AL,@(H'000C,X)
+	ld	AL,@(H'0003,X)
 ?LBE_wechatTransportRfcommGetSink:
 	leavel	#2
 $_wechatTransportRfcommHandleMessage:
@@ -151766,8 +151817,8 @@ $_wechatTransportRfcommHandleMessage:
 	tst	@(0,X)
 	bne	?L25
 	ld	X,@$_wechat
-	ld	AH,@(H'0007,X)
-	ld	AL,@(H'0008,X)
+	ld	AH,@(H'0004,X)
+	ld	AL,@(H'0005,X)
 	cmp	AH,#H'0000
 	bne	?L26
 	cmp	AL,#H'0000
@@ -151784,8 +151835,8 @@ $_wechatTransportRfcommHandleMessage:
 	ld	AH,@(H'0001,X)
 	ld	AL,@(H'0002,X)
 	ld	X,@(H'000E,Y)
-	st	AH,@(H'0007,X)
-	st	AL,@(H'0008,X)
+	st	AH,@(H'0004,X)
+	st	AL,@(H'0005,X)
 	bra	(?L16)
 ?L25:
 	ld	AL,#H'0000
@@ -151820,11 +151871,11 @@ $_wechatTransportRfcommHandleMessage:
 	ld	X,@(H'000A,Y)
 	ld	AL,@(H'0005,X)
 	ld	X,@$XAP_AH
-	st	AL,@(H'000C,X)
+	st	AL,@(H'0003,X)
 	ld	X,@(H'000A,Y)
 	ld	AL,@(H'0004,X)
 	ld	X,@$XAP_AH
-	st	AL,@(H'000B,X)
+	st	AL,@(H'0002,X)
 	ld	X,@(H'000A,Y)
 	ld	AL,@(H'0005,X)
 	st	AL,@(0,Y)
@@ -151849,14 +151900,14 @@ $_wechatTransportRfcommHandleMessage:
 	bne	?L32
 	ld	AL,@(H'0003,X)
 	ld	X,@(H'000B,Y)
-	st	AL,@(H'000C,X)
+	st	AL,@(H'0003,X)
 	ld	X,@(H'0011,Y)
 	ld	AL,@(H'0001,X)
 	ld	X,@(H'000B,Y)
-	st	AL,@(H'000B,X)
+	st	AL,@(H'0002,X)
 	ld	X,@$_wechat
-	ld	AH,@(H'0007,X)
-	ld	AL,@(H'0008,X)
+	ld	AH,@(H'0004,X)
+	ld	AL,@(H'0005,X)
 	st	AH,@(0,Y)
 	st	AL,@(1,Y)
 	ld	AL,@(H'0003,Y)
@@ -151881,7 +151932,7 @@ $_wechatTransportRfcommHandleMessage:
 	tst	@(0,X)
 	bne	?L16
 	ld	AL,@(H'0003,Y)
-	ld	AH,#H'0001
+	ld	AH,#H'000C
 	bsr	$_ConnectionRfcommAllocateChannel
 ?LBE12:
 	bra	(?L16)
@@ -151896,7 +151947,7 @@ $_wechatTransportRfcommHandleMessage:
 	bsr	$_ConnectionRfcommDisconnectResponse
 	ld	AL,@(H'0003,Y)
 	ld	X,@(H'000C,Y)
-	ld	AH,@(H'000B,X)
+	ld	AH,@(H'0002,X)
 	bsr	$_ConnectionRfcommDeallocateChannel
 ?LBE13:
 	bra	(?L16)
@@ -151949,14 +152000,14 @@ $_wechatTransportRfcommHandleMessage:
 ;.stabn	224,0,0,?LBE6
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 55 used[1] = 21 total = 76
+;# Function pattern *movqi2 used[0] = 54 used[1] = 21 total = 75
 ;# Function pattern *movqi3 used[0] = 85 total = 85
 ;# Function pattern *movhi used[2] = 3 used[3] = 2 total = 5
 ;# Function pattern *addqi2 used[0] = 2 total = 2
 ;# Function pattern *andqi3 used[0] = 1 total = 1
 ;# Function pattern *iorqi3 used[0] = 1 total = 1
 ;# Function pattern jump used[0] = 20 total = 20
-;# Function pattern *call1 used[0] = 21 total = 21
+;# Function pattern *call1 used[0] = 20 total = 20
 ;# Function pattern *call_value1 used[0] = 17 total = 17
 ;# Function pattern movstrqi+2 used[0] = 1 total = 1
 ;# Function pattern movstrqi+3 used[0] = 2 used[1] = 8 total = 10
@@ -152106,19 +152157,10 @@ $_wechatTransportCommonSendWechatStartServiceCfm:
 	leavel	#5
 ;.stabn	192,0,0,?LBB6
 ;.stabn	224,0,0,?LBE6
-$_wechatTransportCommonCleanupThresholdState:
-	enterl	#2
-?LBB_wechatTransportCommonCleanupThresholdState:
-	ld	X,@$XAP_AL
-	ld	AL,#H'0000
-	st	AL,@(H'000A,X)
-?LBE_wechatTransportCommonCleanupThresholdState:
-	leavel	#2
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 35 total = 35
+;# Function pattern *movqi2 used[0] = 33 total = 33
 ;# Function pattern *movqi3 used[0] = 30 total = 30
-;# Function pattern *movqi8 used[0] = 1 total = 1
 ;# Function pattern *call1 used[0] = 5 total = 5
 ;# Function pattern *call_value1 used[0] = 5 total = 5
 	MODULE	gaia

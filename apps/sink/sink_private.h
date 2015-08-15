@@ -555,19 +555,6 @@ typedef struct
 typedef struct
 {
     WECHAT_TRANSPORT *wechat_transport;
-    
-    uint32 pio_change_mask;
-    uint32 pio_old_state;
-    ringtone_note *alert_tone;
-    
-    unsigned notify_ui_event:1;
-    unsigned notify_charger_connection:1;
-    unsigned notify_battery_charged:1;
-    unsigned notify_speech_rec:1;
-    unsigned dfu_partition:4;
-    unsigned dfu_boot_status:2;
-    unsigned unused:6;
-    
 } wechat_settings_t;
 #endif
 

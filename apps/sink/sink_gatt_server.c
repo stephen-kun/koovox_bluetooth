@@ -183,7 +183,7 @@ void server_handle_gatt_disconnect_ind(GATT_DISCONNECT_IND_T * ind)
     GATT_SERVER_DEBUG(("GATT: Wait for a connection from a remote device\n"));
     GattConnectRequest(&theSink.rundata->gatt.task, NULL, gatt_connection_ble_slave_undirected, FALSE);
 
-	koovox_device_wechat_disconnect();
+	koovox_wechat_disconnect();
 }
 
 
@@ -256,32 +256,7 @@ void server_handle_gatt_access_ind(GATT_ACCESS_IND_T * ind)
 		if(ind->flags & ATT_ACCESS_WRITE)
 		{
 			/* 处理消息 */
-			koovox_write_from_wechat(ind->value, ind->size_value);
-			
-			/* 发送init req */
-			if((g_wechatble_state.auth_state) 
-				&& (!g_wechatble_state.init_state) 
-				&& (!g_wechatble_state.init_send))
-			{
-				koovox_pack_wechat_init_req();
-				koovox_indicate_to_wechat(ind->cid, HANDLE_WECHAR_CLIENT_CONFIG);
-				g_wechatble_state.init_send = TRUE;
-			}
-
-#if 1
-			/* 测试发送send data req */
-			{
-			static bool test_flag = FALSE;
-			
-			if((g_wechatble_state.init_state)&&(!test_flag))
-			{
-				uint8 device_name[] = {'K', 'O', 'O', 'V','O', 'X'};
-				koovox_pack_wechat_send_data_req((uint8*)device_name, 6, TRUE, EDDT_manufatureSvr);
-				koovox_indicate_to_wechat(ind->cid, HANDLE_WECHAR_CLIENT_CONFIG);
-				test_flag = TRUE;
-			}
-			}
-#endif
+			koovox_rcv_data_from_wechat(ind->value, ind->size_value);
 		}
 
 	}
@@ -307,16 +282,18 @@ void server_handle_gatt_access_ind(GATT_ACCESS_IND_T * ind)
 		{
 			/* Check the size of the data requested to write to the client config is correct */
 			if (ind->size_value == GATT_CLIENT_CONFIG_OCTET_SIZE)
-			{	 
+			{
+				Ble ble = {0};
+				ble.cid = ind->cid;
+				ble.handle = ind->handle;
+				
 				GattAccessResponse(ind->cid, ind->handle, gatt_status_success, 0, 0);
-
-				koovox_handle_wechat_indicate(ind->cid, ind->handle);
+				/* 微信连接 */
+				koovox_wechat_connect(TYPE_BLE, &ble, NULL);
 				
 			}
 			else
-			{
-				g_wechatble_state.indication_state = FALSE;
-				
+			{				
 				/* Requested data to write is the wrong length, respond to the device with appropriate error */
 				GattAccessResponse(ind->cid, ind->handle, gatt_status_invalid_length, 0, NULL);
 			}
@@ -359,7 +336,7 @@ void server_handle_gatt_indication_cfm(GATT_INDICATION_CFM_T * ind)
 		{
 			if(ind->status == gatt_status_success)
 			{
-				koovox_indicate_to_wechat(ind->cid, HANDLE_WECHAR_CLIENT_CONFIG);
+				koovox_send_data_to_wechat();
 			}
 		}
 		break;

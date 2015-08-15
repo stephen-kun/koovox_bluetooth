@@ -84,13 +84,11 @@ DESCRIPTION
 */
 void wechatTransportRfcommDropState(wechat_transport *transport)
 {
-    transport->state.spp.sink = NULL;
+    transport->spp.sink = NULL;
     transport->connected = FALSE;
     transport->enabled = FALSE;
     transport->type = wechat_transport_none;
     
-    /* No longer have a Wechat connection over this transport, ensure we reset any threshold state */
-    wechatTransportCommonCleanupThresholdState(transport);
 }
 
 
@@ -152,7 +150,7 @@ void wechatTransportRfcommStartService(void)
  */
 Sink wechatTransportRfcommGetSink(wechat_transport *transport)
 {
-    return transport->state.spp.sink;
+    return transport->spp.sink;
 }
 
 
@@ -236,8 +234,8 @@ bool wechatTransportRfcommHandleMessage(Task task, MessageId id, Message message
                 else
                 {
                     transport->type = wechat_transport_rfcomm;
-                    transport->state.spp.sink = m->sink;
-                    transport->state.spp.rfcomm_channel = m->server_channel;
+                    transport->spp.sink = m->sink;
+                    transport->spp.rfcomm_channel = m->server_channel;
                     ConnectionRfcommConnectResponse(task, TRUE, m->sink, m->server_channel, &rfcomm_config);
                 }
             }
@@ -254,8 +252,8 @@ bool wechatTransportRfcommHandleMessage(Task task, MessageId id, Message message
                 
                 if (m->status == rfcomm_connect_success)
                 {
-                    transport->state.spp.sink = m->sink;
-                    transport->state.spp.rfcomm_channel = m->server_channel;
+                    transport->spp.sink = m->sink;
+                    transport->spp.rfcomm_channel = m->server_channel;
                     ConnectionUnregisterServiceRecord(task, wechat->spp_sdp_handle);
                     wechatTransportCommonSendWechatConnectInd(transport, TRUE);
                     transport->connected = TRUE;
@@ -276,7 +274,7 @@ bool wechatTransportRfcommHandleMessage(Task task, MessageId id, Message message
                 if (m->status == success)
                 {
                 /*  Get another channel from the pool  */
-                    ConnectionRfcommAllocateChannel(task, SPP_DEFAULT_CHANNEL);
+                    ConnectionRfcommAllocateChannel(task, WECHAT_DEFAULT_CHANNEL);
                 }
             }
             break;
@@ -292,7 +290,7 @@ bool wechatTransportRfcommHandleMessage(Task task, MessageId id, Message message
                 ConnectionRfcommDisconnectResponse(m->sink);
 
             /*  release channel for re-use  */
-                ConnectionRfcommDeallocateChannel(task, transport->state.spp.rfcomm_channel);
+                ConnectionRfcommDeallocateChannel(task, transport->spp.rfcomm_channel);
             }
             break;
         

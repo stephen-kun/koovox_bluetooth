@@ -24,11 +24,7 @@ DESCRIPTION
 #include <panic.h>
 #include <print.h>
 #include <string.h>
-#include <power.h>
-#include <psu.h>
-#include <partition.h>
 #include <file.h>
-#include <spp_common.h>
 #include <audio.h>
 #include <loader.h>
 #include <kalimba.h>
@@ -126,9 +122,6 @@ DESCRIPTION
 static void wechat_init(void)
 {
     MESSAGE_PMAKE(status, WECHAT_INIT_CFM_T);
-
-    /*  Default API minor version (may be overridden by WechatSetApiMinorVersion())  */
-    wechat->api_minor = WECHAT_API_VERSION_MINOR;
              
     /*  So we can use AUDIO_BUSY interlocking  */
     AudioLibraryInit();
@@ -305,27 +298,6 @@ void WechatSendPacket(WECHAT_TRANSPORT *transport, uint16 packet_length, uint8 *
 {
     if (wechat != NULL)
         send_packet(wechat->app_task, (wechat_transport *) transport, packet_length, packet);
-}
-
-
-
-
-/*************************************************************************
-NAME
-    WechatSetApiMinorVersion
-    
-DESCRIPTION
-    Changes the API Minor Version reported by WECHAT_COMMAND_GET_API_VERSION
-    Returns TRUE on success, FALSE if the value is out of range (0..15) or
-    the WECHAT storage is not allocated
-*/
-bool WechatSetApiMinorVersion(uint8 version)
-{
-    if (wechat == NULL || version > WECHAT_API_VERSION_MINOR_MAX)
-        return FALSE;
-    
-    wechat->api_minor = version;
-    return TRUE;
 }
 
 

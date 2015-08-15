@@ -428,8 +428,7 @@ void KoovoxUsrEventHandle(MessageId id, Message message)
 
 	case EventKoovoxRepeatSendIndication:
 	{
-		uint16 cid = *((uint16*)message);
-		koovox_handle_wechat_indicate(cid, HANDLE_WECHAR_CLIENT_CONFIG);
+		koovox_send_data_to_wechat();
 	}
 	break;
 

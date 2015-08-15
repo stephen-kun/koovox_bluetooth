@@ -45,11 +45,5 @@ void wechatTransportCommonSendWechatDisconnectCfm(wechat_transport* transport);
  */
 void wechatTransportCommonSendWechatStartServiceCfm(wechat_transport_type transport_type, wechat_transport* transport, bool success);
 
-/*! @brief Cleanup battery and RSSI threshold state for a given transport.
- 
-    Used once a Wechat transport has closed, as we no longer need to perform the
-    checking or resend the timer messages.
-*/
-void wechatTransportCommonCleanupThresholdState(wechat_transport *transport);
 
 #endif /* _WECHAT_TRANSPORT_COMMON_H */

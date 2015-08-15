@@ -38,17 +38,13 @@ wechat/default/assisted/wechat.o: wechat/wechat.c \
   C:/ADK3.5/tools/include/firmware/panic.h \
   C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/print.h \
   C:/ADK3.5/tools/include/standard/string.h \
+  C:/ADK3.5/tools/include/firmware/file.h \
+  C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/audio.h \
+  C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/audio_plugin_if.h \
   C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/power.h \
   C:/ADK3.5/tools/include/firmware/adc.h \
   C:/ADK3.5/tools/include/firmware/charger.h \
   C:/ADK3.5/tools/include/firmware/app/charger/charger_if.h \
-  C:/ADK3.5/tools/include/firmware/psu.h \
-  C:/ADK3.5/tools/include/firmware/app/psu/psu_if.h \
-  C:/ADK3.5/tools/include/firmware/partition.h \
-  C:/ADK3.5/tools/include/firmware/file.h \
-  C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/spp_common.h \
-  C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/audio.h \
-  C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/audio_plugin_if.h \
   C:/ADK3.5/tools/include/firmware/loader.h \
   C:/ADK3.5/tools/include/firmware/kalimba.h wechat/wechat_private.h \
   wechat/wechat.h \
