@@ -123,6 +123,8 @@ DESCRIPTION
 #define MAX_AT_COMMANDS_TO_SEND (8)
 
 
+#define TIMEOUT_STOP_BLE		(D_SEC(120))
+
 /*! 
     @brief Class Of Device definitions 
 */

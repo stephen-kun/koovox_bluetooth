@@ -65,5 +65,6 @@ sink_gatt_server.o: sink_gatt_server.c sink_gatt_server.h \
   sink_avrcp.h \
   C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/avrcp.h \
   sink_gatt.h sink_gatt_client.h sink_gatt_db.h sink_statemanager.h \
-  sink_koovox_core.h epb_MmBp.h epb.h koovox_wechat_handle.h \
-  sink_ble_advertising.h
+  sink_koovox_core.h sink_koovox_task.h \
+  C:/ADK3.5/tools/include/firmware/partition.h epb_MmBp.h epb.h \
+  koovox_wechat_handle.h sink_ble_advertising.h

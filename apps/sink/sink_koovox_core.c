@@ -29,6 +29,9 @@ FILE NAME
 #include "sink_koovox_uart.h"
 #include "sink_gatt_db.h"
 
+#include "sink_ble_advertising.h"
+
+
 
 /*************************************************************************
 NAME
@@ -258,7 +261,17 @@ void KoovoxUsrEventHandle(MessageId id, Message message)
 		/* 进入配对模式 */
 		case deviceConnectable:
 		case deviceConnDiscoverable:
-			MessageSend(&theSink.task, EventUsrRssiPair, 0);
+			{
+				MessageSend(&theSink.task, EventUsrRssiPair, 0);
+				if(!koovox.ble_adv)
+				{
+#if defined(BLE_ENABLED)
+					start_ble_advertising();
+					koovox.ble_adv = TRUE;
+#endif
+					MessageSendLater(&(theSink.task), EventKoovoxDisableBleAdvertising, 0, TIMEOUT_STOP_BLE);
+				}
+			}
 			break;
 
 		/* 上一曲 */
@@ -365,6 +378,16 @@ void KoovoxUsrEventHandle(MessageId id, Message message)
 	case EventKoovoxRepeatSendIndication:
 	{
 		koovox_send_data_to_wechat();
+	}
+	break;
+
+	case EventKoovoxDisableBleAdvertising:
+	{
+		DEBUG(("EventKoovoxDisableBleAdvertising\n"));
+#if defined(BLE_ENABLED)
+		stop_ble_advertising();
+		koovox.ble_adv = FALSE;
+#endif
 	}
 	break;
 

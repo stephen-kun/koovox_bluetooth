@@ -15,6 +15,9 @@ NOTES
 #ifdef ENABLE_WECHAT
 #include "sink_wechat.h"
 #include "koovox_wechat_handle.h"
+#include "sink_ble_advertising.h"
+#include "sink_koovox_task.h"
+
 #include <kalimba.h>
 
 
@@ -63,6 +66,10 @@ void handleWechatMessage(Task task, MessageId id, Message message)
                 WechatSetSessionEnable(m->transport, theSink.features.WechatEnableSession);
 
 				koovox_wechat_connect(TYPE_RFCOMM, NULL, m->transport);
+#if defined(BLE_ENABLED)
+				stop_ble_advertising();
+				koovox.ble_adv = FALSE;
+#endif
             }			
         }
         break;

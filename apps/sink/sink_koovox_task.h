@@ -59,14 +59,12 @@ typedef struct{
 	uint16			last_cmd;		/* the last of the cmd to STM8 */
 	uint8			repeat_times;	/* repeat send the last cmd times */
 
-	Sink			sppSink;		/* Stream sink of the spp transport. */ 
-	uint8*			sppValue;		/* value from the mobile */
-	uint16			sizeSppValue;	/* size of the value */
-
 	uint8			neckEnable; 	/* enable or disable neck protect business */
 	uint8			seatEnable; 	/* enable or disable const seat business */
 	uint8			hbEnable;		/* enable or disable heart rate business */
 	uint8			health;
+
+	bool			ble_adv;		/* flag set when ble adverting enable or disable */
 	
 }gKoovoxTaskData;
 

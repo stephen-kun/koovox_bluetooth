@@ -18,6 +18,7 @@ DESCRIPTION
 #include "sink_gatt_db.h"
 #include "sink_statemanager.h"
 #include "sink_koovox_core.h"
+#include "sink_koovox_task.h"
 #include "epb_MmBp.h"
 #include "koovox_wechat_handle.h"
 
@@ -137,7 +138,10 @@ void server_handle_gatt_connect_cfm(GATT_CONNECT_CFM_T * cfm)
                 /* Start Advertising so a remote device can find and connect */
 				if(deviceConnected <= stateManagerGetState())
 				{
+					DEBUG(("start_ble_advertising\n"));
 					start_ble_advertising();
+					koovox.ble_adv = TRUE;
+					MessageSendLater(&(theSink.task), EventKoovoxDisableBleAdvertising, 0, TIMEOUT_STOP_BLE);
 				}
             }
             #endif
@@ -153,6 +157,7 @@ void server_handle_gatt_connect_cfm(GATT_CONNECT_CFM_T * cfm)
                 #if defined(BLE_ENABLED)
                 {
                     stop_ble_advertising();
+					koovox.ble_adv = FALSE;
                 }
                 #endif
             }
@@ -177,6 +182,8 @@ void server_handle_gatt_disconnect_ind(GATT_DISCONNECT_IND_T * ind)
     #if defined(BLE_ENABLED)
     {
         start_ble_advertising();
+		koovox.ble_adv = TRUE;
+		MessageSendLater(&(theSink.task), EventKoovoxDisableBleAdvertising, 0, TIMEOUT_STOP_BLE);
     }
     #endif
     

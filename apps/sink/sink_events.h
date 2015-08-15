@@ -269,10 +269,11 @@ typedef enum sinkEventsTag
 /*0x40BE*/		EventKoovoxButtonCRelease,
 
 /******** dsp event ************/
-/*0x40BD*/    EventCVCKalimbaLoaded,
+/*0x40BF*/    	EventCVCKalimbaLoaded,
 
 /******** koovox event *************/
-/*0x40BD*/		EventKoovoxRepeatSendIndication,
+/*0x40C0*/		EventKoovoxRepeatSendIndication,
+/*0x40C1*/		EventKoovoxDisableBleAdvertising,
 
 /* User events list cannot go past 0x40FF */   
               EventUsrLast,

@@ -8675,7 +8675,7 @@ _handleUEMessage:
 ?L56:
 	ld	AL,@(H'0006,Y)
 	add	AL,#-H'40B5
-	cmp	AL,#(H'0001+H'000B)
+	cmp	AL,#(H'0001+H'000C)
 	bcc	?L467
 	ld	AH,#H'0000
 	st	AH,@(H'0008,Y)
@@ -9362,13 +9362,13 @@ $_main:
 	.SEG	CONST
 ?LC3:
 	dc	H'31
-	dc	H'36
+	dc	H'38
 	dc	H'3A
-	dc	H'31
 	dc	H'35
+	dc	H'32
 	dc	H'3A
 	dc	H'34
-	dc	H'39
+	dc	H'35
 	dc	H'00
 ?LC2:
 	dc	H'4D
@@ -26079,7 +26079,7 @@ _gaia_alert_event:
 ?LBB_gaia_alert_event:
 	st	AL,@(H'0003,Y)
 	add	AL,#-H'4000
-	cmp	AL,#H'00C0
+	cmp	AL,#H'00C1
 	bcz	?L77
 	ld	AL,@(H'0003,Y)
 	add	AL,#-H'4700
@@ -26263,7 +26263,7 @@ _gaia_set_led_config:
 ?L174:
 	ld	AL,@$XAP_AH
 	add	AL,#-H'4000
-	cmp	AL,#H'00C0
+	cmp	AL,#H'00C1
 	bcz	?L106
 	ld	AL,@$XAP_AH
 	add	AL,#-H'4700
@@ -26570,7 +26570,7 @@ _gaia_set_led_config:
 	bne	?L135
 	ld	AL,@$XAP_AH
 	add	AL,#-H'4000
-	cmp	AL,#H'00C0
+	cmp	AL,#H'00C1
 	bcz	?L135
 	ld	AL,@$XAP_AH
 	add	AL,#-H'4700
@@ -27309,7 +27309,7 @@ _gaia_set_tone_config:
 	st	AH,@(H'0013,Y)
 ?LBB19:
 	add	AL,#-H'4000
-	cmp	AL,#H'00C0
+	cmp	AL,#H'00C1
 	bcz	?L267
 	ld	AL,@(H'0012,Y)
 	add	AL,#-H'4700
@@ -27495,7 +27495,7 @@ _gaia_send_tone_config:
 	st	AL,@(H'0008,Y)
 	ld	AL,@(H'0007,Y)
 	add	AL,#-H'4000
-	cmp	AL,#H'00C0
+	cmp	AL,#H'00C1
 	bcz	?L298
 	ld	AL,@(H'0007,Y)
 	add	AL,#-H'4700
@@ -27774,7 +27774,7 @@ _gaia_set_ap_config:
 	ld	X,#H'0000
 	st	X,@(H'0014,Y)
 	add	AL,#-H'4000
-	cmp	AL,#H'00C0
+	cmp	AL,#H'00C1
 	bcz	?L336
 	ld	AL,@(H'0013,Y)
 	add	AL,#-H'4700
@@ -27932,7 +27932,7 @@ _gaia_send_ap_config:
 	st	AL,@(H'0016,Y)
 	ld	AL,@(H'0015,Y)
 	add	AL,#-H'4000
-	cmp	AL,#H'00C0
+	cmp	AL,#H'00C1
 	bcz	?L360
 	ld	AL,@(H'0015,Y)
 	add	AL,#-H'4700
@@ -31343,10 +31343,10 @@ $_gaiaDisconnect:
 	.ENHANCED
 	.CODE
 $_initialise_gatt_for_device:
-	enterl	#6
+	enterl	#8
 ?LBB_initialise_gatt_for_device:
-	st	AL,@(H'0002,Y)
-	st	AH,@(H'0003,Y)
+	st	AL,@(H'0004,Y)
+	st	AH,@(H'0005,Y)
 ?LBB2:
 	ld	X,@$_theSink+H'0004
 	tst	@(H'0016,X)
@@ -31361,27 +31361,36 @@ $_initialise_gatt_for_device:
 	bne	?L1
 ?LBB3:
 	ld	AL,@$XAP_UY
-	add	AL,#H'0001
+	add	AL,#H'0003
 	bsr	$_GattGetDatabase
 	ld	AH,@$XAP_AL
 	ld	AL,@$_theSink+H'0004
 	add	AL,#H'0012
 	st	AH,@(0,Y)
-	ld	AH,@(H'0001,Y)
+	ld	AH,@(H'0003,Y)
 	bsr	$_GattInit
 	ld	X,@$_theSink+H'0004
 	ld	AL,#H'0000
 	st	AL,@(H'001B,X)
 	ld	X,@$_theSink+H'0004
 	st	AL,@(H'001C,X)
-	ld	AL,@(H'0003,Y)
-	ld	AH,@(H'0002,Y)
+	ld	AL,@(H'0005,Y)
+	ld	AH,@(H'0004,Y)
 	bsr	$_setup_ble_ad_data
+	ld	AH,#H'0000
+	st	AH,@(0,Y)
+	ld	AL,#-H'2B40
+	st	AL,@(H'0002,Y)
+	ld	AL,#H'0001
+	st	AL,@(H'0001,Y)
+	ld	AL,#($_theSink)
+	ld	AH,#H'40C1
+	bsr	$_MessageSendLater
 ?L1:
 ?LBE3:
 ?LBE2:
 ?LBE_initialise_gatt_for_device:
-	leavel	#6
+	leavel	#8
 ;.stabn	192,0,0,?LBB3
 ;.stabn	224,0,0,?LBE3
 $_gatt_message_handler:
@@ -31484,13 +31493,13 @@ $_disconnect_all_gatt_devices:
 	leavel	#2
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 9 used[1] = 8 total = 17
-;# Function pattern *movqi3 used[0] = 15 total = 15
+;# Function pattern *movqi2 used[0] = 12 used[1] = 8 total = 20
+;# Function pattern *movqi3 used[0] = 20 total = 20
 ;# Function pattern *movhi used[2] = 1 used[3] = 1 total = 2
 ;# Function pattern *addqi0 used[0] = 1 total = 1
 ;# Function pattern *addqi2 used[0] = 2 total = 2
 ;# Function pattern jump used[0] = 10 total = 10
-;# Function pattern *call1 used[0] = 11 total = 11
+;# Function pattern *call1 used[0] = 12 total = 12
 ;# Function pattern *call_value1 used[0] = 1 total = 1
 ;# Function pattern movstrqi+3 used[1] = 2 total = 2
 ;# Function pattern movstrqi+4 used[1] = 4 total = 4
@@ -31754,7 +31763,7 @@ $_server_handle_gatt_init_cfm:
 ?LBE_server_handle_gatt_init_cfm:
 	leavel	#4
 $_server_handle_gatt_connect_cfm:
-	enterl	#2
+	enterl	#6
 ?LBB_server_handle_gatt_connect_cfm:
 	ld	X,@$XAP_AL
 	ld	AL,@(0,X)
@@ -31765,24 +31774,74 @@ $_server_handle_gatt_connect_cfm:
 	bsr	$_stateManagerGetState
 	cmp	AL,#H'0002
 	bcz	?L32
+	ld	AL,#(?LC0)
+	bsr	$_puts
 	bsr	$_start_ble_advertising
+	ld	AL,#H'0001
+	st	AL,@$_koovox+H'000F
+	ld	AH,#H'0000
+	st	AH,@(0,Y)
+	ld	AH,#-H'2B40
+	st	AH,@(H'0002,Y)
+	st	AL,@(H'0001,Y)
+	ld	AL,#($_theSink)
+	ld	AH,#H'40C1
+	bsr	$_MessageSendLater
 	bra	(?L32)
 ?L36:
 	ld	AL,@(H'0007,X)
 	bsr	_add_client_device
+	st	AL,@(H'0003,Y)
 	cmp	AL,#H'0000
 	bne	?L32
 	bsr	$_stop_ble_advertising
+	ld	AL,@(H'0003,Y)
+	st	AL,@$_koovox+H'000F
 ?L32:
 ?LBE_server_handle_gatt_connect_cfm:
-	leavel	#2
+	leavel	#6
+	.SEG	CONST
+?LC0:
+	dc	H'73
+	dc	H'74
+	dc	H'61
+	dc	H'72
+	dc	H'74
+	dc	H'5F
+	dc	H'62
+	dc	H'6C
+	dc	H'65
+	dc	H'5F
+	dc	H'61
+	dc	H'64
+	dc	H'76
+	dc	H'65
+	dc	H'72
+	dc	H'74
+	dc	H'69
+	dc	H'73
+	dc	H'69
+	dc	H'6E
+	dc	H'67
+	dc	H'00
+	.CODE
 $_server_handle_gatt_disconnect_ind:
-	enterl	#4
+	enterl	#5
 ?LBB_server_handle_gatt_disconnect_ind:
 	ld	X,@$XAP_AL
 	ld	AL,@(H'0001,X)
 	bsr	_remove_client_device
 	bsr	$_start_ble_advertising
+	ld	AH,#H'0001
+	st	AH,@$_koovox+H'000F
+	ld	AL,#H'0000
+	st	AL,@(0,Y)
+	ld	AL,#-H'2B40
+	st	AL,@(H'0002,Y)
+	st	AH,@(H'0001,Y)
+	ld	AL,#($_theSink)
+	ld	AH,#H'40C1
+	bsr	$_MessageSendLater
 	ld	AL,@$_theSink+H'0004
 	add	AL,#H'0012
 	ld	AH,#H'0005
@@ -31792,7 +31851,7 @@ $_server_handle_gatt_disconnect_ind:
 	bsr	$_GattConnectRequest
 	bsr	$_koovox_wechat_disconnect
 ?LBE_server_handle_gatt_disconnect_ind:
-	leavel	#4
+	leavel	#5
 $_server_handle_gatt_access_ind:
 	enterl	#14
 ?LBB_server_handle_gatt_access_ind:
@@ -31801,7 +31860,7 @@ $_server_handle_gatt_access_ind:
 ?LBB4:
 	ld	AL,@(H'0001,X)
 	st	AL,@(0,Y)
-	ld	AL,#(?LC0)
+	ld	AL,#(?LC1)
 	bsr	$_printf
 	ld	X,@(H'000B,Y)
 	ld	AL,@(H'0001,X)
@@ -31853,7 +31912,7 @@ $_server_handle_gatt_access_ind:
 	st	AL,@(0,Y)
 	ld	AL,@(H'0003,X)
 	st	AL,@(H'0001,Y)
-	ld	AL,#(?LC1)
+	ld	AL,#(?LC2)
 	bsr	$_printf
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
@@ -31970,7 +32029,7 @@ $_server_handle_gatt_access_ind:
 ?LBE_server_handle_gatt_access_ind:
 	leavel	#14
 	.SEG	CONST
-?LC0:
+?LC1:
 	dc	H'73
 	dc	H'65
 	dc	H'72
@@ -32006,7 +32065,7 @@ $_server_handle_gatt_access_ind:
 	dc	H'78
 	dc	H'0A
 	dc	H'00
-?LC1:
+?LC2:
 	dc	H'66
 	dc	H'6C
 	dc	H'61
@@ -32080,15 +32139,15 @@ $_disconnect_all_gatt_clients:
 ;.stabn	224,0,0,?LBE7
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 54 used[1] = 1 used[3] = 1 total = 56
-;# Function pattern *movqi3 used[0] = 79 total = 79
+;# Function pattern *movqi2 used[0] = 64 used[1] = 1 used[3] = 1 total = 66
+;# Function pattern *movqi3 used[0] = 91 total = 91
 ;# Function pattern *movqi8 used[0] = 6 total = 6
 ;# Function pattern *addqi0 used[0] = 4 total = 4
 ;# Function pattern *addqi2 used[0] = 9 used[2] = 8 total = 17
 ;# Function pattern *andqi3 used[0] = 3 total = 3
 ;# Function pattern jump used[0] = 11 total = 11
-;# Function pattern *call1 used[0] = 17 total = 17
-;# Function pattern *call_value1 used[0] = 7 total = 7
+;# Function pattern *call1 used[0] = 19 total = 19
+;# Function pattern *call_value1 used[0] = 8 total = 8
 ;# Function pattern movstrqi+2 used[0] = 1 total = 1
 ;# Function pattern movstrqi+3 used[0] = 9 used[1] = 5 total = 14
 ;# Function pattern movstrqi+5 used[0] = 16 total = 16
@@ -34685,35 +34744,36 @@ $_KoovoxGetBluetoothAdrress:
 ;.stabn	192,0,0,?LBB2
 ;.stabn	224,0,0,?LBE2
 $_KoovoxUsrEventHandle:
-	enterl	#5
+	enterl	#6
 ?LBB_KoovoxUsrEventHandle:
-	st	AL,@(H'0002,Y)
+	st	AL,@(H'0003,Y)
 ?LBB3:
 	bsr	$_stateManagerGetState
-	ld	AH,@(H'0002,Y)
+	ld	AH,@(H'0003,Y)
 	add	AH,#-H'40B5
-	cmp	AH,#(H'0001+H'000B)
+	cmp	AH,#(H'0001+H'000C)
 	bcc	?L16
 	ld	X,@$XAP_AH
-	ld	X,@(?JTBASE58,X)
+	ld	X,@(?JTBASE60,X)
 	brxl
 	.SEG	CONST
-?JTBASE58:
+?JTBASE60:
 	.CODE
-?L58:
+?L60:
 	.SEG	CONST
-	dc	lwrd(?L45-?L58)
-	dc	lwrd(?L16-?L58)
-	dc	lwrd(?L52-?L58)
-	dc	lwrd(?L16-?L58)
-	dc	lwrd(?L16-?L58)
-	dc	lwrd(?L18-?L58)
-	dc	lwrd(?L36-?L58)
-	dc	lwrd(?L27-?L58)
-	dc	lwrd(?L16-?L58)
-	dc	lwrd(?L16-?L58)
-	dc	lwrd(?L16-?L58)
-	dc	lwrd(?L56-?L58)
+	dc	lwrd(?L46-?L60)
+	dc	lwrd(?L16-?L60)
+	dc	lwrd(?L53-?L60)
+	dc	lwrd(?L16-?L60)
+	dc	lwrd(?L16-?L60)
+	dc	lwrd(?L18-?L60)
+	dc	lwrd(?L37-?L60)
+	dc	lwrd(?L27-?L60)
+	dc	lwrd(?L16-?L60)
+	dc	lwrd(?L16-?L60)
+	dc	lwrd(?L16-?L60)
+	dc	lwrd(?L57-?L60)
+	dc	lwrd(?L58-?L60)
 	.CODE
 ?L18:
 	add	AL,#-H'0003
@@ -34744,105 +34804,119 @@ $_KoovoxUsrEventHandle:
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'4047
-	bra	(?L60)
+	bra	(?L62)
 ?L22:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'4008
-	bra	(?L60)
+	bra	(?L62)
 ?L24:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'400A
-	bra	(?L60)
+	bra	(?L62)
 ?L27:
 	cmp	AL,#(H'0001+H'000D)
 	bcc	?L16
 	ld	X,@$XAP_AL
-	ld	X,@(?JTBASE35,X)
+	ld	X,@(?JTBASE36,X)
 	brxl
 	.SEG	CONST
-?JTBASE35:
+?JTBASE36:
 	.CODE
-?L35:
+?L36:
 	.SEG	CONST
-	dc	lwrd(?L16-?L35)
-	dc	lwrd(?L30-?L35)
-	dc	lwrd(?L30-?L35)
-	dc	lwrd(?L16-?L35)
-	dc	lwrd(?L16-?L35)
-	dc	lwrd(?L32-?L35)
-	dc	lwrd(?L33-?L35)
-	dc	lwrd(?L16-?L35)
-	dc	lwrd(?L16-?L35)
-	dc	lwrd(?L16-?L35)
-	dc	lwrd(?L16-?L35)
-	dc	lwrd(?L16-?L35)
-	dc	lwrd(?L16-?L35)
-	dc	lwrd(?L31-?L35)
+	dc	lwrd(?L16-?L36)
+	dc	lwrd(?L30-?L36)
+	dc	lwrd(?L30-?L36)
+	dc	lwrd(?L16-?L36)
+	dc	lwrd(?L16-?L36)
+	dc	lwrd(?L33-?L36)
+	dc	lwrd(?L34-?L36)
+	dc	lwrd(?L16-?L36)
+	dc	lwrd(?L16-?L36)
+	dc	lwrd(?L16-?L36)
+	dc	lwrd(?L16-?L36)
+	dc	lwrd(?L16-?L36)
+	dc	lwrd(?L16-?L36)
+	dc	lwrd(?L32-?L36)
 	.CODE
 ?L30:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'4034
-	bra	(?L60)
-?L31:
+	bsr	$_MessageSend
+	tst	@$_koovox+H'000F
+	bne	?L16
+	bsr	$_start_ble_advertising
+	ld	AH,#H'0001
+	st	AH,@$_koovox+H'000F
+	ld	X,#H'0000
+	st	X,@(0,Y)
+	ld	AL,#-H'2B40
+	st	AL,@(H'0002,Y)
+	st	AH,@(H'0001,Y)
+	ld	AL,#($_theSink)
+	ld	AH,#H'40C1
+	bsr	$_MessageSendLater
+	bra	(?L16)
+?L32:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'4048
-	bra	(?L60)
-?L32:
+	bra	(?L62)
+?L33:
 	bsr	$_KoovoxPresentIncomingCall
 	bra	(?L16)
-?L33:
+?L34:
 	bsr	$_KoovoxMuteActiveCall
 	bra	(?L16)
-?L36:
+?L37:
 	cmp	AL,#H'0005
-	beq	?L40
-	cmp	AL,#(H'0001+H'0005)
-	bcc	?L44
-	cmp	AL,#H'0003
-	beq	?L39
-	bra	(?L16)
-?L44:
-	cmp	AL,#H'0006
 	beq	?L41
+	cmp	AL,#(H'0001+H'0005)
+	bcc	?L45
+	cmp	AL,#H'0003
+	beq	?L40
+	bra	(?L16)
+?L45:
+	cmp	AL,#H'0006
+	beq	?L42
 	cmp	AL,#H'000D
 	bne	?L16
-?L39:
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	ld	AL,#($_theSink)
-	ld	AH,#H'4045
-	bra	(?L60)
 ?L40:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
-	ld	AH,#H'4009
-	bra	(?L60)
+	ld	AH,#H'4045
+	bra	(?L62)
 ?L41:
+	ld	AL,#H'0000
+	st	AL,@(0,Y)
+	ld	AL,#($_theSink)
+	ld	AH,#H'4009
+	bra	(?L62)
+?L42:
 	bsr	$_KoovoxRecordControl
 	bra	(?L16)
-?L45:
-	tst	@$_koovox+H'0011
-	bne	?L46
-	tst	@$_button_req
-	bne	?L16
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	st	AL,@(H'0001,Y)
-	ld	AL,#H'0001
-	ld	AH,#H'0008
-	bsr	$_KoovoxFillAndSendUartPacket
-	ld	AL,#H'0001
-	bra	(?L59)
 ?L46:
+	tst	@$_koovox+H'000E
+	bne	?L47
+	tst	@$_button_req
+	bne	?L16
+	ld	AL,#H'0000
+	st	AL,@(0,Y)
+	st	AL,@(H'0001,Y)
+	ld	AL,#H'0001
+	ld	AH,#H'0008
+	bsr	$_KoovoxFillAndSendUartPacket
+	ld	AL,#H'0001
+	bra	(?L61)
+?L47:
 	tst	@$_button_req
 	bne	?L16
 	ld	AL,#H'0000
@@ -34852,28 +34926,71 @@ $_KoovoxUsrEventHandle:
 	ld	AH,#H'0008
 	bsr	$_KoovoxFillAndSendUartPacket
 	ld	AL,#H'0002
-?L59:
+?L61:
 	ld	AH,#H'0008
 	bsr	$_KoovoxStoreLastCmd
 	ld	AL,#H'0001
 	st	AL,@$_button_req
 	bra	(?L16)
-?L52:
+?L53:
 	cmp	AL,#H'0002
 	bcz	?L16
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'4026
-?L60:
+?L62:
 	bsr	$_MessageSend
 	bra	(?L16)
-?L56:
+?L57:
 	bsr	$_koovox_send_data_to_wechat
+	bra	(?L16)
+?L58:
+	ld	AL,#(?LC0)
+	bsr	$_puts
+	bsr	$_stop_ble_advertising
+	ld	AL,#H'0000
+	st	AL,@$_koovox+H'000F
 ?L16:
 ?LBE3:
 ?LBE_KoovoxUsrEventHandle:
-	leavel	#5
+	leavel	#6
+	.SEG	CONST
+?LC0:
+	dc	H'45
+	dc	H'76
+	dc	H'65
+	dc	H'6E
+	dc	H'74
+	dc	H'4B
+	dc	H'6F
+	dc	H'6F
+	dc	H'76
+	dc	H'6F
+	dc	H'78
+	dc	H'44
+	dc	H'69
+	dc	H'73
+	dc	H'61
+	dc	H'62
+	dc	H'6C
+	dc	H'65
+	dc	H'42
+	dc	H'6C
+	dc	H'65
+	dc	H'41
+	dc	H'64
+	dc	H'76
+	dc	H'65
+	dc	H'72
+	dc	H'74
+	dc	H'69
+	dc	H'73
+	dc	H'69
+	dc	H'6E
+	dc	H'67
+	dc	H'00
+	.CODE
 ;.stabn	192,0,0,?LBB3
 ;.stabn	224,0,0,?LBE3
 $_KoovoxResultI2cTest:
@@ -34894,21 +35011,21 @@ $_KoovoxResultI2cTest:
 	st	AL,@(0,Y)
 	ld	AL,@(H'0002,Y)
 	st	AL,@(H'0001,Y)
-	ld	AL,#(?LC0)
+	ld	AL,#(?LC1)
 	bsr	$_printf
 	ld	AL,@(H'0002,Y)
 	ld	X,@(H'0003,Y)
 	cmp	AL,@(0,X)
-	beq	?L67
+	beq	?L69
 	ld	AL,#H'0001
 	st	AL,@(0,Y)
 	ld	AL,#H'002D
 	ld	AH,@$XAP_UXL
 	bsr	$_ConfigStore
-?L67:
+?L69:
 	ld	X,@(H'0003,Y)
 	tst	@(0,X)
-	beq	?L68
+	beq	?L70
 	ld	AL,#H'0001
 	st	AL,@$_button_req
 	ld	AL,#H'0000
@@ -34920,18 +35037,18 @@ $_KoovoxResultI2cTest:
 	ld	AL,#H'0001
 	ld	AH,#H'0007
 	bsr	$_KoovoxStoreLastCmd
-	ld	AL,#(?LC1)
-	bsr	$_KoovoxLog
-	bra	(?L66)
-?L68:
 	ld	AL,#(?LC2)
+	bsr	$_KoovoxLog
+	bra	(?L68)
+?L70:
+	ld	AL,#(?LC3)
 	bsr	$_KoovoxLog
 	ld	AL,@$_koovox+H'000A
 	cmp	AL,#H'0002
-	bcz	?L70
+	bcz	?L72
 	ld	AL,#H'0000
-	bra	(?L72)
-?L70:
+	bra	(?L74)
+?L72:
 	ld	AL,#H'0001
 	st	AL,@$_button_req
 	ld	AL,#H'0000
@@ -34945,14 +35062,14 @@ $_KoovoxResultI2cTest:
 	bsr	$_KoovoxStoreLastCmd
 	ld	AL,@$_koovox+H'000A
 	add	AL,#H'0001
-?L72:
+?L74:
 	st	AL,@$_koovox+H'000A
-?L66:
+?L68:
 ?LBE4:
 ?LBE_KoovoxResultI2cTest:
 	leavel	#6
 	.SEG	CONST
-?LC0:
+?LC1:
 	dc	H'61
 	dc	H'63
 	dc	H'63
@@ -34987,7 +35104,7 @@ $_KoovoxResultI2cTest:
 	dc	H'64
 	dc	H'0A
 	dc	H'00
-?LC1:
+?LC2:
 	dc	H'49
 	dc	H'32
 	dc	H'43
@@ -34997,7 +35114,7 @@ $_KoovoxResultI2cTest:
 	dc	H'63
 	dc	H'0A
 	dc	H'00
-?LC2:
+?LC3:
 	dc	H'49
 	dc	H'32
 	dc	H'43
@@ -35025,8 +35142,8 @@ $_KoovoxStoreLastCmd:
 	rts
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 51 total = 51
-;# Function pattern *movqi3 used[0] = 86 total = 86
+;# Function pattern *movqi2 used[0] = 55 total = 55
+;# Function pattern *movqi3 used[0] = 91 total = 91
 ;# Function pattern *movhi used[2] = 1 total = 1
 ;# Function pattern *addqi0 used[0] = 1 total = 1
 ;# Function pattern *addqi2 used[0] = 4 total = 4
@@ -35035,11 +35152,12 @@ $_KoovoxStoreLastCmd:
 ;# Function pattern *ashlqi3 used[0] = 1 total = 1
 ;# Function pattern *lshrhi3 used[0] = 1 total = 1
 ;# Function pattern *zero_extendqihi2 used[0] = 1 total = 1
-;# Function pattern jump used[0] = 17 total = 17
-;# Function pattern *call1 used[0] = 18 total = 18
-;# Function pattern *call_value1 used[0] = 4 total = 4
+;# Function pattern jump used[0] = 18 total = 18
+;# Function pattern *call1 used[0] = 21 total = 21
+;# Function pattern *call_value1 used[0] = 6 total = 6
 ;# Function pattern tablejump_1 used[0] = 3 total = 3
-;# Function pattern movstrqi+3 used[1] = 5 total = 5
+;# Function pattern movstrqi+2 used[0] = 1 total = 1
+;# Function pattern movstrqi+3 used[1] = 6 total = 6
 ;# Function pattern movstrqi+4 used[1] = 4 total = 4
 ;# Function pattern movstrqi+5 used[0] = 9 total = 9
 	MODULE	sink_koovox_task
@@ -35095,7 +35213,7 @@ $_InitKoovoxTask:
 	leavel	#2
 	.SEG	VAR
 $_koovox:
-	DS	18
+	DS	16
 	ENDMOD
 
 ;# Function pattern *movqi2 used[0] = 1 total = 1
@@ -47190,6 +47308,9 @@ $_handleWechatMessage:
 	ld	AL,#H'0001
 	ld	AH,#H'0000
 	bsr	$_koovox_wechat_connect
+	bsr	$_stop_ble_advertising
+	ld	AL,#H'0000
+	st	AL,@$_koovox+H'000F
 ?LBE4:
 	bra	(?L1)
 ?L7:
@@ -47500,13 +47621,13 @@ $_wechatDisconnect:
 	.CODE
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 14 total = 14
-;# Function pattern *movqi3 used[0] = 45 total = 45
+;# Function pattern *movqi2 used[0] = 15 total = 15
+;# Function pattern *movqi3 used[0] = 46 total = 46
 ;# Function pattern *addqi2 used[0] = 1 used[2] = 1 total = 2
 ;# Function pattern *andqi3 used[0] = 2 total = 2
 ;# Function pattern *lshrqi3 used[0] = 2 total = 2
 ;# Function pattern jump used[0] = 7 total = 7
-;# Function pattern *call1 used[0] = 8 total = 8
+;# Function pattern *call1 used[0] = 9 total = 9
 ;# Function pattern *call_value1 used[0] = 6 total = 6
 ;# Function pattern tablejump_1 used[0] = 1 total = 1
 ;# Function pattern movstrqi+3 used[1] = 4 total = 4

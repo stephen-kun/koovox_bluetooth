@@ -73,6 +73,7 @@ void initialise_gatt_for_device(uint8 *name, uint16 size_name)
 #ifdef BLE_ENABLED
                 {
                     setup_ble_ad_data(size_name, name);
+					MessageSendLater(&(theSink.task), EventKoovoxDisableBleAdvertising, 0, TIMEOUT_STOP_BLE);
                 }
 #else
                 {
