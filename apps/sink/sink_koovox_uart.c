@@ -15,6 +15,7 @@ FILE NAME
 
 #include "sink_handle_accelerate_data.h"
 #include "sink_heart_rate_calc.h"
+#include "koovox_wechat_handle.h"
 
 UARTStreamTaskData theUARTStreamTask;
 uint8* uart_msg = NULL;
@@ -262,6 +263,13 @@ static void KoovoxResponseFrameError(uint16 value)
 		if(wechat_req)
 		{
 			/* 通知前端，通信异常 */
+			RspWechat_t response = {0};
+			response.state = S_ERROR;
+			response.cmd  = cmd;
+			response.obj  = obj;
+
+			koovox_pack_wechat_send_data_req((uint8 *)&response, sizeof(response), TRUE, EDDT_manufatureSvr);
+			koovox_send_data_to_wechat();
 			
 			wechat_req = FALSE;
 		}
@@ -289,7 +297,13 @@ static void KoovoxUartMessageHandle(uint8 *data, uint16 length)
 	if((!data) || (msg->len > (length - FRAME_UART_SIZE)))
 	{
 		/* 通知前端通信异常 */
+		RspWechat_t response = {0};
+		response.state = S_ERROR;
+		response.cmd  = 0;
+		response.obj  = 0;
 		
+		koovox_pack_wechat_send_data_req((uint8 *)&response, sizeof(response), TRUE, EDDT_manufatureSvr);
+		koovox_send_data_to_wechat();
 		return;
 	}
 

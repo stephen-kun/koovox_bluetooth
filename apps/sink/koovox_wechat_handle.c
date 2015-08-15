@@ -328,8 +328,8 @@ static uint16 koovox_rcv_data_handle(uint8* data, uint16 size_data)
 		uint16 i = 0;
 
 		DEBUG(("obj = %x\n", k_data->obj));
-		for(; i<k_data->len; i++ )
-			DEBUG(("%x ", k_data->data[i]));
+		for(; i<k_data->size_value; i++ )
+			DEBUG(("%x ", k_data->value[i]));
 
 		DEBUG(("\n"));
 		}
@@ -349,7 +349,7 @@ static uint16 koovox_rcv_data_handle(uint8* data, uint16 size_data)
 		}
 		else
 		{
-			KoovoxFillAndSendUartPacket(k_data->cmd, k_data->obj, k_data->data, k_data->len);
+			KoovoxFillAndSendUartPacket(k_data->cmd, k_data->obj, k_data->value, k_data->size_value);
 			wechat_req = TRUE;
 		}
 			

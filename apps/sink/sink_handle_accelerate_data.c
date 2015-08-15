@@ -16,6 +16,7 @@ FILE NAME
 
 #include "sink_states.h"
 #include "sink_statemanager.h"
+#include "koovox_wechat_handle.h"
 
 
 /****************************************************************************
@@ -38,7 +39,11 @@ void KoovoxResponseHealthMonitor(uint8* data, uint8 size_data)
 	if(wechat_req)
 	{
 		/* 应答前端 */
+		RspWechat_t response = {0};
+		response.state = S_SUC;
 		
+		koovox_pack_wechat_send_data_req((uint8 *)&response, sizeof(response), TRUE, EDDT_manufatureSvr);
+		koovox_send_data_to_wechat();
 		wechat_req = FALSE;
 	}
 	else if(button_req)
@@ -78,7 +83,11 @@ void KoovoxResponseStepCount(uint8* data, uint8 size_data)
 	if(wechat_req)
 	{
 		/* 应答前端 */
+		RspWechat_t response = {0};
+		response.state = S_SUC;
 		
+		koovox_pack_wechat_send_data_req((uint8 *)&response, sizeof(response), TRUE, EDDT_manufatureSvr);
+		koovox_send_data_to_wechat();
 		wechat_req = FALSE;
 	}
 	
@@ -99,13 +108,31 @@ RETURNS
 */ 
 void KoovoxCountStep(uint8* value, uint8 size_value)
 {
+	uint16 length = sizeof(RspWechat_t) + (size_value ? (size_value - 1) : 0);
+	RspWechat_t* response = (RspWechat_t*)mallocPanic(length);
+
 	if((size_value < FRAME_STEP_COUNT)||(value == NULL))
 	{
 		/* 通知前端通信异常 */
-		return;
+		response->state = S_ERROR;
+	}
+	else
+	{
+		/* 将步数值同步到前端 */
+		response->state = S_SUC;
+		response->cmd = ENV;
+		response->obj = OBJ_STEP_COUNT;
+		response->size_value= size_value;
+		if(value)
+			memmove(response->value, value, size_value);
+		
 	}
 
-	/* 将步数值同步到前端 */
+	koovox_pack_wechat_send_data_req((uint8 *)response, length, TRUE, EDDT_manufatureSvr);
+	koovox_send_data_to_wechat();
+
+	freePanic(response);
+	response = NULL;
 	
 }
 
@@ -129,18 +156,34 @@ RETURNS
 */ 
 void KoovoxProtectNeck(uint8* value, uint8 size_value)
 {
+	uint16 length = sizeof(RspWechat_t) + (size_value ? (size_value - 1) : 0);
+	RspWechat_t* response = (RspWechat_t*)mallocPanic(length);
+
 	if(value == NULL)
 	{
 		/* 通知前端通信异常 */
+		response->state = S_ERROR;
 		
-		return;
 	}
+	else
+	{
+		/********** 语音提醒用户颈椎保护 **********/
+		
+		/* 通知前端记录到一次颈椎保护提示 */
+		response->state = S_SUC;
+		response->cmd = ENV;
+		response->obj = OBJ_NECK_PROTECT;
+		response->size_value= size_value;
+		if(value)
+			memmove(response->value, value, size_value);
 
-	/********** 语音提醒用户颈椎保护 **********/
-
-	/* 通知前端记录到一次颈椎保护提示 */
-
-			
+	}
+	
+	koovox_pack_wechat_send_data_req((uint8 *)response, length, TRUE, EDDT_manufatureSvr);
+	koovox_send_data_to_wechat();
+	
+	freePanic(response);
+	response = NULL;
 }
 
 /***************************************************************************
@@ -163,7 +206,11 @@ void KoovoxResponseNeckProtect(uint8* data, uint8 size_data)
 	if(wechat_req)
 	{
 		/* 应答前端 */
+		RspWechat_t response = {0};
+		response.state = S_SUC;
 		
+		koovox_pack_wechat_send_data_req((uint8 *)&response, sizeof(response), TRUE, EDDT_manufatureSvr);
+		koovox_send_data_to_wechat();
 		wechat_req = FALSE;
 	}
 	
@@ -188,19 +235,37 @@ DESCRIPTION
 RETURNS
   	void
 */ 
-void KoovoxConstSeat(uint8* data, uint8 size_data)
+void KoovoxConstSeat(uint8* value, uint8 size_value)
 {
-	if(data == NULL)
+
+	uint16 length = sizeof(RspWechat_t) + (size_value ? (size_value - 1) : 0);
+	RspWechat_t* response = (RspWechat_t*)mallocPanic(length);
+
+	if(value == NULL)
 	{
 		/* 通知前端通信异常 */
+		response->state = S_ERROR;
 		
-		return;
 	}
+	else
+	{
+		/********** 语音提醒用户已久坐 **********/
+		
+		/* 通知前端记录到一次久坐提醒 */
+		response->state = S_SUC;
+		response->cmd = ENV;
+		response->obj = OBJ_CONST_SEAT;
+		response->size_value= size_value;
+		if(value)
+			memmove(response->value, value, size_value);
 
-	/********** 语音提醒用户已久坐 **********/
-
-	/* 通知前端记录到一次久坐提醒 */
-
+	}
+	
+	koovox_pack_wechat_send_data_req((uint8 *)response, length, TRUE, EDDT_manufatureSvr);
+	koovox_send_data_to_wechat();
+	
+	freePanic(response);
+	response = NULL;
 }
 
 
@@ -225,7 +290,11 @@ void KoovoxResponseConstSeat(uint8* data, uint8 size_data)
 	if(wechat_req)
 	{
 		/* 应答前端 */
+		RspWechat_t response = {0};
+		response.state = S_SUC;
 		
+		koovox_pack_wechat_send_data_req((uint8 *)&response, sizeof(response), TRUE, EDDT_manufatureSvr);
+		koovox_send_data_to_wechat();
 		wechat_req = FALSE;
 	}
 	

@@ -5081,29 +5081,29 @@ _koovox_pack_wechat_init_req:
 ;.stabn	192,0,0,?LBB5
 ;.stabn	224,0,0,?LBE5
 _koovox_rcv_data_handle:
-	enterl	#18
+	enterl	#20
 ?LBB_koovox_rcv_data_handle:
-	st	AL,@(H'0007,Y)
-	st	AH,@(H'0008,Y)
+	st	AL,@(H'0009,Y)
+	st	AH,@(H'000A,Y)
 ?LBB6:
 	ld	AH,#H'0000
-	st	AH,@(H'0009,Y)
-	ld	AL,@(H'0008,Y)
+	st	AH,@(H'000B,Y)
+	ld	AL,@(H'000A,Y)
 	cmp	AL,#(H'0001+H'0007)
 	bcc	?L20
 	ld	AL,#-H'6669
 	bra	(?L19)
 ?L20:
-	ld	X,@(H'0007,Y)
+	ld	X,@(H'0009,Y)
 	ld	AL,@(H'0004,X)
 	asl	#H'0008
 	ld	AH,@$XAP_AL
 	add	AH,@(H'0005,X)
-	st	AH,@(H'000A,Y)
+	st	AH,@(H'000C,Y)
 	st	AH,@(0,Y)
 	ld	AL,#(?LC3)
 	bsr	$_printf
-	ld	AL,@(H'000A,Y)
+	ld	AL,@(H'000C,Y)
 	cmp	AL,#H'4E23
 	beq	?L32
 	cmp	AL,#(H'0001+H'4E23)
@@ -5114,7 +5114,7 @@ _koovox_rcv_data_handle:
 	bcc	?L29
 	bra	(?L21)
 ?L58:
-	ld	AH,@(H'000A,Y)
+	ld	AH,@(H'000C,Y)
 	cmp	AH,#H'7531
 	beq	?L40
 	cmp	AH,#H'7531
@@ -5125,10 +5125,10 @@ _koovox_rcv_data_handle:
 	beq	?L53
 	bra	(?L21)
 ?L23:
-	ld	AL,@(H'0007,Y)
+	ld	AL,@(H'0009,Y)
 ?LBB7:
 	add	AL,#H'0008
-	ld	AH,@(H'0008,Y)
+	ld	AH,@(H'000A,Y)
 	sub	AH,#H'0008
 	bsr	$_epb_unpack_auth_response
 	st	AL,@H'fff8
@@ -5157,7 +5157,7 @@ _koovox_rcv_data_handle:
 	ld	AL,@(0,X)
 	ld	X,@$XAP_AL
 	ld	AL,@(H'0001,X)
-	st	AL,@(H'0009,Y)
+	st	AL,@(H'000B,Y)
 ?L25:
 	ld	AL,@H'fff8
 	bsr	$_epb_unpack_auth_response_free
@@ -5173,10 +5173,10 @@ _koovox_rcv_data_handle:
 ?LBE7:
 	bra	(?L21)
 ?L29:
-	ld	AL,@(H'0007,Y)
+	ld	AL,@(H'0009,Y)
 ?LBB8:
 	add	AL,#H'0008
-	ld	AH,@(H'0008,Y)
+	ld	AH,@(H'000A,Y)
 	sub	AH,#H'0008
 	bsr	$_epb_unpack_send_data_response
 	st	AL,@H'fff8
@@ -5187,7 +5187,7 @@ _koovox_rcv_data_handle:
 ?L30:
 	ld	X,@$XAP_AL
 	ld	X,@(0,X)
-	st	X,@(H'000B,Y)
+	st	X,@(H'000D,Y)
 	ld	AH,@(0,X)
 	ld	AL,@(1,X)
 	cmp	AH,#H'0000
@@ -5196,26 +5196,26 @@ _koovox_rcv_data_handle:
 	beq	?L31
 ?L69:
 	ld	AH,@(H'0001,X)
-	st	AH,@(H'0009,Y)
+	st	AH,@(H'000B,Y)
 ?L31:
 	ld	AL,@H'fff8
 	bsr	$_epb_unpack_send_data_response_free
 ?LBE8:
 	bra	(?L21)
 ?L32:
-	ld	AL,@(H'0007,Y)
+	ld	AL,@(H'0009,Y)
 ?LBB9:
 	add	AL,#H'0008
-	ld	AH,@(H'0008,Y)
+	ld	AH,@(H'000A,Y)
 	sub	AH,#H'0008
 	bsr	$_epb_unpack_init_response
-	st	AL,@(H'000C,Y)
+	st	AL,@(H'000E,Y)
 	cmp	AL,#H'0000
 	bne	?L33
 	ld	AL,#-H'666F
 	bra	(?L19)
 ?L33:
-	ld	X,@(H'000C,Y)
+	ld	X,@(H'000E,Y)
 	tst	@(0,X)
 	beq	?L34
 	ld	AL,@(0,X)
@@ -5226,7 +5226,7 @@ _koovox_rcv_data_handle:
 	bne	?L35
 	cmp	AL,#H'0000
 	bne	?L35
-	ld	X,@(H'000C,Y)
+	ld	X,@(H'000E,Y)
 	tst	@(H'0005,X)
 	beq	?L36
 ?LBB10:
@@ -5240,7 +5240,7 @@ _koovox_rcv_data_handle:
 	bsr	$_crc32
 	st	AH,@H'fff8
 	st	AL,@H'fff9
-	ld	X,@(H'000C,Y)
+	ld	X,@(H'000E,Y)
 	cmp	AH,@(H'0006,X)
 	bne	?L37
 	cmp	AL,@(H'0007,X)
@@ -5253,7 +5253,7 @@ _koovox_rcv_data_handle:
 	ld	AL,@H'fff9
 	st	AH,@(0,Y)
 	st	AL,@(1,Y)
-	ld	X,@(H'000C,Y)
+	ld	X,@(H'000E,Y)
 	ld	AH,@(H'0006,X)
 	ld	AL,@(H'0007,X)
 	st	AH,@(H'0002,Y)
@@ -5272,27 +5272,27 @@ _koovox_rcv_data_handle:
 	st	AL,@(H'0002,X)
 	bra	(?L34)
 ?L35:
-	ld	X,@(H'000C,Y)
+	ld	X,@(H'000E,Y)
 	ld	AL,@(0,X)
 	ld	X,@$XAP_AL
 	ld	AL,@(H'0001,X)
-	st	AL,@(H'0009,Y)
+	st	AL,@(H'000B,Y)
 ?L34:
-	ld	AL,@(H'000C,Y)
+	ld	AL,@(H'000E,Y)
 	bsr	$_epb_unpack_init_response_free
 ?LBE9:
 	bra	(?L21)
 ?L40:
-	ld	AL,@(H'0007,Y)
+	ld	AL,@(H'0009,Y)
 ?LBB11:
 	add	AL,#H'0008
-	ld	AH,@(H'0008,Y)
+	ld	AH,@(H'000A,Y)
 	sub	AH,#H'0008
 	bsr	$_epb_unpack_recv_data_push
-	st	AL,@(H'000D,Y)
+	st	AL,@(H'000F,Y)
 	ld	X,@$XAP_AL
 	ld	X,@(H'0001,X)
-	st	X,@(H'000E,Y)
+	st	X,@(H'0010,Y)
 	cmp	AL,#H'0000
 	bne	?L41
 	ld	AL,#-H'666C
@@ -5300,27 +5300,27 @@ _koovox_rcv_data_handle:
 ?L41:
 ?LBB12:
 	ld	AH,#H'0000
-	st	AH,@(H'000F,Y)
-	ld	X,@(H'000E,Y)
+	st	AH,@(H'0011,Y)
+	ld	X,@(H'0010,Y)
 	ld	AL,@(H'0001,X)
 	st	AL,@(0,Y)
 	ld	AL,#(?LC5)
 	bsr	$_printf
-	ld	AH,@(H'000F,Y)
-	ld	X,@(H'000E,Y)
+	ld	AH,@(H'0011,Y)
+	ld	X,@(H'0010,Y)
 	cmp	AH,@(H'0002,X)
 	bcc	?L61
 ?L46:
-	ld	X,@(H'000E,Y)
-	add	X,@(H'000F,Y)
+	ld	X,@(H'0010,Y)
+	add	X,@(H'0011,Y)
 	ld	AL,@(H'0003,X)
 	st	AL,@(0,Y)
 	ld	AL,#(?LC6)
 	bsr	$_printf
-	ld	AL,@(H'000F,Y)
+	ld	AL,@(H'0011,Y)
 	add	AL,#H'0001
-	st	AL,@(H'000F,Y)
-	ld	X,@(H'000E,Y)
+	st	AL,@(H'0011,Y)
+	ld	X,@(H'0010,Y)
 	cmp	AL,@(H'0002,X)
 	bcs	?L46
 ?L61:
@@ -5333,31 +5333,34 @@ _koovox_rcv_data_handle:
 	beq	?L47
 ?L48:
 ?LBB13:
+	ld	AL,#H'0005
+	st	AL,@(0,Y)
+	ld	AL,@$XAP_UY
+	add	AL,#H'0004
 	ld	AH,#H'0000
-	st	AH,@(H'0005,Y)
-	st	AH,@(H'0006,Y)
-	ld	AL,#H'0001
-	st	AL,@(H'0004,Y)
-	ld	X,@(H'000E,Y)
+	bsr	$_memset
+	ld	AH,#H'0001
+	st	AH,@(H'0004,Y)
+	ld	X,@(H'0010,Y)
 	ld	AL,@(0,X)
 	st	AL,@(H'0005,Y)
 	ld	AL,@(H'0001,X)
 	st	AL,@(H'0006,Y)
-	ld	AL,#H'0001
-	st	AL,@(0,Y)
-	st	AH,@(H'0001,Y)
+	st	AH,@(0,Y)
+	ld	AL,#H'0000
+	st	AL,@(H'0001,Y)
 	ld	AL,@$XAP_UY
 	add	AL,#H'0004
-	ld	AH,#H'0003
+	ld	AH,#H'0005
 	bsr	$_koovox_pack_wechat_send_data_req
 	bsr	$_koovox_send_data_to_wechat
 ?LBE13:
 	bra	(?L49)
 ?L47:
-	ld	AL,@(H'000E,Y)
+	ld	AL,@(H'0010,Y)
 	add	AL,#H'0003
 	st	AL,@(0,Y)
-	ld	X,@(H'000E,Y)
+	ld	X,@(H'0010,Y)
 	ld	AL,@(H'0002,X)
 	st	AL,@(H'0001,Y)
 	ld	AL,@(0,X)
@@ -5366,7 +5369,7 @@ _koovox_rcv_data_handle:
 	ld	AL,#H'0001
 	st	AL,@$_wechat_req
 ?L49:
-	ld	AL,@(H'000D,Y)
+	ld	AL,@(H'000F,Y)
 	bsr	$_epb_unpack_recv_data_push_free
 	ld	X,@$_g_wechat
 	ld	AL,@(H'0008,X)
@@ -5375,10 +5378,10 @@ _koovox_rcv_data_handle:
 ?LBE11:
 	bra	(?L21)
 ?L50:
-	ld	AL,@(H'0007,Y)
+	ld	AL,@(H'0009,Y)
 ?LBB14:
 	add	AL,#H'0008
-	ld	AH,@(H'0008,Y)
+	ld	AH,@(H'000A,Y)
 	sub	AH,#H'0008
 	bsr	$_epb_unpack_switch_view_push
 	ld	X,@$_g_wechat
@@ -5397,10 +5400,10 @@ _koovox_rcv_data_handle:
 ?LBE14:
 	bra	(?L21)
 ?L53:
-	ld	AL,@(H'0007,Y)
+	ld	AL,@(H'0009,Y)
 ?LBB15:
 	add	AL,#H'0008
-	ld	AH,@(H'0008,Y)
+	ld	AH,@(H'000A,Y)
 	sub	AH,#H'0008
 	bsr	$_epb_unpack_switch_backgroud_push
 	cmp	AL,#H'0000
@@ -5411,11 +5414,11 @@ _koovox_rcv_data_handle:
 	bsr	$_epb_unpack_switch_backgroud_push_free
 ?L21:
 ?LBE15:
-	ld	AL,@(H'0009,Y)
+	ld	AL,@(H'000B,Y)
 ?L19:
 ?LBE6:
 ?LBE_koovox_rcv_data_handle:
-	leavel	#18
+	leavel	#20
 	.SEG	CONST
 ?LC3:
 	dc	H'3D
@@ -5871,11 +5874,11 @@ $_koovox_wechat_disconnect:
 	leavel	#2
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 170 used[1] = 14 used[3] = 3 total = 187
-;# Function pattern *movqi3 used[0] = 260 total = 260
+;# Function pattern *movqi2 used[0] = 169 used[1] = 14 used[3] = 3 total = 186
+;# Function pattern *movqi3 used[0] = 261 total = 261
 ;# Function pattern *movqi8 used[0] = 21 total = 21
 ;# Function pattern *movhi used[2] = 5 used[3] = 3 total = 8
-;# Function pattern *addqi0 used[0] = 18 total = 18
+;# Function pattern *addqi0 used[0] = 19 total = 19
 ;# Function pattern *addqi2 used[0] = 32 used[2] = 2 total = 34
 ;# Function pattern *andqi3 used[0] = 6 total = 6
 ;# Function pattern *subqi3 used[0] = 13 total = 13
@@ -5883,7 +5886,7 @@ $_koovox_wechat_disconnect:
 ;# Function pattern *ashlqi3 used[0] = 2 total = 2
 ;# Function pattern jump used[0] = 22 total = 22
 ;# Function pattern *call1 used[0] = 27 total = 27
-;# Function pattern *call_value1 used[0] = 39 total = 39
+;# Function pattern *call_value1 used[0] = 40 total = 40
 ;# Function pattern movstrqi+3 used[0] = 7 used[1] = 18 total = 25
 ;# Function pattern movstrqi+4 used[1] = 3 used[2] = 1 total = 4
 ;# Function pattern movstrqi+5 used[0] = 20 total = 20
@@ -32329,16 +32332,36 @@ $_handle_device_appearance_access:
 	.ENHANCED
 	.CODE
 $_KoovoxResponseHealthMonitor:
-; leaf function with empty stack frame
+	enterl	#9
 ?LBB_KoovoxResponseHealthMonitor:
+?LBB2:
 	cmp	AL,#H'0000
 	beq	?L1
 	cmp	AH,#H'0001
 	bcz	?L1
 	tst	@$_wechat_req
 	beq	?L4
+?LBB3:
+	ld	AL,#H'0005
+	st	AL,@(0,Y)
+	ld	AL,@$XAP_UY
+	add	AL,#H'0002
+	ld	AH,#H'0000
+	bsr	$_memset
+	ld	AL,#H'0000
+	st	AL,@(H'0002,Y)
+	ld	AL,#H'0001
+	st	AL,@(0,Y)
+	ld	AL,#H'0000
+	st	AL,@(H'0001,Y)
+	ld	AL,@$XAP_UY
+	add	AL,#H'0002
+	ld	AH,#H'0005
+	bsr	$_koovox_pack_wechat_send_data_req
+	bsr	$_koovox_send_data_to_wechat
 	ld	AL,#H'0000
 	st	AL,@$_wechat_req
+?LBE3:
 	bra	(?L1)
 ?L4:
 	tst	@$_button_req
@@ -32346,110 +32369,344 @@ $_KoovoxResponseHealthMonitor:
 	ld	AL,#H'0000
 	st	AL,@$_button_req
 ?L1:
+?LBE2:
 ?LBE_KoovoxResponseHealthMonitor:
-	rts
+	leavel	#9
+;.stabn	192,0,0,?LBB3
+;.stabn	224,0,0,?LBE3
 $_KoovoxResponseStepCount:
-; leaf function with empty stack frame
+	enterl	#9
 ?LBB_KoovoxResponseStepCount:
+?LBB4:
 	cmp	AL,#H'0000
 	beq	?L8
 	cmp	AH,#H'0001
 	bcz	?L8
 	tst	@$_wechat_req
 	beq	?L8
+?LBB5:
+	ld	AL,#H'0005
+	st	AL,@(0,Y)
+	ld	AL,@$XAP_UY
+	add	AL,#H'0002
+	ld	AH,#H'0000
+	bsr	$_memset
+	ld	AL,#H'0000
+	st	AL,@(H'0002,Y)
+	ld	AL,#H'0001
+	st	AL,@(0,Y)
+	ld	AL,#H'0000
+	st	AL,@(H'0001,Y)
+	ld	AL,@$XAP_UY
+	add	AL,#H'0002
+	ld	AH,#H'0005
+	bsr	$_koovox_pack_wechat_send_data_req
+	bsr	$_koovox_send_data_to_wechat
 	ld	AL,#H'0000
 	st	AL,@$_wechat_req
 ?L8:
+?LBE5:
+?LBE4:
 ?LBE_KoovoxResponseStepCount:
-	rts
+	leavel	#9
+;.stabn	192,0,0,?LBB5
+;.stabn	224,0,0,?LBE5
 $_KoovoxCountStep:
-; leaf function with empty stack frame
+	enterl	#8
 ?LBB_KoovoxCountStep:
-?LBE_KoovoxCountStep:
-	rts
-$_KoovoxProtectNeck:
-; leaf function with empty stack frame
-?LBB_KoovoxProtectNeck:
-?LBE_KoovoxProtectNeck:
-	rts
-$_KoovoxResponseNeckProtect:
-; leaf function with empty stack frame
-?LBB_KoovoxResponseNeckProtect:
-	cmp	AL,#H'0000
-	beq	?L18
-	cmp	AH,#H'0001
-	bcz	?L18
-	tst	@$_wechat_req
-	beq	?L18
+	st	AL,@(H'0002,Y)
+	st	AH,@(H'0003,Y)
+?LBB6:
+	cmp	AH,#H'0000
+	beq	?L14
+	add	AH,#H'0004
+	st	AH,@(H'0004,Y)
+	bra	(?L15)
+?L14:
+	ld	AL,#H'0005
+	st	AL,@(H'0004,Y)
+?L15:
+	ld	AL,@(H'0004,Y)
+	bsr	$_malloc
+	st	AL,@(H'0005,Y)
+	ld	AH,@(H'0003,Y)
+	cmp	AH,#H'0003
+	bcz	?L17
+	tst	@(H'0002,Y)
+	bne	?L16
+?L17:
+	ld	AL,#H'0002
+	ld	X,@(H'0005,Y)
+	st	AL,@(0,X)
+	bra	(?L18)
+?L16:
 	ld	AL,#H'0000
-	st	AL,@$_wechat_req
+	ld	X,@(H'0005,Y)
+	st	AL,@(0,X)
+	ld	AL,#H'0006
+	st	AL,@(H'0001,X)
+	ld	AL,#H'0007
+	st	AL,@(H'0002,X)
+	ld	AH,@(H'0003,Y)
+	st	AH,@(H'0003,X)
+	tst	@(H'0002,Y)
+	beq	?L18
+	ld	AL,@$XAP_UXL
+	add	AL,#H'0004
+	st	AH,@(0,Y)
+	ld	AH,@(H'0002,Y)
+	bsr	$_memmove
 ?L18:
-?LBE_KoovoxResponseNeckProtect:
-	rts
-$_KoovoxConstSeat:
-; leaf function with empty stack frame
-?LBB_KoovoxConstSeat:
-?LBE_KoovoxConstSeat:
-	rts
-$_KoovoxResponseConstSeat:
-; leaf function with empty stack frame
-?LBB_KoovoxResponseConstSeat:
+	ld	AL,#H'0001
+	st	AL,@(0,Y)
+	ld	AL,#H'0000
+	st	AL,@(H'0001,Y)
+	ld	AL,@(H'0005,Y)
+	ld	AH,@(H'0004,Y)
+	bsr	$_koovox_pack_wechat_send_data_req
+	bsr	$_koovox_send_data_to_wechat
+	ld	AL,@(H'0005,Y)
+	bsr	$_free
+?LBE6:
+?LBE_KoovoxCountStep:
+	leavel	#8
+;.stabn	192,0,0,?LBB6
+;.stabn	224,0,0,?LBE6
+$_KoovoxProtectNeck:
+	enterl	#8
+?LBB_KoovoxProtectNeck:
+	st	AL,@(H'0002,Y)
+	st	AH,@(H'0003,Y)
+?LBB7:
+	cmp	AH,#H'0000
+	beq	?L22
+	add	AH,#H'0004
+	st	AH,@(H'0004,Y)
+	bra	(?L23)
+?L22:
+	ld	AL,#H'0005
+	st	AL,@(H'0004,Y)
+?L23:
+	ld	AL,@(H'0004,Y)
+	bsr	$_malloc
+	st	AL,@(H'0005,Y)
+	tst	@(H'0002,Y)
+	bne	?L24
+	ld	AL,#H'0002
+	ld	X,@(H'0005,Y)
+	st	AL,@(0,X)
+	bra	(?L25)
+?L24:
+	ld	AL,#H'0000
+	ld	X,@(H'0005,Y)
+	st	AL,@(0,X)
+	ld	AL,#H'0006
+	st	AL,@(H'0001,X)
+	ld	AL,#H'0004
+	st	AL,@(H'0002,X)
+	ld	AH,@(H'0003,Y)
+	st	AH,@(H'0003,X)
+	tst	@(H'0002,Y)
+	beq	?L25
+	ld	AL,@$XAP_UXL
+	add	AL,#H'0004
+	st	AH,@(0,Y)
+	ld	AH,@(H'0002,Y)
+	bsr	$_memmove
+?L25:
+	ld	AL,#H'0001
+	st	AL,@(0,Y)
+	ld	AL,#H'0000
+	st	AL,@(H'0001,Y)
+	ld	AL,@(H'0005,Y)
+	ld	AH,@(H'0004,Y)
+	bsr	$_koovox_pack_wechat_send_data_req
+	bsr	$_koovox_send_data_to_wechat
+	ld	AL,@(H'0005,Y)
+	bsr	$_free
+?LBE7:
+?LBE_KoovoxProtectNeck:
+	leavel	#8
+;.stabn	192,0,0,?LBB7
+;.stabn	224,0,0,?LBE7
+$_KoovoxResponseNeckProtect:
+	enterl	#9
+?LBB_KoovoxResponseNeckProtect:
+?LBB8:
 	cmp	AL,#H'0000
-	beq	?L25
+	beq	?L27
 	cmp	AH,#H'0001
-	bcz	?L25
+	bcz	?L27
 	tst	@$_wechat_req
-	beq	?L25
+	beq	?L27
+?LBB9:
+	ld	AL,#H'0005
+	st	AL,@(0,Y)
+	ld	AL,@$XAP_UY
+	add	AL,#H'0002
+	ld	AH,#H'0000
+	bsr	$_memset
+	ld	AL,#H'0000
+	st	AL,@(H'0002,Y)
+	ld	AL,#H'0001
+	st	AL,@(0,Y)
+	ld	AL,#H'0000
+	st	AL,@(H'0001,Y)
+	ld	AL,@$XAP_UY
+	add	AL,#H'0002
+	ld	AH,#H'0005
+	bsr	$_koovox_pack_wechat_send_data_req
+	bsr	$_koovox_send_data_to_wechat
 	ld	AL,#H'0000
 	st	AL,@$_wechat_req
-?L25:
+?L27:
+?LBE9:
+?LBE8:
+?LBE_KoovoxResponseNeckProtect:
+	leavel	#9
+;.stabn	192,0,0,?LBB9
+;.stabn	224,0,0,?LBE9
+$_KoovoxConstSeat:
+	enterl	#8
+?LBB_KoovoxConstSeat:
+	st	AL,@(H'0002,Y)
+	st	AH,@(H'0003,Y)
+?LBB10:
+	cmp	AH,#H'0000
+	beq	?L33
+	add	AH,#H'0004
+	st	AH,@(H'0004,Y)
+	bra	(?L34)
+?L33:
+	ld	AL,#H'0005
+	st	AL,@(H'0004,Y)
+?L34:
+	ld	AL,@(H'0004,Y)
+	bsr	$_malloc
+	st	AL,@(H'0005,Y)
+	tst	@(H'0002,Y)
+	bne	?L35
+	ld	AL,#H'0002
+	ld	X,@(H'0005,Y)
+	st	AL,@(0,X)
+	bra	(?L36)
+?L35:
+	ld	AL,#H'0000
+	ld	X,@(H'0005,Y)
+	st	AL,@(0,X)
+	ld	AL,#H'0006
+	st	AL,@(H'0001,X)
+	ld	AL,#H'0003
+	st	AL,@(H'0002,X)
+	ld	AH,@(H'0003,Y)
+	st	AH,@(H'0003,X)
+	tst	@(H'0002,Y)
+	beq	?L36
+	ld	AL,@$XAP_UXL
+	add	AL,#H'0004
+	st	AH,@(0,Y)
+	ld	AH,@(H'0002,Y)
+	bsr	$_memmove
+?L36:
+	ld	AL,#H'0001
+	st	AL,@(0,Y)
+	ld	AL,#H'0000
+	st	AL,@(H'0001,Y)
+	ld	AL,@(H'0005,Y)
+	ld	AH,@(H'0004,Y)
+	bsr	$_koovox_pack_wechat_send_data_req
+	bsr	$_koovox_send_data_to_wechat
+	ld	AL,@(H'0005,Y)
+	bsr	$_free
+?LBE10:
+?LBE_KoovoxConstSeat:
+	leavel	#8
+;.stabn	192,0,0,?LBB10
+;.stabn	224,0,0,?LBE10
+$_KoovoxResponseConstSeat:
+	enterl	#9
+?LBB_KoovoxResponseConstSeat:
+?LBB11:
+	cmp	AL,#H'0000
+	beq	?L38
+	cmp	AH,#H'0001
+	bcz	?L38
+	tst	@$_wechat_req
+	beq	?L38
+?LBB12:
+	ld	AL,#H'0005
+	st	AL,@(0,Y)
+	ld	AL,@$XAP_UY
+	add	AL,#H'0002
+	ld	AH,#H'0000
+	bsr	$_memset
+	ld	AL,#H'0000
+	st	AL,@(H'0002,Y)
+	ld	AL,#H'0001
+	st	AL,@(0,Y)
+	ld	AL,#H'0000
+	st	AL,@(H'0001,Y)
+	ld	AL,@$XAP_UY
+	add	AL,#H'0002
+	ld	AH,#H'0005
+	bsr	$_koovox_pack_wechat_send_data_req
+	bsr	$_koovox_send_data_to_wechat
+	ld	AL,#H'0000
+	st	AL,@$_wechat_req
+?L38:
+?LBE12:
+?LBE11:
 ?LBE_KoovoxResponseConstSeat:
-	rts
+	leavel	#9
+;.stabn	192,0,0,?LBB12
+;.stabn	224,0,0,?LBE12
 $_KoovoxNodHead:
 	enterl	#3
 ?LBB_KoovoxNodHead:
 	cmp	AH,#H'0007
-	bcz	?L30
+	bcz	?L43
 	cmp	AL,#H'0000
-	beq	?L30
+	beq	?L43
 	bsr	$_stateManagerGetState
 	cmp	AL,#H'0005
-	bne	?L30
+	bne	?L43
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'4008
 	bsr	$_MessageSend
-?L30:
+?L43:
 ?LBE_KoovoxNodHead:
 	leavel	#3
 $_KoovoxShakeHead:
 	enterl	#3
 ?LBB_KoovoxShakeHead:
 	cmp	AH,#H'0007
-	bcz	?L36
+	bcz	?L49
 	cmp	AL,#H'0000
-	beq	?L36
+	beq	?L49
 	bsr	$_stateManagerGetState
 	cmp	AL,#H'0006
-	bne	?L36
+	bne	?L49
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'400A
 	bsr	$_MessageSend
-?L36:
+?L49:
 ?LBE_KoovoxShakeHead:
 	leavel	#3
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 7 total = 7
-;# Function pattern *movqi3 used[0] = 11 total = 11
-;# Function pattern jump used[0] = 1 total = 1
-;# Function pattern *call1 used[0] = 2 total = 2
-;# Function pattern *call_value1 used[0] = 2 total = 2
-;# Function pattern movstrqi+3 used[0] = 6 used[1] = 5 total = 11
-;# Function pattern movstrqi+5 used[0] = 8 total = 8
+;# Function pattern *movqi2 used[0] = 65 used[1] = 15 total = 80
+;# Function pattern *movqi3 used[0] = 66 total = 66
+;# Function pattern *addqi0 used[0] = 8 total = 8
+;# Function pattern *addqi2 used[0] = 6 total = 6
+;# Function pattern jump used[0] = 7 total = 7
+;# Function pattern *call1 used[0] = 19 total = 19
+;# Function pattern *call_value1 used[0] = 12 total = 12
+;# Function pattern movstrqi+3 used[0] = 9 used[1] = 11 total = 20
+;# Function pattern movstrqi+5 used[0] = 9 total = 9
 	MODULE	sink_heart_rate_calc
 	.LARGE
 ; GNU C version 3.3.3 (CSR version 30 for xapnative)
@@ -32770,23 +33027,68 @@ _Koovox_heartrate_smooth:
 ;.stabn	224,0,0,?LBE6
 ;.stabn	224,0,0,?LBE4
 $_KoovoxCalculateHeartRate:
-	enterl	#3
+	enterl	#8
 ?LBB_KoovoxCalculateHeartRate:
-	ld	X,@$XAP_AL
+	st	AL,@(H'0002,Y)
+	st	AH,@(H'0003,Y)
 ?LBB7:
-	cmp	AL,#H'0000
-	beq	?L65
+	cmp	AH,#H'0000
+	beq	?L66
+	add	AH,#H'0004
+	st	AH,@(H'0004,Y)
+	bra	(?L67)
+?L66:
+	ld	AL,#H'0005
+	st	AL,@(H'0004,Y)
+?L67:
+	ld	AL,@(H'0004,Y)
+	bsr	$_malloc
+	st	AL,@(H'0005,Y)
+	tst	@(H'0002,Y)
+	bne	?L68
+	ld	AL,#H'0002
+	ld	X,@(H'0005,Y)
+	st	AL,@(0,X)
+	bra	(?L69)
+?L68:
+	ld	X,@(H'0002,Y)
 ?LBB8:
 	ld	AL,@(0,X)
 	bsr	_Koovox_heartrate_smooth
 	st	AL,@(0,Y)
 	ld	AL,#(?LC0)
 	bsr	$_printf
-?L65:
+	ld	AL,#H'0000
+	ld	X,@(H'0005,Y)
+	st	AL,@(0,X)
+	ld	AL,#H'0006
+	st	AL,@(H'0001,X)
+	ld	AL,#H'0007
+	st	AL,@(H'0002,X)
+	ld	AH,@(H'0003,Y)
+	st	AH,@(H'0003,X)
+	tst	@(H'0002,Y)
+	beq	?L69
+	ld	AL,@$XAP_UXL
+	add	AL,#H'0004
+	st	AH,@(0,Y)
+	ld	AH,@(H'0002,Y)
+	bsr	$_memmove
+?L69:
 ?LBE8:
+	ld	AL,#H'0001
+	st	AL,@(0,Y)
+	ld	AL,#H'0000
+	st	AL,@(H'0001,Y)
+	ld	AL,@(H'0005,Y)
+	ld	AH,@(H'0004,Y)
+	bsr	$_koovox_pack_wechat_send_data_req
+	bsr	$_koovox_send_data_to_wechat
+	ld	AL,@(H'0005,Y)
+	bsr	$_free
 ?LBE7:
 ?LBE_KoovoxCalculateHeartRate:
-	leavel	#3
+	leavel	#8
 	.SEG	CONST
 ?LC0:
 	dc	H'61
@@ -32802,52 +33104,73 @@ $_KoovoxCalculateHeartRate:
 	dc	H'0A
 	dc	H'00
 	.CODE
+;.stabn	192,0,0,?LBB7
 ;.stabn	192,0,0,?LBB8
 ;.stabn	224,0,0,?LBE8
+;.stabn	224,0,0,?LBE7
 $_KoovoxResponseHeartRate:
-	enterl	#6
+	enterl	#11
 ?LBB_KoovoxResponseHeartRate:
 	ld	X,@$XAP_AL
 ?LBB9:
 	cmp	AL,#H'0000
-	beq	?L67
+	beq	?L71
 	cmp	AH,#H'0001
-	bcz	?L67
+	bcz	?L71
 ?LBB10:
 	ld	AL,@(0,X)
-	st	AL,@(H'0002,Y)
+	st	AL,@(H'0007,Y)
 	ld	AL,@(H'0001,X)
-	st	AL,@(H'0003,Y)
-	ld	AL,@(H'0002,Y)
+	st	AL,@(H'0008,Y)
+	ld	AL,@(H'0007,Y)
 	st	AL,@(0,Y)
-	ld	AL,@(H'0003,Y)
+	ld	AL,@(H'0008,Y)
 	st	AL,@(H'0001,Y)
 	ld	AL,#(?LC1)
 	bsr	$_printf
-	ld	AL,@(H'0002,Y)
+	ld	AL,@(H'0007,Y)
 	cmp	AL,#H'0001
-	bne	?L70
-	tst	@(H'0003,Y)
-	bne	?L72
+	bne	?L74
+	tst	@(H'0008,Y)
+	bne	?L76
 	bsr	$_Koovox_init_smooth_var
-	bra	(?L72)
-?L70:
-	ld	AL,@(H'0002,Y)
+	bra	(?L76)
+?L74:
+	ld	AL,@(H'0007,Y)
 	cmp	AL,#H'0002
-	bne	?L72
-	tst	@(H'0003,Y)
-	bne	?L72
+	bne	?L76
+	tst	@(H'0008,Y)
+	bne	?L76
 	bsr	$_Koovox_free_smooth_var
-?L72:
+?L76:
 	tst	@$_wechat_req
-	beq	?L67
+	beq	?L71
+?LBB11:
+	ld	AL,#H'0005
+	st	AL,@(0,Y)
+	ld	AL,@$XAP_UY
+	add	AL,#H'0002
+	ld	AH,#H'0000
+	bsr	$_memset
+	ld	AL,#H'0000
+	st	AL,@(H'0002,Y)
+	ld	AL,#H'0001
+	st	AL,@(0,Y)
+	ld	AL,#H'0000
+	st	AL,@(H'0001,Y)
+	ld	AL,@$XAP_UY
+	add	AL,#H'0002
+	ld	AH,#H'0005
+	bsr	$_koovox_pack_wechat_send_data_req
+	bsr	$_koovox_send_data_to_wechat
 	ld	AL,#H'0000
 	st	AL,@$_wechat_req
-?L67:
+?L71:
+?LBE11:
 ?LBE10:
 ?LBE9:
 ?LBE_KoovoxResponseHeartRate:
-	leavel	#6
+	leavel	#11
 	.SEG	CONST
 ?LC1:
 	dc	H'63
@@ -32871,21 +33194,24 @@ $_KoovoxResponseHeartRate:
 	dc	H'00
 	.CODE
 ;.stabn	192,0,0,?LBB10
+;.stabn	192,0,0,?LBB11
+;.stabn	224,0,0,?LBE11
 ;.stabn	224,0,0,?LBE10
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 48 used[1] = 2 used[3] = 2 total = 52
-;# Function pattern *movqi3 used[0] = 70 total = 70
+;# Function pattern *movqi2 used[0] = 65 used[1] = 7 used[3] = 2 total = 74
+;# Function pattern *movqi3 used[0] = 87 total = 87
 ;# Function pattern *movqi8 used[0] = 4 total = 4
-;# Function pattern *addqi2 used[0] = 13 used[2] = 9 total = 22
+;# Function pattern *addqi0 used[0] = 2 total = 2
+;# Function pattern *addqi2 used[0] = 15 used[2] = 9 total = 24
 ;# Function pattern *subqi3 used[0] = 1 used[1] = 1 total = 2
 ;# Function pattern *udivqi3_const used[0] = 1 total = 1
 ;# Function pattern *udivqi3 used[0] = 1 total = 1
 ;# Function pattern *zero_extendqihi2_1 used[1] = 2 total = 2
-;# Function pattern jump used[0] = 9 total = 9
-;# Function pattern *call1 used[0] = 5 total = 5
-;# Function pattern *call_value1 used[0] = 9 total = 9
-;# Function pattern movstrqi+3 used[0] = 5 used[1] = 7 total = 12
+;# Function pattern jump used[0] = 11 total = 11
+;# Function pattern *call1 used[0] = 10 total = 10
+;# Function pattern *call_value1 used[0] = 12 total = 12
+;# Function pattern movstrqi+3 used[0] = 5 used[1] = 9 total = 14
 ;# Function pattern movstrqi+4 used[1] = 2 used[2] = 1 total = 3
 ;# Function pattern movstrqi+5 used[0] = 15 total = 15
 	MODULE	sink_indicators
@@ -35113,16 +35439,16 @@ _UARTStreamMessageHandler:
 ?LBE_UARTStreamMessageHandler:
 	leavel	#2
 _KoovoxResponseFrameError:
-	enterl	#6
+	enterl	#11
 ?LBB_KoovoxResponseFrameError:
 ?LBB6:
 	ld	AH,@$XAP_AL
 	and	AL,#H'00FF
-	st	AL,@(H'0002,Y)
+	st	AL,@(H'0007,Y)
 	lsr	#H'0008
 	ld	AL,@$XAP_AH
 	and	AL,#H'00FF
-	st	AL,@(H'0003,Y)
+	st	AL,@(H'0008,Y)
 	ld	AL,@$_koovox+H'000A
 	cmp	AL,#H'0002
 	bcz	?L42
@@ -35132,14 +35458,14 @@ _KoovoxResponseFrameError:
 ?L42:
 	tst	@$_button_req
 	beq	?L44
-	ld	AL,@(H'0002,Y)
-	ld	AH,@(H'0003,Y)
+	ld	AL,@(H'0007,Y)
+	ld	AH,@(H'0008,Y)
 	bsr	$_KoovoxStoreLastCmd
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	st	AL,@(H'0001,Y)
-	ld	AL,@(H'0002,Y)
-	ld	AH,@(H'0003,Y)
+	ld	AL,@(H'0007,Y)
+	ld	AH,@(H'0008,Y)
 	bsr	$_KoovoxFillAndSendUartPacket
 	ld	AL,@$_koovox+H'000A
 	add	AL,#H'0001
@@ -35147,50 +35473,99 @@ _KoovoxResponseFrameError:
 ?L44:
 	tst	@$_wechat_req
 	beq	?L41
+?LBB7:
+	ld	AL,#H'0005
+	st	AL,@(0,Y)
+	ld	AL,@$XAP_UY
+	add	AL,#H'0002
+	ld	AH,#H'0000
+	bsr	$_memset
+	ld	AL,#H'0002
+	st	AL,@(H'0002,Y)
+	ld	AL,@(H'0007,Y)
+	st	AL,@(H'0003,Y)
+	ld	AL,@(H'0008,Y)
+	st	AL,@(H'0004,Y)
+	ld	AL,#H'0001
+	st	AL,@(0,Y)
+	ld	AL,#H'0000
+	st	AL,@(H'0001,Y)
+	ld	AL,@$XAP_UY
+	add	AL,#H'0002
+	ld	AH,#H'0005
+	bsr	$_koovox_pack_wechat_send_data_req
+	bsr	$_koovox_send_data_to_wechat
 	ld	AL,#H'0000
 	st	AL,@$_wechat_req
 ?L41:
+?LBE7:
 ?LBE6:
 ?LBE_KoovoxResponseFrameError:
-	leavel	#6
+	leavel	#11
 ;.stabn	192,0,0,?LBB6
+;.stabn	192,0,0,?LBB7
+;.stabn	224,0,0,?LBE7
 ;.stabn	224,0,0,?LBE6
 _KoovoxUartMessageHandle:
-	enterl	#7
+	enterl	#13
 ?LBB_KoovoxUartMessageHandle:
-	st	AL,@(H'0001,Y)
-	st	AH,@(H'0002,Y)
-?LBB7:
-	st	AL,@(H'0003,Y)
+	st	AL,@(H'0007,Y)
+	st	AH,@(H'0008,Y)
+?LBB8:
+	st	AL,@(H'0009,Y)
 	cmp	AL,#H'0000
-	beq	?L47
+	beq	?L49
 	ld	AL,@$XAP_AH
 	add	AL,#-H'0005
-	ld	X,@(H'0003,Y)
+	ld	X,@(H'0009,Y)
 	cmp	AL,@(H'0002,X)
-	bcs	?L47
-?LBB8:
+	bcc	?L48
+?L49:
+?LBB9:
+	ld	AL,#H'0005
+	st	AL,@(0,Y)
+	ld	AL,@$XAP_UY
+	add	AL,#H'0002
+	ld	AH,#H'0000
+	bsr	$_memset
+	ld	AL,#H'0002
+	st	AL,@(H'0002,Y)
+	ld	AH,#H'0000
+	st	AH,@(H'0003,Y)
+	st	AH,@(H'0004,Y)
+	ld	AL,#H'0001
+	st	AL,@(0,Y)
+	st	AH,@(H'0001,Y)
+	ld	AL,@$XAP_UY
+	add	AL,#H'0002
+	ld	AH,#H'0005
+	bsr	$_koovox_pack_wechat_send_data_req
+	bsr	$_koovox_send_data_to_wechat
+	bra	(?L47)
+?L48:
+?LBE9:
+?LBB10:
 	ld	AL,#H'0000
-	st	AL,@(H'0004,Y)
-	cmp	AL,@$XAP_AH
+	st	AL,@(H'000A,Y)
+	cmp	AL,@(H'0008,Y)
 	bcc	?L82
 ?L54:
-	ld	X,@(H'0001,Y)
-	add	X,@(H'0004,Y)
+	ld	X,@(H'0007,Y)
+	add	X,@(H'000A,Y)
 	ld	AL,@(0,X)
 	st	AL,@(0,Y)
 	ld	AL,#(?LC3)
 	bsr	$_printf
-	ld	AL,@(H'0004,Y)
+	ld	AL,@(H'000A,Y)
 	add	AL,#H'0001
-	st	AL,@(H'0004,Y)
-	cmp	AL,@(H'0002,Y)
+	st	AL,@(H'000A,Y)
+	cmp	AL,@(H'0008,Y)
 	bcs	?L54
 ?L82:
 	ld	AL,#H'000A
 	bsr	$_putchar
-	ld	X,@(H'0003,Y)
-?LBE8:
+	ld	X,@(H'0009,Y)
+?LBE10:
 	ld	AL,@(0,X)
 	cmp	AL,#H'0003
 	beq	?L56
@@ -35198,7 +35573,7 @@ _KoovoxUartMessageHandle:
 	beq	?L68
 	bra	(?L47)
 ?L56:
-	ld	X,@(H'0003,Y)
+	ld	X,@(H'0009,Y)
 	ld	AL,@(H'0001,X)
 	cmp	AL,#H'0004
 	beq	?L60
@@ -35222,37 +35597,37 @@ _KoovoxUartMessageHandle:
 	beq	?L63
 	bra	(?L64)
 ?L58:
-	ld	AL,@(H'0003,Y)
+	ld	AL,@(H'0009,Y)
 	add	AL,#H'0003
-	ld	X,@(H'0003,Y)
+	ld	X,@(H'0009,Y)
 	ld	AH,@(H'0002,X)
 	bsr	$_KoovoxResponseHealthMonitor
 	bra	(?L47)
 ?L59:
-	ld	AL,@(H'0003,Y)
+	ld	AL,@(H'0009,Y)
 	add	AL,#H'0003
-	ld	X,@(H'0003,Y)
+	ld	X,@(H'0009,Y)
 	ld	AH,@(H'0002,X)
 	bsr	$_KoovoxResponseHeartRate
 	bra	(?L47)
 ?L60:
-	ld	AL,@(H'0003,Y)
+	ld	AL,@(H'0009,Y)
 	add	AL,#H'0003
-	ld	X,@(H'0003,Y)
+	ld	X,@(H'0009,Y)
 	ld	AH,@(H'0002,X)
 	bsr	$_KoovoxResponseNeckProtect
 	bra	(?L47)
 ?L61:
-	ld	AL,@(H'0003,Y)
+	ld	AL,@(H'0009,Y)
 	add	AL,#H'0003
-	ld	X,@(H'0003,Y)
+	ld	X,@(H'0009,Y)
 	ld	AH,@(H'0002,X)
 	bsr	$_KoovoxResponseStepCount
 	bra	(?L47)
 ?L62:
-	ld	AL,@(H'0003,Y)
+	ld	AL,@(H'0009,Y)
 	add	AL,#H'0003
-	ld	X,@(H'0003,Y)
+	ld	X,@(H'0009,Y)
 	ld	AH,@(H'0002,X)
 	bsr	$_KoovoxResponseConstSeat
 	bra	(?L47)
@@ -35265,7 +35640,7 @@ _KoovoxUartMessageHandle:
 	st	AL,@$_button_req
 	bra	(?L47)
 ?L68:
-	ld	X,@(H'0003,Y)
+	ld	X,@(H'0009,Y)
 	ld	AL,@(H'0001,X)
 	add	AL,#-H'0003
 	cmp	AL,#(H'0001+H'0006)
@@ -35287,57 +35662,57 @@ _KoovoxUartMessageHandle:
 	dc	lwrd(?L76-?L78)
 	.CODE
 ?L70:
-	ld	AL,@(H'0003,Y)
+	ld	AL,@(H'0009,Y)
 	add	AL,#H'0003
-	ld	X,@(H'0003,Y)
+	ld	X,@(H'0009,Y)
 	ld	AH,@(H'0002,X)
 	bsr	$_KoovoxCountStep
 	bra	(?L47)
 ?L71:
-	ld	AL,@(H'0003,Y)
+	ld	AL,@(H'0009,Y)
 	add	AL,#H'0003
-	ld	X,@(H'0003,Y)
+	ld	X,@(H'0009,Y)
 	ld	AH,@(H'0002,X)
 	bsr	$_KoovoxProtectNeck
 	bra	(?L47)
 ?L72:
-	ld	AL,@(H'0003,Y)
+	ld	AL,@(H'0009,Y)
 	add	AL,#H'0003
-	ld	X,@(H'0003,Y)
+	ld	X,@(H'0009,Y)
 	ld	AH,@(H'0002,X)
 	bsr	$_KoovoxConstSeat
 	bra	(?L47)
 ?L73:
-	ld	AL,@(H'0003,Y)
+	ld	AL,@(H'0009,Y)
 	add	AL,#H'0003
-	ld	X,@(H'0003,Y)
+	ld	X,@(H'0009,Y)
 	ld	AH,@(H'0002,X)
 	bsr	$_KoovoxNodHead
 	bra	(?L47)
 ?L74:
-	ld	AL,@(H'0003,Y)
+	ld	AL,@(H'0009,Y)
 	add	AL,#H'0003
-	ld	X,@(H'0003,Y)
+	ld	X,@(H'0009,Y)
 	ld	AH,@(H'0002,X)
 	bsr	$_KoovoxShakeHead
 	bra	(?L47)
 ?L75:
-	ld	AL,@(H'0003,Y)
+	ld	AL,@(H'0009,Y)
 	add	AL,#H'0003
-	ld	X,@(H'0003,Y)
+	ld	X,@(H'0009,Y)
 	ld	AH,@(H'0002,X)
 	bsr	$_KoovoxCalculateHeartRate
 	bra	(?L47)
 ?L76:
-	ld	AL,@(H'0003,Y)
+	ld	AL,@(H'0009,Y)
 	add	AL,#H'0003
-	ld	X,@(H'0003,Y)
+	ld	X,@(H'0009,Y)
 	ld	AH,@(H'0002,X)
 	bsr	$_KoovoxResultI2cTest
 ?L47:
-?LBE7:
+?LBE8:
 ?LBE_KoovoxUartMessageHandle:
-	leavel	#7
+	leavel	#13
 	.SEG	CONST
 ?LC3:
 	dc	H'25
@@ -35346,16 +35721,18 @@ _KoovoxUartMessageHandle:
 	dc	H'20
 	dc	H'00
 	.CODE
-;.stabn	192,0,0,?LBB7
 ;.stabn	192,0,0,?LBB8
+;.stabn	192,0,0,?LBB9
+;.stabn	224,0,0,?LBE9
+;.stabn	192,0,0,?LBB10
+;.stabn	224,0,0,?LBE10
 ;.stabn	224,0,0,?LBE8
-;.stabn	224,0,0,?LBE7
 $_KoovoxFillAndSendUartPacket:
 	enterl	#9
 ?LBB_KoovoxFillAndSendUartPacket:
 	st	AL,@(H'0001,Y)
 	st	AH,@(H'0002,Y)
-?LBB9:
+?LBB11:
 	tst	@(H'000A,Y)
 	beq	?L95
 	ld	AL,@(H'000A,Y)
@@ -35379,7 +35756,7 @@ $_KoovoxFillAndSendUartPacket:
 	st	X,@H'fff8
 	cmp	AL,#H'0001
 	bcz	?L97
-?LBB10:
+?LBB12:
 	ld	AH,#H'0000
 	cmp	AH,@$XAP_AL
 	bcc	?L103
@@ -35399,7 +35776,7 @@ $_KoovoxFillAndSendUartPacket:
 	add	AH,#H'0001
 	cmp	AH,@(H'000A,Y)
 	bcs	?L102
-?LBE10:
+?LBE12:
 	bra	(?L103)
 ?L97:
 	tst	@(H'0009,Y)
@@ -35434,7 +35811,7 @@ $_KoovoxFillAndSendUartPacket:
 	ld	AL,@(H'0004,Y)
 	ld	AH,@(H'0003,Y)
 	bsr	_uart_data_stream_tx_data
-?LBB11:
+?LBB13:
 	ld	AL,#H'0000
 	st	AL,@(H'0005,Y)
 	cmp	AL,@(H'0003,Y)
@@ -35454,10 +35831,10 @@ $_KoovoxFillAndSendUartPacket:
 ?L114:
 	ld	AL,#H'000A
 	bsr	$_putchar
-?LBE11:
+?LBE13:
 	ld	AL,@(H'0004,Y)
 	bsr	$_free
-?LBE9:
+?LBE11:
 ?LBE_KoovoxFillAndSendUartPacket:
 	leavel	#9
 	.SEG	CONST
@@ -35468,12 +35845,12 @@ $_KoovoxFillAndSendUartPacket:
 	dc	H'20
 	dc	H'00
 	.CODE
-;.stabn	192,0,0,?LBB9
-;.stabn	192,0,0,?LBB10
-;.stabn	224,0,0,?LBE10
 ;.stabn	192,0,0,?LBB11
+;.stabn	192,0,0,?LBB12
+;.stabn	224,0,0,?LBE12
+;.stabn	192,0,0,?LBB13
+;.stabn	224,0,0,?LBE13
 ;.stabn	224,0,0,?LBE11
-;.stabn	224,0,0,?LBE9
 $_KoovoxControlObject:
 	enterl	#4
 ?LBB_KoovoxControlObject:
@@ -35488,17 +35865,18 @@ $_theUARTStreamTask:
 	DS	4
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 83 used[1] = 17 total = 100
-;# Function pattern *movqi3 used[0] = 118 total = 118
+;# Function pattern *movqi2 used[0] = 95 used[1] = 17 total = 112
+;# Function pattern *movqi3 used[0] = 132 total = 132
 ;# Function pattern *movqi8 used[0] = 13 total = 13
 ;# Function pattern *movhi used[2] = 1 used[3] = 1 total = 2
+;# Function pattern *addqi0 used[0] = 4 total = 4
 ;# Function pattern *addqi2 used[0] = 34 used[2] = 12 total = 46
 ;# Function pattern *andqi3 used[0] = 2 total = 2
 ;# Function pattern *subqi3 used[0] = 4 total = 4
 ;# Function pattern *lshrqi3 used[0] = 1 total = 1
-;# Function pattern jump used[0] = 24 total = 24
-;# Function pattern *call1 used[0] = 24 total = 24
-;# Function pattern *call_value1 used[0] = 26 total = 26
+;# Function pattern jump used[0] = 25 total = 25
+;# Function pattern *call1 used[0] = 28 total = 28
+;# Function pattern *call_value1 used[0] = 28 total = 28
 ;# Function pattern tablejump_1 used[0] = 1 total = 1
 ;# Function pattern movstrqi+3 used[0] = 4 used[1] = 9 total = 13
 ;# Function pattern movstrqi+4 used[1] = 4 total = 4

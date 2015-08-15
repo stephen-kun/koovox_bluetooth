@@ -114,8 +114,8 @@ typedef struct
 {
 	uint8 cmd;
 	uint8 obj;
-	uint8 len;
-	uint8 data[1];
+	uint8 size_value;
+	uint8 value[1];
 }ReqWechat_t;
 
 typedef struct
@@ -123,6 +123,8 @@ typedef struct
 	uint8 state;
 	uint8 cmd;
 	uint8 obj;
+	uint8 size_value;
+	uint8 value[1];
 }RspWechat_t;
 
 void koovox_wechat_connect(WechatTramsportType type, Ble* ble, WECHAT_TRANSPORT* rfcomm);

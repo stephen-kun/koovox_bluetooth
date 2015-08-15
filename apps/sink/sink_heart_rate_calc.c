@@ -12,6 +12,7 @@ FILE NAME
 #include "sink_koovox_core.h"
 #include "sink_koovox_task.h"
 #include "sink_koovox_uart.h"
+#include "koovox_wechat_handle.h"
 
 
 
@@ -233,13 +234,15 @@ RETURNS
 */ 
 void KoovoxCalculateHeartRate(uint8* value, uint8 size_value)
 {
+	uint16 length = sizeof(RspWechat_t) + (size_value ? (size_value - 1) : 0);
+	RspWechat_t* response = (RspWechat_t*)mallocPanic(length);
+
 	if(value == NULL)
 	{
 		/* 通知前端通信异常 */
-		
-		return;
+		response->state = S_ERROR;
 	}
-
+	else
 	{
 		uint8 heart_rate = 0;
 		
@@ -247,7 +250,20 @@ void KoovoxCalculateHeartRate(uint8* value, uint8 size_value)
 		DEBUG(("average:%d\n", heart_rate));
 		
 		/* 更新心率值到前端 */
+		response->state = S_SUC;
+		response->cmd = ENV;
+		response->obj = OBJ_STEP_COUNT;
+		response->size_value= size_value;
+		if(value)
+			memmove(response->value, value, size_value);
+		
 	}
+
+	koovox_pack_wechat_send_data_req((uint8 *)response, length, TRUE, EDDT_manufatureSvr);
+	koovox_send_data_to_wechat();
+
+	freePanic(response);
+	response = NULL;
 	
 }
 
@@ -293,7 +309,12 @@ void KoovoxResponseHeartRate(uint8* value, uint8 size_value)
 	if(wechat_req)
 	{
 		/* 应答前端 */
+		RspWechat_t response = {0};
+		response.state = S_SUC;
 		
+		koovox_pack_wechat_send_data_req((uint8 *)&response, sizeof(response), TRUE, EDDT_manufatureSvr);
+		koovox_send_data_to_wechat();
+
 		wechat_req = FALSE;
 	}
 	
