@@ -25,7 +25,6 @@ FILE NAME
 #include "sink_config.h"
 #include "sink_koovox_task.h"
 #include "sink_koovox_core.h"
-#include "sink_koovox_message.h"
 #include "koovox_wechat_handle.h"
 #include "sink_koovox_uart.h"
 #include "sink_gatt_db.h"
@@ -40,42 +39,7 @@ DESCRIPTION
 */
 void KoovoxLog(const char* value_data)
 {
-	uint16 size_data = 0;
-	if(value_data == NULL)
-		return ;
 
-	size_data = strlen(value_data);
-
-	{
-		uint16 length = sizeof(NotifyRequest_t) + (size_data ? size_data - 1 : 0) + strlen(FRAME_TAIL);
-		NotifyRequest_t *req = (NotifyRequest_t *)mallocPanic(length);
-		memset(req, 0, length);
-				
-		/* fill the req */
-		req->cmd[0] = (CMD_NOTIFY >> 8) & 0xff;
-		req->cmd[1] = CMD_NOTIFY & 0xff;
-		req->tid[0] = (CMD_NOTIFY >> 8) & 0xff;
-		req->tid[1] = CMD_NOTIFY & 0xff;
-		req->size[0] = ((length - INDEX_ELEMENT - 2)>> 8) & 0xff;
-		req->size[1] = (length - INDEX_ELEMENT - 2) & 0xff;
-		req->id_oid = ID_OID;
-		req->value_oid[0] = OID_LOG & 0xff;
-		req->value_oid[1] = (OID_LOG >> 8) & 0xff;
-		req->id_event = ID_EVENT;
-		req->value_event = 0;
-		req->id_data = ID_DATA;
-		if(value_data)
-		{
-			memmove(req->value_data, value_data, size_data);
-			memcpy(req->value_data + size_data, FRAME_TAIL, strlen(FRAME_TAIL));
-		}
-		
-		SendMessageWithSink(koovox.sppSink, req, length);
-
-		free(req);
-		req = NULL;
-	}
-	
 }
 
 
@@ -123,14 +87,7 @@ RETURNS
 */ 
 void KoovoxConfirmAsrNumber(void)
 {
-#if 0
-	uint8 value = ASR_MODE;
-	
-	KOOVOX_CORE_DEBUG(("KoovoxConfirmAsrNumber\n")) ;
 
-	/* send ASR phone number confirm  event to mobile */
-	SendNotifyToDevice(OID_BUTTON_C, CLICK, &value, 1);
-#endif
 }
 
 /****************************************************************************
@@ -145,28 +102,7 @@ RETURNS
 */ 
 void KoovoxRecordControl(void)
 {
-#if 0
-	uint8 value = 0;
-	
-	if(koovox.recodeStatus == RECORD_IDLE)
-	{
-		koovox.recodeStatus = RECORD_BUSY;
 
-		value = OFF;
-		/* disconnected record stream */
-		SendNotifyToDevice(OID_RECODE, LONG_CLICK, &value, 1);
-		AudioPromptPlayEvent(0);
-	}
-	else
-	{
-		koovox.recodeStatus = RECORD_IDLE;
-
-		value = ON;
-		/* send a notify to mobile */
-		SendNotifyToDevice(OID_RECODE, LONG_CLICK, &value, 1);
-		AudioPromptPlayEvent(0);
-	}
-#endif
 }
 
 /****************************************************************************

@@ -40,6 +40,13 @@ FILE NAME
 
 typedef enum
 {
+	S_SUC,
+	S_PROCESS,
+	S_ERROR
+}WechatState;
+
+typedef enum
+{
 	sendTextReq = 0x01,
 	sendTextResp = 0x1001,
 	openLightPush = 0x2001,
@@ -95,17 +102,6 @@ typedef struct
 	
 }WECHAT_DATA_T;
 
-/* 可自定义 */
-typedef struct
-{
-	uint8 	m_magicCode[2];
-	uint16 	m_version;
-	uint16 	m_totalLength;
-	uint16 	m_cmdid;
-	uint16 	m_seq;
-	uint16 	m_errorCode;
-}WeChatBleHead;
-
 typedef struct{
 	uint8 	bMagicNumber;
 	uint8 	bVer;
@@ -120,7 +116,14 @@ typedef struct
 	uint8 obj;
 	uint8 len;
 	uint8 data[1];
-}KoovoxData;
+}ReqWechat_t;
+
+typedef struct
+{
+	uint8 state;
+	uint8 cmd;
+	uint8 obj;
+}RspWechat_t;
 
 void koovox_wechat_connect(WechatTramsportType type, Ble* ble, WECHAT_TRANSPORT* rfcomm);
 void koovox_rcv_data_from_wechat(uint8* data, uint16 size_data);

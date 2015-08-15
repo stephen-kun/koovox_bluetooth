@@ -56,7 +56,6 @@
   <file path="sink_partymode.c" />
   <file path="sink_peer.c" />
   <file path="sink_koovox_core.c" />
-  <file path="sink_koovox_message.c" />
   <file path="sink_koovox_task.c" />
   <file path="epb.c" />
   <file path="epb_MmBp.c" />
@@ -131,7 +130,6 @@
   <file path="sink_partymode.h" />
   <file path="sink_peer.h" />
   <file path="sink_koovox_core.h" />
-  <file path="sink_koovox_message.h" />
   <file path="sink_koovox_task.h" />
   <file path="epb.h" />
   <file path="epb_MmBp.h" />

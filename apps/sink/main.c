@@ -47,7 +47,6 @@ NOTES
 #ifdef ENABLE_KOOVOX
 #include "sink_koovox_core.h"
 #include "sink_koovox_task.h"
-#include "sink_koovox_message.h"
 #endif
 
 #ifndef GATT_DISABLED

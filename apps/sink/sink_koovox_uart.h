@@ -27,6 +27,7 @@ FILE NAME
 
 #define REPEAT_TIMES		(3)
 
+#define FRAME_TAIL				"{}"
 
 typedef struct
 {

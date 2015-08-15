@@ -74,9 +74,9 @@ main.o: main.c sink_private.h \
   C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/fm_rx_plugin.h \
   C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/fm_plugin_if.h \
   sink_leds.h sink_koovox_core.h sink_koovox_task.h \
-  C:/ADK3.5/tools/include/firmware/partition.h sink_koovox_message.h \
-  sink_ble_advertising.h sink_tones.h sink_audio_prompts.h sink_audio.h \
-  sink_at_commands.h C:/ADK3.5/tools/include/firmware/vm.h \
+  C:/ADK3.5/tools/include/firmware/partition.h sink_ble_advertising.h \
+  sink_tones.h sink_audio_prompts.h sink_audio.h sink_at_commands.h \
+  C:/ADK3.5/tools/include/firmware/vm.h \
   C:/ADK3.5/tools/include/firmware/ps.h \
   C:/ADK3.5/tools/include/firmware/app/ps/ps_if.h \
   C:/ADK3.5/tools/include/firmware/boot.h \

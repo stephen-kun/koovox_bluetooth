@@ -11,7 +11,6 @@ FILE NAME
 #include "sink_koovox_uart.h"
 #include "sink_private.h"
 #include "sink_koovox_core.h"
-#include "sink_koovox_message.h"
 #include "sink_koovox_task.h"
 
 #include "sink_handle_accelerate_data.h"
@@ -27,6 +26,42 @@ static void UARTStreamMessageHandler (Task pTask, MessageId pId, Message pMessag
 static void KoovoxUartMessageHandle(uint8 *data, uint16 length);
 static void uart_data_stream_rx_data(Source src);
 static void uart_data_stream_tx_data(const uint8 *data, uint16 length);
+
+/*************************************************************************
+NAME
+    KoovoxMessageStr
+    
+DESCRIPTION
+    check the message include str or not
+
+RETURN
+	return the index of the str .if return 0, failed find the str
+*/
+static uint16 KoovoxMessageStr(const uint8* msg, const char* str, uint16 msg_len)
+{
+	uint16 i = 0, j = 0;
+
+	if((msg == NULL)||(str == NULL))
+		return 0;
+
+	while(str[j])
+	{
+		if(msg[i++] == str[j])
+			j++;
+		else
+			j = 0;
+
+		if(i >= msg_len)
+			break;
+	}
+	
+	if(str[j] == '\0')
+		return i;
+	else
+		return 0;
+
+}
+
 
 
 /****************************************************************************

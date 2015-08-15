@@ -316,7 +316,7 @@ static uint16 koovox_rcv_data_handle(uint8* data, uint16 size_data)
 	case ECI_push_recvData:
 	{
 		RecvDataPush *recvDatPush = epb_unpack_recv_data_push(data + fix_head_len, size_data - fix_head_len);
-		KoovoxData* k_data = (KoovoxData*)recvDatPush->data.data;
+		ReqWechat_t* k_data = (ReqWechat_t*)recvDatPush->data.data;
 				
 		if(!recvDatPush)
 		{
@@ -328,32 +328,29 @@ static uint16 koovox_rcv_data_handle(uint8* data, uint16 size_data)
 		uint16 i = 0;
 
 		DEBUG(("obj = %x\n", k_data->obj));
-		for(; i<recvDatPush->data.len; i++ )
-			DEBUG(("%x ", recvDatPush->data.data[i]));
+		for(; i<k_data->len; i++ )
+			DEBUG(("%x ", k_data->data[i]));
 
 		DEBUG(("\n"));
 		}
 #endif
-		
-		switch(k_data->obj)
-		{
-		/* 填充自己的命令 */
-		case OBJ_HEART_RATE:
-		{
-			if(k_data->cmd == START)
-			{
-				DEBUG(("Enable heart rate\n"));
-			}
-			else if(k_data->cmd == STOP)
-			{
-				DEBUG(("Disable heart rate\n"));
-			}
-		}
-		break;
-		
 
-		default:
-			break;
+		if(wechat_req || button_req)
+		{
+			/* 上一个命令正在运行，请稍后操作 */
+			RspWechat_t response = {0};
+
+			response.state = S_PROCESS;
+			response.cmd = k_data->cmd;
+			response.obj = k_data->obj;
+			
+			koovox_pack_wechat_send_data_req((uint8*)&response, sizeof(response), TRUE, EDDT_manufatureSvr);
+			koovox_send_data_to_wechat();
+		}
+		else
+		{
+			KoovoxFillAndSendUartPacket(k_data->cmd, k_data->obj, k_data->data, k_data->len);
+			wechat_req = TRUE;
 		}
 			
 		epb_unpack_recv_data_push_free(recvDatPush);
