@@ -448,6 +448,12 @@ typedef enum sinkEventsTag
 /*0x4783*/    EventSysCheckDefrag,   
 /*0x4784*/    EventSysDefrag,              
 /*0x4785*/    EventSysAmpPowerDown,
+
+/*0x4791*/		EventKoovoxPromptDriving,
+/*0x4792*/		EventKoovoxPromptMeeting,
+/*0x4793*/		EventKoovoxPromptLeaving,
+/*0x4794*/		EventKoovoxPromptNoDisturbing,
+
     EventSysLast
               
 } sinkEvents_t; 

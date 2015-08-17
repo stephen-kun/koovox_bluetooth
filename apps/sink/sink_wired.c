@@ -206,6 +206,7 @@ void wiredAudioRoute(Sink audio_sink, int16 master_volume, AUDIO_SINK_T variant_
                      AUDIO_ROUTE_INTERNAL, 
                      powerManagerGetLBIPM(), 
                      &theSink.a2dp_link_data->a2dp_audio_connect_params, 
+                     FALSE,
                      &theSink.task);
     }
 #else
@@ -223,6 +224,7 @@ void wiredAudioRoute(Sink audio_sink, int16 master_volume, AUDIO_SINK_T variant_
                  AUDIO_ROUTE_INTERNAL, 
                  powerManagerGetLBIPM(), 
                  &theSink.a2dp_link_data->a2dp_audio_connect_params, 
+                 FALSE,
                  &theSink.task);
 #endif
                 
@@ -239,7 +241,7 @@ void wiredAudioRoute(Sink audio_sink, int16 master_volume, AUDIO_SINK_T variant_
     volumeDsp.trim_gain_right= theSink.conf1->volume_config.volume_control_config.trim_volume_right;
     volumeDsp.device_trim_master = theSink.conf1->volume_config.volume_control_config.device_trim_master;
     volumeDsp.device_trim_slave = theSink.conf1->volume_config.volume_control_config.device_trim_slave;
-    volumeDsp.mute_active = theSink.sink_mute_status;
+    volumeDsp.mute_active = theSink.sink_enable_present;
     
     AudioSetVolumeA2DP ( &volumeDsp);
     
@@ -468,7 +470,7 @@ bool wiredAudioUpdateVolume(volume_direction dir)
         volumeDsp.trim_gain_right= theSink.conf1->volume_config.volume_control_config.trim_volume_right;
         volumeDsp.device_trim_master = theSink.conf1->volume_config.volume_control_config.device_trim_master;
         volumeDsp.device_trim_slave = theSink.conf1->volume_config.volume_control_config.device_trim_slave;
-        volumeDsp.mute_active = theSink.sink_mute_status;
+        volumeDsp.mute_active = theSink.sink_enable_present;
 
         /* indicate volume change on display */
         displayUpdateVolume((VOLUME_NUM_VOICE_STEPS * *masterVolume)/theSink.conf1->volume_config.volume_control_config.no_of_steps);
@@ -573,7 +575,7 @@ void wiredAudioSetVolume(void)
     volumeDsp.trim_gain_right= theSink.conf1->volume_config.volume_control_config.trim_volume_right;
     volumeDsp.device_trim_master = theSink.conf1->volume_config.volume_control_config.device_trim_master;
     volumeDsp.device_trim_slave = theSink.conf1->volume_config.volume_control_config.device_trim_slave;
-    volumeDsp.mute_active = theSink.sink_mute_status;
+    volumeDsp.mute_active = theSink.sink_enable_present;
     
     /* indicate volume change on display */
     displayUpdateVolume((VOLUME_NUM_VOICE_STEPS * *masterVolume)/theSink.conf1->volume_config.volume_control_config.no_of_steps);      

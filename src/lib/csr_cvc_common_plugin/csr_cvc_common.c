@@ -17,6 +17,7 @@ NOTES
 #include <stdlib.h>
 #include <panic.h>
 #include <stream.h>
+#define DEBUG_PRINT_ENABLED
 #include <print.h>
 #include <kalimba.h>
 #include <file.h>
@@ -97,7 +98,9 @@ typedef struct audio_Tag
     /* flag used to control the connecting of ports */
     unsigned ports_connected:1;
     /*! mono or stereo/use i2s output */
-    AudioPluginFeatures features;      
+    AudioPluginFeatures features;    
+	/*! enable or disable presence business*/
+	bool				presence;
 }CVC_t ;
 
 /* The CVC task instance pointer*/
@@ -200,6 +203,7 @@ void CsrCvcPluginConnect( CvcPluginTaskdata *task,
                           AUDIO_POWER_T power,
                           Source audio_source,
                           const common_mic_params* digital,
+                          bool  presence,
                           TaskData * app_task)
 {
     FILE_INDEX index=0; 
@@ -232,6 +236,7 @@ void CsrCvcPluginConnect( CvcPluginTaskdata *task,
     CVC->tone_stereo     = features.stereo;
     /* Check if this is the no dsp plugin or should be started in low power mode */
     CVC->no_dsp = (task->cvc_plugin_variant == CVSD_NO_DSP);
+	CVC->presence		 = presence;
     
     /* Set clear mic pin */
     AudioPluginSetMicPio(CVC->digital->mic_a, TRUE);
@@ -1154,8 +1159,21 @@ static void CvcConnectAudio (CvcPluginTaskdata *task)
         /* check whether SCO is present */
         if(CVC->audio_sink)
         {
+        #if 0
             /* connect sco in/out to dsp ports */
-            StreamConnect(CVC->audio_source,StreamKalimbaSink(CVC_SCO_PORT)); /* SCO->DSP */  
+			if(CVC->presence)
+			{
+	            StreamConnectDispose(CVC->audio_source); 
+				printf("StreamConnectDispose**\n");
+			}
+			else
+			{
+	            StreamConnect(CVC->audio_source,StreamKalimbaSink(CVC_SCO_PORT)); /* SCO->DSP */  
+				printf("StreamConnect**\n");
+			}
+		#else
+			StreamConnect(CVC->audio_source,StreamKalimbaSink(CVC_SCO_PORT)); /* SCO->DSP */  
+		#endif
             StreamConnect( StreamKalimbaSource(CVC_SCO_PORT), CVC->audio_sink ); /* DSP->SCO */
         }
     
@@ -1362,9 +1380,22 @@ void CsrCvcPluginInternalMessage( CvcPluginTaskdata *task ,uint16 id , Message m
                                        
                     SetCurrentDspStatus(DSP_LOADED_IDLE);
 
+					/* 检测是否启动PRESENCE业务 */
+					if(CVC->presence)
+					{
+						KalimbaSendMessage(SET_ENABLE_PRESENCE_MESSAGE_ID, 0, 0, 0, 0);
+						PRINT(("SET_ENABLE_PRESENCE_MESSAGE_ID\n"));
+					}
+					else
+					{
+						KalimbaSendMessage(SET_DISABLE_PRESENCE_MESSAGE_ID, 0, 0, 0, 0);
+						printf(("SET_DISABLE_PRESENCE_MESSAGE_ID\n"));
+					}
+
                     PRINT(("CVC: CVC_READY, SysId[%x] BuildVersion[%x] \n",m->a, m->b));
                     
                     CvcConnectAudio (task);
+
                 }
                 break;
             

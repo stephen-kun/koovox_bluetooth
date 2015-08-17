@@ -388,6 +388,8 @@ typedef struct
     AUDIO_POWER_T   power ;
         /*!plugin specific parameters*/
     const void *    params ;
+		/*! enable or disabel presence business */
+	bool 			presence;
     	/*! The application task to route upstream plugin messages to*/
     Task            app_task ;
 }AUDIO_PLUGIN_CONNECT_MSG_T ;
@@ -556,6 +558,8 @@ typedef struct
     AudioPluginFeatures features;
         /*! The audio route of connection required*/
     AUDIO_ROUTE_T   route ;
+		/*! The app task to use to communication the audio*/
+	Task			app_task ;
 
 }AUDIO_PLUGIN_PLAY_AUDIO_PROMPT_MSG_T ;
 

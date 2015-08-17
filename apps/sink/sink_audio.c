@@ -38,6 +38,10 @@ NOTES
 #include <bdaddr.h>
 #include <codec.h>
 
+#ifdef ENABLE_KOOVOX
+#include "sink_koovox_task.h"
+#endif
+
 #include <csr_cvc_common_plugin.h>
 #ifdef ENABLE_SOUNDBAR
 #include <inquiry.h>
@@ -581,7 +585,10 @@ void audioHfpConnectAudio (hfp_link_priority priority, Sink sink)
                        AUDIO_ROUTE_INTERNAL,
                        powerManagerGetLBIPM(),
                        AUDIO_CONNECT_PARAMS,
-                       NULL ) ;       
+                       koovox.presentEnable,
+                       &theSink.task) ;    
+
+		DEBUG(("===presentEnable=%d\n", koovox.presentEnable));
 
         audioControlLowPowerCodecs (TRUE) ;
 
@@ -750,7 +757,7 @@ void A2dpRouteAudio(uint8 Index, Sink sink)
                 volumeInitAudio.device_trim_master = theSink.conf1->volume_config.volume_control_config.device_trim_master;
                 volumeInitAudio.device_trim_slave = theSink.conf1->volume_config.volume_control_config.device_trim_slave;
           		volumeInitAudio.tones_gain = VolumeConvertStepsToDB(((TonesGetToneVolume(FALSE) * theSink.conf1->volume_config.volume_control_config.no_of_steps)/VOLUME_NUM_VOICE_STEPS), &theSink.conf1->volume_config.volume_control_config, DSP_DB_SCALE);
-                volumeInitAudio.mute_active = theSink.sink_mute_status;
+                volumeInitAudio.mute_active = theSink.sink_enable_present;
                 
                 /* connect the audio via the audio plugin */    
   			    AudioConnect(getA2dpPlugin(codec_settings->seid),
@@ -764,6 +771,7 @@ void A2dpRouteAudio(uint8 Index, Sink sink)
                              AUDIO_ROUTE_INTERNAL,
                              powerManagerGetLBIPM(), 
                              &theSink.a2dp_link_data->a2dp_audio_connect_params,
+                             FALSE,
                              &theSink.task);
                
 				AudioSetVolumeA2DP(&volumeInitAudio);

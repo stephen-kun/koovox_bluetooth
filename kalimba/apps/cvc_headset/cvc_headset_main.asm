@@ -139,6 +139,7 @@
       CVC_SET_BANDWIDTH,                        // CVC_BANDWIDTH_INIT_FUNC
       &$M.CVC.data.StatisticsPtrs,              // STATUS_PTR
       &$dac_out.auxillary_mix_op.param,         // TONE_MIX_PTR
+      &$vp_in.auxillary_mix_op.param,           // TONE_VP
       &$M.CVC.data.CurParams + $M.CVC_HEADSET.PARAMETERS.OFFSET_INV_DAC_GAIN_TABLE; // $M.CVC.CONFIG.PTR_INV_DAC_TABLE
 .ENDMODULE;
 
@@ -407,6 +408,8 @@ $main_send:
 #define VM_ADCDAC_RATE_MESSAGE_ID               0x1070
 #define VM_SET_TONE_RATE_MESSAGE_ID             0x1072
 #define UNSUPPORTED_SAMPLING_RATES_MSG          0x1090
+#define VM_ENABLE_PRESENT_MESSAGE_ID            0x4f04
+#define VM_DISABLE_PRESENT_MESSAGE_ID		0x4f05
 
 .MODULE $M.audio_config;
    .CODESEGMENT AUDIO_CONFIG_PM;
@@ -415,7 +418,10 @@ $main_send:
    // For routing config message
    .VAR  set_port_type_message_struc[$message.STRUC_SIZE];
    .VAR  set_adcdac_rate_from_vm_message_struc[$message.STRUC_SIZE];
-   .VAR  set_tone_rate_from_vm_message_struc[$message.STRUC_SIZE]; // Message structure for VM_SET_TONE_RATE_MESSAGE_ID message
+   .VAR  set_tone_rate_from_vm_message_struc[$message.STRUC_SIZE]; 		// Message structure for VM_SET_TONE_RATE_MESSAGE_ID message
+   .VAR  set_enable_present_from_vm_message_struc[$message.STRUC_SIZE]; 	// Message structure for VM_ENABLE_PRESENT_MESSAGE_ID message
+   .VAR  set_disable_present_from_vm_message_struc[$message.STRUC_SIZE]; 	// Message structure for VM_DISABLE_PRESENT_MESSAGE_ID message
+
    
    // ** allocate memory for timer structures **
    .VAR  $audio_copy_timer_struc[$timer.STRUC_SIZE];
@@ -456,6 +462,19 @@ $audio_config.initialise:
    r3 = &$set_tone_rate_from_vm;
    call $message.register_handler;
 
+   // set up message handler for VM_ENABLE_PRESENT_MESSAGE_ID message
+   r1 = &set_enable_present_from_vm_message_struc;
+   r2 = VM_ENABLE_PRESENT_MESSAGE_ID;
+   r3 = &$set_enable_present_from_vm;
+   call $message.register_handler;
+
+   // set up message handler for VM_DISABLE_PRESENT_MESSAGE_ID message
+   r1 = &set_disable_present_from_vm_message_struc;
+   r2 = VM_DISABLE_PRESENT_MESSAGE_ID;
+   r3 = &$set_disable_present_from_vm;
+   call $message.register_handler;
+
+   
    // start timer that copies audio samples
    r1 = &$audio_copy_timer_struc;
    r2 = $TIMER_PERIOD_AUDIO_COPY_MICROS;
@@ -593,9 +612,8 @@ $audio_copy_handler:
    $push_rLink_macro;
 
    // Call operators
-   r8 = &$adc_in.copy_struc;
-   call $cbops_multirate.copy;
-
+   call $vee.cbops_multirate_copy;
+   
    // Set up DAC operation 
    call $DAC_CheckConnectivity;
    

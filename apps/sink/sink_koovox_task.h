@@ -35,11 +35,6 @@ typedef enum{
 }PresentScence;
 
 typedef enum{
-	PRESET_IDLE,
-	PRESET_BUSY
-}enumPresenceStatus;
-
-typedef enum{
 	RECORD_IDLE,
 	RECORD_BUSY
 }enumRecordStatus;
@@ -51,11 +46,9 @@ typedef struct{
     TaskData        task;           /* The phone app  message handler */
     bool            initialised;    /* Flag set when phone app has been initialised for the device */
 	uint8 			muteStatus;		/* the mute micphone status */
-	uint8			presentEnable;	/* the present business enable or disable */
-	uint8 			presentStatus;	/* the presence status */
-	uint8			vmEnable;		/* enable or disable the voice message */
+	bool			presentEnable;	/* the present business enable or disable */
+	PresentScence 	presentScence;	/* the presence scence */
 	uint8			recodeStatus;	/* the record status */
-	uint8			angle_init_cnt;	/* */
 	uint16			last_cmd;		/* the last of the cmd to STM8 */
 	uint8			repeat_times;	/* repeat send the last cmd times */
 

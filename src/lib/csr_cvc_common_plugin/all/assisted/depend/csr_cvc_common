@@ -38,6 +38,8 @@ csr_cvc_common_plugin/all/assisted/csr_cvc_common.o:  \
   C:/ADK3.5/tools/include/firmware/codec_.h \
   C:/ADK3.5/tools/include/standard/stdlib.h \
   C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/print.h \
+  C:/ADK3.5/tools/include/standard/stdio.h \
+  C:/ADK3.5/tools/lib/gcc-lib/xap-local-xap-assisted/3.3.3/include/stdarg.h \
   C:/ADK3.5/tools/include/firmware/kalimba.h \
   C:/ADK3.5/tools/include/firmware/file.h \
   C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/connection.h \

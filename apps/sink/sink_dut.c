@@ -597,6 +597,7 @@ void enterAudioTestMode(void)
                  0, 
                  powerManagerGetLBIPM(), 
                  &theSink.conf1->PIOIO.digital, 
+                 FALSE,
                  &theSink.task);
 }
 
@@ -625,6 +626,7 @@ void enterToneTestMode(void)
                  0, 
                  powerManagerGetLBIPM(), 
                  NULL, 
+                 FALSE,
                  &theSink.task);
     AudioPlayTone(sine_tone, theSink.features.QueueEventTones, theSink.codec_task, TonesGetToneVolume(FALSE), theSink.conf2->audio_routing_data.PluginFeatures); 
 }

@@ -55,9 +55,7 @@ sink_buttons.o: sink_buttons.c sink_private.h \
   C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/bdaddr.h \
   C:/ADK3.5/tools/include/firmware/app/bluestack/bluetooth.h \
   C:/ADK3.5/tools/include/standard/string.h sink_audio_routing.h \
-  sink_partymode.h sink_fm.h sink_devicemanager.h sink_gaia.h \
-  C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/gaia.h \
-  sink_wechat.h \
+  sink_partymode.h sink_fm.h sink_devicemanager.h sink_wechat.h \
   C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/wechat.h \
   sink_avrcp.h \
   C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/avrcp.h \

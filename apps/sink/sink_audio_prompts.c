@@ -28,6 +28,11 @@ DESCRIPTION
 #include <partition.h>
 #include <csr_tone_plugin.h> 
 #include <csr_voice_prompts_plugin.h>
+#include <csr_voice_presences_plugin.h>
+
+#ifdef ENABLE_KOOVOX
+#include "sink_koovox_task.h"
+#endif
 
 #ifdef DEBUG_AUDIO_PROMPTS
     #define PROMPTS_DEBUG(x) DEBUG(x)
@@ -85,6 +90,7 @@ void AudioPromptConfigure( uint8 size_index )
 {
     PROMPTS_DEBUG(("Setup AP Indexing: %d prompts\n",size_index));
     AudioVoicePromptsInit((TaskData *)&csr_voice_prompts_plugin, size_index, theSink.num_audio_prompt_languages);
+    AudioVoicePromptsInit((TaskData *)&csr_voice_presences_plugin, size_index, theSink.num_audio_prompt_languages);
 }
 
 /****************************************************************************
@@ -168,6 +174,70 @@ bool AudioPromptPlayEvent ( sinkEvents_t event )
     }
     return event_match;
 } 
+
+
+/****************************************************************************
+NAME
+    AudioPresencePlayEvent
+    
+DESCRIPTION
+    play presece audio to peer listenning
+*/
+bool AudioPresencePlayEvent ( sinkEvents_t event )
+{  
+    uint16 lEventIndex = event;
+	uint16 state_mask  = 1 << stateManagerGetState();
+    audio_prompts_config_type* ptr  = NULL;
+	TaskData * task    = NULL;
+    bool event_match   = FALSE;
+
+	PROMPTS_DEBUG(("KoovoxAudioPresencePlayEvent\n")) ;
+    
+    if(theSink.conf4)
+    {
+        ptr = theSink.conf4->audioPromptEvents;
+    }
+    else
+    {
+        /* no config */
+        return FALSE;
+    }
+     
+    task = (TaskData *) &csr_voice_presences_plugin;
+
+	/* While we have a valid Audio Prompt event */
+	while(ptr->prompt_id != AUDIO_PROMPT_NOT_DEFINED)
+	{           
+	    /* Play Audio Prompt if the event matches and we're not in a blocked state or in streaming A2DP state */
+	    if((ptr->event == lEventIndex) && 
+	       ((ptr->state_mask & state_mask) && 
+	       (!(ptr->sco_block && theSink.routed_audio)||(state_mask & (1<<deviceA2DPStreaming)))))
+	    {
+	        PROMPTS_DEBUG(("AP: EvPl[%x][%x][%x][%x][%x]\n", event, lEventIndex, ptr->event, ptr->prompt_id,  ptr->cancel_queue_play_immediate )) ;
+	        event_match = TRUE;
+
+		   /* turn on audio amp */
+		   PioSetPio ( theSink.conf1->PIOIO.pio_outputs.DeviceAudioActivePIO , pio_drive, TRUE) ;
+
+		   /* start check to turn amp off again if required */ 
+		   MessageSendLater(&theSink.task , EventSysCheckAudioAmpDrive, 0, 1000);	 
+		   	   
+		   AudioPlayAudioPrompt(task, (uint16) ptr->prompt_id, theSink.audio_prompt_language, TRUE,
+						theSink.codec_task, TonesGetToneVolume(FALSE), 
+						theSink.conf2->audio_routing_data.PluginFeatures, ptr->cancel_queue_play_immediate, &koovox.task);
+
+           
+           /* If the event is a power off, then there is no need to connect an audio plugin again after the prompt */
+           if((GetAudioPlugin()!= task)&&(event == EventUsrPowerOff))
+           {
+               MessageCancelAll(GetAudioPlugin(),AUDIO_PLUGIN_CONNECT_MSG);
+           }                   
+	    }
+	    ptr++;
+	}
+    return event_match;
+} 
+
 
 /****************************************************************************
 NAME 

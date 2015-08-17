@@ -26,6 +26,7 @@ void CsrCvcPluginConnect( CvcPluginTaskdata *task,
 						  AUDIO_POWER_T power,
                           Source audio_source,
                           const common_mic_params* digital,
+                          bool	presence,
                           TaskData * app_task);
 void CsrCvcPluginDisconnect(CvcPluginTaskdata *task) ;
 void CsrCvcPluginSetVolume( CvcPluginTaskdata *task, uint16 volume ) ;

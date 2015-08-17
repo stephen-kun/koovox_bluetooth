@@ -5,5 +5,8 @@ image/cvc_handsfree_2mic/cvc_handsfree_2mic.kap
 image/cvc_headset/cvc_headset.kap
 image/cvc_headset_2mic/cvc_headset_2mic.kap
 image/faststream_decoder/faststream_decoder.kap
+image/headers/0.idx
+image/prompts/0.prm
+image/refname/0.txt
 image/sbc_decoder/sbc_decoder.kap
 image/vm.app

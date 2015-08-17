@@ -46,6 +46,41 @@ void KoovoxLog(const char* value_data)
 }
 
 
+/*************************************************************************
+NAME
+    GetPresentScenceEvent
+    
+DESCRIPTION
+    get the present scence event
+*/
+static uint16 GetPresentScenceEvent(void)
+{
+	uint16 event = 0;
+
+	switch(koovox.presentScence)
+	{
+		case MEETING_SCENCE:
+			event = EventKoovoxPromptMeeting;
+			break;
+		
+		case DRIVING_SCENCE:
+			event = EventKoovoxPromptDriving;
+			break;
+		
+		case LEAVING_SCENCE:
+			event = EventKoovoxPromptLeaving;
+			break;
+		
+		default:
+			event = EventKoovoxPromptNoDisturbing;
+			
+	}
+
+	return event;
+}
+
+
+
 
 /****************************************************************************
 NAME 
@@ -149,30 +184,42 @@ void KoovoxPresentIncomingCall(void)
 {
 	KOOVOX_CORE_DEBUG(("KoovoxPresentIncomingCall\n"));
 
-	if((koovox.presentStatus != PRESET_BUSY)&&(koovox.presentEnable == TRUE))
+	if(!koovox.presentEnable)
 	{
-		koovox.presentStatus = PRESET_BUSY;
+		koovox.presentEnable = TRUE;
 		
 		/* answer the call */
 		MessageSend(&(theSink.task), EventUsrAnswer, 0);
 	}
 }
 
+
 /****************************************************************************
 NAME 
-  	KoovoxHandleEventCvcLoaded
+  	KoovoxPromptPresentScenceVoice
 
 DESCRIPTION
- 	handle the Event cvc kalimba loaded
+ 	prompt the present scence voice
  
 RETURNS
   	void
 */ 
-void KoovoxHandleEventCvcLoaded(void)
+void KoovoxPromptPresentScenceVoice(void)
 {
-	KOOVOX_CORE_DEBUG(("KoovoxHandleEventCvcLoaded\n"));
+	/* 播放预置提示性 */
+	if(koovox.presentEnable)
+	{
+		uint16 event = GetPresentScenceEvent();
 
+		DEBUG(("****present call \n"));
+		event = EventSysRingtone1;
+		AudioPresencePlayEvent(event);
+		AudioPromptPlayEvent(event);
+
+		MessageSendLater(&theSink.task, EventSysCallAnswered, 0, D_SEC(4));
+	}
 }
+
 
 
 /****************************************************************************

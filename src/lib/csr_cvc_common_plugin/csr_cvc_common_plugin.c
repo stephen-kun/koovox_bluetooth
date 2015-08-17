@@ -87,7 +87,7 @@ static void handleAudioMessage ( Task task , MessageId id, Message message )
 	
 			if (IsAudioBusy())
 			{ 		/*Queue the connect message until the audio task is available*/
-				MAKE_AUDIO_MESSAGE( AUDIO_PLUGIN_CONNECT_MSG ) ; 
+				MAKE_AUDIO_MESSAGE( AUDIO_PLUGIN_CONNECT_MSG) ; 
 				
 				message->audio_sink = connect_message->audio_sink ;
 				message->sink_type  = connect_message->sink_type ;
@@ -99,6 +99,7 @@ static void handleAudioMessage ( Task task , MessageId id, Message message )
 				message->params     = connect_message->params ;
 				message->power      = connect_message->power ;
 				message->params     = connect_message->params;
+				message->presence	= connect_message->presence;
                 message->app_task   = connect_message->app_task;
 			    MessageSendConditionally ( task, AUDIO_PLUGIN_CONNECT_MSG , message , (const uint16 *)AudioBusyPtr() ) ;
 				PRINT(("CVC: audio connect requeued\n"));				
@@ -134,6 +135,7 @@ static void handleAudioMessage ( Task task , MessageId id, Message message )
 									  connect_message->power,
                                       audio_source,
                                       digital,
+                                      connect_message->presence,
                                       connect_message->app_task) ;
 			}			
 		}	

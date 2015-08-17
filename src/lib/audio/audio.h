@@ -95,6 +95,7 @@ bool AudioConnect(Task audio_plugin,
 				  AUDIO_ROUTE_T route , 
 				  AUDIO_POWER_T power ,
 				  const void * params , 
+				  bool	presence,
 				  Task app_task);
 
 /*!

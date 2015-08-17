@@ -1001,6 +1001,7 @@ void usbAudioRoute(void)
                                  AUDIO_ROUTE_INTERNAL,
                                  powerManagerGetLBIPM(),
                                  &theSink.a2dp_link_data->a2dp_audio_connect_params,
+                                 FALSE,
                                  &theSink.task);
 #else
 
@@ -1015,6 +1016,7 @@ void usbAudioRoute(void)
                                  AUDIO_ROUTE_INTERNAL,
                                  powerManagerGetLBIPM(),
                                  &theSink.a2dp_link_data->a2dp_audio_connect_params,
+                                 FALSE,
                                  &theSink.task);
 #endif
                 }
@@ -1032,6 +1034,7 @@ void usbAudioRoute(void)
                                  AUDIO_ROUTE_INTERNAL,
                                  powerManagerGetLBIPM(),
                                  &theSink.cvc_params,
+                                 FALSE,
                                  &theSink.task);
                 }
                 
@@ -1048,7 +1051,7 @@ void usbAudioRoute(void)
                 volumeDsp.trim_gain_right= theSink.conf1->volume_config.volume_control_config.trim_volume_right;
                 volumeDsp.device_trim_master = theSink.conf1->volume_config.volume_control_config.device_trim_master;
                 volumeDsp.device_trim_slave = theSink.conf1->volume_config.volume_control_config.device_trim_slave;
-                volumeDsp.mute_active = theSink.sink_mute_status;
+                volumeDsp.mute_active = theSink.sink_enable_present;
 
                 AudioSetVolumeA2DP ( &volumeDsp);
 
@@ -1193,7 +1196,7 @@ void usbAudioSetVolume(void)
         volumeDsp.trim_gain_right= theSink.conf1->volume_config.volume_control_config.trim_volume_right;
         volumeDsp.device_trim_master = theSink.conf1->volume_config.volume_control_config.device_trim_master;
         volumeDsp.device_trim_slave = theSink.conf1->volume_config.volume_control_config.device_trim_slave;
-        volumeDsp.mute_active = theSink.sink_mute_status;
+        volumeDsp.mute_active = theSink.sink_enable_present;
 
         AudioSetVolumeA2DP ( &volumeDsp);
         

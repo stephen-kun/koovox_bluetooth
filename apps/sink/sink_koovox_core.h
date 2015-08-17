@@ -38,10 +38,10 @@ void KoovoxConfirmAsrNumber(void);
 void KoovoxRecordControl(void);
 void KoovoxMuteActiveCall(void);
 void KoovoxPresentIncomingCall(void);
-void KoovoxHandleEventCvcLoaded(void);
 void KoovoxGetBluetoothAdrress(uint8* addr);
 void KoovoxResultI2cTest(uint8* data, uint8 size_data);
 void KoovoxStoreLastCmd(uint8 cmd, uint8 obj);
+void KoovoxPromptPresentScenceVoice(void);
 
 void KoovoxUsrEventHandle(MessageId id, Message message);
 

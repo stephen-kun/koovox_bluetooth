@@ -379,6 +379,11 @@ typedef enum
 #define CVC_1MIC_PS_BASE_WBS_EXT_MIC_NOT_FITTED 0x2280 /* DSP_40 */
 #define CVC_1MIC_PS_BASE_WBS_EXT_MIC_FITTED 0x2284     /* DSP_44 */
 
+
+/* 启动/关闭presence功能 */
+#define SET_ENABLE_PRESENCE_MESSAGE_ID             0x4f04
+#define SET_DISABLE_PRESENCE_MESSAGE_ID            0x4f05
+
 /* cVc mode values */
 typedef enum
 {

@@ -116,7 +116,7 @@ void VolumeSetA2dp(uint16 index, uint16 oldVolume, bool pPlayTone)
     volumeDsp.trim_gain_right= theSink.conf1->volume_config.volume_control_config.trim_volume_right;
     volumeDsp.device_trim_master = theSink.conf1->volume_config.volume_control_config.device_trim_master;
     volumeDsp.device_trim_slave = theSink.conf1->volume_config.volume_control_config.device_trim_slave;
-    volumeDsp.mute_active = theSink.sink_mute_status;
+    volumeDsp.mute_active = theSink.sink_enable_present;
 
     /* set volume level via a2dp library plugin */
     AudioSetVolumeA2DP ( &volumeDsp);
@@ -328,7 +328,7 @@ bool VolumeCheckA2dp(volume_direction dir)
                 }
                 
                 /* if feature to unmute on volume change is set then issue unmute */
-                if ((theSink.features.VolumeChangeCausesUnMute)&&(theSink.sink_mute_status))
+                if ((theSink.features.VolumeChangeCausesUnMute)&&(theSink.sink_enable_present))
         		{
                     MessageSend(&theSink.task, EventUsrMuteOff, 0);
                 }
@@ -630,7 +630,7 @@ static bool VolumeCheckFmRx(volume_direction dir)
         volumeDsp.trim_gain_right= theSink.conf1->volume_config.volume_control_config.trim_volume_right;
         volumeDsp.device_trim_master = theSink.conf1->volume_config.volume_control_config.device_trim_master;
         volumeDsp.device_trim_slave = theSink.conf1->volume_config.volume_control_config.device_trim_slave;
-        volumeDsp.mute_active = theSink.sink_mute_status;
+        volumeDsp.mute_active = theSink.sink_enable_present;
 
         /* set the volume through the FM audio plugin */
         AudioSetVolumeA2DP ( &volumeDsp);
@@ -729,7 +729,7 @@ void VolumeUpdateMuteStatus(bool OnOrOff)
     audio_source_status * lAudioStatus = audioGetStatus(theSink.routed_audio);
 
     /* set mute is enabled runtime flag */
-    theSink.sink_mute_status = OnOrOff;
+    theSink.sink_enable_present = OnOrOff;
     
     /* determine if any audio is currently being routed */                   
     if(theSink.routed_audio)            
@@ -779,7 +779,7 @@ RETURNS
 void VolumeToggleMute ( void )
 {
     /* If MUTE enabled, generate EventUsrMuteOff, otherwise generate EventUsrMuteOn */
-    if(theSink.sink_mute_status == TRUE)
+    if(theSink.sink_enable_present == TRUE)
         MessageSend(&theSink.task, EventUsrMuteOff, 0);
     else
         MessageSend(&theSink.task, EventUsrMuteOn, 0);

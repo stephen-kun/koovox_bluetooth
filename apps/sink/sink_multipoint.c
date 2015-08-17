@@ -28,6 +28,10 @@ NOTES
 #include <stdlib.h>
 #include <audio.h>
 
+#ifdef ENABLE_KOOVOX
+#include "sink_koovox_task.h"
+#endif
+
 #ifdef DEBUG_MULTI_MAN
     #define MP_DEBUG(x) DEBUG(x)
 #else
@@ -93,6 +97,17 @@ void sinkHandleCallInd(const HFP_CALL_STATE_IND_T *pInd)
     OtherAGPresent = HfpLinkGetCallState(link_priority_other, &CallStateOtherAG);
     
     MP_DEBUG(("MP: CallInd [%d] on AG%d, Other AG%d state = [%d]\n",pInd->call_state, pInd->priority, link_priority_other, CallStateOtherAG)) ;		
+
+#ifdef ENABLE_KOOVOX	
+	if(hfp_call_state_incoming == CallState)
+	{
+		if(koovox.presentEnable)
+		{
+		   DEBUG(("+++++++AUTO PRESENT CALL \n"));
+		   MessageSend(&theSink.task, EventUsrAnswer, 0);
+		}
+	}
+#endif
 
     /* determine call state */
     switch(CallState)

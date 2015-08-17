@@ -133,7 +133,7 @@ DESCRIPTION
         #define DEBUG_BAT_REPx
 
 		#define DEBUG_KOOVOX_TASKx
-		#define DEBUG_KOOVOX_COREx
+		#define DEBUG_KOOVOX_CORE
 		#define DEBUG_KOOVOX_MESSAGEx
 		#define DEBUG_KOOVOX_UARTx
 

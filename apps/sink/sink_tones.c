@@ -1530,7 +1530,7 @@ void TonesPlayEvent ( sinkEvents_t pEvent )
 #endif
     
     /* ensure sink is not in muted state or trying to play the mute reminder */
-    if((theSink.sink_mute_status != TRUE)||(pEvent == EventSysMuteReminder)||(pEvent == EventUsrMuteOn))
+    if((theSink.sink_enable_present != TRUE)||(pEvent == EventSysMuteReminder)||(pEvent == EventUsrMuteOn))
     {
         /* If Audio Prompts are disabled go straight to tones. Otherwise if Audio Prompt is assigned to this 
            event tone playback would be skipped.*/

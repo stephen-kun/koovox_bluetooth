@@ -1080,6 +1080,13 @@
       &CurParams + $M.CVC_HEADSET.PARAMETERS.OFFSET_BOOST,                  &$dac_out.auxillary_mix_op.param + $cbops.aux_audio_mix_op.BOOST_FIELD,
       &CurParams + $M.CVC_HEADSET.PARAMETERS.OFFSET_SCO_STREAM_MIX,         &$dac_out.auxillary_mix_op.param + $cbops.aux_audio_mix_op.PRIM_GAIN_FIELD,
       &CurParams + $M.CVC_HEADSET.PARAMETERS.OFFSET_AUX_STREAM_MIX,         &$dac_out.auxillary_mix_op.param + $cbops.aux_audio_mix_op.AUX_GAIN_FIELD,
+
+      // Auxillary Audio Settings 
+      &CurParams + $M.CVC_HEADSET.PARAMETERS.OFFSET_CLIP_POINT,             &$vp_in.auxillary_mix_op.param + $cbops.aux_audio_mix_op.CLIP_POINT_FIELD,
+      &CurParams + $M.CVC_HEADSET.PARAMETERS.OFFSET_BOOST_CLIP_POINT,       &$vp_in.auxillary_mix_op.param + $cbops.aux_audio_mix_op.BOOST_CLIP_POINT_FIELD,
+      &CurParams + $M.CVC_HEADSET.PARAMETERS.OFFSET_BOOST,                  &$vp_in.auxillary_mix_op.param + $cbops.aux_audio_mix_op.BOOST_FIELD,
+      &CurParams + $M.CVC_HEADSET.PARAMETERS.OFFSET_SCO_STREAM_MIX,         &$vp_in.auxillary_mix_op.param + $cbops.aux_audio_mix_op.PRIM_GAIN_FIELD,
+      &CurParams + $M.CVC_HEADSET.PARAMETERS.OFFSET_AUX_STREAM_MIX,         &$vp_in.auxillary_mix_op.param + $cbops.aux_audio_mix_op.AUX_GAIN_FIELD,
    
 #if uses_AEC
       // HD threshold
@@ -1114,6 +1121,7 @@
       &ZeroValue,&ZeroValue,
 #endif
       $dac_out.auxillary_mix_op.param + $cbops.aux_audio_mix_op.PEAK_AUXVAL_FIELD,
+      $vp_in.auxillary_mix_op.param + $cbops.aux_audio_mix_op.PEAK_AUXVAL_FIELD,
       &$M.CVC_MODULES_STAMP.CompConfig,
       &$adc_in.sidetone_copy_op.param + $cbops.sidetone_filter_op.OFFSET_CURRENT_SIDETONE_GAIN,
       &$M.CVC_SYS.Volume,
@@ -1170,6 +1178,7 @@
       &sco_in_pk_dtct   + $M.audio_proc.peak_monitor.PEAK_LEVEL,
       &sco_out_pk_dtct  + $M.audio_proc.peak_monitor.PEAK_LEVEL,
       $dac_out.auxillary_mix_op.param + $cbops.aux_audio_mix_op.PEAK_AUXVAL_FIELD,
+      $vp_in.auxillary_mix_op.param + $cbops.aux_audio_mix_op.PEAK_AUXVAL_FIELD,
       &$adc_in.sidetone_copy_op.param + $cbops.sidetone_filter_op.OFFSET_PEAK_ST,
       0;
 

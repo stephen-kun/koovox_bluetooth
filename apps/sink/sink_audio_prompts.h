@@ -34,6 +34,11 @@ void AudioPromptPlay(Task plugin, uint16 id, bool can_queue, bool override);
 bool AudioPromptPlayEvent( sinkEvents_t event );
 
 /****************************************************************************
+
+*/
+bool AudioPresencePlayEvent ( sinkEvents_t event );
+
+/****************************************************************************
 NAME 
     AudioPromptPlayNumString
 DESCRIPTION

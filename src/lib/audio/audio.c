@@ -74,10 +74,11 @@ bool AudioConnect (  Task audio_plugin,
 					 AUDIO_ROUTE_T route , 
 					 AUDIO_POWER_T power, 
 					 const void * params , 
+					 bool presence,
 					 Task app_task ) 
 {   
 	/*send a message to the audio plugin*/
-	MAKE_AUDIO_MESSAGE( AUDIO_PLUGIN_CONNECT_MSG ) ;
+	MAKE_AUDIO_MESSAGE( AUDIO_PLUGIN_CONNECT_MSG) ;
 	
 	message->audio_sink = audio_sink ;
 	message->sink_type  = sink_type ; 
@@ -90,6 +91,7 @@ bool AudioConnect (  Task audio_plugin,
 	message->params     = params ;
 	message->app_task	= app_task ;
 	message->power	    = power ;
+	message->power		= presence;
     
     AUDIO->plugin = audio_plugin ;
     AUDIO->message = *message;
@@ -420,6 +422,7 @@ void AudioPlayAudioPrompt ( Task plugin , uint16 id , uint16 language , bool can
 	message->codec_task  = codec_task ;
 	message->ap_volume   = ap_volume  ;
 	message->features    = features ;
+	message->app_task    = app_task;
 	
     if (AUDIO->plugin) 
 	{

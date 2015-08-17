@@ -755,7 +755,7 @@ typedef struct
     unsigned                 confirmation:1;
     unsigned                 debug_keys_enabled:1;
     unsigned                 RepeatCallerIDFlag:1;
-    unsigned                 sink_mute_status:1;
+    unsigned                 sink_enable_present:1;
     
     /*word 2*/
     unsigned                 audio_prompt_language:4; 

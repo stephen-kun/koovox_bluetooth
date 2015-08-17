@@ -162,6 +162,7 @@ void speechRecognitionStart(void)
                        AUDIO_ROUTE_INTERNAL,
                        powerManagerGetLBIPM(),
                        &theSink.cvc_params,
+                       FALSE,
                        (TaskData*)&speechRecTask ) ;       
     }
     /* already running, just restart timeout timer */
@@ -203,6 +204,7 @@ void speechRecognitionReStart(void)
                    AUDIO_ROUTE_INTERNAL,
                    powerManagerGetLBIPM(),
                    &theSink.cvc_params,
+                   FALSE,
                    (TaskData*)&speechRecTask ) ;       
            
 }

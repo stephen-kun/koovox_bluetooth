@@ -41,4 +41,5 @@
 -lcsr_i2s_audio_plugin
 -lwechat
 -lgaia
+-lcsr_voice_presences_plugin
 assisted

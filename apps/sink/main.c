@@ -223,10 +223,6 @@ static void handleCLMessage ( Task task, MessageId id, Message message )
             MAIN_DEBUG(("CL_DM_LOCAL_NAME_COMPLETE\n"));
             /* Write EIR data and initialise the codec task */
             sinkWriteEirData((CL_DM_LOCAL_NAME_COMPLETE_T*)message);
-#ifndef GATT_DISABLED
-            /* Initialise any GATT services */
-            initialise_gatt_for_device( ((CL_DM_LOCAL_NAME_COMPLETE_T*)message)->local_name, ((CL_DM_LOCAL_NAME_COMPLETE_T*)message)->size_local_name );
-#endif
         break;
         case CL_SM_SEC_MODE_CONFIG_CFM:
             MAIN_DEBUG(("CL_SM_SEC_MODE_CONFIG_CFM\n"));
@@ -593,7 +589,7 @@ static void handleUEMessage  ( Task task, MessageId id, Message message )
 			DEBUG(("+++ EventUsrPowerOn ++++\n"));
             
             /* cancel any existing mute operations when powering up */
-            theSink.sink_mute_status = FALSE;
+            theSink.sink_enable_present = FALSE;
                                  
             /* if this init occurs and in limbo wait for the display init */
             if (stateManagerGetState() == deviceLimbo)
@@ -1504,6 +1500,9 @@ static void handleUEMessage  ( Task task, MessageId id, Message message )
             break ;
         case EventSysCallAnswered:
             MAIN_DEBUG(("HS: EventSysCallAnswered\n")) ;
+#ifdef ENABLE_KOOVOX
+			KoovoxPromptPresentScenceVoice();
+#endif
         break;
         case EventSysSLCConnected:
         case EventSysSLCConnectedAfterPowerOn:
@@ -1511,6 +1510,13 @@ static void handleUEMessage  ( Task task, MessageId id, Message message )
             MAIN_DEBUG(("HS: EventSysSLCConnected\n")) ;
             /*if there is a queued event - we might want to know*/                
             sinkRecallQueuedEvent();
+#ifndef GATT_DISABLED
+			{
+				char* local_name = "KOOVOX";
+				/* Initialise any GATT services */
+				initialise_gatt_for_device((uint8*)local_name, strlen(local_name));
+			}
+#endif	/* GATT_DISABLED */
         break;            
         case EventSysPrimaryDeviceConnected:
         case EventSysSecondaryDeviceConnected:
@@ -1546,6 +1552,9 @@ static void handleUEMessage  ( Task task, MessageId id, Message message )
             displayShowSimpleText(DISPLAYSTR_CLEAR,1);
             displayShowSimpleText(DISPLAYSTR_CLEAR,2);
 #endif            
+#ifdef ENABLE_KOOVOX
+			koovox.presentEnable = FALSE;
+#endif
         break;    
         case EventSysResetComplete:        
             MAIN_DEBUG(("EventSysResetComplete\n")) ;
