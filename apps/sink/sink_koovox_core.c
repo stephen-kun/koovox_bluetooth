@@ -213,10 +213,13 @@ void KoovoxPromptPresentScenceVoice(void)
 
 		DEBUG(("****present call \n"));
 		event = EventSysRingtone1;
+		#if 0
 		AudioPresencePlayEvent(event);
+		#else
 		AudioPromptPlayEvent(event);
+		#endif
 
-		MessageSendLater(&theSink.task, EventSysCallAnswered, 0, D_SEC(4));
+		MessageSendLater(&theSink.task, EventSysCallAnswered, 0, D_SEC(10));
 	}
 }
 

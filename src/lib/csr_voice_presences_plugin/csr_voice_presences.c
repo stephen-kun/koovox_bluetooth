@@ -252,6 +252,10 @@ static void CsrVoicePresencesPluginPlayDigit(void)
                 }   
                 
             }
+			else
+			{
+				CsrVoicePresencesPluginStopPhrase();
+			}
         }
         break;
         

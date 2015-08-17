@@ -1159,7 +1159,7 @@ static void CvcConnectAudio (CvcPluginTaskdata *task)
         /* check whether SCO is present */
         if(CVC->audio_sink)
         {
-        #if 0
+        #if 1
             /* connect sco in/out to dsp ports */
 			if(CVC->presence)
 			{
