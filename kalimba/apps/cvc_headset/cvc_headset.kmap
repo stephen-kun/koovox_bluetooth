@@ -11938,20 +11938,20 @@ Region: flash.code
 0x0030C8        F3D00000                 push rLink;
 0x0030C9        FD0000FF 09205D56        r0 = Null + M[$M.FrontEnd.enable_present];
 0x0030CB        0002000F                 Null = r0 + Null;
-0x0030CC        DD10000A                 if NE jump $M.FrontEnd.cbops_multirate_copy;
-0x0030CD        01A02D1D                 r8 = Null + 11549;
-0x0030CE        E1F0FFE8                 call $vee.feed_cbuffer;
-0x0030CF        FD0000FF 01A05BE1        r8 = Null + -42015;
-0x0030D1        E1F0D93C                 call $cbops_multirate.copy;
-0x0030D2        FD0000FF 01A05C95        r8 = Null + -41835;
-0x0030D4        E1F0D939                 call $cbops_multirate.copy;
-0x0030D5        DDF0EBF0                 jump $pop_rLink_and_rts;
+0x0030CC        DD100008                 if NE jump $M.FrontEnd.cbops_multirate_copy;
+0x0030CD        FD0000FF 01A05BD6        r8 = Null + -42026;
+0x0030CF        E1F0D93E                 call $cbops_multirate.copy;
+0x0030D0        FD000094 01206005        r0 = Null + -7053307;
+0x0030D2        E1F0E93A                 call $cbuffer.empty_buffer;
+0x0030D3        DDF0EBF2                 jump $pop_rLink_and_rts;
 
  <$M.FrontEnd.cbops_multirate_copy>
-0x0030D6        FD0000FF 01A05BD6        r8 = Null + -42026;
+0x0030D4        01A02D1D                 r8 = Null + 11549;
+0x0030D5        E1F0FFE1                 call $vee.feed_cbuffer;
+0x0030D6        FD0000FF 01A05BE1        r8 = Null + -42015;
 0x0030D8        E1F0D935                 call $cbops_multirate.copy;
-0x0030D9        FD000094 01206005        r0 = Null + -7053307;
-0x0030DB        E1F0E931                 call $cbuffer.empty_buffer;
+0x0030D9        FD0000FF 01A05C95        r8 = Null + -41835;
+0x0030DB        E1F0D932                 call $cbops_multirate.copy;
 0x0030DC        DDF0EBE9                 jump $pop_rLink_and_rts;
 
  <$ConfigureBackEnd>

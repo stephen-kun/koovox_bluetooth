@@ -166,7 +166,7 @@
    <property key="enable_capsense" >0</property>
    <property key="enable_fm" >0</property>
    <property key="enable_fm_rds" >0</property>
-   <property key="enable_gaia" >0</property>
+   <property key="enable_gaia" >1</property>
    <property key="enable_gatt" >2</property>
    <property key="enable_gatt_bas" >0</property>
    <property key="enable_ir_remote" >0</property>
@@ -189,9 +189,8 @@
    <property key="panic" >0</property>
    <property key="pcvalue" >1</property>
    <property key="primitives" >1</property>
-   <property key="stacksize" >0</property>
+   <property key="stacksize" >246</property>
    <property key="storage_type" >0</property>
-   <property key="three_way_calling" >0</property>
    <property key="timestamps" >1</property>
   </configuration>
   <configuration name="Soundbar-Mozart(CSR8670)" >

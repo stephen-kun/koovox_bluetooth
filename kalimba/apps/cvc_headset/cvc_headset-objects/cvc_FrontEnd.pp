@@ -5551,6 +5551,18 @@ $vee.cbops_multirate_copy:
     NULL = r0;
     if NZ jump cbops_multirate_copy;
 
+    r8 = &$adc_in.copy_struc;
+    call $cbops_multirate.copy;
+
+
+   r0 = $TONE_VP;
+   call $cbuffer.empty_buffer;
+
+   jump $pop_rLink_and_rts;
+
+
+cbops_multirate_copy:
+
     r8 = &$vp_in.port_cbuffer_struc;
     call $vee.feed_cbuffer;
 
@@ -5561,16 +5573,5 @@ $vee.cbops_multirate_copy:
    call $cbops_multirate.copy;
 
     jump $pop_rLink_and_rts;
-
-cbops_multirate_copy:
-
-    r8 = &$adc_in.copy_struc;
-    call $cbops_multirate.copy;
-
-
-   r0 = $TONE_VP;
-   call $cbuffer.empty_buffer;
-
-   jump $pop_rLink_and_rts;
 
 .ENDMODULE;

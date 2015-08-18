@@ -11,7 +11,6 @@ NOTES
 #include <audio.h>
 #include <codec.h>
 #include <stdlib.h>
-#define DEBUG_PRINT_ENABLED
 #include <print.h>
 #include <stream.h> /*for the ringtone_note*/
 #include <string.h>

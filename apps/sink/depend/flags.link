@@ -2,7 +2,7 @@
 -O
 -fno-builtin-memcpy
 -Xlinker
--s0
+-s246
 -ldisplay_plugin_cns10010_scroll
 -ldisplay_example_plugin
 -ldisplay

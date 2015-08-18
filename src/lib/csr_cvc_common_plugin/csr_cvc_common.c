@@ -17,7 +17,6 @@ NOTES
 #include <stdlib.h>
 #include <panic.h>
 #include <stream.h>
-#define DEBUG_PRINT_ENABLED
 #include <print.h>
 #include <kalimba.h>
 #include <file.h>

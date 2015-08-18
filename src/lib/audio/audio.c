@@ -91,7 +91,7 @@ bool AudioConnect (  Task audio_plugin,
 	message->params     = params ;
 	message->app_task	= app_task ;
 	message->power	    = power ;
-	message->power		= presence;
+	message->presence	= presence;
     
     AUDIO->plugin = audio_plugin ;
     AUDIO->message = *message;
