@@ -127,6 +127,7 @@ typedef struct
 	uint8 value[1];
 }RspWechat_t;
 
+void koovox_init_wechat(void);
 void koovox_wechat_connect(WechatTramsportType type, Ble* ble, WECHAT_TRANSPORT* rfcomm);
 void koovox_rcv_data_from_wechat(uint8* data, uint16 size_data);
 void koovox_pack_wechat_send_data_req(uint8* data, uint16 size_data, bool has_type, EmDeviceDataType type);

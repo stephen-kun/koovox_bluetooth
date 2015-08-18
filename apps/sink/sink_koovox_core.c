@@ -257,7 +257,7 @@ void KoovoxUsrEventHandle(MessageId id, Message message)
 {
 	sinkState state = stateManagerGetState();
 	
-	KOOVOX_CORE_DEBUG(("KoovoxUsrEventHandle: %x\n", id));
+	KOOVOX_CORE_DEBUG(("KoovoxUsrEventHandle: id=%x, state=%d\n", id, state));
 	
 	switch(id)
 	{
@@ -305,16 +305,19 @@ void KoovoxUsrEventHandle(MessageId id, Message message)
 		/* 进入配对模式 */
 		case deviceConnectable:
 		case deviceConnDiscoverable:
+			MessageSend(&theSink.task, EventUsrRssiPair, 0);
+			break;
+
+		/* 启动BLE 广播 */
+		case deviceConnected:
+			if(!koovox.ble_adv)
 			{
-				MessageSend(&theSink.task, EventUsrRssiPair, 0);
-				if(!koovox.ble_adv)
-				{
 #if defined(BLE_ENABLED)
-					start_ble_advertising();
-					koovox.ble_adv = TRUE;
+				start_ble_advertising();
+				koovox.ble_adv = TRUE;
+				MessageCancelAll(&(theSink.task), EventKoovoxDisableBleAdvertising);
+				MessageSendLater(&(theSink.task), EventKoovoxDisableBleAdvertising, 0, TIMEOUT_STOP_BLE);
 #endif
-					MessageSendLater(&(theSink.task), EventKoovoxDisableBleAdvertising, 0, TIMEOUT_STOP_BLE);
-				}
 			}
 			break;
 
@@ -429,8 +432,11 @@ void KoovoxUsrEventHandle(MessageId id, Message message)
 	{
 		DEBUG(("EventKoovoxDisableBleAdvertising\n"));
 #if defined(BLE_ENABLED)
-		stop_ble_advertising();
-		koovox.ble_adv = FALSE;
+		if(koovox.ble_adv)
+		{
+			stop_ble_advertising();
+			koovox.ble_adv = FALSE;
+		}
 #endif
 	}
 	break;

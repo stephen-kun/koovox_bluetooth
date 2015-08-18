@@ -442,7 +442,7 @@ DESCRIPTION
 RETURN
     void
 */
-static void koovox_init_wechat(void)
+void koovox_init_wechat(void)
 {
 	if(g_wechat == NULL)
 		g_wechat = (WECHAT_DATA_T*)mallocPanic(sizeof(WECHAT_DATA_T));
@@ -457,25 +457,6 @@ static void koovox_init_wechat(void)
 
 /*************************************************************************
 NAME
-    koovox_init_wechat
-    
-DESCRIPTION
-    device disconnect to wechat
-
-RETURN
-    void
-*/
-static void koovox_free_wechat(void)
-{
-	if(g_wechat)
-	{
-		freePanic(g_wechat);
-		g_wechat = NULL;
-	}
-}
-
-/*************************************************************************
-NAME
     koovox_wechat_connect
     
 DESCRIPTION
@@ -486,8 +467,7 @@ RETURN
 */
 void koovox_wechat_connect(WechatTramsportType type, Ble* ble, WECHAT_TRANSPORT* rfcomm)
 {
-
-	koovox_init_wechat();
+	DEBUG(("koovox_wechat_connect\n"));
 
 	if(!g_wechat->state.connect_state)
 	{
@@ -547,7 +527,7 @@ void koovox_rcv_data_from_wechat(uint8* data, uint16 size_data)
 		}
 #endif    
 	
-		if(size_data < FRAME_SIZE_FIX_HEAD)
+		if((size_data < FRAME_SIZE_FIX_HEAD)||(!g_wechat))
 			return;
 	
 		while(size_data)
@@ -557,7 +537,7 @@ void koovox_rcv_data_from_wechat(uint8* data, uint16 size_data)
 				uint16 lenght = ((uint16)data[offset + 2] << 8) + (uint16)data[offset + 3] ;
 	
 				/* °üÍ·¼ì²â */
-				if((data[0] != 0xfe)&&(data[1] != 0x01))
+				if((data[offset + 0] != 0xfe)&&(data[offset + 1] != 0x01))
 					return;
 				
 				g_wechat->rcv_data.len = lenght;
@@ -635,7 +615,11 @@ RETURN
 */
 void koovox_wechat_disconnect(void)
 {
-	koovox_free_wechat();
+	if(g_wechat)
+	{
+		freePanic(g_wechat);
+		g_wechat = NULL;
+	}
 }
 
 

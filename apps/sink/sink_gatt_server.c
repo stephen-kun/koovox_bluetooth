@@ -138,9 +138,9 @@ void server_handle_gatt_connect_cfm(GATT_CONNECT_CFM_T * cfm)
                 /* Start Advertising so a remote device can find and connect */
 				if(deviceConnected <= stateManagerGetState())
 				{
-					DEBUG(("start_ble_advertising\n"));
 					start_ble_advertising();
 					koovox.ble_adv = TRUE;
+					MessageCancelAll(&(theSink.task), EventKoovoxDisableBleAdvertising);
 					MessageSendLater(&(theSink.task), EventKoovoxDisableBleAdvertising, 0, TIMEOUT_STOP_BLE);
 				}
             }
@@ -183,6 +183,7 @@ void server_handle_gatt_disconnect_ind(GATT_DISCONNECT_IND_T * ind)
     {
         start_ble_advertising();
 		koovox.ble_adv = TRUE;
+		MessageCancelAll(&(theSink.task), EventKoovoxDisableBleAdvertising);
 		MessageSendLater(&(theSink.task), EventKoovoxDisableBleAdvertising, 0, TIMEOUT_STOP_BLE);
     }
     #endif
@@ -201,7 +202,7 @@ void server_handle_gatt_access_ind(GATT_ACCESS_IND_T * ind)
     /* Which GATT declaration/characteristic/descriptor has been requested? */
     bool is_valid = FALSE;
 
-	DEBUG(("server_handle_gatt_access_ind: %x\n", ind->handle));
+	DEBUG(("server_handle_gatt_access_ind: handle=%x, flags=%x\n", ind->handle, ind->flags));
     
     /* Was the GATT characteristic requested? */
     if (ind->handle == HANDLE_GATT_SERVICE)
@@ -300,7 +301,8 @@ void server_handle_gatt_access_ind(GATT_ACCESS_IND_T * ind)
 				
 			}
 			else
-			{				
+			{
+				DEBUG(("==gatt_status_invalid_length\n"));
 				/* Requested data to write is the wrong length, respond to the device with appropriate error */
 				GattAccessResponse(ind->cid, ind->handle, gatt_status_invalid_length, 0, NULL);
 			}

@@ -64,4 +64,5 @@ sink_gatt.o: sink_gatt.c sink_gatt.h sink_gatt_server.h \
   C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/wechat.h \
   sink_avrcp.h \
   C:/ADK3.5/tools/include/profiles/BlueLab-6.5.2-Release/avrcp.h \
-  sink_gatt_db.h sink_ble_advertising.h sink_ble_scanning.h
+  sink_gatt_db.h sink_ble_advertising.h sink_ble_scanning.h \
+  koovox_wechat_handle.h epb_MmBp.h epb.h

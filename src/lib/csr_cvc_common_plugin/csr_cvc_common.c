@@ -1163,12 +1163,12 @@ static void CvcConnectAudio (CvcPluginTaskdata *task)
 			if(CVC->presence)
 			{
 	            StreamConnectDispose(CVC->audio_source); 
-				printf("StreamConnectDispose**\n");
+				PRINT(("StreamConnectDispose**\n"));
 			}
 			else
 			{
 	            StreamConnect(CVC->audio_source,StreamKalimbaSink(CVC_SCO_PORT)); /* SCO->DSP */  
-				printf("StreamConnect**\n");
+				PRINT(("StreamConnect**\n"));
 			}
 		#else
 			StreamConnect(CVC->audio_source,StreamKalimbaSink(CVC_SCO_PORT)); /* SCO->DSP */  
@@ -1388,7 +1388,7 @@ void CsrCvcPluginInternalMessage( CvcPluginTaskdata *task ,uint16 id , Message m
 					else
 					{
 						KalimbaSendMessage(SET_DISABLE_PRESENCE_MESSAGE_ID, 0, 0, 0, 0);
-						printf(("SET_DISABLE_PRESENCE_MESSAGE_ID\n"));
+						PRINT(("SET_DISABLE_PRESENCE_MESSAGE_ID\n"));
 					}
 
                     PRINT(("CVC: CVC_READY, SysId[%x] BuildVersion[%x] \n",m->a, m->b));

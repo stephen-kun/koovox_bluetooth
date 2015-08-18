@@ -5582,7 +5582,7 @@ $_koovox_pack_wechat_send_data_req:
 	leavel	#12
 ;.stabn	192,0,0,?LBB16
 ;.stabn	224,0,0,?LBE16
-_koovox_init_wechat:
+$_koovox_init_wechat:
 	enterl	#3
 ?LBB_koovox_init_wechat:
 	tst	@$_g_wechat
@@ -5610,27 +5610,16 @@ _koovox_init_wechat:
 	st	AL,@(H'000D,X)
 ?LBE_koovox_init_wechat:
 	leavel	#3
-_koovox_free_wechat:
-	enterl	#2
-?LBB_koovox_free_wechat:
-	tst	@$_g_wechat
-	beq	?L77
-	ld	AL,@$_g_wechat
-	bsr	$_free
-	ld	AL,#H'0000
-	st	AL,@$_g_wechat
-?L77:
-?LBE_koovox_free_wechat:
-	leavel	#2
 $_koovox_wechat_connect:
 	enterl	#7
 ?LBB_koovox_wechat_connect:
 	st	AL,@(H'0003,Y)
 	st	AH,@(H'0004,Y)
-	bsr	_koovox_init_wechat
+	ld	AL,#(?LC7)
+	bsr	$_puts
 	ld	X,@$_g_wechat
 	tst	@(H'0001,X)
-	bne	?L79
+	bne	?L77
 	ld	AL,#H'0001
 	st	AL,@(H'0001,X)
 	ld	X,@$_g_wechat
@@ -5639,7 +5628,7 @@ $_koovox_wechat_connect:
 	bsr	_koovox_pack_wechat_auth_req
 	ld	AL,@(H'0003,Y)
 	cmp	AL,#H'0002
-	bne	?L81
+	bne	?L79
 	ld	AH,@$_g_wechat
 	ld	X,@(H'0004,Y)
 	ld	AL,@(0,X)
@@ -5652,7 +5641,7 @@ $_koovox_wechat_connect:
 	st	AL,@(H'0015,X)
 	ld	X,@$_theSink+H'0004
 	tst	@(H'001A,X)
-	beq	?L86
+	beq	?L84
 	ld	AH,#H'0000
 	st	AH,@(0,Y)
 	ld	AL,#H'03E8
@@ -5661,23 +5650,48 @@ $_koovox_wechat_connect:
 	ld	AL,#($_theSink)
 	ld	AH,#H'40C0
 	bsr	$_MessageSendLater
-	bra	(?L84)
-?L81:
+	bra	(?L82)
+?L79:
 	ld	AL,@(H'0003,Y)
 	cmp	AL,#H'0001
-	bne	?L84
+	bne	?L82
 	ld	X,@$_g_wechat
 	ld	AL,@(H'0007,Y)
 	st	AL,@(H'0014,X)
-?L86:
-	bsr	$_koovox_send_data_to_wechat
 ?L84:
+	bsr	$_koovox_send_data_to_wechat
+?L82:
 	ld	X,@$_g_wechat
 	ld	AL,#H'0001
 	st	AL,@(H'0005,X)
-?L79:
+?L77:
 ?LBE_koovox_wechat_connect:
 	leavel	#7
+	.SEG	CONST
+?LC7:
+	dc	H'6B
+	dc	H'6F
+	dc	H'6F
+	dc	H'76
+	dc	H'6F
+	dc	H'78
+	dc	H'5F
+	dc	H'77
+	dc	H'65
+	dc	H'63
+	dc	H'68
+	dc	H'61
+	dc	H'74
+	dc	H'5F
+	dc	H'63
+	dc	H'6F
+	dc	H'6E
+	dc	H'6E
+	dc	H'65
+	dc	H'63
+	dc	H'74
+	dc	H'00
+	.CODE
 $_koovox_rcv_data_from_wechat:
 	enterl	#10
 ?LBB_koovox_rcv_data_from_wechat:
@@ -5689,8 +5703,8 @@ $_koovox_rcv_data_from_wechat:
 	st	AH,@(H'0006,Y)
 ?LBB18:
 	tst	@(H'0002,Y)
-	beq	?L107
-?L94:
+	beq	?L106
+?L92:
 	ld	X,@(H'0001,Y)
 	add	X,@(H'0006,Y)
 	ld	AL,@(0,X)
@@ -5701,20 +5715,22 @@ $_koovox_rcv_data_from_wechat:
 	add	AL,#H'0001
 	st	AL,@(H'0006,Y)
 	cmp	AL,@(H'0002,Y)
-	bcs	?L94
-?L107:
+	bcs	?L92
+?L106:
 	ld	AL,#H'000A
 	bsr	$_putchar
 	ld	AH,@(H'0002,Y)
 ?LBE18:
 	cmp	AH,#H'0007
-	bcz	?L89
+	bcz	?L87
+	tst	@$_g_wechat
+	beq	?L87
 	cmp	AH,#H'0000
-	beq	?L89
-?L105:
+	beq	?L87
+?L104:
 	ld	X,@$_g_wechat
 	tst	@(H'000F,X)
-	bne	?L99
+	bne	?L98
 	ld	X,@(H'0001,Y)
 ?LBB19:
 	add	X,@(H'0005,Y)
@@ -5722,27 +5738,25 @@ $_koovox_rcv_data_from_wechat:
 	asl	#H'0008
 	ld	AH,@(H'0003,X)
 	add	AH,@$XAP_AL
-	ld	X,@(H'0001,Y)
 	ld	AL,@(0,X)
 	cmp	AL,#H'00FE
-	beq	?L100
+	beq	?L99
 	ld	AL,@(H'0001,X)
 	cmp	AL,#H'0001
-	bne	?L89
-?L100:
+	bne	?L87
+?L99:
 	ld	X,@$_g_wechat
 	st	AH,@(H'000F,X)
 	ld	X,@$_g_wechat
-	ld	AH,#H'0000
-	st	AH,@(H'0010,X)
-	ld	AL,@$_g_wechat
-	st	AL,@(H'0007,Y)
-	ld	X,@$XAP_AL
+	ld	AL,#H'0000
+	st	AL,@(H'0010,X)
+	ld	X,@$_g_wechat
+	st	X,@(H'0007,Y)
 	ld	AL,@(H'000F,X)
 	bsr	$_malloc
 	ld	X,@(H'0007,Y)
 	st	AL,@(H'000E,X)
-?L99:
+?L98:
 ?LBE19:
 	ld	X,@$_g_wechat
 	ld	AH,@(H'000F,X)
@@ -5751,9 +5765,9 @@ $_koovox_rcv_data_from_wechat:
 	st	AH,@(H'0003,Y)
 	ld	AL,@(H'0002,Y)
 	cmp	AL,@$XAP_AH
-	bcz	?L101
+	bcz	?L100
 	ld	AL,@$XAP_AH
-?L101:
+?L100:
 	st	AL,@(H'0003,Y)
 	ld	X,@$_g_wechat
 	ld	AL,@(H'000E,X)
@@ -5778,17 +5792,17 @@ $_koovox_rcv_data_from_wechat:
 	ld	X,@$_g_wechat
 	ld	AH,@(H'000F,X)
 	cmp	AH,@(H'0010,X)
-	beq	?L114
-	bcc	?L96
-?L114:
+	beq	?L113
+	bcc	?L95
+?L113:
 	ld	AL,@(H'000E,X)
 	bsr	_koovox_rcv_data_handle
 	st	AL,@(H'0004,Y)
 	bsr	_koovox_wechat_error_handle
 	ld	X,@$_g_wechat
 	tst	@(H'000E,X)
-	beq	?L103
-	ld	AL,#(?LC7)
+	beq	?L102
+	ld	AL,#(?LC8)
 	bsr	$_puts
 	ld	X,@$_g_wechat
 	ld	AL,@(H'000E,X)
@@ -5796,24 +5810,24 @@ $_koovox_rcv_data_from_wechat:
 	ld	X,@$_g_wechat
 	ld	AH,#H'0000
 	st	AH,@(H'000E,X)
-?L103:
+?L102:
 	ld	X,@$_g_wechat
 	ld	AL,#H'0000
 	st	AL,@(H'000F,X)
 	ld	X,@$_g_wechat
 	st	AL,@(H'0010,X)
 	tst	@(H'0004,Y)
-	beq	?L96
+	beq	?L95
 	st	AL,@(H'0002,Y)
-?L96:
+?L95:
 	tst	@(H'0002,Y)
-	bne	?L105
-?L89:
+	bne	?L104
+?L87:
 ?LBE17:
 ?LBE_koovox_rcv_data_from_wechat:
 	leavel	#10
 	.SEG	CONST
-?LC7:
+?LC8:
 	dc	H'66
 	dc	H'72
 	dc	H'65
@@ -5848,33 +5862,39 @@ $_koovox_send_data_to_wechat:
 	ld	X,@$_g_wechat
 	ld	AL,@(0,X)
 	cmp	AL,#H'0002
-	bne	?L116
+	bne	?L115
 	ld	AL,@(H'0014,X)
 	ld	AH,@(H'0015,X)
 	bsr	_koovox_indicate_to_wechat
-	bra	(?L115)
-?L116:
+	bra	(?L114)
+?L115:
 	ld	X,@$_g_wechat
 	ld	AL,@(0,X)
 	cmp	AL,#H'0001
-	bne	?L115
+	bne	?L114
 	ld	AL,@(H'0011,X)
 	st	AL,@(0,Y)
 	ld	AL,@(H'0014,X)
 	ld	AH,@(H'0012,X)
 	bsr	$_WechatSendPacket
-?L115:
+?L114:
 ?LBE_koovox_send_data_to_wechat:
 	leavel	#3
 $_koovox_wechat_disconnect:
 	enterl	#2
 ?LBB_koovox_wechat_disconnect:
-	bsr	_koovox_free_wechat
+	tst	@$_g_wechat
+	beq	?L120
+	ld	AL,@$_g_wechat
+	bsr	$_free
+	ld	AL,#H'0000
+	st	AL,@$_g_wechat
+?L120:
 ?LBE_koovox_wechat_disconnect:
 	leavel	#2
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 169 used[1] = 14 used[3] = 3 total = 186
+;# Function pattern *movqi2 used[0] = 168 used[1] = 14 used[3] = 3 total = 185
 ;# Function pattern *movqi3 used[0] = 261 total = 261
 ;# Function pattern *movqi8 used[0] = 21 total = 21
 ;# Function pattern *movhi used[2] = 5 used[3] = 3 total = 8
@@ -5885,9 +5905,9 @@ $_koovox_wechat_disconnect:
 ;# Function pattern *lshrqi3 used[0] = 3 total = 3
 ;# Function pattern *ashlqi3 used[0] = 2 total = 2
 ;# Function pattern jump used[0] = 22 total = 22
-;# Function pattern *call1 used[0] = 27 total = 27
-;# Function pattern *call_value1 used[0] = 40 total = 40
-;# Function pattern movstrqi+3 used[0] = 7 used[1] = 18 total = 25
+;# Function pattern *call1 used[0] = 25 total = 25
+;# Function pattern *call_value1 used[0] = 41 total = 41
+;# Function pattern movstrqi+3 used[0] = 7 used[1] = 19 total = 26
 ;# Function pattern movstrqi+4 used[1] = 3 used[2] = 1 total = 4
 ;# Function pattern movstrqi+5 used[0] = 20 total = 20
 ;# Function pattern movstrqi+6 used[0] = 3 total = 3
@@ -9376,14 +9396,14 @@ $_main:
 	leavel	#6
 	.SEG	CONST
 ?LC4:
-	dc	H'32
 	dc	H'31
-	dc	H'3A
-	dc	H'32
-	dc	H'36
+	dc	H'35
 	dc	H'3A
 	dc	H'34
-	dc	H'39
+	dc	H'34
+	dc	H'3A
+	dc	H'31
+	dc	H'33
 	dc	H'00
 ?LC3:
 	dc	H'4D
@@ -31625,6 +31645,7 @@ $_gatt_message_handler:
 	st	AL,@(H'0001,Y)
 	ld	AL,#($_theSink)
 	bsr	$_ConnectionDmBleSecurityReq
+	bsr	$_koovox_init_wechat
 ?L10:
 	ld	AL,@(H'0004,Y)
 	bsr	$_server_handle_gatt_connect_cfm
@@ -31669,7 +31690,7 @@ $_disconnect_all_gatt_devices:
 ;# Function pattern *addqi0 used[0] = 1 total = 1
 ;# Function pattern *addqi2 used[0] = 2 total = 2
 ;# Function pattern jump used[0] = 10 total = 10
-;# Function pattern *call1 used[0] = 12 total = 12
+;# Function pattern *call1 used[0] = 13 total = 13
 ;# Function pattern *call_value1 used[0] = 1 total = 1
 ;# Function pattern movstrqi+3 used[1] = 2 total = 2
 ;# Function pattern movstrqi+4 used[1] = 4 total = 4
@@ -31944,15 +31965,17 @@ $_server_handle_gatt_connect_cfm:
 	bsr	$_stateManagerGetState
 	cmp	AL,#H'0002
 	bcz	?L32
-	ld	AL,#(?LC0)
-	bsr	$_puts
 	bsr	$_start_ble_advertising
 	ld	AL,#H'0001
 	st	AL,@$_koovox+H'000D
-	ld	AH,#H'0000
-	st	AH,@(0,Y)
-	ld	AH,#-H'2B40
-	st	AH,@(H'0002,Y)
+	ld	AL,#($_theSink)
+	ld	AH,#H'40C1
+	bsr	$_MessageCancelAll
+	ld	AL,#H'0000
+	st	AL,@(0,Y)
+	ld	AL,#-H'2B40
+	st	AL,@(H'0002,Y)
+	ld	AL,#H'0001
 	st	AL,@(H'0001,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'40C1
@@ -31970,31 +31993,6 @@ $_server_handle_gatt_connect_cfm:
 ?L32:
 ?LBE_server_handle_gatt_connect_cfm:
 	leavel	#6
-	.SEG	CONST
-?LC0:
-	dc	H'73
-	dc	H'74
-	dc	H'61
-	dc	H'72
-	dc	H'74
-	dc	H'5F
-	dc	H'62
-	dc	H'6C
-	dc	H'65
-	dc	H'5F
-	dc	H'61
-	dc	H'64
-	dc	H'76
-	dc	H'65
-	dc	H'72
-	dc	H'74
-	dc	H'69
-	dc	H'73
-	dc	H'69
-	dc	H'6E
-	dc	H'67
-	dc	H'00
-	.CODE
 $_server_handle_gatt_disconnect_ind:
 	enterl	#5
 ?LBB_server_handle_gatt_disconnect_ind:
@@ -32004,10 +32002,14 @@ $_server_handle_gatt_disconnect_ind:
 	bsr	$_start_ble_advertising
 	ld	AH,#H'0001
 	st	AH,@$_koovox+H'000D
+	ld	AL,#($_theSink)
+	ld	AH,#H'40C1
+	bsr	$_MessageCancelAll
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#-H'2B40
 	st	AL,@(H'0002,Y)
+	ld	AH,#H'0001
 	st	AH,@(H'0001,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'40C1
@@ -32030,7 +32032,9 @@ $_server_handle_gatt_access_ind:
 ?LBB4:
 	ld	AL,@(H'0001,X)
 	st	AL,@(0,Y)
-	ld	AL,#(?LC1)
+	ld	AL,@(H'0002,X)
+	st	AL,@(H'0001,Y)
+	ld	AL,#(?LC0)
 	bsr	$_printf
 	ld	X,@(H'000B,Y)
 	ld	AL,@(H'0001,X)
@@ -32082,7 +32086,7 @@ $_server_handle_gatt_access_ind:
 	st	AL,@(0,Y)
 	ld	AL,@(H'0003,X)
 	st	AL,@(H'0001,Y)
-	ld	AL,#(?LC2)
+	ld	AL,#(?LC1)
 	bsr	$_printf
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
@@ -32183,6 +32187,8 @@ $_server_handle_gatt_access_ind:
 ?LBE6:
 	bra	(?L43)
 ?L63:
+	ld	AL,#(?LC2)
+	bsr	$_puts
 	ld	AL,#H'000D
 	st	AL,@(0,Y)
 	ld	AL,#H'0000
@@ -32199,7 +32205,7 @@ $_server_handle_gatt_access_ind:
 ?LBE_server_handle_gatt_access_ind:
 	leavel	#14
 	.SEG	CONST
-?LC1:
+?LC0:
 	dc	H'73
 	dc	H'65
 	dc	H'72
@@ -32231,11 +32237,28 @@ $_server_handle_gatt_access_ind:
 	dc	H'64
 	dc	H'3A
 	dc	H'20
+	dc	H'68
+	dc	H'61
+	dc	H'6E
+	dc	H'64
+	dc	H'6C
+	dc	H'65
+	dc	H'3D
+	dc	H'25
+	dc	H'78
+	dc	H'2C
+	dc	H'20
+	dc	H'66
+	dc	H'6C
+	dc	H'61
+	dc	H'67
+	dc	H'73
+	dc	H'3D
 	dc	H'25
 	dc	H'78
 	dc	H'0A
 	dc	H'00
-?LC2:
+?LC1:
 	dc	H'66
 	dc	H'6C
 	dc	H'61
@@ -32258,6 +32281,36 @@ $_server_handle_gatt_access_ind:
 	dc	H'78
 	dc	H'20
 	dc	H'0A
+	dc	H'00
+?LC2:
+	dc	H'3D
+	dc	H'3D
+	dc	H'67
+	dc	H'61
+	dc	H'74
+	dc	H'74
+	dc	H'5F
+	dc	H'73
+	dc	H'74
+	dc	H'61
+	dc	H'74
+	dc	H'75
+	dc	H'73
+	dc	H'5F
+	dc	H'69
+	dc	H'6E
+	dc	H'76
+	dc	H'61
+	dc	H'6C
+	dc	H'69
+	dc	H'64
+	dc	H'5F
+	dc	H'6C
+	dc	H'65
+	dc	H'6E
+	dc	H'67
+	dc	H'74
+	dc	H'68
 	dc	H'00
 	.CODE
 ;.stabn	192,0,0,?LBB5
@@ -32309,15 +32362,15 @@ $_disconnect_all_gatt_clients:
 ;.stabn	224,0,0,?LBE7
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 64 used[1] = 1 used[3] = 1 total = 66
-;# Function pattern *movqi3 used[0] = 91 total = 91
+;# Function pattern *movqi2 used[0] = 65 used[1] = 1 used[3] = 1 total = 67
+;# Function pattern *movqi3 used[0] = 98 total = 98
 ;# Function pattern *movqi8 used[0] = 6 total = 6
 ;# Function pattern *addqi0 used[0] = 4 total = 4
 ;# Function pattern *addqi2 used[0] = 9 used[2] = 8 total = 17
 ;# Function pattern *andqi3 used[0] = 3 total = 3
 ;# Function pattern jump used[0] = 11 total = 11
 ;# Function pattern *call1 used[0] = 19 total = 19
-;# Function pattern *call_value1 used[0] = 8 total = 8
+;# Function pattern *call_value1 used[0] = 10 total = 10
 ;# Function pattern movstrqi+2 used[0] = 1 total = 1
 ;# Function pattern movstrqi+3 used[0] = 9 used[1] = 5 total = 14
 ;# Function pattern movstrqi+5 used[0] = 16 total = 16
@@ -34998,7 +35051,7 @@ $_KoovoxPresentIncomingCall:
 	dc	H'00
 	.CODE
 $_KoovoxPromptPresentScenceVoice:
-	enterl	#5
+	enterl	#2
 ?LBB_KoovoxPromptPresentScenceVoice:
 ?LBB3:
 	tst	@$_koovox+H'0004
@@ -35008,19 +35061,11 @@ $_KoovoxPromptPresentScenceVoice:
 	bsr	$_puts
 	ld	AL,#H'4751
 	bsr	$_AudioPresencePlayEvent
-	ld	AH,#H'0000
-	st	AH,@(0,Y)
-	ld	AL,#H'2710
-	st	AL,@(H'0002,Y)
-	st	AH,@(H'0001,Y)
-	ld	AL,#($_theSink)
-	ld	AH,#H'4722
-	bsr	$_MessageSendLater
 ?L23:
 ?LBE4:
 ?LBE3:
 ?LBE_KoovoxPromptPresentScenceVoice:
-	leavel	#5
+	leavel	#2
 	.SEG	CONST
 ?LC3:
 	dc	H'2A
@@ -35093,6 +35138,8 @@ $_KoovoxUsrEventHandle:
 	st	AL,@(H'0004,Y)
 	ld	AL,@(H'0003,Y)
 	st	AL,@(0,Y)
+	ld	X,@(H'0004,Y)
+	st	X,@(H'0001,Y)
 	ld	AL,#(?LC4)
 	bsr	$_printf
 	ld	AL,@(H'0003,Y)
@@ -35100,26 +35147,26 @@ $_KoovoxUsrEventHandle:
 	cmp	AL,#(H'0001+H'000C)
 	bcc	?L26
 	ld	X,@$XAP_AL
-	ld	X,@(?JTBASE70,X)
+	ld	X,@(?JTBASE72,X)
 	brxl
 	.SEG	CONST
-?JTBASE70:
+?JTBASE72:
 	.CODE
-?L70:
+?L72:
 	.SEG	CONST
-	dc	lwrd(?L56-?L70)
-	dc	lwrd(?L26-?L70)
-	dc	lwrd(?L63-?L70)
-	dc	lwrd(?L26-?L70)
-	dc	lwrd(?L26-?L70)
-	dc	lwrd(?L28-?L70)
-	dc	lwrd(?L47-?L70)
-	dc	lwrd(?L37-?L70)
-	dc	lwrd(?L26-?L70)
-	dc	lwrd(?L26-?L70)
-	dc	lwrd(?L26-?L70)
-	dc	lwrd(?L67-?L70)
-	dc	lwrd(?L68-?L70)
+	dc	lwrd(?L57-?L72)
+	dc	lwrd(?L26-?L72)
+	dc	lwrd(?L64-?L72)
+	dc	lwrd(?L26-?L72)
+	dc	lwrd(?L26-?L72)
+	dc	lwrd(?L28-?L72)
+	dc	lwrd(?L48-?L72)
+	dc	lwrd(?L37-?L72)
+	dc	lwrd(?L26-?L72)
+	dc	lwrd(?L26-?L72)
+	dc	lwrd(?L26-?L72)
+	dc	lwrd(?L68-?L72)
+	dc	lwrd(?L69-?L72)
 	.CODE
 ?L28:
 	ld	AL,@(H'0004,Y)
@@ -35151,122 +35198,127 @@ $_KoovoxUsrEventHandle:
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'4047
-	bra	(?L72)
+	bra	(?L74)
 ?L32:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'4008
-	bra	(?L72)
+	bra	(?L74)
 ?L34:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'400A
-	bra	(?L72)
+	bra	(?L74)
 ?L37:
 	ld	AL,@(H'0004,Y)
 	cmp	AL,#(H'0001+H'000D)
 	bcc	?L26
 	ld	X,@$XAP_AL
-	ld	X,@(?JTBASE46,X)
+	ld	X,@(?JTBASE47,X)
 	brxl
 	.SEG	CONST
-?JTBASE46:
+?JTBASE47:
 	.CODE
-?L46:
+?L47:
 	.SEG	CONST
-	dc	lwrd(?L26-?L46)
-	dc	lwrd(?L40-?L46)
-	dc	lwrd(?L40-?L46)
-	dc	lwrd(?L26-?L46)
-	dc	lwrd(?L26-?L46)
-	dc	lwrd(?L43-?L46)
-	dc	lwrd(?L44-?L46)
-	dc	lwrd(?L26-?L46)
-	dc	lwrd(?L26-?L46)
-	dc	lwrd(?L26-?L46)
-	dc	lwrd(?L26-?L46)
-	dc	lwrd(?L26-?L46)
-	dc	lwrd(?L26-?L46)
-	dc	lwrd(?L42-?L46)
+	dc	lwrd(?L26-?L47)
+	dc	lwrd(?L40-?L47)
+	dc	lwrd(?L40-?L47)
+	dc	lwrd(?L41-?L47)
+	dc	lwrd(?L26-?L47)
+	dc	lwrd(?L44-?L47)
+	dc	lwrd(?L45-?L47)
+	dc	lwrd(?L26-?L47)
+	dc	lwrd(?L26-?L47)
+	dc	lwrd(?L26-?L47)
+	dc	lwrd(?L26-?L47)
+	dc	lwrd(?L26-?L47)
+	dc	lwrd(?L26-?L47)
+	dc	lwrd(?L43-?L47)
 	.CODE
 ?L40:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'4034
-	bsr	$_MessageSend
+	bra	(?L74)
+?L41:
 	tst	@$_koovox+H'000D
 	bne	?L26
 	bsr	$_start_ble_advertising
-	ld	AH,#H'0001
-	st	AH,@$_koovox+H'000D
-	ld	X,#H'0000
-	st	X,@(0,Y)
+	ld	AL,#H'0001
+	st	AL,@$_koovox+H'000D
+	ld	AL,#($_theSink)
+	ld	AH,#H'40C1
+	bsr	$_MessageCancelAll
+	ld	AL,#H'0000
+	st	AL,@(0,Y)
 	ld	AL,#-H'2B40
 	st	AL,@(H'0002,Y)
-	st	AH,@(H'0001,Y)
+	ld	X,#H'0001
+	st	X,@(H'0001,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'40C1
 	bsr	$_MessageSendLater
 	bra	(?L26)
-?L42:
+?L43:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'4048
-	bra	(?L72)
-?L43:
+	bra	(?L74)
+?L44:
 	bsr	$_KoovoxPresentIncomingCall
 	bra	(?L26)
-?L44:
+?L45:
 	bsr	$_KoovoxMuteActiveCall
 	bra	(?L26)
-?L47:
+?L48:
 	ld	AL,@(H'0004,Y)
 	cmp	AL,#H'0005
-	beq	?L51
+	beq	?L52
 	cmp	AL,#(H'0001+H'0005)
-	bcc	?L55
+	bcc	?L56
 	cmp	AL,#H'0003
-	beq	?L50
+	beq	?L51
 	bra	(?L26)
-?L55:
+?L56:
 	ld	X,@(H'0004,Y)
 	cmp	X,#H'0006
-	beq	?L52
+	beq	?L53
 	cmp	X,#H'000D
 	bne	?L26
-?L50:
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	ld	AL,#($_theSink)
-	ld	AH,#H'4045
-	bra	(?L72)
 ?L51:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
-	ld	AH,#H'4009
-	bra	(?L72)
+	ld	AH,#H'4045
+	bra	(?L74)
 ?L52:
+	ld	AL,#H'0000
+	st	AL,@(0,Y)
+	ld	AL,#($_theSink)
+	ld	AH,#H'4009
+	bra	(?L74)
+?L53:
 	bsr	$_KoovoxRecordControl
 	bra	(?L26)
-?L56:
-	tst	@$_koovox+H'000C
-	bne	?L57
-	tst	@$_button_req
-	bne	?L26
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	st	AL,@(H'0001,Y)
-	ld	AL,#H'0001
-	ld	AH,#H'0008
-	bsr	$_KoovoxFillAndSendUartPacket
-	ld	AL,#H'0001
-	bra	(?L71)
 ?L57:
+	tst	@$_koovox+H'000C
+	bne	?L58
+	tst	@$_button_req
+	bne	?L26
+	ld	AL,#H'0000
+	st	AL,@(0,Y)
+	st	AL,@(H'0001,Y)
+	ld	AL,#H'0001
+	ld	AH,#H'0008
+	bsr	$_KoovoxFillAndSendUartPacket
+	ld	AL,#H'0001
+	bra	(?L73)
+?L58:
 	tst	@$_button_req
 	bne	?L26
 	ld	AL,#H'0000
@@ -35276,13 +35328,13 @@ $_KoovoxUsrEventHandle:
 	ld	AH,#H'0008
 	bsr	$_KoovoxFillAndSendUartPacket
 	ld	AL,#H'0002
-?L71:
+?L73:
 	ld	AH,#H'0008
 	bsr	$_KoovoxStoreLastCmd
 	ld	AL,#H'0001
 	st	AL,@$_button_req
 	bra	(?L26)
-?L63:
+?L64:
 	ld	AL,@(H'0004,Y)
 	cmp	AL,#H'0002
 	bcz	?L26
@@ -35290,15 +35342,17 @@ $_KoovoxUsrEventHandle:
 	st	AL,@(0,Y)
 	ld	AL,#($_theSink)
 	ld	AH,#H'4026
-?L72:
+?L74:
 	bsr	$_MessageSend
 	bra	(?L26)
-?L67:
+?L68:
 	bsr	$_koovox_send_data_to_wechat
 	bra	(?L26)
-?L68:
+?L69:
 	ld	AL,#(?LC5)
 	bsr	$_puts
+	tst	@$_koovox+H'000D
+	beq	?L26
 	bsr	$_stop_ble_advertising
 	ld	AL,#H'0000
 	st	AL,@$_koovox+H'000D
@@ -35330,8 +35384,21 @@ $_KoovoxUsrEventHandle:
 	dc	H'65
 	dc	H'3A
 	dc	H'20
+	dc	H'69
+	dc	H'64
+	dc	H'3D
 	dc	H'25
 	dc	H'78
+	dc	H'2C
+	dc	H'20
+	dc	H'73
+	dc	H'74
+	dc	H'61
+	dc	H'74
+	dc	H'65
+	dc	H'3D
+	dc	H'25
+	dc	H'64
 	dc	H'0A
 	dc	H'00
 ?LC5:
@@ -35394,16 +35461,16 @@ $_KoovoxResultI2cTest:
 	ld	AL,@(H'0002,Y)
 	ld	X,@(H'0003,Y)
 	cmp	AL,@(0,X)
-	beq	?L79
+	beq	?L81
 	ld	AL,#H'0001
 	st	AL,@(0,Y)
 	ld	AL,#H'002D
 	ld	AH,@$XAP_UXL
 	bsr	$_ConfigStore
-?L79:
+?L81:
 	ld	X,@(H'0003,Y)
 	tst	@(0,X)
-	beq	?L80
+	beq	?L82
 	ld	AL,#H'0001
 	st	AL,@$_button_req
 	ld	AL,#H'0000
@@ -35417,16 +35484,16 @@ $_KoovoxResultI2cTest:
 	bsr	$_KoovoxStoreLastCmd
 	ld	AL,#(?LC7)
 	bsr	$_KoovoxLog
-	bra	(?L78)
-?L80:
+	bra	(?L80)
+?L82:
 	ld	AL,#(?LC8)
 	bsr	$_KoovoxLog
 	ld	AL,@$_koovox+H'0008
 	cmp	AL,#H'0002
-	bcz	?L82
+	bcz	?L84
 	ld	AL,#H'0000
-	bra	(?L84)
-?L82:
+	bra	(?L86)
+?L84:
 	ld	AL,#H'0001
 	st	AL,@$_button_req
 	ld	AL,#H'0000
@@ -35440,9 +35507,9 @@ $_KoovoxResultI2cTest:
 	bsr	$_KoovoxStoreLastCmd
 	ld	AL,@$_koovox+H'0008
 	add	AL,#H'0001
-?L84:
+?L86:
 	st	AL,@$_koovox+H'0008
-?L78:
+?L80:
 ?LBE7:
 ?LBE_KoovoxResultI2cTest:
 	leavel	#6
@@ -35520,8 +35587,8 @@ $_KoovoxStoreLastCmd:
 	rts
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 60 total = 60
-;# Function pattern *movqi3 used[0] = 111 total = 111
+;# Function pattern *movqi2 used[0] = 59 total = 59
+;# Function pattern *movqi3 used[0] = 113 total = 113
 ;# Function pattern *movhi used[2] = 1 total = 1
 ;# Function pattern *addqi0 used[0] = 1 total = 1
 ;# Function pattern *addqi2 used[0] = 4 total = 4
@@ -35530,12 +35597,11 @@ $_KoovoxStoreLastCmd:
 ;# Function pattern *ashlqi3 used[0] = 1 total = 1
 ;# Function pattern *lshrhi3 used[0] = 1 total = 1
 ;# Function pattern *zero_extendqihi2 used[0] = 1 total = 1
-;# Function pattern jump used[0] = 23 total = 23
-;# Function pattern *call1 used[0] = 22 total = 22
-;# Function pattern *call_value1 used[0] = 12 total = 12
+;# Function pattern jump used[0] = 24 total = 24
+;# Function pattern *call1 used[0] = 20 total = 20
+;# Function pattern *call_value1 used[0] = 13 total = 13
 ;# Function pattern tablejump_1 used[0] = 3 total = 3
-;# Function pattern movstrqi+2 used[0] = 1 total = 1
-;# Function pattern movstrqi+3 used[1] = 8 total = 8
+;# Function pattern movstrqi+3 used[1] = 9 total = 9
 ;# Function pattern movstrqi+4 used[1] = 5 total = 5
 ;# Function pattern movstrqi+5 used[0] = 10 total = 10
 	MODULE	sink_koovox_task
@@ -47665,23 +47731,23 @@ $_handleWechatMessage:
 	ld	AL,#-H'7D00
 	add	AL,@$XAP_AH
 	cmp	AL,#(H'0001+H'0007)
-	bcc	?L13
+	bcc	?L14
 	ld	X,@$XAP_AL
-	ld	X,@(?JTBASE14,X)
+	ld	X,@(?JTBASE15,X)
 	brxl
 	.SEG	CONST
-?JTBASE14:
+?JTBASE15:
 	.CODE
-?L14:
+?L15:
 	.SEG	CONST
-	dc	lwrd(?L3-?L14)
-	dc	lwrd(?L13-?L14)
-	dc	lwrd(?L5-?L14)
-	dc	lwrd(?L7-?L14)
-	dc	lwrd(?L8-?L14)
-	dc	lwrd(?L9-?L14)
-	dc	lwrd(?L10-?L14)
-	dc	lwrd(?L12-?L14)
+	dc	lwrd(?L3-?L15)
+	dc	lwrd(?L14-?L15)
+	dc	lwrd(?L5-?L15)
+	dc	lwrd(?L8-?L15)
+	dc	lwrd(?L9-?L15)
+	dc	lwrd(?L10-?L15)
+	dc	lwrd(?L11-?L15)
+	dc	lwrd(?L13-?L15)
 	.CODE
 ?L3:
 	ld	X,@(H'0005,Y)
@@ -47723,18 +47789,21 @@ $_handleWechatMessage:
 	ld	AL,@(0,X)
 	and	AH,#H'0001
 	bsr	$_WechatSetSessionEnable
+	bsr	$_koovox_init_wechat
 	ld	X,@(H'0005,Y)
 	ld	AL,@(0,X)
 	st	AL,@(0,Y)
 	ld	AL,#H'0001
 	ld	AH,#H'0000
 	bsr	$_koovox_wechat_connect
+	tst	@$_koovox+H'000D
+	beq	?L1
 	bsr	$_stop_ble_advertising
 	ld	AL,#H'0000
 	st	AL,@$_koovox+H'000D
 ?LBE4:
 	bra	(?L1)
-?L7:
+?L8:
 	ld	X,@(H'0005,Y)
 ?LBB5:
 	ld	AL,@(0,X)
@@ -47747,21 +47816,21 @@ $_handleWechatMessage:
 	bsr	$_koovox_wechat_disconnect
 ?LBE5:
 	bra	(?L1)
-?L8:
+?L9:
 	ld	X,@(H'0005,Y)
 ?LBB6:
 	ld	AL,@(0,X)
 	st	AL,@(0,Y)
 	ld	AL,#(?LC3)
-	bra	(?L15)
-?L9:
+	bra	(?L16)
+?L10:
 	ld	X,@(H'0005,Y)
 ?LBE6:
 	ld	AL,@(H'0002,X)
 	st	AL,@(0,Y)
 	ld	AL,#(?LC4)
-	bra	(?L15)
-?L10:
+	bra	(?L16)
+?L11:
 	ld	X,@(H'0005,Y)
 ?LBB7:
 	tst	@(H'0001,X)
@@ -47770,7 +47839,7 @@ $_handleWechatMessage:
 	bsr	$_free
 ?LBE7:
 	bra	(?L1)
-?L12:
+?L13:
 	ld	X,@(H'0005,Y)
 ?LBB8:
 	ld	AL,@(0,X)
@@ -47784,10 +47853,10 @@ $_handleWechatMessage:
 	bsr	$_koovox_rcv_data_from_wechat
 ?LBE8:
 	bra	(?L1)
-?L13:
+?L14:
 	st	AH,@(0,Y)
 	ld	AL,#(?LC6)
-?L15:
+?L16:
 	bsr	$_printf
 ?L1:
 ?LBE2:
@@ -48011,10 +48080,10 @@ $_wechatDisconnect:
 	bsr	$_printf
 	ld	X,@$_theSink+H'0004
 	tst	@(H'0007,X)
-	beq	?L16
+	beq	?L17
 	ld	AL,@(H'0007,X)
 	bsr	$_WechatDisconnectRequest
-?L16:
+?L17:
 ?LBE_wechatDisconnect:
 	leavel	#3
 	.SEG	CONST
@@ -48048,10 +48117,10 @@ $_wechatDisconnect:
 ;# Function pattern *andqi3 used[0] = 2 total = 2
 ;# Function pattern *lshrqi3 used[0] = 2 total = 2
 ;# Function pattern jump used[0] = 7 total = 7
-;# Function pattern *call1 used[0] = 9 total = 9
+;# Function pattern *call1 used[0] = 10 total = 10
 ;# Function pattern *call_value1 used[0] = 6 total = 6
 ;# Function pattern tablejump_1 used[0] = 1 total = 1
-;# Function pattern movstrqi+3 used[1] = 4 total = 4
+;# Function pattern movstrqi+3 used[1] = 5 total = 5
 ;# Function pattern movstrqi+4 used[1] = 1 total = 1
 	MODULE	sink_wired
 	.LARGE
@@ -111018,39 +111087,39 @@ _csrCvcPluginGetKapFile:
 	dc	H'00
 	.CODE
 $_CsrCvcPluginConnect:
-	enterl	#11
+	enterl	#10
 ?LBB_CsrCvcPluginConnect:
-	st	AL,@(H'0003,Y)
-	st	AH,@(H'0004,Y)
+	st	AL,@(H'0002,Y)
+	st	AH,@(H'0003,Y)
 ?LBB2:
-	ld	AL,@(H'0003,Y)
+	ld	AL,@(H'0002,Y)
 	bsr	$_SetAudioBusy
 	ld	AL,@_CVC?
 	bsr	$_PanicNotNull
 	ld	AL,#H'000F
 	bsr	$_PanicUnlessMalloc
 	st	AL,@_CVC?
-	ld	AL,@(H'000D,Y)
+	ld	AL,@(H'000C,Y)
 	cmp	AL,#H'000F
 	bcz	?L22
 	ld	X,#H'000F
-	st	X,@(H'000D,Y)
+	st	X,@(H'000C,Y)
 ?L22:
 	ld	X,@_CVC?
-	ld	AL,@(H'0016,Y)
+	ld	AL,@(H'0015,Y)
 	st	AL,@(0,X)
 	ld	X,@_CVC?
 	ld	AL,@(H'000C,X)
 	and	AL,#-H'0041
 	st	AL,@(H'000C,X)
 	ld	X,@_CVC?
-	ld	AL,@(H'0014,Y)
+	ld	AL,@(H'0013,Y)
 	st	AL,@(H'000A,X)
 	ld	X,@_CVC?
-	ld	AL,@(H'000C,Y)
+	ld	AL,@(H'000B,Y)
 	st	AL,@(H'0001,X)
 	ld	X,@_CVC?
-	ld	AL,@(H'000B,Y)
+	ld	AL,@(H'000A,Y)
 	and	AL,#H'000F
 	asl	#H'0008
 	ld	AH,@(H'000C,X)
@@ -111058,20 +111127,20 @@ $_CsrCvcPluginConnect:
 	or	AH,@$XAP_AL
 	st	AH,@(H'000C,X)
 	ld	X,@_CVC?
-	ld	AL,@(H'000D,Y)
+	ld	AL,@(H'000C,Y)
 	asl	#H'0008
 	ld	AH,@(H'000B,X)
 	and	AH,#H'00FF
 	or	AH,@$XAP_AL
 	st	AH,@(H'000B,X)
 	ld	X,@_CVC?
-	ld	AL,@(H'0004,Y)
+	ld	AL,@(H'0003,Y)
 	st	AL,@(H'0002,X)
 	ld	X,@_CVC?
-	ld	AL,@(H'0013,Y)
+	ld	AL,@(H'0012,Y)
 	st	AL,@(H'0003,X)
 	ld	X,@_CVC?
-	ld	AL,@(H'0011,Y)
+	ld	AL,@(H'0010,Y)
 	asl	#H'000C
 	ld	AH,@(H'000C,X)
 	and	AH,#H'0FFF
@@ -111082,26 +111151,26 @@ $_CsrCvcPluginConnect:
 	and	AL,#-H'0081
 	st	AL,@(H'000C,X)
 	ld	X,@_CVC?
-	ld	AH,@(H'000D,Y)
+	ld	AH,@(H'000C,Y)
 	and	AH,#H'00FF
 	ld	AL,@(H'000B,X)
 	and	AL,#-H'0100
 	or	AL,@$XAP_AH
 	st	AL,@(H'000B,X)
 	ld	X,@_CVC?
-	ld	AH,@(H'000E,Y)
-	ld	AL,@(H'000F,Y)
+	ld	AH,@(H'000D,Y)
+	ld	AL,@(H'000E,Y)
 	st	AH,@(H'0006,X)
 	st	AL,@(H'0007,X)
 	ld	X,@_CVC?
-	ld	AL,@(H'0010,Y)
+	ld	AL,@(H'000F,Y)
 	st	AL,@(H'000D,X)
 	ld	X,@_CVC?
 	ld	AL,@(H'000C,X)
 	or	AL,#H'0010
 	st	AL,@(H'000C,X)
 	ld	X,@_CVC?
-	ld	AH,@(H'0010,Y)
+	ld	AH,@(H'000F,Y)
 	lsr	#H'0007
 	ld	AL,@$XAP_AH
 	and	AL,#H'0001
@@ -111111,10 +111180,10 @@ $_CsrCvcPluginConnect:
 	or	AH,@$XAP_AL
 	st	AH,@(H'000C,X)
 	ld	X,@_CVC?
-	st	X,@(H'0008,Y)
+	st	X,@(H'0007,Y)
 	ld	AL,#H'0000
 	st	AL,@H'fff8
-	ld	X,@(H'0003,Y)
+	ld	X,@(H'0002,Y)
 	ld	AH,@(H'0002,X)
 	lsr	#H'000B
 	cmp	AH,#H'000C
@@ -111125,20 +111194,20 @@ $_CsrCvcPluginConnect:
 	ld	AL,@H'fff8
 	and	AL,#H'0001
 	asl	#H'0005
-	ld	X,@(H'0008,Y)
+	ld	X,@(H'0007,Y)
 	ld	AH,@(H'000C,X)
 	and	AH,#-H'0021
 	or	AH,@$XAP_AL
 	st	AH,@(H'000C,X)
 	ld	X,@_CVC?
-	ld	AL,@(H'0015,Y)
+	ld	AL,@(H'0014,Y)
 	st	AL,@(H'000E,X)
 	ld	X,@_CVC?
 	ld	X,@(H'000A,X)
 	ld	AL,@(0,X)
 	ld	AH,#H'0001
 	bsr	$_AudioPluginSetMicPio
-	ld	X,@(H'0003,Y)
+	ld	X,@(H'0002,Y)
 	ld	AH,@(H'0002,X)
 	lsr	#H'0007
 	and	AH,#H'0001
@@ -111150,13 +111219,13 @@ $_CsrCvcPluginConnect:
 	ld	AH,#H'0001
 	bsr	$_AudioPluginSetMicPio
 ?L24:
-	ld	AL,@(H'0012,Y)
+	ld	AL,@(H'0011,Y)
 	cmp	AL,#(H'0001+H'0002)
 	bcc	?L25
 ?LBB3:
 	ld	AL,#H'0000
-	st	AL,@(H'0007,Y)
-	ld	X,@(H'0003,Y)
+	st	AL,@(H'0006,Y)
+	ld	X,@(H'0002,Y)
 	ld	AH,@(H'0002,X)
 	lsr	#H'0008
 	and	AH,#H'0007
@@ -111172,11 +111241,11 @@ $_CsrCvcPluginConnect:
 	cmp	AL,#H'0000
 	beq	?L26
 	ld	AL,#H'0001
-	st	AL,@(H'0007,Y)
+	st	AL,@(H'0006,Y)
 ?L26:
-	tst	@(H'0007,Y)
+	tst	@(H'0006,Y)
 	beq	?L27
-	ld	X,@(H'000B,Y)
+	ld	X,@(H'000A,Y)
 	cmp	X,#H'0004
 	beq	?L27
 	ld	X,@_CVC?
@@ -111193,17 +111262,6 @@ $_CsrCvcPluginConnect:
 ?LBE3:
 	ld	X,@_CVC?
 	ld	AH,@(H'000C,X)
-	lsr	#H'0006
-	and	AH,#H'0001
-	st	AH,@(0,Y)
-	ld	AL,@(H'0002,X)
-	st	AL,@(H'0001,Y)
-	ld	AL,@(H'0003,X)
-	st	AL,@(H'0002,Y)
-	ld	AL,#(?LC4)
-	bsr	$_printf
-	ld	X,@_CVC?
-	ld	AH,@(H'000C,X)
 	lsr	#H'0005
 	and	AH,#H'0001
 	cmp	AH,#H'0000
@@ -111215,8 +111273,8 @@ $_CsrCvcPluginConnect:
 	bra	(?L30)
 ?L29:
 	ld	AL,@_CVC?
-	st	AL,@(H'0008,Y)
-	ld	X,@(H'0003,Y)
+	st	AL,@(H'0007,Y)
+	ld	X,@(H'0002,Y)
 	ld	AH,@(H'0002,X)
 	lsr	#H'0003
 	and	AH,#H'0001
@@ -111228,11 +111286,11 @@ $_CsrCvcPluginConnect:
 	ld	AL,#H'1F40
 ?L40:
 	ld	AH,#H'0000
-	ld	X,@(H'0008,Y)
+	ld	X,@(H'0007,Y)
 	st	AH,@(H'0004,X)
 	st	AL,@(H'0005,X)
 ?L30:
-	ld	X,@(H'0003,Y)
+	ld	X,@(H'0002,Y)
 	ld	AL,@(H'0002,X)
 	and	AL,#H'0700
 	cmp	AL,#H'0200
@@ -111252,26 +111310,23 @@ $_CsrCvcPluginConnect:
 	and	AH,#H'0001
 	cmp	AH,#H'0000
 	beq	?L34
-	ld	AL,#(?LC5)
-	bsr	$_puts
-	ld	X,@_CVC?
 	ld	AL,#H'0000
 	st	AL,@(H'0001,Y)
 	st	AL,@(0,Y)
 	ld	AL,@(H'0003,X)
 	ld	AH,#H'0003
 	bsr	$_SourceConfigure
-	ld	AL,@(H'0003,Y)
+	ld	AL,@(H'0002,Y)
 	bsr	_CvcConnectAudio
-	ld	AL,@(H'0003,Y)
-	ld	AH,@(H'000D,Y)
+	ld	AL,@(H'0002,Y)
+	ld	AH,@(H'000C,Y)
 	bsr	$_CsrCvcPluginSetVolume
 	ld	AL,#H'0000
 	bsr	$_SetAudioBusy
 	ld	AL,#H'0000
 	bra	(?L41)
 ?L34:
-	ld	AL,@(H'000B,Y)
+	ld	AL,@(H'000A,Y)
 	cmp	AL,#H'0004
 	beq	?L35
 	ld	X,@_CVC?
@@ -111286,44 +111341,37 @@ $_CsrCvcPluginConnect:
 	bsr	$_SourceConfigure
 	bra	(?L36)
 ?L35:
-	ld	AL,@(H'0003,Y)
+	ld	AL,@(H'0002,Y)
 	ld	AH,#-H'7FDC
 	bsr	$_MessageCancelAll
 ?L36:
-	ld	AL,@(H'0003,Y)
+	ld	AL,@(H'0002,Y)
 	ld	AH,#-H'7FDC
 	bsr	$_MessageCancelAll
-	ld	AL,@(H'0003,Y)
+	ld	AL,@(H'0002,Y)
 	bsr	$_MessageKalimbaTask
-	ld	X,@(H'0003,Y)
+	ld	X,@(H'0002,Y)
 	ld	AH,@(H'0002,X)
 	lsr	#H'000B
 	ld	AL,@$XAP_AH
 	bsr	_csrCvcPluginGetKapFile
-	st	AL,@(H'0006,Y)
+	st	AL,@(H'0005,Y)
 	bsr	$_strlen
 	st	AL,@(0,Y)
 	ld	AL,#H'0001
-	ld	AH,@(H'0006,Y)
+	ld	AH,@(H'0005,Y)
 	bsr	$_FileFind
-	st	AL,@(H'0005,Y)
-	st	AL,@(0,Y)
-	ld	AL,@(H'0006,Y)
-	st	AL,@(H'0001,Y)
-	ld	AL,#(?LC6)
-	bsr	$_printf
+	st	AL,@(H'0004,Y)
 	ld	AL,#H'0000
-	tst	@(H'0005,Y)
+	tst	@(H'0004,Y)
 	beq	?L37
 	ld	AL,#H'0001
 ?L37:
 	bsr	$_PanicNull
-	ld	AL,@(H'0005,Y)
+	ld	AL,@(H'0004,Y)
 	bsr	$_KalimbaLoad
 	cmp	AL,#H'0000
 	bne	?L38
-	ld	AL,#(?LC7)
-	bsr	$_puts
 	bsr	$_Panic
 ?L38:
 	ld	AL,#H'0001
@@ -111331,110 +111379,7 @@ $_CsrCvcPluginConnect:
 	bsr	$_SetCurrentDspStatus
 ?LBE2:
 ?LBE_CsrCvcPluginConnect:
-	leavel	#11
-	.SEG	CONST
-?LC4:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'63
-	dc	H'6F
-	dc	H'6E
-	dc	H'6E
-	dc	H'65
-	dc	H'63
-	dc	H'74
-	dc	H'20
-	dc	H'5B
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'20
-	dc	H'5B
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'20
-	dc	H'5B
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'0A
-	dc	H'00
-?LC5:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'63
-	dc	H'6F
-	dc	H'6E
-	dc	H'6E
-	dc	H'65
-	dc	H'63
-	dc	H'74
-	dc	H'20
-	dc	H'4E
-	dc	H'6F
-	dc	H'20
-	dc	H'44
-	dc	H'53
-	dc	H'50
-	dc	H'00
-?LC6:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'41
-	dc	H'70
-	dc	H'70
-	dc	H'20
-	dc	H'46
-	dc	H'69
-	dc	H'6C
-	dc	H'65
-	dc	H'20
-	dc	H'5B
-	dc	H'30
-	dc	H'78
-	dc	H'25
-	dc	H'58
-	dc	H'5D
-	dc	H'20
-	dc	H'25
-	dc	H'73
-	dc	H'0A
-	dc	H'00
-?LC7:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'4B
-	dc	H'61
-	dc	H'6C
-	dc	H'69
-	dc	H'6D
-	dc	H'62
-	dc	H'61
-	dc	H'20
-	dc	H'6C
-	dc	H'6F
-	dc	H'61
-	dc	H'64
-	dc	H'20
-	dc	H'66
-	dc	H'61
-	dc	H'69
-	dc	H'6C
-	dc	H'00
-	.CODE
+	leavel	#10
 ;.stabn	192,0,0,?LBB2
 ;.stabn	192,0,0,?LBB3
 ;.stabn	224,0,0,?LBE3
@@ -111458,9 +111403,6 @@ $_CsrCvcPluginDisconnect:
 	and	AH,#H'0001
 	cmp	AH,#H'0000
 	beq	?L49
-	ld	AL,#(?LC8)
-	bsr	$_puts
-	ld	X,@_CVC?
 	ld	AH,@(H'000D,X)
 	lsr	#H'000E
 	cmp	AH,#H'0002
@@ -111524,8 +111466,6 @@ $_CsrCvcPluginDisconnect:
 	ld	AL,@$XAP_AH
 	and	AL,#H'0001
 	bsr	$_PanicNull
-	ld	AL,#(?LC9)
-	bsr	$_puts
 	ld	X,@_CVC?
 	ld	AH,@(H'000D,X)
 	lsr	#H'000E
@@ -111649,8 +111589,6 @@ $_CsrCvcPluginDisconnect:
 	ld	X,@_CVC?
 	ld	AH,@(H'0002,X)
 	bsr	$_StreamDisconnect
-	ld	AL,#(?LC10)
-	bsr	$_puts
 ?L55:
 ?LBE6:
 	ld	X,@_CVC?
@@ -111721,77 +111659,6 @@ $_CsrCvcPluginDisconnect:
 ?LBE4:
 ?LBE_CsrCvcPluginDisconnect:
 	leavel	#12
-	.SEG	CONST
-?LC8:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'4E
-	dc	H'4F
-	dc	H'20
-	dc	H'44
-	dc	H'53
-	dc	H'50
-	dc	H'3A
-	dc	H'20
-	dc	H'64
-	dc	H'69
-	dc	H'73
-	dc	H'63
-	dc	H'6F
-	dc	H'6E
-	dc	H'6E
-	dc	H'65
-	dc	H'63
-	dc	H'74
-	dc	H'00
-?LC9:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'44
-	dc	H'65
-	dc	H'73
-	dc	H'74
-	dc	H'72
-	dc	H'6F
-	dc	H'79
-	dc	H'20
-	dc	H'74
-	dc	H'72
-	dc	H'61
-	dc	H'6E
-	dc	H'73
-	dc	H'66
-	dc	H'6F
-	dc	H'72
-	dc	H'6D
-	dc	H'73
-	dc	H'00
-?LC10:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'44
-	dc	H'69
-	dc	H'73
-	dc	H'63
-	dc	H'6F
-	dc	H'6E
-	dc	H'6E
-	dc	H'65
-	dc	H'63
-	dc	H'74
-	dc	H'65
-	dc	H'64
-	dc	H'00
-	.CODE
 ;.stabn	192,0,0,?LBB5
 ;.stabn	224,0,0,?LBE5
 ;.stabn	192,0,0,?LBB6
@@ -111823,9 +111690,6 @@ $_CsrCvcPluginSetVolume:
 	and	AH,#H'0001
 	cmp	AH,#H'0000
 	beq	?L71
-	ld	AL,#(?LC11)
-	bsr	$_puts
-	ld	X,@_CVC?
 	ld	AH,@(H'000B,X)
 	lsr	#H'0008
 	ld	AL,#H'0002
@@ -111834,12 +111698,6 @@ $_CsrCvcPluginSetVolume:
 	bsr	$_CodecSetOutputGainNow
 	bra	(?L69)
 ?L71:
-	ld	X,@_CVC?
-	ld	AH,@(H'000B,X)
-	lsr	#H'0008
-	st	AH,@(0,Y)
-	ld	AL,#(?LC12)
-	bsr	$_printf
 	ld	X,@_CVC?
 	ld	AH,@(H'000C,X)
 	lsr	#H'0006
@@ -111866,57 +111724,6 @@ $_CsrCvcPluginSetVolume:
 ?L69:
 ?LBE_CsrCvcPluginSetVolume:
 	leavel	#6
-	.SEG	CONST
-?LC11:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'4E
-	dc	H'4F
-	dc	H'20
-	dc	H'44
-	dc	H'53
-	dc	H'50
-	dc	H'3A
-	dc	H'20
-	dc	H'53
-	dc	H'65
-	dc	H'74
-	dc	H'20
-	dc	H'76
-	dc	H'6F
-	dc	H'6C
-	dc	H'75
-	dc	H'6D
-	dc	H'65
-	dc	H'00
-?LC12:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'44
-	dc	H'41
-	dc	H'43
-	dc	H'20
-	dc	H'47
-	dc	H'41
-	dc	H'49
-	dc	H'4E
-	dc	H'20
-	dc	H'53
-	dc	H'45
-	dc	H'54
-	dc	H'5B
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'0A
-	dc	H'00
-	.CODE
 $_CsrCvcPluginResetVolume:
 	enterl	#5
 ?LBB_CsrCvcPluginResetVolume:
@@ -111949,275 +111756,42 @@ $_CsrCvcPluginResetVolume:
 ?LBE_CsrCvcPluginResetVolume:
 	leavel	#5
 $_CsrCvcPluginSetModeNoDsp:
-	enterl	#4
+	enterl	#2
 ?LBB_CsrCvcPluginSetModeNoDsp:
-	st	AL,@(H'0001,Y)
-	st	AL,@(0,Y)
-	ld	AL,#(?LC13)
-	bsr	$_printf
-	ld	AL,@(H'0001,Y)
 	cmp	AL,#H'0001
-	beq	?L82
+	beq	?L88
 	cmp	AL,#H'0001
 	bcs	?L84
 	cmp	AL,#H'0003
 	beq	?L85
 	cmp	AL,#H'0004
-	beq	?L83
-	bra	(?L86)
-?L82:
-	ld	AL,#(?LC14)
-	bsr	$_puts
-	bra	(?L88)
-?L83:
-	ld	AL,#(?LC15)
-	bsr	$_puts
+	bne	?L80
 	bsr	_ConnectMicNoDsp
 	bsr	_ConnectSpeakerNoDsp
 	bra	(?L80)
 ?L84:
-	ld	AL,#(?LC16)
-	bsr	$_puts
 	bsr	_DisconnectMicNoDsp
 	bra	(?L80)
 ?L85:
-	ld	AL,#(?LC17)
-	bsr	$_puts
 	bsr	_DisconnectMicNoDsp
 ?L88:
 	ld	AL,#H'0000
 	bsr	_DisconnectSpeakerNoDsp
-	bra	(?L80)
-?L86:
-	ld	AL,@(H'0001,Y)
-	st	AL,@(0,Y)
-	ld	AL,#(?LC18)
-	bsr	$_printf
 ?L80:
 ?LBE_CsrCvcPluginSetModeNoDsp:
-	leavel	#4
-	.SEG	CONST
-?LC13:
-	dc	H'43
-	dc	H'73
-	dc	H'72
-	dc	H'43
-	dc	H'76
-	dc	H'63
-	dc	H'50
-	dc	H'6C
-	dc	H'75
-	dc	H'67
-	dc	H'69
-	dc	H'6E
-	dc	H'53
-	dc	H'65
-	dc	H'74
-	dc	H'4D
-	dc	H'6F
-	dc	H'64
-	dc	H'65
-	dc	H'4E
-	dc	H'6F
-	dc	H'44
-	dc	H'73
-	dc	H'70
-	dc	H'20
-	dc	H'6D
-	dc	H'6F
-	dc	H'64
-	dc	H'65
-	dc	H'20
-	dc	H'3D
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'0A
-	dc	H'00
-?LC14:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'4E
-	dc	H'4F
-	dc	H'44
-	dc	H'53
-	dc	H'50
-	dc	H'3A
-	dc	H'20
-	dc	H'53
-	dc	H'65
-	dc	H'74
-	dc	H'20
-	dc	H'4D
-	dc	H'6F
-	dc	H'64
-	dc	H'65
-	dc	H'20
-	dc	H'4D
-	dc	H'55
-	dc	H'54
-	dc	H'45
-	dc	H'20
-	dc	H'53
-	dc	H'50
-	dc	H'45
-	dc	H'41
-	dc	H'4B
-	dc	H'45
-	dc	H'52
-	dc	H'00
-?LC15:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'4E
-	dc	H'4F
-	dc	H'44
-	dc	H'53
-	dc	H'50
-	dc	H'3A
-	dc	H'20
-	dc	H'53
-	dc	H'65
-	dc	H'74
-	dc	H'20
-	dc	H'4D
-	dc	H'6F
-	dc	H'64
-	dc	H'65
-	dc	H'20
-	dc	H'43
-	dc	H'4F
-	dc	H'4E
-	dc	H'4E
-	dc	H'45
-	dc	H'43
-	dc	H'54
-	dc	H'45
-	dc	H'44
-	dc	H'00
-?LC16:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'4E
-	dc	H'4F
-	dc	H'44
-	dc	H'53
-	dc	H'50
-	dc	H'3A
-	dc	H'20
-	dc	H'53
-	dc	H'65
-	dc	H'74
-	dc	H'20
-	dc	H'4D
-	dc	H'6F
-	dc	H'64
-	dc	H'65
-	dc	H'20
-	dc	H'4D
-	dc	H'55
-	dc	H'54
-	dc	H'45
-	dc	H'20
-	dc	H'4D
-	dc	H'49
-	dc	H'43
-	dc	H'00
-?LC17:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'4E
-	dc	H'4F
-	dc	H'44
-	dc	H'53
-	dc	H'50
-	dc	H'3A
-	dc	H'20
-	dc	H'53
-	dc	H'65
-	dc	H'74
-	dc	H'20
-	dc	H'4D
-	dc	H'6F
-	dc	H'64
-	dc	H'65
-	dc	H'20
-	dc	H'4D
-	dc	H'55
-	dc	H'54
-	dc	H'45
-	dc	H'20
-	dc	H'42
-	dc	H'4F
-	dc	H'54
-	dc	H'48
-	dc	H'00
-?LC18:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'4E
-	dc	H'4F
-	dc	H'44
-	dc	H'53
-	dc	H'50
-	dc	H'3A
-	dc	H'20
-	dc	H'53
-	dc	H'65
-	dc	H'74
-	dc	H'20
-	dc	H'4D
-	dc	H'6F
-	dc	H'64
-	dc	H'65
-	dc	H'20
-	dc	H'49
-	dc	H'6E
-	dc	H'76
-	dc	H'61
-	dc	H'6C
-	dc	H'69
-	dc	H'64
-	dc	H'20
-	dc	H'5B
-	dc	H'30
-	dc	H'78
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'0A
-	dc	H'00
-	.CODE
+	leavel	#2
 $_CsrCvcPluginSetMode:
-	enterl	#12
+	enterl	#10
 ?LBB_CsrCvcPluginSetMode:
 	st	AL,@(H'0003,Y)
-	st	AH,@(H'0004,Y)
+	st	AH,@H'fff8
 ?LBB8:
 	ld	AL,#H'0001
-	st	AL,@(H'0006,Y)
-	st	AH,@(0,Y)
-	ld	AL,#(?LC19)
-	bsr	$_printf
+	st	AL,@(H'0004,Y)
 	tst	@_CVC?
 	beq	?L93
 	ld	X,@_CVC?
-	ld	AL,@(H'0004,Y)
+	ld	AL,@$XAP_AH
 	asl	#H'000C
 	ld	AH,@(H'000C,X)
 	and	AH,#H'0FFF
@@ -112229,7 +111803,7 @@ $_CsrCvcPluginSetMode:
 	and	AH,#H'0001
 	cmp	AH,#H'0000
 	beq	?L95
-	ld	AL,@(H'0004,Y)
+	ld	AL,@H'fff8
 	bsr	$_CsrCvcPluginSetModeNoDsp
 	bra	(?L93)
 ?L95:
@@ -112242,17 +111816,17 @@ $_CsrCvcPluginSetMode:
 	ld	X,@_CVC?
 	ld	AH,@(H'000B,X)
 	lsr	#H'0008
-	st	AH,@(H'0007,Y)
+	st	AH,@(H'0005,Y)
 	ld	AL,@(H'000C,X)
 	and	AL,#H'0080
 	cmp	AL,#H'0000
 	bne	?L96
 	ld	X,#H'0001
-	st	X,@(H'0005,Y)
+	st	X,@(-1,Y)
 	bra	(?L97)
 ?L96:
 	ld	AL,#H'0003
-	st	AL,@(H'0005,Y)
+	st	AL,@(-1,Y)
 ?L97:
 	ld	X,@(H'0003,Y)
 	ld	AH,@(H'0002,X)
@@ -112260,17 +111834,13 @@ $_CsrCvcPluginSetMode:
 	add	AH,#-H'000D
 	cmp	AH,#(H'0001+H'0003)
 	bcc	?L98
-	ld	AL,@(H'0007,Y)
+	ld	AL,#H'0000
 	st	AL,@(0,Y)
-	ld	AL,#(?LC20)
-	bsr	$_printf
-	ld	X,#H'0000
-	st	X,@(0,Y)
 	ld	AL,#H'0001
 	st	AL,@(H'0001,Y)
 	ld	X,@_CVC?
 	ld	X,@(H'000A,X)
-	st	X,@(H'0008,Y)
+	st	X,@(H'0006,Y)
 	ld	AH,@(0,X)
 	lsr	#H'000F
 	ld	AL,@$XAP_AH
@@ -112283,9 +111853,6 @@ $_CsrCvcPluginSetMode:
 	st	AL,@(H'0002,Y)
 	ld	AL,#H'1001
 	ld	AH,#H'0002
-	bsr	$_KalimbaSendMessage
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
 	bra	(?L109)
 ?L98:
 	ld	X,@_CVC?
@@ -112299,49 +111866,34 @@ $_CsrCvcPluginSetMode:
 	beq	?L105
 	cmp	AH,#H'0004
 	beq	?L100
-	bra	(?L106)
+	bra	(?L93)
 ?L101:
-	ld	X,@(H'0005,Y)
+	ld	X,@(-1,Y)
 	cmp	X,#H'0001
 	bne	?L108
 	ld	AL,#H'0002
-	st	AL,@(H'0005,Y)
+	st	AL,@(-1,Y)
 	bra	(?L108)
 ?L104:
 	ld	X,#H'0003
-	st	X,@(H'0006,Y)
+	st	X,@(H'0004,Y)
 	bra	(?L100)
 ?L105:
 	ld	AL,#H'0006
-	st	AL,@(H'0005,Y)
+	st	AL,@(-1,Y)
 	ld	X,#H'0000
-	st	X,@(H'0006,Y)
+	st	X,@(H'0004,Y)
 ?L108:
 	ld	AL,#H'0000
-	st	AL,@(H'0007,Y)
-	bra	(?L100)
-?L106:
-	ld	AL,@(H'0004,Y)
-	st	AL,@(0,Y)
-	ld	AL,#(?LC21)
-	bsr	$_printf
-	bra	(?L93)
+	st	AL,@(H'0005,Y)
 ?L100:
-	ld	X,@(H'0005,Y)
-	st	X,@(0,Y)
-	ld	AL,@(H'0006,Y)
-	st	AL,@(H'0001,Y)
-	ld	AL,@(H'0007,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#(?LC22)
-	bsr	$_printf
 	ld	X,#H'0000
 	st	X,@(0,Y)
-	ld	AL,@(H'0006,Y)
+	ld	AL,@(H'0004,Y)
 	st	AL,@(H'0001,Y)
 	ld	X,@_CVC?
 	ld	X,@(H'000A,X)
-	st	X,@(H'0009,Y)
+	st	X,@(H'0007,Y)
 	ld	AH,@(0,X)
 	lsr	#H'000F
 	ld	AL,@$XAP_AH
@@ -112353,12 +111905,12 @@ $_CsrCvcPluginSetMode:
 	or	AL,@$XAP_AH
 	st	AL,@(H'0002,Y)
 	ld	AL,#H'1001
-	ld	AH,@(H'0005,Y)
+	ld	AH,@(-1,Y)
+?L109:
 	bsr	$_KalimbaSendMessage
 	ld	X,#H'0000
 	st	X,@(0,Y)
-?L109:
-	ld	AL,@(H'0007,Y)
+	ld	AL,@(H'0005,Y)
 	st	AL,@(H'0001,Y)
 	ld	X,@_CVC?
 	ld	AL,@(H'000B,X)
@@ -112370,145 +111922,7 @@ $_CsrCvcPluginSetMode:
 ?L93:
 ?LBE8:
 ?LBE_CsrCvcPluginSetMode:
-	leavel	#12
-	.SEG	CONST
-?LC19:
-	dc	H'43
-	dc	H'73
-	dc	H'72
-	dc	H'43
-	dc	H'76
-	dc	H'63
-	dc	H'50
-	dc	H'6C
-	dc	H'75
-	dc	H'67
-	dc	H'69
-	dc	H'6E
-	dc	H'53
-	dc	H'65
-	dc	H'74
-	dc	H'4D
-	dc	H'6F
-	dc	H'64
-	dc	H'65
-	dc	H'20
-	dc	H'6D
-	dc	H'6F
-	dc	H'64
-	dc	H'65
-	dc	H'20
-	dc	H'3D
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'0A
-	dc	H'00
-?LC20:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'53
-	dc	H'45
-	dc	H'54
-	dc	H'4D
-	dc	H'4F
-	dc	H'44
-	dc	H'45
-	dc	H'20
-	dc	H'41
-	dc	H'53
-	dc	H'52
-	dc	H'3A
-	dc	H'20
-	dc	H'76
-	dc	H'6F
-	dc	H'6C
-	dc	H'3D
-	dc	H'25
-	dc	H'64
-	dc	H'0A
-	dc	H'00
-?LC21:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'53
-	dc	H'65
-	dc	H'74
-	dc	H'20
-	dc	H'4D
-	dc	H'6F
-	dc	H'64
-	dc	H'65
-	dc	H'20
-	dc	H'49
-	dc	H'6E
-	dc	H'76
-	dc	H'61
-	dc	H'6C
-	dc	H'69
-	dc	H'64
-	dc	H'20
-	dc	H'5B
-	dc	H'30
-	dc	H'78
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'0A
-	dc	H'00
-?LC22:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'53
-	dc	H'59
-	dc	H'53
-	dc	H'4D
-	dc	H'4F
-	dc	H'44
-	dc	H'45
-	dc	H'20
-	dc	H'30
-	dc	H'78
-	dc	H'25
-	dc	H'78
-	dc	H'2C
-	dc	H'20
-	dc	H'43
-	dc	H'41
-	dc	H'4C
-	dc	H'4C
-	dc	H'53
-	dc	H'54
-	dc	H'41
-	dc	H'54
-	dc	H'45
-	dc	H'20
-	dc	H'30
-	dc	H'78
-	dc	H'25
-	dc	H'78
-	dc	H'2C
-	dc	H'20
-	dc	H'56
-	dc	H'4F
-	dc	H'4C
-	dc	H'20
-	dc	H'30
-	dc	H'78
-	dc	H'25
-	dc	H'78
-	dc	H'0A
-	dc	H'00
-	.CODE
+	leavel	#10
 ;.stabn	192,0,0,?LBB8
 ;.stabn	224,0,0,?LBE8
 $_CsrCvcPluginPlayTone:
@@ -112519,8 +111933,6 @@ $_CsrCvcPluginPlayTone:
 ?LBB9:
 	ld	AL,@_CVC?
 	bsr	$_PanicNull
-	ld	AL,#(?LC23)
-	bsr	$_puts
 	ld	X,@_CVC?
 	ld	AH,@(H'000C,X)
 	lsr	#H'0005
@@ -112575,8 +111987,6 @@ $_CsrCvcPluginPlayTone:
 	cmp	AH,#(H'0001+H'0003)
 	bcc	?L121
 ?LBB10:
-	ld	AL,#(?LC24)
-	bsr	$_puts
 	ld	X,@_CVC?
 	ld	X,@(H'000A,X)
 	ld	AH,@(0,X)
@@ -112673,71 +112083,12 @@ $_CsrCvcPluginPlayTone:
 ?LBE9:
 ?LBE_CsrCvcPluginPlayTone:
 	leavel	#9
-	.SEG	CONST
-?LC23:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'54
-	dc	H'6F
-	dc	H'6E
-	dc	H'65
-	dc	H'20
-	dc	H'53
-	dc	H'74
-	dc	H'61
-	dc	H'72
-	dc	H'74
-	dc	H'00
-?LC24:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'4D
-	dc	H'75
-	dc	H'74
-	dc	H'65
-	dc	H'20
-	dc	H'4D
-	dc	H'69
-	dc	H'63
-	dc	H'20
-	dc	H'66
-	dc	H'6F
-	dc	H'72
-	dc	H'20
-	dc	H'74
-	dc	H'6F
-	dc	H'6E
-	dc	H'65
-	dc	H'20
-	dc	H'70
-	dc	H'6C
-	dc	H'61
-	dc	H'79
-	dc	H'20
-	dc	H'77
-	dc	H'69
-	dc	H'74
-	dc	H'68
-	dc	H'20
-	dc	H'41
-	dc	H'53
-	dc	H'52
-	dc	H'00
-	.CODE
 ;.stabn	192,0,0,?LBB9
 ;.stabn	224,0,0,?LBE9
 $_CsrCvcPluginStopTone:
 	enterl	#3
 ?LBB_CsrCvcPluginStopTone:
 	st	AL,@(0,Y)
-	ld	AL,#(?LC25)
-	bsr	$_puts
 	ld	AL,@_CVC?
 	bsr	$_PanicNull
 	ld	X,@_CVC?
@@ -112772,24 +112123,6 @@ $_CsrCvcPluginStopTone:
 	bsr	$_SetTonePlaying
 ?LBE_CsrCvcPluginStopTone:
 	leavel	#3
-	.SEG	CONST
-?LC25:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'53
-	dc	H'74
-	dc	H'6F
-	dc	H'70
-	dc	H'20
-	dc	H'54
-	dc	H'6F
-	dc	H'6E
-	dc	H'65
-	dc	H'00
-	.CODE
 _CvcMicSetGain:
 	enterl	#5
 ?LBB_CvcMicSetGain:
@@ -112843,9 +112176,9 @@ _CvcSpkrSetup:
 ;.stabn	192,0,0,?LBB12
 ;.stabn	224,0,0,?LBE12
 _CvcConnectAudio:
-	enterl	#29
+	enterl	#24
 ?LBB_CvcConnectAudio:
-	st	AL,@(H'0004,Y)
+	st	AL,@(H'0003,Y)
 ?LBB13:
 	ld	X,@_CVC?
 	tst	@(H'0002,X)
@@ -112864,30 +112197,30 @@ _CvcConnectAudio:
 ?L139:
 ?LBB14:
 	ld	AH,#H'0000
-	st	AH,@(H'000A,Y)
+	st	AH,@(H'0009,Y)
 	ld	X,@_CVC?
 	ld	AL,@(H'000C,X)
 	and	AL,#H'0F00
 	cmp	AL,#H'0400
 	beq	?L140
-	ld	X,@(H'0004,Y)
+	ld	X,@(H'0003,Y)
 	ld	AH,@(H'0002,X)
 	lsr	#H'0008
 	and	AH,#H'0007
-	st	AH,@(H'000B,Y)
+	st	AH,@(H'000A,Y)
 	bra	(?L141)
 ?L140:
 	ld	AL,#H'0003
-	st	AL,@(H'000B,Y)
+	st	AL,@(H'000A,Y)
 ?L141:
 	ld	X,@_CVC?
 	ld	AH,@(H'0004,X)
 	ld	AL,@(H'0005,X)
-	st	AH,@(H'000C,Y)
-	st	AL,@(H'000D,Y)
-	st	AH,@(H'000E,Y)
-	st	AL,@(H'000F,Y)
-	ld	X,@(H'0004,Y)
+	st	AH,@(H'000B,Y)
+	st	AL,@(H'000C,Y)
+	st	AH,@(H'000D,Y)
+	st	AL,@(H'000E,Y)
+	ld	X,@(H'0003,Y)
 	ld	AH,@(H'0002,X)
 	lsr	#H'000B
 	cmp	AH,#H'0004
@@ -112896,94 +112229,81 @@ _CvcConnectAudio:
 	bne	?L142
 ?L143:
 	ld	AH,#H'1F40
-	st	AH,@(H'000F,Y)
+	st	AH,@(H'000E,Y)
 	ld	AL,#H'0000
-	st	AL,@(H'000E,Y)
+	st	AL,@(H'000D,Y)
 ?L142:
 	ld	AL,#H'0001
 	bsr	$_SetAudioInUse
-	ld	AH,#H'0000
-	ld	X,@_CVC?
-	ld	AL,@(H'000D,X)
-	and	AL,#H'3000
-	cmp	AL,#H'1000
-	bne	?L144
-	ld	AH,#H'0001
-?L144:
-	st	AH,@(0,Y)
-	ld	AL,#(?LC26)
-	bsr	$_printf
 	ld	X,@_CVC?
 	ld	AH,@(H'000D,X)
 	lsr	#H'000C
 	and	AH,#H'0003
 	cmp	AH,#H'0001
-	beq	?L155
+	beq	?L154
 	cmp	AH,#H'0001
-	bcc	?L145
+	bcc	?L144
 	ld	X,@(H'000A,X)
 	ld	AH,@(0,X)
 	lsr	#H'000F
 	ld	AL,#H'0000
+	bsr	$_AudioPluginGetMic
+	st	AL,@(H'0006,Y)
+	ld	X,@_CVC?
+	ld	AL,@(H'000D,X)
+	and	AL,#-H'4000
+	cmp	AL,#-H'8000
+	bne	?L146
+	bsr	$_CsrI2SVoiceResamplingFrequency
+	cmp	AL,#H'0000
+	beq	?L146
+	bsr	$_CsrI2SVoiceResamplingFrequency
+	ld	AH,#H'0000
+	st	AH,@H'fff8
+	st	AL,@H'fff9
+	ld	X,@_CVC?
+	ld	X,@(H'000A,X)
+	ld	AH,@(0,X)
+	lsr	#H'000F
+	ld	X,@$XAP_AH
+	ld	AH,@H'fff8
+	ld	AL,@H'fff9
+	bra	(?L203)
+?L146:
+	ld	X,@_CVC?
+	ld	X,@(H'000A,X)
+	ld	AH,@(0,X)
+	lsr	#H'000F
+	ld	X,@$XAP_AH
+	ld	AH,@(H'000D,Y)
+	ld	AL,@(H'000E,Y)
+?L203:
+	st	AH,@(0,Y)
+	st	AL,@(1,Y)
+	ld	AL,@(H'0006,Y)
+	ld	AH,@$XAP_UXL
+	bsr	$_AudioPluginSetMicRate
+	ld	X,@(H'0003,Y)
+	ld	AH,@(H'0002,X)
+	lsr	#H'0007
+	and	AH,#H'0001
+	cmp	AH,#H'0000
+	beq	?L148
+	ld	X,@_CVC?
+	ld	X,@(H'000A,X)
+	ld	AH,@(H'0001,X)
+	lsr	#H'000F
+	ld	AL,#H'0001
 	bsr	$_AudioPluginGetMic
 	st	AL,@(H'0007,Y)
 	ld	X,@_CVC?
 	ld	AL,@(H'000D,X)
 	and	AL,#-H'4000
 	cmp	AL,#-H'8000
-	bne	?L147
+	bne	?L149
 	bsr	$_CsrI2SVoiceResamplingFrequency
 	cmp	AL,#H'0000
-	beq	?L147
-	bsr	$_CsrI2SVoiceResamplingFrequency
-	ld	AH,#H'0000
-	st	AH,@H'fff8
-	st	AL,@H'fff9
-	ld	X,@_CVC?
-	ld	X,@(H'000A,X)
-	ld	AH,@(0,X)
-	lsr	#H'000F
-	ld	X,@$XAP_AH
-	ld	AH,@H'fff8
-	ld	AL,@H'fff9
-	bra	(?L207)
-?L147:
-	ld	X,@_CVC?
-	ld	X,@(H'000A,X)
-	ld	AH,@(0,X)
-	lsr	#H'000F
-	ld	X,@$XAP_AH
-	ld	AH,@(H'000E,Y)
-	ld	AL,@(H'000F,Y)
-?L207:
-	st	AH,@(0,Y)
-	st	AL,@(1,Y)
-	ld	AL,@(H'0007,Y)
-	ld	AH,@$XAP_UXL
-	bsr	$_AudioPluginSetMicRate
-	ld	X,@(H'0004,Y)
-	ld	AH,@(H'0002,X)
-	lsr	#H'0007
-	and	AH,#H'0001
-	cmp	AH,#H'0000
 	beq	?L149
-	ld	AL,#(?LC27)
-	bsr	$_puts
-	ld	X,@_CVC?
-	ld	X,@(H'000A,X)
-	ld	AH,@(H'0001,X)
-	lsr	#H'000F
-	ld	AL,#H'0001
-	bsr	$_AudioPluginGetMic
-	st	AL,@(H'0008,Y)
-	ld	X,@_CVC?
-	ld	AL,@(H'000D,X)
-	and	AL,#-H'4000
-	cmp	AL,#-H'8000
-	bne	?L150
-	bsr	$_CsrI2SVoiceResamplingFrequency
-	cmp	AL,#H'0000
-	beq	?L150
 	bsr	$_CsrI2SVoiceResamplingFrequency
 	ld	AH,#H'0000
 	st	AH,@H'fff8
@@ -112995,129 +112315,113 @@ _CvcConnectAudio:
 	ld	X,@$XAP_AH
 	ld	AH,@H'fff8
 	ld	AL,@H'fff9
-	bra	(?L208)
-?L150:
+	bra	(?L204)
+?L149:
 	ld	X,@_CVC?
 	ld	X,@(H'000A,X)
 	ld	AH,@(H'0001,X)
 	lsr	#H'000F
 	ld	X,@$XAP_AH
-	ld	AH,@(H'000E,Y)
-	ld	AL,@(H'000F,Y)
-?L208:
+	ld	AH,@(H'000D,Y)
+	ld	AL,@(H'000E,Y)
+?L204:
 	st	AH,@(0,Y)
 	st	AL,@(1,Y)
-	ld	AL,@(H'0008,Y)
+	ld	AL,@(H'0007,Y)
 	ld	AH,@$XAP_UXL
 	bsr	$_AudioPluginSetMicRate
-	ld	AL,@(H'0007,Y)
-	ld	AH,@(H'0008,Y)
+	ld	AL,@(H'0006,Y)
+	ld	AH,@(H'0007,Y)
 	bsr	$_SourceSynchronise
 	ld	AL,#H'0000
 	bsr	$_StreamKalimbaSink
 	ld	AH,@$XAP_AL
-	ld	AL,@(H'0007,Y)
+	ld	AL,@(H'0006,Y)
 	bsr	$_StreamConnect
 	bsr	$_PanicNull
-	ld	X,@(H'0004,Y)
+	ld	X,@(H'0003,Y)
 	ld	AH,@(H'0002,X)
 	lsr	#H'0007
 	and	AH,#H'0001
 	cmp	AH,#H'0000
-	beq	?L145
+	beq	?L144
 	ld	AL,#H'0002
 	bsr	$_StreamKalimbaSink
 	ld	AH,@$XAP_AL
-	ld	AL,@(H'0008,Y)
-	bra	(?L210)
-?L149:
+	ld	AL,@(H'0007,Y)
+	bra	(?L206)
+?L148:
 	ld	X,@_CVC?
 	ld	AH,@(H'000C,X)
 	lsr	#H'0005
 	and	AH,#H'0001
 	cmp	AH,#H'0000
-	bne	?L145
+	bne	?L144
 	ld	AL,#H'0000
 	bsr	$_StreamKalimbaSink
 	ld	AH,@$XAP_AL
-	ld	AL,@(H'0007,Y)
-?L210:
+	ld	AL,@(H'0006,Y)
+?L206:
 	bsr	$_StreamConnect
 	bsr	$_PanicNull
-	bra	(?L145)
-?L155:
-	ld	X,@(H'0004,Y)
+	bra	(?L144)
+?L154:
+	ld	X,@(H'0003,Y)
 	ld	AH,@(H'0002,X)
 	lsr	#H'0007
 	and	AH,#H'0001
 	cmp	AH,#H'0000
-	beq	?L156
+	beq	?L155
 	bsr	$_CsrI2SVoiceResamplingFrequency
 	ld	AH,#H'0000
-	st	AH,@(H'0010,Y)
-	st	AL,@(H'0011,Y)
+	st	AH,@(H'000F,Y)
+	st	AL,@(H'0010,Y)
 	ld	AL,#H'0000
 	bsr	$_StreamKalimbaSink
-	st	AL,@(H'0012,Y)
+	st	AL,@(H'0011,Y)
 	ld	AL,#H'0002
 	bsr	$_StreamKalimbaSink
 	ld	AH,#H'0001
 	st	AH,@(0,Y)
-	ld	AH,@(H'0012,Y)
+	ld	AH,@(H'0011,Y)
 	st	AH,@(H'0001,Y)
 	st	AL,@(H'0002,Y)
-	ld	AH,@(H'0010,Y)
-	ld	AL,@(H'0011,Y)
-	bra	(?L209)
-?L156:
+	ld	AH,@(H'000F,Y)
+	ld	AL,@(H'0010,Y)
+	bra	(?L205)
+?L155:
 	bsr	$_CsrI2SVoiceResamplingFrequency
 	ld	AH,#H'0000
-	st	AH,@(H'0013,Y)
-	st	AL,@(H'0014,Y)
+	st	AH,@(H'0012,Y)
+	st	AL,@(H'0013,Y)
 	ld	AL,#H'0000
 	bsr	$_StreamKalimbaSink
 	ld	AH,#H'0000
 	st	AH,@(0,Y)
 	st	AL,@(H'0001,Y)
 	st	AH,@(H'0002,Y)
-	ld	AH,@(H'0013,Y)
-	ld	AL,@(H'0014,Y)
-?L209:
+	ld	AH,@(H'0012,Y)
+	ld	AL,@(H'0013,Y)
+?L205:
 	bsr	$_CsrI2SAudioInputConnect
-?L145:
-	ld	AH,#H'0000
-	ld	X,@_CVC?
-	ld	AL,@(H'000D,X)
-	and	AL,#-H'4000
-	cmp	AL,#-H'8000
-	bne	?L162
-	ld	AH,#H'0001
-?L162:
-	st	AH,@(0,Y)
-	ld	AL,#(?LC28)
-	bsr	$_printf
+?L144:
 	ld	X,@_CVC?
 	tst	@(H'0002,X)
-	beq	?L163
+	beq	?L161
 	ld	AH,@(H'000D,X)
 	lsr	#H'000E
 	cmp	AH,#H'0002
-	beq	?L165
+	beq	?L163
 	cmp	AH,#H'0003
-	beq	?L170
-	bra	(?L172)
-?L165:
-	ld	X,@_CVC?
-	ld	AL,@(H'0005,X)
-	st	AL,@(0,Y)
-	ld	AL,#(?LC29)
-	bsr	$_printf
+	beq	?L168
+	bra	(?L170)
+?L163:
 	ld	X,@_CVC?
 	ld	AH,@(H'000C,X)
 	lsr	#H'0005
 	and	AH,#H'0001
 	cmp	AH,#H'0000
-	beq	?L166
+	beq	?L164
 	ld	AH,@(H'000C,X)
 	lsr	#H'000C
 	ld	AL,@$XAP_AH
@@ -113135,20 +112439,170 @@ _CvcConnectAudio:
 	and	AL,#H'0001
 	bsr	$_CsrI2SAudioOutputSetVolume
 	bra	(?L137)
-?L166:
+?L164:
 	bsr	$_CsrI2SVoiceResamplingFrequency
 	cmp	AL,#H'0000
-	beq	?L168
+	beq	?L166
 	bsr	$_CsrI2SVoiceResamplingFrequency
 	ld	AH,#H'0000
-	bra	(?L211)
-?L168:
+	bra	(?L207)
+?L166:
 	ld	X,@_CVC?
 	ld	AH,@(H'0004,X)
 	ld	AL,@(H'0005,X)
-?L211:
-	st	AH,@(H'0005,Y)
-	st	AL,@(H'0006,Y)
+?L207:
+	st	AH,@(H'0004,Y)
+	st	AL,@(H'0005,Y)
+	ld	AL,#H'0000
+	bsr	$_StreamKalimbaSink
+	bsr	$_StreamSourceFromSink
+	st	AL,@(H'0014,Y)
+	ld	AL,#H'0002
+	bsr	$_StreamKalimbaSink
+	bsr	$_StreamSourceFromSink
+	st	AL,@H'fff8
+	ld	X,@_CVC?
+	ld	AH,@(H'000D,X)
+	lsr	#H'0007
+	and	AH,#H'0001
+	st	AH,@(0,Y)
+	ld	AL,@(H'0014,Y)
+	bra	(?L210)
+?L168:
+	ld	AL,#H'0000
+	st	AL,@(0,Y)
+	ld	AL,#H'0002
+	ld	AH,#H'0000
+	bsr	$_StreamAudioSink
+	st	AL,@(H'0008,Y)
+	ld	AL,#H'0001
+	st	AL,@(0,Y)
+	ld	AL,#H'0002
+	ld	AH,#H'0000
+	bsr	$_StreamAudioSink
+	st	AL,@(H'0009,Y)
+	ld	X,@_CVC?
+	ld	AH,@(H'0004,X)
+	ld	AL,@(H'0005,X)
+	st	AH,@(0,Y)
+	st	AL,@(1,Y)
+	ld	AL,@(H'0008,Y)
+	ld	AH,#H'0500
+	bsr	$_SinkConfigure
+	bsr	$_PanicNull
+	ld	X,@_CVC?
+	ld	AH,@(H'0004,X)
+	ld	AL,@(H'0005,X)
+	st	AH,@(0,Y)
+	st	AL,@(1,Y)
+	ld	AL,@(H'0009,Y)
+	ld	AH,#H'0500
+	bsr	$_SinkConfigure
+	bsr	$_PanicNull
+	ld	AL,@(H'0008,Y)
+	ld	AH,@(H'0009,Y)
+	bsr	$_SinkSynchronise
+	bsr	$_PanicNull
+	ld	AL,#H'0000
+	bsr	$_StreamKalimbaSink
+	bsr	$_StreamSourceFromSink
+	ld	AH,@(H'0008,Y)
+	bsr	$_StreamConnect
+	bsr	$_PanicNull
+	ld	AL,#H'0002
+	bsr	$_StreamKalimbaSink
+	bsr	$_StreamSourceFromSink
+	ld	AH,@(H'0009,Y)
+	bsr	$_StreamConnect
+	bsr	$_PanicNull
+	ld	X,@_CVC?
+	ld	AH,@(H'000C,X)
+	lsr	#H'0005
+	and	AH,#H'0001
+	cmp	AH,#H'0000
+	beq	?L178
+	ld	AH,@(H'000C,X)
+	lsr	#H'000C
+	ld	AL,@$XAP_AH
+	bsr	$_CsrCvcPluginSetModeNoDsp
+	bra	(?L137)
+?L170:
+	ld	X,@_CVC?
+	ld	AL,#H'0002
+	st	AL,@(0,Y)
+	ld	AL,@(H'0001,X)
+	ld	AH,#H'0000
+	bsr	$_CodecSetOutputGainNow
+	ld	X,@_CVC?
+	ld	AH,@(H'000C,X)
+	lsr	#H'0005
+	and	AH,#H'0001
+	cmp	AH,#H'0000
+	beq	?L215
+	ld	AH,@(H'000D,X)
+	lsr	#H'0007
+	and	AH,#H'0001
+	cmp	AH,#H'0000
+	beq	?L172
+	ld	X,@(H'0003,Y)
+	ld	AH,@(H'0002,X)
+	lsr	#H'0007
+	and	AH,#H'0001
+	cmp	AH,#H'0000
+	bne	?L172
+	ld	X,#H'0002
+	bra	(?L173)
+?L172:
+	ld	X,#H'0000
+?L173:
+	ld	AH,@(H'000B,Y)
+	ld	AL,@(H'000C,Y)
+	st	AH,@(0,Y)
+	st	AL,@(1,Y)
+	ld	AL,@$XAP_UXL
+	bsr	_CvcSpkrSetup
+	ld	X,@_CVC?
+	ld	AH,@(H'000C,X)
+	lsr	#H'000C
+	ld	AL,@$XAP_AH
+	bsr	$_CsrCvcPluginSetModeNoDsp
+	ld	X,@_CVC?
+	ld	AH,@(H'000B,X)
+	lsr	#H'0008
+	ld	AL,#H'0002
+	st	AL,@(0,Y)
+	ld	AL,@(H'0001,X)
+	bsr	$_CodecSetOutputGainNow
+	bra	(?L137)
+?L161:
+	ld	X,@(H'0003,Y)
+	ld	AH,@(H'0002,X)
+	lsr	#H'000B
+	add	AH,#-H'000D
+	cmp	AH,#(H'0001+H'0003)
+	bcc	?L178
+	ld	X,@_CVC?
+	ld	AH,@(H'000D,X)
+	lsr	#H'000E
+	cmp	AH,#H'0002
+	beq	?L181
+	cmp	AH,#H'0003
+	beq	?L184
+	bra	(?L185)
+?L181:
+	bsr	$_CsrI2SVoiceResamplingFrequency
+	cmp	AL,#H'0000
+	beq	?L182
+	bsr	$_CsrI2SVoiceResamplingFrequency
+	ld	AH,#H'0000
+	bra	(?L208)
+?L182:
+	ld	X,@_CVC?
+	ld	AH,@(H'0004,X)
+	ld	AL,@(H'0005,X)
+?L208:
+	st	AH,@(H'0004,Y)
+	st	AL,@(H'0005,Y)
 	ld	AL,#H'0000
 	bsr	$_StreamKalimbaSink
 	bsr	$_StreamSourceFromSink
@@ -113163,183 +112617,38 @@ _CvcConnectAudio:
 	and	AH,#H'0001
 	st	AH,@(0,Y)
 	ld	AL,@(H'0015,Y)
-	bra	(?L214)
-?L170:
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	ld	AL,#H'0002
-	ld	AH,#H'0000
-	bsr	$_StreamAudioSink
-	st	AL,@(H'0009,Y)
-	ld	AL,#H'0001
-	st	AL,@(0,Y)
-	ld	AL,#H'0002
-	ld	AH,#H'0000
-	bsr	$_StreamAudioSink
-	st	AL,@(H'000A,Y)
-	ld	X,@_CVC?
-	ld	AH,@(H'0004,X)
-	ld	AL,@(H'0005,X)
-	st	AH,@(0,Y)
-	st	AL,@(1,Y)
-	ld	AL,@(H'0009,Y)
-	ld	AH,#H'0500
-	bsr	$_SinkConfigure
-	bsr	$_PanicNull
-	ld	X,@_CVC?
-	ld	AH,@(H'0004,X)
-	ld	AL,@(H'0005,X)
-	st	AH,@(0,Y)
-	st	AL,@(1,Y)
-	ld	AL,@(H'000A,Y)
-	ld	AH,#H'0500
-	bsr	$_SinkConfigure
-	bsr	$_PanicNull
-	ld	AL,@(H'0009,Y)
-	ld	AH,@(H'000A,Y)
-	bsr	$_SinkSynchronise
-	bsr	$_PanicNull
-	ld	AL,#H'0000
-	bsr	$_StreamKalimbaSink
-	bsr	$_StreamSourceFromSink
-	ld	AH,@(H'0009,Y)
-	bsr	$_StreamConnect
-	bsr	$_PanicNull
-	ld	AL,#H'0002
-	bsr	$_StreamKalimbaSink
-	bsr	$_StreamSourceFromSink
-	ld	AH,@(H'000A,Y)
-	bsr	$_StreamConnect
-	bsr	$_PanicNull
-	ld	X,@_CVC?
-	ld	AH,@(H'000C,X)
-	lsr	#H'0005
-	and	AH,#H'0001
-	cmp	AH,#H'0000
-	beq	?L171
-	ld	AH,@(H'000C,X)
-	lsr	#H'000C
-	ld	AL,@$XAP_AH
-	bsr	$_CsrCvcPluginSetModeNoDsp
-	bra	(?L137)
-?L171:
-	ld	AL,#(?LC30)
-	bsr	$_puts
-	bra	(?L180)
-?L172:
-	ld	X,@_CVC?
-	ld	AL,#H'0002
-	st	AL,@(0,Y)
-	ld	AL,@(H'0001,X)
-	ld	AH,#H'0000
-	bsr	$_CodecSetOutputGainNow
-	ld	X,@_CVC?
-	ld	AH,@(H'000C,X)
-	lsr	#H'0005
-	and	AH,#H'0001
-	cmp	AH,#H'0000
-	beq	?L219
-	ld	AH,@(H'000D,X)
-	lsr	#H'0007
-	and	AH,#H'0001
-	cmp	AH,#H'0000
-	beq	?L174
-	ld	X,@(H'0004,Y)
-	ld	AH,@(H'0002,X)
-	lsr	#H'0007
-	and	AH,#H'0001
-	cmp	AH,#H'0000
-	bne	?L174
-	ld	X,#H'0002
-	bra	(?L175)
-?L174:
-	ld	X,#H'0000
-?L175:
-	ld	AH,@(H'000C,Y)
-	ld	AL,@(H'000D,Y)
-	st	AH,@(0,Y)
-	st	AL,@(1,Y)
-	ld	AL,@$XAP_UXL
-	bsr	_CvcSpkrSetup
-	ld	X,@_CVC?
-	ld	AH,@(H'000C,X)
-	lsr	#H'000C
-	ld	AL,@$XAP_AH
-	bsr	$_CsrCvcPluginSetModeNoDsp
-	ld	X,@_CVC?
-	ld	AH,@(H'000B,X)
-	lsr	#H'0008
-	ld	AL,#H'0002
-	st	AL,@(0,Y)
-	ld	AL,@(H'0001,X)
-	bsr	$_CodecSetOutputGainNow
-	bra	(?L137)
-?L163:
-	ld	X,@(H'0004,Y)
-	ld	AH,@(H'0002,X)
-	lsr	#H'000B
-	add	AH,#-H'000D
-	cmp	AH,#(H'0001+H'0003)
-	bcc	?L180
-	ld	X,@_CVC?
-	ld	AH,@(H'000D,X)
-	lsr	#H'000E
-	cmp	AH,#H'0002
-	beq	?L183
-	cmp	AH,#H'0003
-	beq	?L186
-	bra	(?L187)
-?L183:
-	bsr	$_CsrI2SVoiceResamplingFrequency
-	cmp	AL,#H'0000
-	beq	?L184
-	bsr	$_CsrI2SVoiceResamplingFrequency
-	ld	AH,#H'0000
-	bra	(?L212)
-?L184:
-	ld	X,@_CVC?
-	ld	AH,@(H'0004,X)
-	ld	AL,@(H'0005,X)
-?L212:
-	st	AH,@(H'0005,Y)
-	st	AL,@(H'0006,Y)
-	ld	AL,#H'0000
-	bsr	$_StreamKalimbaSink
-	bsr	$_StreamSourceFromSink
-	st	AL,@(H'0016,Y)
-	ld	AL,#H'0002
-	bsr	$_StreamKalimbaSink
-	bsr	$_StreamSourceFromSink
-	st	AL,@H'fff8
-	ld	X,@_CVC?
-	ld	AH,@(H'000D,X)
-	lsr	#H'0007
-	and	AH,#H'0001
-	st	AH,@(0,Y)
-	ld	AL,@(H'0016,Y)
-?L214:
+?L210:
 	st	AL,@(H'0001,Y)
 	st	AL,@H'ffff
 	ld	AL,@H'fff8
 	st	AL,@(H'0002,Y)
 	ld	AL,@H'ffff
-	ld	AH,@(H'0005,Y)
-	ld	AL,@(H'0006,Y)
+	ld	AH,@(H'0004,Y)
+	ld	AL,@(H'0005,Y)
 	bsr	$_CsrI2SAudioOutputConnect
-	bra	(?L180)
-?L186:
+	bra	(?L178)
+?L184:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,#H'0002
 	ld	AH,#H'0000
 	bsr	$_StreamAudioSink
-	st	AL,@(H'0009,Y)
+	st	AL,@(H'0008,Y)
 	ld	AL,#H'0001
 	st	AL,@(0,Y)
 	ld	AL,#H'0002
 	ld	AH,#H'0000
 	bsr	$_StreamAudioSink
-	st	AL,@(H'000A,Y)
+	st	AL,@(H'0009,Y)
+	ld	X,@_CVC?
+	ld	AH,@(H'0004,X)
+	ld	AL,@(H'0005,X)
+	st	AH,@(0,Y)
+	st	AL,@(1,Y)
+	ld	AL,@(H'0008,Y)
+	ld	AH,#H'0500
+	bsr	$_SinkConfigure
+	bsr	$_PanicNull
 	ld	X,@_CVC?
 	ld	AH,@(H'0004,X)
 	ld	AL,@(H'0005,X)
@@ -113349,78 +112658,69 @@ _CvcConnectAudio:
 	ld	AH,#H'0500
 	bsr	$_SinkConfigure
 	bsr	$_PanicNull
-	ld	X,@_CVC?
-	ld	AH,@(H'0004,X)
-	ld	AL,@(H'0005,X)
-	st	AH,@(0,Y)
-	st	AL,@(1,Y)
-	ld	AL,@(H'000A,Y)
-	ld	AH,#H'0500
-	bsr	$_SinkConfigure
-	bsr	$_PanicNull
-	ld	AL,@(H'0009,Y)
-	ld	AH,@(H'000A,Y)
+	ld	AL,@(H'0008,Y)
+	ld	AH,@(H'0009,Y)
 	bsr	$_SinkSynchronise
 	bsr	$_PanicNull
 	ld	AL,#H'0000
 	bsr	$_StreamKalimbaSink
 	bsr	$_StreamSourceFromSink
-	ld	AH,@(H'0009,Y)
+	ld	AH,@(H'0008,Y)
 	bsr	$_StreamConnect
 	bsr	$_PanicNull
-	bra	(?L213)
-?L187:
+	bra	(?L209)
+?L185:
 	ld	X,@_CVC?
 	ld	AL,#H'0002
 	st	AL,@(0,Y)
 	ld	AL,@(H'0001,X)
 	ld	AH,#H'0000
 	bsr	$_CodecSetOutputGainNow
-?L219:
-	ld	AH,@(H'000C,Y)
-	ld	AL,@(H'000D,Y)
+?L215:
+	ld	AH,@(H'000B,Y)
+	ld	AL,@(H'000C,Y)
 	st	AH,@(0,Y)
 	st	AL,@(1,Y)
 	ld	AL,#H'0000
 	bsr	_CvcSpkrSetup
-	st	AL,@(H'0009,Y)
+	st	AL,@(H'0008,Y)
 	ld	X,@_CVC?
 	ld	AH,@(H'000D,X)
 	lsr	#H'0007
 	and	AH,#H'0001
 	cmp	AH,#H'0000
-	beq	?L188
-	ld	AH,@(H'000C,Y)
-	ld	AL,@(H'000D,Y)
+	beq	?L186
+	ld	AH,@(H'000B,Y)
+	ld	AL,@(H'000C,Y)
 	st	AH,@(0,Y)
 	st	AL,@(1,Y)
 	ld	AL,#H'0001
 	bsr	_CvcSpkrSetup
-	st	AL,@(H'000A,Y)
-	ld	AL,@(H'0009,Y)
-	ld	AH,@(H'000A,Y)
+	st	AL,@(H'0009,Y)
+	ld	AL,@(H'0008,Y)
+	ld	AH,@(H'0009,Y)
 	bsr	$_SinkSynchronise
-?L188:
+?L186:
 	ld	AL,#H'0000
+	bsr	$_StreamKalimbaSink
+	bsr	$_StreamSourceFromSink
+	ld	AH,@(H'0008,Y)
+	bsr	$_StreamConnect
+	bsr	$_PanicNull
+	ld	X,@_CVC?
+	ld	AH,@(H'000D,X)
+	lsr	#H'0007
+	and	AH,#H'0001
+	cmp	AH,#H'0000
+	beq	?L178
+?L209:
+	ld	AL,#H'0002
 	bsr	$_StreamKalimbaSink
 	bsr	$_StreamSourceFromSink
 	ld	AH,@(H'0009,Y)
 	bsr	$_StreamConnect
 	bsr	$_PanicNull
-	ld	X,@_CVC?
-	ld	AH,@(H'000D,X)
-	lsr	#H'0007
-	and	AH,#H'0001
-	cmp	AH,#H'0000
-	beq	?L180
-?L213:
-	ld	AL,#H'0002
-	bsr	$_StreamKalimbaSink
-	bsr	$_StreamSourceFromSink
-	ld	AH,@(H'000A,Y)
-	bsr	$_StreamConnect
-	bsr	$_PanicNull
-?L180:
+?L178:
 	ld	X,@_CVC?
 	ld	AL,@(H'000C,X)
 	or	AL,#H'0004
@@ -113429,27 +112729,7 @@ _CvcConnectAudio:
 	ld	AL,@(H'000C,X)
 	or	AL,#H'0040
 	st	AL,@(H'000C,X)
-	ld	AL,@(H'000B,Y)
-	st	AL,@(0,Y)
-	ld	X,@(H'0004,Y)
-	ld	AH,@(H'0002,X)
-	lsr	#H'0004
-	and	AH,#H'0007
-	st	AH,@(H'0001,Y)
-	ld	AH,@(H'0002,X)
-	lsr	#H'0003
-	and	AH,#H'0001
-	cmp	AH,#H'0000
-	beq	?L191
-	ld	AL,#(?LC32)
-	bra	(?L192)
-?L191:
-	ld	AL,#(?LC33)
-?L192:
-	st	AL,@(H'0002,Y)
-	ld	AL,#(?LC31)
-	bsr	$_printf
-	ld	X,@(H'0004,Y)
+	ld	X,@(H'0003,Y)
 	ld	AH,@(H'0002,X)
 	lsr	#H'0004
 	and	AH,#H'0007
@@ -113458,161 +112738,115 @@ _CvcConnectAudio:
 	lsr	#H'0003
 	and	AH,#H'0001
 	cmp	AH,#H'0000
-	beq	?L193
+	beq	?L189
 	ld	AL,#H'0080
-	bra	(?L194)
-?L193:
+	bra	(?L190)
+?L189:
 	ld	AL,#H'0040
-?L194:
+?L190:
 	st	AL,@(H'0001,Y)
 	ld	AL,#H'0000
 	st	AL,@(H'0002,Y)
 	ld	AL,#H'2000
-	ld	AH,@(H'000B,Y)
+	ld	AH,@(H'000A,Y)
 	bsr	$_KalimbaSendMessage
 	ld	X,@_CVC?
 	tst	@(H'0002,X)
-	beq	?L195
+	beq	?L191
 	tst	@(H'000E,X)
-	beq	?L196
+	beq	?L192
 	ld	AL,@(H'0003,X)
 	bsr	$_StreamConnectDispose
-	ld	AL,#(?LC34)
-	bra	(?L215)
-?L196:
+	bra	(?L193)
+?L192:
 	ld	AL,#H'0001
 	bsr	$_StreamKalimbaSink
 	ld	AH,@$XAP_AL
 	ld	X,@_CVC?
 	ld	AL,@(H'0003,X)
 	bsr	$_StreamConnect
-	ld	AL,#(?LC35)
-?L215:
-	bsr	$_puts
+?L193:
 	ld	AL,#H'0001
 	bsr	$_StreamKalimbaSink
 	bsr	$_StreamSourceFromSink
 	ld	X,@_CVC?
 	ld	AH,@(H'0002,X)
 	bsr	$_StreamConnect
-?L195:
+?L191:
 	ld	X,@_CVC?
 	ld	AL,@(H'000D,X)
 	and	AL,#-H'4000
 	cmp	AL,#-H'8000
-	bne	?L198
+	bne	?L194
 	bsr	$_CsrI2SVoiceResamplingFrequency
 	cmp	AL,#H'0000
-	beq	?L198
-	bsr	$_CsrI2SVoiceResamplingFrequency
-	ld	AH,#H'0000
-	udiv	#H'000A
-	st	AL,@(0,Y)
-	ld	AH,#H'0002
-	st	AH,@(H'0001,Y)
-	ld	AL,#H'0001
-	st	AL,@(H'0002,Y)
-	ld	AL,#(?LC36)
-	bsr	$_printf
+	beq	?L194
 	bsr	$_CsrI2SVoiceResamplingFrequency
 	ld	AH,#H'0000
 	udiv	#H'000A
 	ld	AH,@$XAP_AL
-	ld	X,#H'0002
-	st	X,@(0,Y)
+	ld	AL,#H'0002
+	st	AL,@(0,Y)
 	ld	AL,#H'0001
 	st	AL,@(H'0001,Y)
 	ld	AL,#H'0000
 	st	AL,@(H'0002,Y)
 	ld	AL,#H'1070
-	bra	(?L217)
-?L198:
+	bra	(?L212)
+?L194:
 	ld	X,@_CVC?
 	ld	AL,@(H'000D,X)
 	and	AL,#-H'4000
 	cmp	AL,#-H'8000
-	bne	?L201
-	ld	X,#H'000A
-	st	X,@(H'0001,Y)
+	bne	?L197
+	ld	AL,#H'000A
+	st	AL,@(H'0001,Y)
 	ld	AH,#H'0000
 	st	AH,@(0,Y)
-	ld	AH,@(H'000C,Y)
-	ld	AL,@(H'000D,Y)
+	ld	AH,@(H'000B,Y)
+	ld	AL,@(H'000C,Y)
 	bsr	$___udivhi3
-	st	AH,@(H'0017,Y)
-	st	AL,@(H'0018,Y)
-	st	AH,@(0,Y)
-	st	AL,@(1,Y)
+	st	AH,@H'fff8
+	st	AL,@H'fff9
 	ld	AL,#H'0002
-	st	AL,@(H'0002,Y)
-	ld	X,#H'0001
-	st	X,@(H'0003,Y)
-	ld	AL,#(?LC38)
-	bsr	$_printf
-	ld	AH,#H'000A
-	st	AH,@(H'0001,Y)
-	ld	AL,#H'0000
 	st	AL,@(0,Y)
-	ld	AH,@(H'000C,Y)
-	ld	AL,@(H'000D,Y)
-	bsr	$___udivhi3
-	ld	X,#H'0002
-	st	X,@(0,Y)
-	ld	AH,#H'0001
-	st	AH,@(H'0001,Y)
-	ld	AL,#H'0000
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'1070
-	ld	AH,@(H'0018,Y)
-	bra	(?L217)
-?L201:
-	ld	X,#H'000A
-	st	X,@(H'0001,Y)
-	ld	AH,#H'0000
-	st	AH,@(0,Y)
-	ld	AH,@(H'000C,Y)
-	ld	AL,@(H'000D,Y)
-	bsr	$___udivhi3
-	st	AH,@(H'0019,Y)
-	st	AL,@(H'001A,Y)
-	st	AH,@(0,Y)
-	st	AL,@(1,Y)
 	ld	AL,#H'0001
-	st	AL,@(H'0002,Y)
-	ld	X,#H'0000
-	st	X,@(H'0003,Y)
-	ld	AL,#(?LC38)
-	bsr	$_printf
-	ld	AH,#H'000A
-	st	AH,@(H'0001,Y)
+	st	AL,@(H'0001,Y)
 	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	ld	AH,@(H'000C,Y)
-	ld	AL,@(H'000D,Y)
-	bsr	$___udivhi3
-	ld	X,#H'0001
+	st	AL,@(H'0002,Y)
+	bra	(?L214)
+?L197:
+	ld	AL,#H'000A
+	st	AL,@(H'0001,Y)
+	ld	X,#H'0000
 	st	X,@(0,Y)
+	ld	AH,@(H'000B,Y)
+	ld	AL,@(H'000C,Y)
+	bsr	$___udivhi3
+	st	AH,@H'fff8
+	st	AL,@H'fff9
+	ld	AL,#H'0001
+	st	AL,@(0,Y)
 	ld	AH,#H'0000
 	st	AH,@(H'0001,Y)
 	st	AH,@(H'0002,Y)
+?L214:
 	ld	AL,#H'1070
-	ld	AH,@(H'001A,Y)
-?L217:
+	ld	AH,@H'fff9
+?L212:
 	bsr	$_KalimbaSendMessage
 	cmp	AL,#H'0000
-	bne	?L200
-	ld	AL,#(?LC37)
-	bsr	$_puts
+	bne	?L196
 	bsr	$_Panic
-?L200:
+?L196:
 	ld	X,@_CVC?
 	ld	AH,@(H'000C,X)
 	lsr	#H'000C
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
-	ld	AL,@(H'0004,Y)
+	ld	AL,@(H'0003,Y)
 	bsr	$_CsrCvcPluginSetMode
-	ld	X,@(H'0004,Y)
+	ld	X,@(H'0003,Y)
 	ld	AH,@(H'0002,X)
 	lsr	#H'000B
 	add	AH,#-H'000D
@@ -113624,12 +112858,6 @@ _CvcConnectAudio:
 	st	AH,@(H'0002,Y)
 	ld	AL,#H'1020
 	bsr	$_KalimbaSendMessage
-	bsr	$_IsAudioBusy
-	ld	AH,#H'1020
-	st	AH,@(0,Y)
-	st	AL,@(H'0001,Y)
-	ld	AL,#(?LC39)
-	bsr	$_printf
 	ld	AL,#H'0001
 	bsr	$_SetAsrPlaying
 ?LBE14:
@@ -113639,536 +112867,47 @@ _CvcConnectAudio:
 	ld	AL,@(H'000C,X)
 	or	AL,#H'0040
 	st	AL,@(H'000C,X)
-	ld	AL,@(H'0004,Y)
+	ld	AL,@(H'0003,Y)
 	bsr	$_CsrCvcPluginDisconnect
 ?L137:
 ?LBE13:
 ?LBE_CvcConnectAudio:
-	leavel	#29
-	.SEG	CONST
-?LC26:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'55
-	dc	H'73
-	dc	H'65
-	dc	H'20
-	dc	H'69
-	dc	H'32
-	dc	H'73
-	dc	H'20
-	dc	H'69
-	dc	H'6E
-	dc	H'70
-	dc	H'75
-	dc	H'74
-	dc	H'3F
-	dc	H'20
-	dc	H'25
-	dc	H'78
-	dc	H'0A
-	dc	H'00
-?LC27:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'43
-	dc	H'6F
-	dc	H'6E
-	dc	H'6E
-	dc	H'65
-	dc	H'63
-	dc	H'74
-	dc	H'20
-	dc	H'50
-	dc	H'43
-	dc	H'4D
-	dc	H'20
-	dc	H'73
-	dc	H'6F
-	dc	H'75
-	dc	H'72
-	dc	H'63
-	dc	H'65
-	dc	H'20
-	dc	H'32
-	dc	H'00
-?LC28:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'55
-	dc	H'73
-	dc	H'65
-	dc	H'20
-	dc	H'69
-	dc	H'32
-	dc	H'73
-	dc	H'20
-	dc	H'6F
-	dc	H'75
-	dc	H'74
-	dc	H'70
-	dc	H'75
-	dc	H'74
-	dc	H'3F
-	dc	H'20
-	dc	H'25
-	dc	H'78
-	dc	H'0A
-	dc	H'00
-?LC29:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'55
-	dc	H'73
-	dc	H'69
-	dc	H'6E
-	dc	H'67
-	dc	H'20
-	dc	H'69
-	dc	H'32
-	dc	H'73
-	dc	H'20
-	dc	H'6F
-	dc	H'75
-	dc	H'74
-	dc	H'70
-	dc	H'75
-	dc	H'74
-	dc	H'2C
-	dc	H'20
-	dc	H'73
-	dc	H'61
-	dc	H'6D
-	dc	H'70
-	dc	H'6C
-	dc	H'65
-	dc	H'20
-	dc	H'72
-	dc	H'61
-	dc	H'74
-	dc	H'65
-	dc	H'20
-	dc	H'69
-	dc	H'73
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'0A
-	dc	H'00
-?LC30:
-	dc	H'44
-	dc	H'45
-	dc	H'43
-	dc	H'4F
-	dc	H'44
-	dc	H'45
-	dc	H'52
-	dc	H'3A
-	dc	H'20
-	dc	H'4F
-	dc	H'55
-	dc	H'54
-	dc	H'50
-	dc	H'55
-	dc	H'54
-	dc	H'5F
-	dc	H'49
-	dc	H'4E
-	dc	H'54
-	dc	H'45
-	dc	H'52
-	dc	H'46
-	dc	H'41
-	dc	H'43
-	dc	H'45
-	dc	H'5F
-	dc	H'54
-	dc	H'59
-	dc	H'50
-	dc	H'45
-	dc	H'5F
-	dc	H'53
-	dc	H'50
-	dc	H'44
-	dc	H'49
-	dc	H'46
-	dc	H'00
-?LC32:
-	dc	H'31
-	dc	H'36
-	dc	H'6B
-	dc	H'48
-	dc	H'7A
-	dc	H'00
-?LC33:
-	dc	H'38
-	dc	H'6B
-	dc	H'48
-	dc	H'7A
-	dc	H'00
-?LC31:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'41
-	dc	H'55
-	dc	H'44
-	dc	H'49
-	dc	H'4F
-	dc	H'5F
-	dc	H'43
-	dc	H'4F
-	dc	H'4E
-	dc	H'46
-	dc	H'49
-	dc	H'47
-	dc	H'5F
-	dc	H'4D
-	dc	H'53
-	dc	H'47
-	dc	H'20
-	dc	H'30
-	dc	H'78
-	dc	H'25
-	dc	H'78
-	dc	H'20
-	dc	H'63
-	dc	H'6F
-	dc	H'6E
-	dc	H'66
-	dc	H'69
-	dc	H'67
-	dc	H'20
-	dc	H'30
-	dc	H'78
-	dc	H'25
-	dc	H'78
-	dc	H'20
-	dc	H'25
-	dc	H'73
-	dc	H'0A
-	dc	H'00
-?LC34:
-	dc	H'53
-	dc	H'74
-	dc	H'72
-	dc	H'65
-	dc	H'61
-	dc	H'6D
-	dc	H'43
-	dc	H'6F
-	dc	H'6E
-	dc	H'6E
-	dc	H'65
-	dc	H'63
-	dc	H'74
-	dc	H'44
-	dc	H'69
-	dc	H'73
-	dc	H'70
-	dc	H'6F
-	dc	H'73
-	dc	H'65
-	dc	H'2A
-	dc	H'2A
-	dc	H'00
-?LC35:
-	dc	H'53
-	dc	H'74
-	dc	H'72
-	dc	H'65
-	dc	H'61
-	dc	H'6D
-	dc	H'43
-	dc	H'6F
-	dc	H'6E
-	dc	H'6E
-	dc	H'65
-	dc	H'63
-	dc	H'74
-	dc	H'2A
-	dc	H'2A
-	dc	H'00
-?LC36:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'53
-	dc	H'45
-	dc	H'54
-	dc	H'5F
-	dc	H'53
-	dc	H'41
-	dc	H'4D
-	dc	H'50
-	dc	H'4C
-	dc	H'45
-	dc	H'5F
-	dc	H'52
-	dc	H'41
-	dc	H'54
-	dc	H'45
-	dc	H'20
-	dc	H'72
-	dc	H'61
-	dc	H'74
-	dc	H'65
-	dc	H'5B
-	dc	H'25
-	dc	H'64
-	dc	H'5D
-	dc	H'20
-	dc	H'72
-	dc	H'61
-	dc	H'74
-	dc	H'65
-	dc	H'5F
-	dc	H'6D
-	dc	H'61
-	dc	H'74
-	dc	H'63
-	dc	H'68
-	dc	H'5B
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'20
-	dc	H'69
-	dc	H'6E
-	dc	H'74
-	dc	H'65
-	dc	H'72
-	dc	H'66
-	dc	H'61
-	dc	H'63
-	dc	H'65
-	dc	H'5B
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'0A
-	dc	H'00
-?LC38:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'53
-	dc	H'45
-	dc	H'54
-	dc	H'5F
-	dc	H'53
-	dc	H'41
-	dc	H'4D
-	dc	H'50
-	dc	H'4C
-	dc	H'45
-	dc	H'5F
-	dc	H'52
-	dc	H'41
-	dc	H'54
-	dc	H'45
-	dc	H'20
-	dc	H'72
-	dc	H'61
-	dc	H'74
-	dc	H'65
-	dc	H'5B
-	dc	H'25
-	dc	H'6C
-	dc	H'64
-	dc	H'5D
-	dc	H'20
-	dc	H'72
-	dc	H'61
-	dc	H'74
-	dc	H'65
-	dc	H'5F
-	dc	H'6D
-	dc	H'61
-	dc	H'74
-	dc	H'63
-	dc	H'68
-	dc	H'5B
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'20
-	dc	H'69
-	dc	H'6E
-	dc	H'74
-	dc	H'65
-	dc	H'72
-	dc	H'66
-	dc	H'61
-	dc	H'63
-	dc	H'65
-	dc	H'5B
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'0A
-	dc	H'00
-?LC37:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'4D
-	dc	H'65
-	dc	H'73
-	dc	H'73
-	dc	H'61
-	dc	H'67
-	dc	H'65
-	dc	H'20
-	dc	H'4D
-	dc	H'45
-	dc	H'53
-	dc	H'53
-	dc	H'41
-	dc	H'47
-	dc	H'45
-	dc	H'5F
-	dc	H'53
-	dc	H'45
-	dc	H'54
-	dc	H'5F
-	dc	H'41
-	dc	H'44
-	dc	H'43
-	dc	H'44
-	dc	H'41
-	dc	H'43
-	dc	H'5F
-	dc	H'53
-	dc	H'41
-	dc	H'4D
-	dc	H'50
-	dc	H'4C
-	dc	H'45
-	dc	H'5F
-	dc	H'52
-	dc	H'41
-	dc	H'54
-	dc	H'45
-	dc	H'5F
-	dc	H'4D
-	dc	H'45
-	dc	H'53
-	dc	H'53
-	dc	H'41
-	dc	H'47
-	dc	H'45
-	dc	H'5F
-	dc	H'49
-	dc	H'44
-	dc	H'20
-	dc	H'66
-	dc	H'61
-	dc	H'69
-	dc	H'6C
-	dc	H'65
-	dc	H'64
-	dc	H'21
-	dc	H'00
-?LC39:
-	dc	H'41
-	dc	H'53
-	dc	H'52
-	dc	H'20
-	dc	H'72
-	dc	H'75
-	dc	H'6E
-	dc	H'6E
-	dc	H'69
-	dc	H'6E
-	dc	H'67
-	dc	H'20
-	dc	H'6D
-	dc	H'73
-	dc	H'67
-	dc	H'20
-	dc	H'25
-	dc	H'78
-	dc	H'20
-	dc	H'62
-	dc	H'75
-	dc	H'73
-	dc	H'79
-	dc	H'20
-	dc	H'5B
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'0A
-	dc	H'00
-	.CODE
+	leavel	#24
 ;.stabn	192,0,0,?LBB13
 ;.stabn	192,0,0,?LBB14
 ;.stabn	224,0,0,?LBE14
 ;.stabn	224,0,0,?LBE13
 _CvcCodecMessage:
-	enterl	#7
+	enterl	#6
 ?LBB_CvcCodecMessage:
 	st	AL,@(H'0002,Y)
 	st	AH,@(H'0003,Y)
-	ld	AH,@(H'0007,Y)
-	st	AH,@(H'0004,Y)
-	ld	AL,@(H'0008,Y)
-	st	AL,@(0,Y)
-	ld	AL,#(?LC40)
-	bsr	$_printf
-	ld	AH,@(H'0003,Y)
-	st	AH,@(0,Y)
-	ld	AL,@(H'0004,Y)
-	st	AL,@(H'0001,Y)
-	ld	AL,#(?LC41)
-	bsr	$_printf
 	tst	@_CVC?
-	beq	?L239
+	beq	?L233
 	ld	X,@_CVC?
 	ld	AH,@(H'000D,X)
 	ld	AL,@$XAP_AH
 	and	AL,#-H'4000
 	cmp	AL,#-H'8000
-	bne	?L241
+	bne	?L235
 	lsr	#H'0007
 	ld	AL,@$XAP_AH
-	ld	X,@(H'0008,Y)
-	st	X,@(0,Y)
+	ld	AH,@(H'0007,Y)
+	st	AH,@(0,Y)
 	ld	AH,#H'0000
 	st	AH,@(H'0001,Y)
 	and	AL,#H'0001
-	ld	AH,@$XAP_UXL
+	ld	AH,@(0,Y)
 	bsr	$_CsrI2SAudioOutputSetVolume
-	bra	(?L242)
-?L241:
+	bra	(?L236)
+?L235:
 	ld	X,@_CVC?
 	ld	AL,#H'0002
 	st	AL,@(0,Y)
 	ld	AL,@(H'0001,X)
-	ld	AH,@(H'0008,Y)
+	ld	AH,@(H'0007,Y)
 	bsr	$_CodecSetOutputGainNow
-?L242:
+?L236:
 	ld	X,@_CVC?
 	ld	X,@(H'000A,X)
 	ld	AH,@(0,X)
@@ -114182,394 +112921,231 @@ _CvcCodecMessage:
 	lsr	#H'0007
 	and	AH,#H'0001
 	cmp	AH,#H'0000
-	beq	?L239
+	beq	?L233
 	ld	X,@_CVC?
 	ld	X,@(H'000A,X)
 	ld	AH,@(H'0001,X)
 	lsr	#H'000F
-	ld	AL,@(H'0004,Y)
+	ld	AL,@(H'0006,Y)
 	st	AL,@(0,Y)
 	ld	AL,#H'0001
 	bsr	_CvcMicSetGain
-?L239:
+?L233:
 ?LBE_CvcCodecMessage:
-	leavel	#7
-	.SEG	CONST
-?LC40:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'4F
-	dc	H'75
-	dc	H'74
-	dc	H'70
-	dc	H'75
-	dc	H'74
-	dc	H'20
-	dc	H'67
-	dc	H'61
-	dc	H'69
-	dc	H'6E
-	dc	H'20
-	dc	H'3D
-	dc	H'20
-	dc	H'30
-	dc	H'78
-	dc	H'25
-	dc	H'78
-	dc	H'0A
-	dc	H'00
-?LC41:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'49
-	dc	H'6E
-	dc	H'70
-	dc	H'75
-	dc	H'74
-	dc	H'20
-	dc	H'67
-	dc	H'61
-	dc	H'69
-	dc	H'6E
-	dc	H'20
-	dc	H'4C
-	dc	H'3A
-	dc	H'52
-	dc	H'20
-	dc	H'3D
-	dc	H'20
-	dc	H'30
-	dc	H'78
-	dc	H'25
-	dc	H'78
-	dc	H'20
-	dc	H'3A
-	dc	H'20
-	dc	H'30
-	dc	H'78
-	dc	H'25
-	dc	H'78
-	dc	H'20
-	dc	H'0A
-	dc	H'00
-	.CODE
+	leavel	#6
 $_CsrCvcPluginInternalMessage:
-	enterl	#10
+	enterl	#7
 ?LBB_CsrCvcPluginInternalMessage:
-	st	AL,@(H'0005,Y)
+	st	AL,@(H'0003,Y)
+	ld	X,@(H'0007,Y)
 ?LBB15:
 	cmp	AH,#-H'7FDC
-	beq	?L247
+	beq	?L241
 	cmp	AH,#-H'7FD6
-	beq	?L293
-	bra	(?L245)
-?L247:
-	ld	AL,@(H'000A,Y)
+	beq	?L286
+	bra	(?L239)
+?L241:
 ?LBB16:
-	st	AL,@(H'0006,Y)
-	ld	X,@$XAP_AL
-	ld	AL,@(0,X)
-	st	AL,@(0,Y)
-	ld	AL,@(H'0001,X)
-	st	AL,@(H'0001,Y)
-	ld	AL,@(H'0002,X)
-	st	AL,@(H'0002,Y)
-	ld	AL,@(H'0003,X)
-	st	AL,@(H'0003,Y)
-	ld	AL,@(H'0004,X)
-	st	AL,@(H'0004,Y)
-	ld	AL,#(?LC42)
-	bsr	$_printf
-	ld	X,@(H'000A,Y)
 	ld	AL,@(0,X)
 	cmp	AL,#H'1000
-	beq	?L249
+	beq	?L243
 	cmp	AL,#(H'0001+H'1000)
-	bcc	?L289
+	bcc	?L283
 	cmp	AL,#H'0003
-	beq	?L279
-	cmp	AL,#(H'0001+H'0003)
-	bcc	?L290
-	cmp	AL,#H'0001
-	beq	?L275
-	cmp	AL,#H'0002
-	beq	?L277
-	bra	(?L245)
-?L290:
-	cmp	AL,#H'0004
-	beq	?L281
-	cmp	AL,#H'0005
-	beq	?L283
-	bra	(?L245)
-?L289:
-	cmp	AL,#H'1013
-	beq	?L274
-	cmp	AL,#(H'0001+H'1013)
-	bcc	?L291
-	cmp	AL,#H'1006
-	beq	?L271
-	cmp	AL,#H'100C
 	beq	?L273
-	bra	(?L245)
-?L291:
-	cmp	AL,#H'7201
-	beq	?L285
-	cmp	AL,#(H'0001+H'7201)
-	bcc	?L292
+	cmp	AL,#(H'0001+H'0003)
+	bcc	?L284
+	cmp	AL,#H'0001
+	beq	?L269
+	cmp	AL,#H'0002
+	beq	?L271
+	bra	(?L239)
+?L284:
+	cmp	AL,#H'0004
+	beq	?L275
+	cmp	AL,#H'0005
+	beq	?L277
+	bra	(?L239)
+?L283:
+	cmp	AL,#H'1013
+	beq	?L268
+	cmp	AL,#(H'0001+H'1013)
+	bcc	?L285
+	cmp	AL,#H'1006
+	beq	?L265
+	cmp	AL,#H'100C
+	beq	?L268
+	bra	(?L239)
+?L285:
 	cmp	AL,#H'1014
-	beq	?L272
-	bra	(?L245)
-?L292:
-	cmp	AL,#H'7202
-	beq	?L286
-	bra	(?L245)
-?L249:
-	ld	X,@(H'0005,Y)
+	beq	?L266
+	bra	(?L239)
+?L243:
+	ld	X,@(H'0003,Y)
 	ld	AH,@(H'0002,X)
 	lsr	#H'000B
 	cmp	AH,#(H'0001+H'000E)
-	bcc	?L263
+	bcc	?L257
 	ld	X,@$XAP_AH
-	ld	X,@(?JTBASE268,X)
+	ld	X,@(?JTBASE262,X)
 	brxl
 	.SEG	CONST
-?JTBASE268:
+?JTBASE262:
 	.CODE
-?L268:
+?L262:
 	.SEG	CONST
-	dc	lwrd(?L252-?L268)
-	dc	lwrd(?L257-?L268)
-	dc	lwrd(?L252-?L268)
-	dc	lwrd(?L263-?L268)
-	dc	lwrd(?L260-?L268)
-	dc	lwrd(?L263-?L268)
-	dc	lwrd(?L263-?L268)
-	dc	lwrd(?L259-?L268)
-	dc	lwrd(?L263-?L268)
-	dc	lwrd(?L263-?L268)
-	dc	lwrd(?L260-?L268)
-	dc	lwrd(?L263-?L268)
-	dc	lwrd(?L263-?L268)
-	dc	lwrd(?L261-?L268)
-	dc	lwrd(?L262-?L268)
+	dc	lwrd(?L246-?L262)
+	dc	lwrd(?L251-?L262)
+	dc	lwrd(?L246-?L262)
+	dc	lwrd(?L257-?L262)
+	dc	lwrd(?L254-?L262)
+	dc	lwrd(?L257-?L262)
+	dc	lwrd(?L257-?L262)
+	dc	lwrd(?L254-?L262)
+	dc	lwrd(?L257-?L262)
+	dc	lwrd(?L257-?L262)
+	dc	lwrd(?L254-?L262)
+	dc	lwrd(?L257-?L262)
+	dc	lwrd(?L257-?L262)
+	dc	lwrd(?L255-?L262)
+	dc	lwrd(?L256-?L262)
 	.CODE
-?L252:
+?L246:
 	ld	X,@_CVC?
 	ld	AH,@(H'0004,X)
 	ld	AL,@(H'0005,X)
 	cmp	AH,#H'0000
-	bne	?L253
+	bne	?L247
 	cmp	AL,#H'1F40
-	bne	?L253
-	ld	AL,#H'2263
-	st	AL,@(0,Y)
-	ld	X,#H'0000
-	st	X,@(H'0001,Y)
-	ld	AL,#(?LC43)
-	bsr	$_printf
+	bne	?L247
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
-	bra	(?L306)
-?L253:
+	bra	(?L297)
+?L247:
 	ld	X,@_CVC?
 	ld	AH,@(H'0004,X)
 	ld	AL,@(H'0005,X)
 	cmp	AH,#H'0000
-	bne	?L266
+	bne	?L260
 	cmp	AL,#H'3E80
-	bne	?L266
-	ld	X,#H'2267
-	st	X,@(0,Y)
+	bne	?L260
 	ld	AL,#H'0003
-	st	AL,@(H'0001,Y)
-	ld	AL,#(?LC43)
-	bsr	$_printf
-	ld	X,#H'0003
-	st	X,@(0,Y)
+	st	AL,@(0,Y)
 	ld	AL,#H'0000
 	st	AL,@(H'0001,Y)
 	st	AL,@(H'0002,Y)
 	ld	AL,#H'1012
 	ld	AH,#H'2267
-	bra	(?L300)
-?L257:
-	ld	AL,#H'2263
-	st	AL,@(0,Y)
-	ld	X,#H'0002
-	st	X,@(H'0001,Y)
-	ld	AL,#(?LC43)
-	bsr	$_printf
+	bra	(?L293)
+?L251:
 	ld	AL,#H'0002
 	st	AL,@(0,Y)
 	ld	AL,#H'0000
-?L306:
+?L297:
 	st	AL,@(H'0001,Y)
 	st	AL,@(H'0002,Y)
 	ld	AL,#H'1012
 	ld	AH,#H'2263
-	bra	(?L300)
-?L259:
-	ld	AL,#H'2280
-	st	AL,@(0,Y)
-	ld	X,#H'0002
-	st	X,@(H'0001,Y)
-	ld	AL,#(?LC43)
-	bsr	$_printf
+	bra	(?L293)
+?L254:
 	ld	AL,#H'0002
 	st	AL,@(0,Y)
-?L307:
 	ld	AL,#H'0000
-?L308:
-	st	AL,@(H'0001,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,#H'1012
-	ld	AH,#H'2280
-	bra	(?L300)
-?L260:
-	ld	X,#H'2280
-	st	X,@(0,Y)
-	ld	AL,#H'0002
-	st	AL,@(H'0001,Y)
-	ld	AL,#(?LC43)
-	bsr	$_printf
-	ld	X,#H'0002
-	st	X,@(0,Y)
-	bra	(?L307)
-?L261:
-	ld	AL,#H'2263
-	st	AL,@(0,Y)
-	ld	X,#H'0000
-	st	X,@(H'0001,Y)
-	ld	AL,#(?LC43)
-	bsr	$_printf
+	bra	(?L298)
+?L255:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	st	AL,@(H'0001,Y)
 	st	AL,@(H'0002,Y)
 	ld	AL,#H'1012
 	ld	AH,#H'2263
-	bra	(?L301)
-?L262:
-	ld	X,#H'2280
-	st	X,@(0,Y)
+	bra	(?L294)
+?L256:
 	ld	AL,#H'0000
+	st	AL,@(0,Y)
 	st	AL,@(H'0001,Y)
-	ld	AL,#(?LC43)
-	bsr	$_printf
-	ld	X,#H'0000
-	st	X,@(0,Y)
-	st	X,@(H'0001,Y)
-	st	X,@(H'0002,Y)
+	st	AL,@(H'0002,Y)
 	ld	AL,#H'1012
 	ld	AH,#H'2280
-?L301:
+?L294:
 	bsr	$_KalimbaSendMessage
-	ld	AL,@(H'0005,Y)
+	ld	AL,@(H'0003,Y)
 	bsr	$_CvcConfigureASR
-	bra	(?L250)
-?L263:
+	bra	(?L244)
+?L257:
 	ld	X,@_CVC?
 	ld	AH,@(H'0004,X)
 	ld	AL,@(H'0005,X)
 	cmp	AH,#H'0000
-	bne	?L264
+	bne	?L258
 	cmp	AL,#H'1F40
-	bne	?L264
-	ld	AL,#H'2280
-	st	AL,@(0,Y)
-	ld	X,#H'0000
-	st	X,@(H'0001,Y)
-	ld	AL,#(?LC43)
-	bsr	$_printf
+	bne	?L258
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
-	bra	(?L308)
-?L264:
+?L298:
+	st	AL,@(H'0001,Y)
+	st	AL,@(H'0002,Y)
+	ld	AL,#H'1012
+	ld	AH,#H'2280
+	bra	(?L293)
+?L258:
 	ld	X,@_CVC?
 	ld	AH,@(H'0004,X)
 	ld	AL,@(H'0005,X)
 	cmp	AH,#H'0000
-	bne	?L266
+	bne	?L260
 	cmp	AL,#H'3E80
-	bne	?L266
-	ld	X,#H'2284
-	st	X,@(0,Y)
+	bne	?L260
 	ld	AL,#H'0003
-	st	AL,@(H'0001,Y)
-	ld	AL,#(?LC43)
-	bsr	$_printf
-	ld	X,#H'0003
-	st	X,@(0,Y)
+	st	AL,@(0,Y)
 	ld	AL,#H'0000
 	st	AL,@(H'0001,Y)
 	st	AL,@(H'0002,Y)
 	ld	AL,#H'1012
 	ld	AH,#H'2284
-?L300:
+?L293:
 	bsr	$_KalimbaSendMessage
-	bra	(?L250)
-?L266:
-	ld	AL,#(?LC44)
-	bsr	$_puts
+	bra	(?L244)
+?L260:
 	bsr	$_Panic
-?L250:
+?L244:
 	ld	AL,#H'0002
 	bsr	$_SetCurrentDspStatus
 	ld	X,@_CVC?
 	tst	@(H'000E,X)
-	beq	?L269
+	beq	?L263
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	st	AL,@(H'0001,Y)
 	st	AL,@(H'0002,Y)
 	ld	AL,#H'4F04
-	ld	AH,#H'0000
-	bsr	$_KalimbaSendMessage
-	ld	AL,#(?LC45)
-	bra	(?L302)
-?L269:
+	bra	(?L295)
+?L263:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	st	AL,@(H'0001,Y)
 	st	AL,@(H'0002,Y)
 	ld	AL,#H'4F05
+?L295:
 	ld	AH,#H'0000
 	bsr	$_KalimbaSendMessage
-	ld	AL,#(?LC46)
-?L302:
-	bsr	$_puts
-	ld	X,@(H'0006,Y)
-	ld	AL,@(H'0001,X)
-	st	AL,@(0,Y)
-	ld	AL,@(H'0002,X)
-	st	AL,@(H'0001,Y)
-	ld	AL,#(?LC47)
-	bsr	$_printf
-	ld	AL,@(H'0005,Y)
+	ld	AL,@(H'0003,Y)
 	bsr	_CvcConnectAudio
-	bra	(?L245)
-?L271:
-	ld	X,@(H'0006,Y)
+	bra	(?L239)
+?L265:
 ?LBB17:
 	ld	AL,@(H'0001,X)
 	ld	AH,@(H'0002,X)
 	ld	X,@(H'0003,X)
 	st	X,@(0,Y)
 	st	AL,@(H'0001,Y)
-	ld	AL,@(H'0005,Y)
+	ld	AL,@(H'0003,Y)
 	bsr	_CvcCodecMessage
 	ld	AL,#H'0003
 	bsr	$_SetCurrentDspStatus
 ?LBE17:
-	bra	(?L245)
-?L272:
-	ld	X,@(H'0006,Y)
+	bra	(?L239)
+?L266:
 ?LBB18:
 	ld	AL,@(H'0001,X)
 	bsr	$_PblockGet
@@ -114581,491 +113157,76 @@ $_CsrCvcPluginInternalMessage:
 	ld	AL,#H'1015
 	bsr	$_KalimbaSendLongMessage
 ?LBE18:
-	bra	(?L245)
-?L273:
-	ld	AL,#(?LC48)
-	bra	(?L305)
-?L274:
-	ld	AL,#(?LC49)
-?L305:
-	bsr	$_puts
+	bra	(?L239)
+?L268:
 	ld	AL,#H'0000
 	bsr	$_SetAudioBusy
-	bra	(?L245)
-?L275:
-	ld	AL,#(?LC50)
-	bsr	$_puts
+	bra	(?L239)
+?L269:
 	ld	X,@_CVC?
 	tst	@(0,X)
-	beq	?L245
+	beq	?L239
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,@(0,X)
 	ld	AH,#H'7901
-	bra	(?L304)
-?L277:
-	ld	AL,#(?LC51)
-	bsr	$_puts
+	bra	(?L296)
+?L271:
 	ld	X,@_CVC?
 	tst	@(0,X)
-	beq	?L245
+	beq	?L239
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,@(0,X)
 	ld	AH,#H'7902
-	bra	(?L304)
-?L279:
-	ld	AL,#(?LC52)
-	bsr	$_puts
+	bra	(?L296)
+?L273:
 	ld	X,@_CVC?
 	tst	@(0,X)
-	beq	?L245
+	beq	?L239
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,@(0,X)
 	ld	AH,#H'7903
-	bra	(?L304)
-?L281:
-	ld	AL,#(?LC53)
-	bsr	$_puts
+	bra	(?L296)
+?L275:
 	ld	X,@_CVC?
 	tst	@(0,X)
-	beq	?L245
+	beq	?L239
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,@(0,X)
 	ld	AH,#H'7904
-	bra	(?L304)
-?L283:
-	ld	AL,#(?LC54)
-	bsr	$_puts
+	bra	(?L296)
+?L277:
 	ld	X,@_CVC?
 	tst	@(0,X)
-	beq	?L245
+	beq	?L239
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	ld	AL,@(0,X)
 	ld	AH,#H'7905
-?L304:
+?L296:
 	bsr	$_MessageSend
-	bra	(?L245)
-?L285:
-	ld	AL,#(?LC55)
-	bra	(?L303)
+	bra	(?L239)
 ?L286:
-	ld	AL,#(?LC56)
-?L303:
-	bsr	$_puts
-	bra	(?L245)
-?L293:
-	ld	X,@(H'000A,Y)
 ?LBE16:
 ?LBB19:
 	ld	AL,@(0,X)
 	cmp	AL,#H'1016
-	bne	?L245
+	bne	?L239
 	ld	AH,@(H'0001,X)
 	add	AH,#-H'0001
-	ld	AL,@$XAP_UXL
-	add	AL,#H'0003
+	ld	AL,#H'0003
+	add	AL,@$XAP_UXL
 	st	AL,@(0,Y)
 	ld	AL,@(H'0002,X)
 	bsr	$_PblockSet
-?L245:
+?L239:
 ?LBE19:
 ?LBE15:
 ?LBE_CsrCvcPluginInternalMessage:
-	leavel	#10
-	.SEG	CONST
-?LC42:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'6D
-	dc	H'73
-	dc	H'67
-	dc	H'20
-	dc	H'69
-	dc	H'64
-	dc	H'5B
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'20
-	dc	H'61
-	dc	H'5B
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'20
-	dc	H'62
-	dc	H'5B
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'20
-	dc	H'63
-	dc	H'5B
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'20
-	dc	H'64
-	dc	H'5B
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'0A
-	dc	H'00
-?LC43:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'5F
-	dc	H'4C
-	dc	H'4F
-	dc	H'41
-	dc	H'44
-	dc	H'50
-	dc	H'41
-	dc	H'52
-	dc	H'41
-	dc	H'4D
-	dc	H'53
-	dc	H'5F
-	dc	H'4D
-	dc	H'53
-	dc	H'47
-	dc	H'20
-	dc	H'70
-	dc	H'73
-	dc	H'6B
-	dc	H'65
-	dc	H'79
-	dc	H'5B
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'20
-	dc	H'6D
-	dc	H'6F
-	dc	H'64
-	dc	H'65
-	dc	H'5B
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'0A
-	dc	H'00
-?LC44:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'55
-	dc	H'6E
-	dc	H'6B
-	dc	H'6E
-	dc	H'6F
-	dc	H'77
-	dc	H'6E
-	dc	H'20
-	dc	H'64
-	dc	H'61
-	dc	H'63
-	dc	H'5F
-	dc	H'72
-	dc	H'61
-	dc	H'74
-	dc	H'65
-	dc	H'2E
-	dc	H'00
-?LC45:
-	dc	H'53
-	dc	H'45
-	dc	H'54
-	dc	H'5F
-	dc	H'45
-	dc	H'4E
-	dc	H'41
-	dc	H'42
-	dc	H'4C
-	dc	H'45
-	dc	H'5F
-	dc	H'50
-	dc	H'52
-	dc	H'45
-	dc	H'53
-	dc	H'45
-	dc	H'4E
-	dc	H'43
-	dc	H'45
-	dc	H'5F
-	dc	H'4D
-	dc	H'45
-	dc	H'53
-	dc	H'53
-	dc	H'41
-	dc	H'47
-	dc	H'45
-	dc	H'5F
-	dc	H'49
-	dc	H'44
-	dc	H'00
-?LC46:
-	dc	H'53
-	dc	H'45
-	dc	H'54
-	dc	H'5F
-	dc	H'44
-	dc	H'49
-	dc	H'53
-	dc	H'41
-	dc	H'42
-	dc	H'4C
-	dc	H'45
-	dc	H'5F
-	dc	H'50
-	dc	H'52
-	dc	H'45
-	dc	H'53
-	dc	H'45
-	dc	H'4E
-	dc	H'43
-	dc	H'45
-	dc	H'5F
-	dc	H'4D
-	dc	H'45
-	dc	H'53
-	dc	H'53
-	dc	H'41
-	dc	H'47
-	dc	H'45
-	dc	H'5F
-	dc	H'49
-	dc	H'44
-	dc	H'00
-?LC47:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'5F
-	dc	H'52
-	dc	H'45
-	dc	H'41
-	dc	H'44
-	dc	H'59
-	dc	H'2C
-	dc	H'20
-	dc	H'53
-	dc	H'79
-	dc	H'73
-	dc	H'49
-	dc	H'64
-	dc	H'5B
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'20
-	dc	H'42
-	dc	H'75
-	dc	H'69
-	dc	H'6C
-	dc	H'64
-	dc	H'56
-	dc	H'65
-	dc	H'72
-	dc	H'73
-	dc	H'69
-	dc	H'6F
-	dc	H'6E
-	dc	H'5B
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'20
-	dc	H'0A
-	dc	H'00
-?LC48:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'20
-	dc	H'53
-	dc	H'65
-	dc	H'63
-	dc	H'20
-	dc	H'70
-	dc	H'61
-	dc	H'73
-	dc	H'73
-	dc	H'65
-	dc	H'64
-	dc	H'2E
-	dc	H'00
-?LC49:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'53
-	dc	H'65
-	dc	H'63
-	dc	H'75
-	dc	H'72
-	dc	H'69
-	dc	H'74
-	dc	H'79
-	dc	H'20
-	dc	H'68
-	dc	H'61
-	dc	H'73
-	dc	H'20
-	dc	H'66
-	dc	H'61
-	dc	H'69
-	dc	H'6C
-	dc	H'65
-	dc	H'64
-	dc	H'2E
-	dc	H'00
-?LC50:
-	dc	H'41
-	dc	H'53
-	dc	H'52
-	dc	H'3A
-	dc	H'20
-	dc	H'59
-	dc	H'45
-	dc	H'53
-	dc	H'00
-?LC51:
-	dc	H'41
-	dc	H'53
-	dc	H'52
-	dc	H'3A
-	dc	H'20
-	dc	H'4E
-	dc	H'4F
-	dc	H'00
-?LC52:
-	dc	H'41
-	dc	H'53
-	dc	H'52
-	dc	H'3A
-	dc	H'20
-	dc	H'46
-	dc	H'41
-	dc	H'49
-	dc	H'4C
-	dc	H'45
-	dc	H'44
-	dc	H'20
-	dc	H'59
-	dc	H'45
-	dc	H'53
-	dc	H'00
-?LC53:
-	dc	H'41
-	dc	H'53
-	dc	H'52
-	dc	H'3A
-	dc	H'20
-	dc	H'46
-	dc	H'41
-	dc	H'49
-	dc	H'4C
-	dc	H'45
-	dc	H'44
-	dc	H'20
-	dc	H'4E
-	dc	H'4F
-	dc	H'00
-?LC54:
-	dc	H'41
-	dc	H'53
-	dc	H'52
-	dc	H'3A
-	dc	H'20
-	dc	H'55
-	dc	H'4E
-	dc	H'4B
-	dc	H'4E
-	dc	H'4F
-	dc	H'57
-	dc	H'4E
-	dc	H'00
-?LC55:
-	dc	H'0A
-	dc	H'0A
-	dc	H'0A
-	dc	H'0A
-	dc	H'0A
-	dc	H'49
-	dc	H'6E
-	dc	H'70
-	dc	H'75
-	dc	H'74
-	dc	H'20
-	dc	H'6C
-	dc	H'65
-	dc	H'76
-	dc	H'65
-	dc	H'6C
-	dc	H'20
-	dc	H'63
-	dc	H'6C
-	dc	H'69
-	dc	H'70
-	dc	H'70
-	dc	H'65
-	dc	H'64
-	dc	H'2E
-	dc	H'00
-?LC56:
-	dc	H'0A
-	dc	H'0A
-	dc	H'0A
-	dc	H'0A
-	dc	H'0A
-	dc	H'49
-	dc	H'6E
-	dc	H'70
-	dc	H'75
-	dc	H'74
-	dc	H'20
-	dc	H'6C
-	dc	H'65
-	dc	H'76
-	dc	H'65
-	dc	H'6C
-	dc	H'20
-	dc	H'73
-	dc	H'69
-	dc	H'6C
-	dc	H'65
-	dc	H'6E
-	dc	H'63
-	dc	H'65
-	dc	H'2E
-	dc	H'00
-	.CODE
+	leavel	#7
 ;.stabn	192,0,0,?LBB16
 ;.stabn	192,0,0,?LBB17
 ;.stabn	224,0,0,?LBE17
@@ -115077,25 +113238,23 @@ $_CsrCvcPluginToneComplete:
 ?LBB_CsrCvcPluginToneComplete:
 	st	AL,@(H'0003,Y)
 ?LBB20:
-	ld	AL,#(?LC57)
-	bsr	$_puts
 	ld	X,@_CVC?
 	ld	AH,@(H'000C,X)
 	lsr	#H'0005
 	and	AH,#H'0001
 	cmp	AH,#H'0000
-	beq	?L329
+	beq	?L317
 ?LBB21:
 	ld	AH,@(H'000C,X)
 	lsr	#H'0003
 	and	AH,#H'0001
 	cmp	AH,#H'0000
-	beq	?L330
+	beq	?L318
 	ld	AL,#H'0002
-	bra	(?L331)
-?L330:
+	bra	(?L319)
+?L318:
 	ld	AL,#H'0000
-?L331:
+?L319:
 	st	AL,@(0,Y)
 	ld	AL,#H'0003
 	ld	AH,#H'0000
@@ -115109,26 +113268,15 @@ $_CsrCvcPluginToneComplete:
 	ld	AL,@(H'000C,X)
 	and	AL,#-H'1000
 	cmp	AL,#H'3000
-	beq	?L332
+	beq	?L320
 	cmp	AL,#H'1000
-	beq	?L332
+	beq	?L320
 	bsr	_ConnectSpeakerNoDsp
 	ld	X,@_CVC?
 	ld	AL,@(H'0002,X)
 	bsr	$_SinkIsValid
 	cmp	AL,#H'0000
-	beq	?L333
-	ld	AL,#H'0000
-	bsr	$_SetAudioBusy
-	ld	X,@_CVC?
-	ld	AH,@(H'000B,X)
-	lsr	#H'0008
-	ld	AL,@(H'0003,Y)
-	bsr	$_CsrCvcPluginSetVolume
-	ld	AL,#(?LC58)
-	bsr	$_puts
-	bra	(?L336)
-?L333:
+	bne	?L320
 	ld	AH,#H'0000
 	st	AH,@(0,Y)
 	ld	AL,#H'05DC
@@ -115137,13 +113285,8 @@ $_CsrCvcPluginToneComplete:
 	ld	AL,@(H'0003,Y)
 	ld	AH,#H'0001
 	bsr	$_MessageSendLater
-	ld	X,@_CVC?
-	ld	AL,@(H'0002,X)
-	st	AL,@(0,Y)
-	ld	AL,#(?LC59)
-	bsr	$_printf
-	bra	(?L336)
-?L332:
+	bra	(?L324)
+?L320:
 	ld	AL,#H'0000
 	bsr	$_SetAudioBusy
 	ld	X,@_CVC?
@@ -115152,21 +113295,21 @@ $_CsrCvcPluginToneComplete:
 	ld	AL,@(H'0003,Y)
 	bsr	$_CsrCvcPluginSetVolume
 ?LBE21:
-	bra	(?L336)
-?L329:
+	bra	(?L324)
+?L317:
 	ld	X,@_CVC?
 	ld	AH,@(H'000C,X)
 	lsr	#H'0006
 	and	AH,#H'0001
 	cmp	AH,#H'0000
-	beq	?L337
+	beq	?L325
 	ld	AL,@(H'000C,X)
 	and	AL,#-H'1000
 	cmp	AL,#H'1000
-	beq	?L338
+	beq	?L326
 	cmp	AL,#H'3000
-	bne	?L337
-?L338:
+	bne	?L325
+?L326:
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	st	AL,@(H'0001,Y)
@@ -115177,132 +113320,34 @@ $_CsrCvcPluginToneComplete:
 	ld	AL,#H'1002
 	ld	AH,#H'0000
 	bsr	$_KalimbaSendMessage
-?L337:
+?L325:
 	ld	AL,#H'0003
 	bsr	$_StreamKalimbaSink
 	ld	AH,#H'0000
 	bsr	$_MessageSinkTask
-?L336:
+?L324:
 	ld	AL,#H'0000
 	bsr	$_SetTonePlaying
 ?LBE20:
 ?LBE_CsrCvcPluginToneComplete:
 	leavel	#7
-	.SEG	CONST
-?LC57:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'54
-	dc	H'6F
-	dc	H'6E
-	dc	H'65
-	dc	H'20
-	dc	H'43
-	dc	H'6F
-	dc	H'6D
-	dc	H'70
-	dc	H'6C
-	dc	H'65
-	dc	H'74
-	dc	H'65
-	dc	H'00
-?LC58:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'54
-	dc	H'6F
-	dc	H'6E
-	dc	H'65
-	dc	H'20
-	dc	H'43
-	dc	H'6F
-	dc	H'6D
-	dc	H'70
-	dc	H'6C
-	dc	H'65
-	dc	H'74
-	dc	H'65
-	dc	H'20
-	dc	H'53
-	dc	H'43
-	dc	H'4F
-	dc	H'20
-	dc	H'65
-	dc	H'78
-	dc	H'69
-	dc	H'73
-	dc	H'74
-	dc	H'73
-	dc	H'00
-?LC59:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'54
-	dc	H'6F
-	dc	H'6E
-	dc	H'65
-	dc	H'20
-	dc	H'43
-	dc	H'6F
-	dc	H'6D
-	dc	H'70
-	dc	H'6C
-	dc	H'65
-	dc	H'74
-	dc	H'65
-	dc	H'20
-	dc	H'53
-	dc	H'43
-	dc	H'4F
-	dc	H'20
-	dc	H'6E
-	dc	H'6F
-	dc	H'74
-	dc	H'20
-	dc	H'65
-	dc	H'78
-	dc	H'69
-	dc	H'73
-	dc	H'74
-	dc	H'73
-	dc	H'20
-	dc	H'5B
-	dc	H'30
-	dc	H'78
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'0A
-	dc	H'00
-	.CODE
 ;.stabn	192,0,0,?LBB21
 ;.stabn	224,0,0,?LBE21
 $_CsrCvcPluginToneForceCompleteNoDsp:
 	enterl	#3
 ?LBB_CsrCvcPluginToneForceCompleteNoDsp:
 	st	AL,@(0,Y)
-	ld	AL,#(?LC60)
-	bsr	$_puts
 	tst	@_CVC?
-	beq	?L343
+	beq	?L331
 	bsr	$_IsAudioBusy
 	cmp	AL,#H'0000
-	beq	?L345
+	beq	?L333
 	ld	AL,#H'0000
 	bsr	$_SetAudioBusy
 	ld	AL,#H'0001
 	bsr	_DisconnectSpeakerNoDsp
 	bsr	_DisconnectMicNoDsp
-?L345:
+?L333:
 	ld	X,@_CVC?
 	ld	AH,@(H'000B,X)
 	lsr	#H'0008
@@ -115310,44 +113355,9 @@ $_CsrCvcPluginToneForceCompleteNoDsp:
 	bsr	$_CsrCvcPluginSetVolume
 	ld	AL,#H'0000
 	bsr	$_SetTonePlaying
-?L343:
+?L331:
 ?LBE_CsrCvcPluginToneForceCompleteNoDsp:
 	leavel	#3
-	.SEG	CONST
-?LC60:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'46
-	dc	H'6F
-	dc	H'72
-	dc	H'63
-	dc	H'65
-	dc	H'20
-	dc	H'54
-	dc	H'6F
-	dc	H'6E
-	dc	H'65
-	dc	H'20
-	dc	H'43
-	dc	H'6F
-	dc	H'6D
-	dc	H'70
-	dc	H'6C
-	dc	H'65
-	dc	H'74
-	dc	H'65
-	dc	H'20
-	dc	H'4E
-	dc	H'6F
-	dc	H'20
-	dc	H'44
-	dc	H'53
-	dc	H'50
-	dc	H'00
-	.CODE
 _DisconnectMicNoDsp:
 	enterl	#3
 ?LBB_DisconnectMicNoDsp:
@@ -115359,10 +113369,7 @@ _DisconnectMicNoDsp:
 	ld	AL,#H'0000
 	bsr	$_AudioPluginGetMic
 	st	AL,@(0,Y)
-	ld	AL,#(?LC61)
-	bsr	$_puts
 	ld	X,@_CVC?
-	ld	AL,@(0,Y)
 	ld	AH,@(H'0002,X)
 	bsr	$_StreamDisconnect
 	ld	AL,@(0,Y)
@@ -115370,36 +113377,6 @@ _DisconnectMicNoDsp:
 ?LBE22:
 ?LBE_DisconnectMicNoDsp:
 	leavel	#3
-	.SEG	CONST
-?LC61:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'4E
-	dc	H'4F
-	dc	H'44
-	dc	H'53
-	dc	H'50
-	dc	H'3A
-	dc	H'20
-	dc	H'44
-	dc	H'69
-	dc	H'73
-	dc	H'63
-	dc	H'6F
-	dc	H'6E
-	dc	H'6E
-	dc	H'65
-	dc	H'63
-	dc	H'74
-	dc	H'20
-	dc	H'4D
-	dc	H'69
-	dc	H'63
-	dc	H'00
-	.CODE
 ;.stabn	192,0,0,?LBB22
 ;.stabn	224,0,0,?LBE22
 _DisconnectSpeakerNoDsp:
@@ -115412,7 +113389,7 @@ _DisconnectSpeakerNoDsp:
 	ld	AL,@$XAP_AH
 	and	AL,#-H'4000
 	cmp	AL,#-H'8000
-	bne	?L348
+	bne	?L336
 	lsr	#H'0007
 	ld	AL,@$XAP_AH
 	and	AL,#H'0001
@@ -115421,30 +113398,27 @@ _DisconnectSpeakerNoDsp:
 	ld	AL,@(H'000C,X)
 	and	AL,#-H'0005
 	st	AL,@(H'000C,X)
-	ld	AL,@(H'0001,Y)
-	st	AL,@(0,Y)
-	ld	AL,#(?LC62)
-	bra	(?L357)
-?L348:
+	bra	(?L335)
+?L336:
 	tst	@(H'0001,Y)
-	beq	?L350
+	beq	?L338
 	ld	X,@_CVC?
 	ld	AH,@(H'000C,X)
 	lsr	#H'0003
-	bra	(?L359)
-?L350:
+	bra	(?L346)
+?L338:
 	ld	X,@_CVC?
 	ld	AH,@(H'000D,X)
 	lsr	#H'0007
-?L359:
+?L346:
 	and	AH,#H'0001
 	cmp	AH,#H'0000
-	beq	?L354
+	beq	?L342
 	ld	AL,#H'0002
-	bra	(?L355)
-?L354:
+	bra	(?L343)
+?L342:
 	ld	AL,#H'0000
-?L355:
+?L343:
 	st	AL,@(0,Y)
 	ld	AL,#H'0003
 	ld	AH,#H'0000
@@ -115457,120 +113431,14 @@ _DisconnectSpeakerNoDsp:
 	ld	AL,@(H'0002,Y)
 	bsr	$_SinkClose
 	tst	@(H'0001,Y)
-	beq	?L356
+	beq	?L335
 	ld	AL,@(H'0002,Y)
 	ld	AH,#H'0000
 	bsr	$_MessageSinkTask
-?L356:
-	ld	AL,@(H'0001,Y)
-	st	AL,@(0,Y)
-	ld	AL,#(?LC63)
-?L357:
-	bsr	$_printf
+?L335:
 ?LBE23:
 ?LBE_DisconnectSpeakerNoDsp:
 	leavel	#5
-	.SEG	CONST
-?LC62:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'4E
-	dc	H'4F
-	dc	H'44
-	dc	H'53
-	dc	H'50
-	dc	H'3A
-	dc	H'20
-	dc	H'44
-	dc	H'69
-	dc	H'73
-	dc	H'63
-	dc	H'6F
-	dc	H'6E
-	dc	H'6E
-	dc	H'65
-	dc	H'63
-	dc	H'74
-	dc	H'20
-	dc	H'53
-	dc	H'70
-	dc	H'65
-	dc	H'61
-	dc	H'6B
-	dc	H'65
-	dc	H'72
-	dc	H'20
-	dc	H'74
-	dc	H'6F
-	dc	H'6E
-	dc	H'65
-	dc	H'20
-	dc	H'66
-	dc	H'6F
-	dc	H'72
-	dc	H'20
-	dc	H'49
-	dc	H'32
-	dc	H'53
-	dc	H'20
-	dc	H'6F
-	dc	H'75
-	dc	H'74
-	dc	H'70
-	dc	H'75
-	dc	H'74
-	dc	H'5B
-	dc	H'25
-	dc	H'64
-	dc	H'5D
-	dc	H'0A
-	dc	H'00
-?LC63:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'4E
-	dc	H'4F
-	dc	H'44
-	dc	H'53
-	dc	H'50
-	dc	H'3A
-	dc	H'20
-	dc	H'44
-	dc	H'69
-	dc	H'73
-	dc	H'63
-	dc	H'6F
-	dc	H'6E
-	dc	H'6E
-	dc	H'65
-	dc	H'63
-	dc	H'74
-	dc	H'20
-	dc	H'53
-	dc	H'70
-	dc	H'65
-	dc	H'61
-	dc	H'6B
-	dc	H'65
-	dc	H'72
-	dc	H'20
-	dc	H'74
-	dc	H'6F
-	dc	H'6E
-	dc	H'65
-	dc	H'5B
-	dc	H'25
-	dc	H'64
-	dc	H'5D
-	dc	H'0A
-	dc	H'00
-	.CODE
 ;.stabn	192,0,0,?LBB23
 ;.stabn	224,0,0,?LBE23
 _ConnectMicNoDsp:
@@ -115605,11 +113473,9 @@ _ConnectMicNoDsp:
 	ld	AL,@H'fff9
 	ld	AH,@H'fff8
 	bsr	$_AudioPluginSetMicGain
-	ld	AL,#(?LC64)
-	bsr	$_puts
 	ld	X,@_CVC?
 	tst	@(H'0002,X)
-	beq	?L361
+	beq	?L348
 	ld	X,@(H'000A,X)
 	ld	AH,@(0,X)
 	lsr	#H'000F
@@ -115618,41 +113484,14 @@ _ConnectMicNoDsp:
 	ld	X,@_CVC?
 	ld	AH,@(H'0002,X)
 	bsr	$_StreamConnect
-?L361:
+?L348:
 ?LBE24:
 ?LBE_ConnectMicNoDsp:
 	leavel	#6
-	.SEG	CONST
-?LC64:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'4E
-	dc	H'4F
-	dc	H'44
-	dc	H'53
-	dc	H'50
-	dc	H'3A
-	dc	H'20
-	dc	H'43
-	dc	H'6F
-	dc	H'6E
-	dc	H'6E
-	dc	H'65
-	dc	H'63
-	dc	H'74
-	dc	H'20
-	dc	H'4D
-	dc	H'69
-	dc	H'63
-	dc	H'00
-	.CODE
 ;.stabn	192,0,0,?LBB24
 ;.stabn	224,0,0,?LBE24
 _ConnectSpeakerNoDsp:
-	enterl	#8
+	enterl	#5
 ?LBB_ConnectSpeakerNoDsp:
 ?LBB25:
 	ld	X,@_CVC?
@@ -115660,53 +113499,41 @@ _ConnectSpeakerNoDsp:
 	lsr	#H'0007
 	and	AH,#H'0001
 	cmp	AH,#H'0000
-	beq	?L364
+	beq	?L351
 	ld	AL,#H'0002
-	bra	(?L365)
-?L364:
+	bra	(?L352)
+?L351:
 	ld	AL,#H'0000
-?L365:
+?L352:
 	st	AL,@(0,Y)
 	ld	AL,#H'0003
 	ld	AH,#H'0000
 	bsr	$_StreamAudioSink
-	st	AL,@(H'0004,Y)
+	ld	AH,@$XAP_AL
 	ld	X,@_CVC?
 	ld	AL,@(H'0003,X)
-	st	AL,@(H'0005,Y)
+	st	AL,@(-1,Y)
 	ld	AL,@(H'000D,X)
+	st	AL,@H'fff8
 	and	AL,#-H'4000
 	cmp	AL,#-H'8000
-	bne	?L366
-	ld	AL,@(H'0002,X)
-	st	AL,@(0,Y)
-	ld	AL,@(H'0004,Y)
-	st	AL,@(H'0001,Y)
-	ld	AL,@(H'0005,Y)
-	st	AL,@(H'0002,Y)
-	ld	AH,@(H'000D,X)
-	lsr	#H'0007
-	and	AH,#H'0001
-	st	AH,@(H'0003,Y)
-	ld	AL,#(?LC65)
-	bsr	$_printf
-	ld	X,@_CVC?
+	bne	?L353
 	ld	AH,@(H'000C,X)
 	lsr	#H'0002
 	and	AH,#H'0001
-	st	AH,@H'fff8
+	st	AH,@H'fff9
 	cmp	AH,#H'0000
-	bne	?L363
+	bne	?L350
 	tst	@(H'0002,X)
-	beq	?L363
-	ld	AH,@(H'000D,X)
+	beq	?L350
+	ld	AH,@H'fff8
 	lsr	#H'0007
 	and	AH,#H'0001
 	st	AH,@(0,Y)
-	ld	AL,@(H'0005,Y)
+	ld	AL,@(-1,Y)
 	st	AL,@(H'0001,Y)
 	st	AL,@H'ffff
-	ld	AL,@H'fff8
+	ld	AL,@H'fff9
 	st	AL,@(H'0002,Y)
 	ld	AL,@H'ffff
 	ld	AH,@(H'0004,X)
@@ -115716,208 +113543,17 @@ _ConnectSpeakerNoDsp:
 	ld	AL,@(H'000C,X)
 	or	AL,#H'0004
 	st	AL,@(H'000C,X)
-	bra	(?L363)
-?L366:
-	ld	X,@_CVC?
-	ld	AL,@(H'0002,X)
-	st	AL,@(0,Y)
-	ld	AL,@(H'0004,Y)
-	st	AL,@(H'0001,Y)
-	ld	AL,@(H'0005,Y)
-	st	AL,@(H'0002,Y)
-	ld	AH,@(H'000D,X)
-	lsr	#H'0007
-	and	AH,#H'0001
-	st	AH,@(H'0003,Y)
-	ld	AL,#(?LC66)
-	bsr	$_printf
+	bra	(?L350)
+?L353:
 	ld	X,@_CVC?
 	tst	@(H'0002,X)
-	beq	?L363
-	ld	AL,@(H'0005,Y)
-	ld	AH,@(H'0004,Y)
+	beq	?L350
+	ld	AL,@(-1,Y)
 	bsr	$_StreamConnect
-?L363:
+?L350:
 ?LBE25:
 ?LBE_ConnectSpeakerNoDsp:
-	leavel	#8
-	.SEG	CONST
-?LC65:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'4E
-	dc	H'4F
-	dc	H'44
-	dc	H'53
-	dc	H'50
-	dc	H'3A
-	dc	H'20
-	dc	H'49
-	dc	H'32
-	dc	H'53
-	dc	H'3A
-	dc	H'20
-	dc	H'43
-	dc	H'6F
-	dc	H'6E
-	dc	H'6E
-	dc	H'65
-	dc	H'63
-	dc	H'74
-	dc	H'20
-	dc	H'53
-	dc	H'70
-	dc	H'65
-	dc	H'61
-	dc	H'6B
-	dc	H'65
-	dc	H'72
-	dc	H'5B
-	dc	H'30
-	dc	H'78
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'20
-	dc	H'73
-	dc	H'70
-	dc	H'65
-	dc	H'61
-	dc	H'6B
-	dc	H'65
-	dc	H'72
-	dc	H'5F
-	dc	H'73
-	dc	H'69
-	dc	H'6E
-	dc	H'6B
-	dc	H'5B
-	dc	H'30
-	dc	H'78
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'20
-	dc	H'61
-	dc	H'75
-	dc	H'64
-	dc	H'69
-	dc	H'6F
-	dc	H'5F
-	dc	H'73
-	dc	H'6F
-	dc	H'75
-	dc	H'72
-	dc	H'63
-	dc	H'65
-	dc	H'5B
-	dc	H'30
-	dc	H'78
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'20
-	dc	H'73
-	dc	H'74
-	dc	H'65
-	dc	H'72
-	dc	H'65
-	dc	H'6F
-	dc	H'5B
-	dc	H'25
-	dc	H'64
-	dc	H'5D
-	dc	H'0A
-	dc	H'00
-?LC66:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'4E
-	dc	H'4F
-	dc	H'44
-	dc	H'53
-	dc	H'50
-	dc	H'3A
-	dc	H'20
-	dc	H'43
-	dc	H'6F
-	dc	H'6E
-	dc	H'6E
-	dc	H'65
-	dc	H'63
-	dc	H'74
-	dc	H'20
-	dc	H'53
-	dc	H'70
-	dc	H'65
-	dc	H'61
-	dc	H'6B
-	dc	H'65
-	dc	H'72
-	dc	H'5B
-	dc	H'30
-	dc	H'78
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'20
-	dc	H'73
-	dc	H'70
-	dc	H'65
-	dc	H'61
-	dc	H'6B
-	dc	H'65
-	dc	H'72
-	dc	H'5F
-	dc	H'73
-	dc	H'69
-	dc	H'6E
-	dc	H'6B
-	dc	H'5B
-	dc	H'30
-	dc	H'78
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'20
-	dc	H'61
-	dc	H'75
-	dc	H'64
-	dc	H'69
-	dc	H'6F
-	dc	H'5F
-	dc	H'73
-	dc	H'6F
-	dc	H'75
-	dc	H'72
-	dc	H'63
-	dc	H'65
-	dc	H'5B
-	dc	H'30
-	dc	H'78
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'20
-	dc	H'73
-	dc	H'74
-	dc	H'65
-	dc	H'72
-	dc	H'65
-	dc	H'6F
-	dc	H'5B
-	dc	H'25
-	dc	H'64
-	dc	H'5D
-	dc	H'0A
-	dc	H'00
-	.CODE
+	leavel	#5
 ;.stabn	192,0,0,?LBB25
 ;.stabn	224,0,0,?LBE25
 _DisconnectSecondMicNoDsp:
@@ -115931,10 +113567,7 @@ _DisconnectSecondMicNoDsp:
 	ld	AL,#H'0001
 	bsr	$_AudioPluginGetMic
 	st	AL,@(0,Y)
-	ld	AL,#(?LC67)
-	bsr	$_puts
 	ld	X,@_CVC?
-	ld	AL,@(0,Y)
 	ld	AH,@(H'0002,X)
 	bsr	$_StreamDisconnect
 	ld	AL,@(0,Y)
@@ -115942,43 +113575,6 @@ _DisconnectSecondMicNoDsp:
 ?LBE26:
 ?LBE_DisconnectSecondMicNoDsp:
 	leavel	#3
-	.SEG	CONST
-?LC67:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'4E
-	dc	H'4F
-	dc	H'44
-	dc	H'53
-	dc	H'50
-	dc	H'3A
-	dc	H'20
-	dc	H'44
-	dc	H'69
-	dc	H'73
-	dc	H'63
-	dc	H'6F
-	dc	H'6E
-	dc	H'6E
-	dc	H'65
-	dc	H'63
-	dc	H'74
-	dc	H'20
-	dc	H'53
-	dc	H'65
-	dc	H'63
-	dc	H'6F
-	dc	H'6E
-	dc	H'64
-	dc	H'20
-	dc	H'4D
-	dc	H'69
-	dc	H'63
-	dc	H'00
-	.CODE
 ;.stabn	192,0,0,?LBB26
 ;.stabn	224,0,0,?LBE26
 _ConnectSecondMicNoDsp:
@@ -116013,11 +113609,9 @@ _ConnectSecondMicNoDsp:
 	ld	AL,@H'fff9
 	ld	AH,@H'fff8
 	bsr	$_AudioPluginSetMicGain
-	ld	AL,#(?LC68)
-	bsr	$_puts
 	ld	X,@_CVC?
 	tst	@(H'0002,X)
-	beq	?L372
+	beq	?L359
 	ld	X,@(H'000A,X)
 	ld	AH,@(H'0001,X)
 	lsr	#H'000F
@@ -116026,57 +113620,18 @@ _ConnectSecondMicNoDsp:
 	ld	X,@_CVC?
 	ld	AH,@(H'0002,X)
 	bsr	$_StreamConnect
-?L372:
+?L359:
 ?LBE27:
 ?LBE_ConnectSecondMicNoDsp:
 	leavel	#6
-	.SEG	CONST
-?LC68:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'4E
-	dc	H'4F
-	dc	H'44
-	dc	H'53
-	dc	H'50
-	dc	H'3A
-	dc	H'20
-	dc	H'43
-	dc	H'6F
-	dc	H'6E
-	dc	H'6E
-	dc	H'65
-	dc	H'63
-	dc	H'74
-	dc	H'20
-	dc	H'53
-	dc	H'65
-	dc	H'63
-	dc	H'6F
-	dc	H'6E
-	dc	H'64
-	dc	H'20
-	dc	H'4D
-	dc	H'69
-	dc	H'63
-	dc	H'00
-	.CODE
 ;.stabn	192,0,0,?LBB27
 ;.stabn	224,0,0,?LBE27
 $_CsrCvcPluginMicSwitch:
 	enterl	#3
 ?LBB_CsrCvcPluginMicSwitch:
 	ld	X,@_CVC?
-	ld	AL,@(H'0002,X)
-	st	AL,@(0,Y)
-	ld	AL,#(?LC69)
-	bsr	$_printf
-	ld	X,@_CVC?
 	tst	@(H'0002,X)
-	beq	?L374
+	beq	?L361
 	ld	AL,#H'0002
 	st	AL,@(0,Y)
 	ld	AL,@(H'0001,X)
@@ -116089,20 +113644,20 @@ $_CsrCvcPluginMicSwitch:
 	lsr	#H'0004
 	and	AH,#H'0001
 	cmp	AH,#H'0000
-	beq	?L376
+	beq	?L363
 	bsr	_DisconnectMicNoDsp
 	bsr	_ConnectSecondMicNoDsp
 	ld	X,@_CVC?
 	ld	AL,@(H'000C,X)
 	and	AL,#-H'0011
-	bra	(?L378)
-?L376:
+	bra	(?L365)
+?L363:
 	bsr	_DisconnectSecondMicNoDsp
 	bsr	_ConnectMicNoDsp
 	ld	X,@_CVC?
 	ld	AL,@(H'000C,X)
 	or	AL,#H'0010
-?L378:
+?L365:
 	st	AL,@(H'000C,X)
 	bsr	_ConnectSpeakerNoDsp
 	ld	X,@_CVC?
@@ -116112,102 +113667,63 @@ $_CsrCvcPluginMicSwitch:
 	st	AL,@(0,Y)
 	ld	AL,@(H'0001,X)
 	bsr	$_CodecSetOutputGainNow
-?L374:
+?L361:
 ?LBE_CsrCvcPluginMicSwitch:
 	leavel	#3
-	.SEG	CONST
-?LC69:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'3A
-	dc	H'20
-	dc	H'4E
-	dc	H'4F
-	dc	H'44
-	dc	H'53
-	dc	H'50
-	dc	H'3A
-	dc	H'20
-	dc	H'4D
-	dc	H'69
-	dc	H'63
-	dc	H'53
-	dc	H'77
-	dc	H'69
-	dc	H'74
-	dc	H'63
-	dc	H'68
-	dc	H'20
-	dc	H'5B
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'0A
-	dc	H'00
-	.CODE
 $_CsrCvcPluginSetPower:
-	enterl	#7
+	enterl	#6
 ?LBB_CsrCvcPluginSetPower:
 	st	AL,@(H'0002,Y)
-	st	AH,@(H'0003,Y)
+	st	AH,@H'fff8
 ?LBB28:
-	st	AH,@(0,Y)
-	ld	AL,#(?LC70)
-	bsr	$_printf
 	tst	@_CVC?
-	beq	?L381
-	ld	X,@(H'0002,Y)
+	beq	?L366
+	ld	X,@$XAP_AL
 	ld	AH,@(H'0002,X)
 	lsr	#H'000B
 	cmp	AH,#H'000C
-	bne	?L380
-?L381:
-	ld	AL,#(?LC71)
-	bsr	$_puts
-	bra	(?L379)
-?L380:
+	beq	?L366
 	ld	X,@_CVC?
 	ld	AH,@(H'000C,X)
 	lsr	#H'0005
 	and	AH,#H'0001
 	cmp	AH,#H'0000
-	bne	?L379
+	bne	?L366
 	ld	AL,@(H'000C,X)
 	and	AL,#-H'0081
 	st	AL,@(H'000C,X)
-	ld	AH,@(H'0003,Y)
+	ld	AH,@H'fff8
 	cmp	AH,#(H'0001+H'0002)
-	bcc	?L383
+	bcc	?L370
 	ld	X,@_CVC?
 	ld	AL,@(H'000C,X)
 	or	AL,#H'0080
 	st	AL,@(H'000C,X)
-?L383:
+?L370:
 	bsr	$_IsAudioBusy
 	cmp	AL,#H'0000
-	beq	?L384
+	beq	?L371
 ?LBB29:
 	ld	AL,#H'0002
 	bsr	$_PanicUnlessMalloc
-	st	AL,@(H'0004,Y)
+	st	AL,@(H'0003,Y)
 	ld	X,@_CVC?
 	ld	AH,@(H'000C,X)
 	lsr	#H'000C
-	ld	X,@(H'0004,Y)
+	ld	X,@(H'0003,Y)
 	st	AH,@(0,X)
 	ld	AL,#H'0000
 	st	AL,@(H'0001,X)
 	bsr	$_AudioBusyPtr
-	ld	AH,@(H'0004,Y)
+	ld	AH,@(H'0003,Y)
 	st	AH,@(0,Y)
 	st	AL,@(H'0001,Y)
 	ld	AL,@(H'0002,Y)
 	ld	AH,#H'7002
 	bsr	$_MessageSendConditionally
 ?LBE29:
-	bra	(?L379)
-?L384:
+	bra	(?L366)
+?L371:
 	ld	X,@_CVC?
 	ld	AH,@(H'000C,X)
 	lsr	#H'000C
@@ -116215,66 +113731,14 @@ $_CsrCvcPluginSetPower:
 	st	AL,@(0,Y)
 	ld	AL,@(H'0002,Y)
 	bsr	$_CsrCvcPluginSetMode
-?L379:
+?L366:
 ?LBE28:
 ?LBE_CsrCvcPluginSetPower:
-	leavel	#7
-	.SEG	CONST
-?LC70:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'20
-	dc	H'3A
-	dc	H'20
-	dc	H'53
-	dc	H'65
-	dc	H'74
-	dc	H'20
-	dc	H'50
-	dc	H'6F
-	dc	H'77
-	dc	H'65
-	dc	H'72
-	dc	H'20
-	dc	H'5B
-	dc	H'30
-	dc	H'78
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'0A
-	dc	H'00
-?LC71:
-	dc	H'43
-	dc	H'56
-	dc	H'43
-	dc	H'20
-	dc	H'3A
-	dc	H'20
-	dc	H'53
-	dc	H'65
-	dc	H'74
-	dc	H'20
-	dc	H'50
-	dc	H'6F
-	dc	H'77
-	dc	H'65
-	dc	H'72
-	dc	H'20
-	dc	H'69
-	dc	H'67
-	dc	H'6E
-	dc	H'6F
-	dc	H'72
-	dc	H'65
-	dc	H'64
-	dc	H'00
-	.CODE
+	leavel	#6
 ;.stabn	192,0,0,?LBB29
 ;.stabn	224,0,0,?LBE29
 $_CvcConfigureASR:
-	enterl	#10
+	enterl	#9
 ?LBB_CvcConfigureASR:
 ?LBB30:
 	ld	AL,#H'7FFF
@@ -116291,107 +113755,26 @@ $_CvcConfigureASR:
 	st	AL,@(0,Y)
 	ld	AL,#H'003C
 	ld	AH,@$XAP_UY
-	add	AH,#H'0004
+	add	AH,#H'0003
 	bsr	$_PsRetrieve
 	cmp	AL,#H'0000
-	beq	?L387
+	beq	?L374
+	ld	X,@$XAP_UY
+	add	X,#H'0003
+	ld	AL,@(H'0001,X)
 	st	AL,@(0,Y)
-	ld	AL,@(H'0004,Y)
+	ld	AL,@(H'0002,X)
 	st	AL,@(H'0001,Y)
-	ld	AL,@(H'0005,Y)
-	st	AL,@(H'0002,Y)
-	ld	AL,@(H'0006,Y)
-	st	AL,@(H'0003,Y)
-	ld	AL,#(?LC72)
-	bsr	$_printf
-	ld	AL,@(H'0005,Y)
-	st	AL,@(0,Y)
-	ld	AL,@(H'0006,Y)
-	st	AL,@(H'0001,Y)
-	ld	AL,@(H'0007,Y)
+	ld	AL,@(H'0003,X)
 	st	AL,@(H'0002,Y)
 	ld	AL,#H'1021
-	ld	AH,@(H'0004,Y)
+	ld	AH,@(H'0003,Y)
 	bsr	$_KalimbaSendMessage
 	bsr	$_PanicNull
-?L387:
+?L374:
 ?LBE30:
 ?LBE_CvcConfigureASR:
-	leavel	#10
-	.SEG	CONST
-?LC72:
-	dc	H'43
-	dc	H'6F
-	dc	H'6E
-	dc	H'66
-	dc	H'69
-	dc	H'64
-	dc	H'65
-	dc	H'6E
-	dc	H'63
-	dc	H'65
-	dc	H'20
-	dc	H'54
-	dc	H'68
-	dc	H'72
-	dc	H'65
-	dc	H'73
-	dc	H'68
-	dc	H'6F
-	dc	H'6C
-	dc	H'64
-	dc	H'20
-	dc	H'66
-	dc	H'72
-	dc	H'6F
-	dc	H'6D
-	dc	H'20
-	dc	H'50
-	dc	H'53
-	dc	H'3A
-	dc	H'20
-	dc	H'6C
-	dc	H'65
-	dc	H'6E
-	dc	H'3D
-	dc	H'30
-	dc	H'78
-	dc	H'25
-	dc	H'78
-	dc	H'2C
-	dc	H'20
-	dc	H'4D
-	dc	H'53
-	dc	H'42
-	dc	H'3D
-	dc	H'30
-	dc	H'78
-	dc	H'25
-	dc	H'78
-	dc	H'2C
-	dc	H'20
-	dc	H'4C
-	dc	H'53
-	dc	H'42
-	dc	H'3D
-	dc	H'30
-	dc	H'78
-	dc	H'25
-	dc	H'78
-	dc	H'2C
-	dc	H'20
-	dc	H'33
-	dc	H'72
-	dc	H'64
-	dc	H'3D
-	dc	H'30
-	dc	H'78
-	dc	H'25
-	dc	H'78
-	dc	H'0A
-	dc	H'0A
-	dc	H'00
-	.CODE
+	leavel	#9
 ;.stabn	192,0,0,?LBB30
 ;.stabn	224,0,0,?LBE30
 $_CsrCvcPluginSetAsr:
@@ -116402,7 +113785,7 @@ $_CsrCvcPluginSetAsr:
 	lsr	#H'000B
 	add	AH,#-H'000D
 	cmp	AH,#(H'0001+H'0003)
-	bcc	?L389
+	bcc	?L376
 	ld	AL,#H'0000
 	st	AL,@(0,Y)
 	st	AL,@(H'0001,Y)
@@ -116410,70 +113793,33 @@ $_CsrCvcPluginSetAsr:
 	ld	AL,#H'1020
 	ld	AH,#H'0000
 	bsr	$_KalimbaSendMessage
-	bsr	$_IsAudioBusy
-	ld	AH,#H'1020
-	st	AH,@(0,Y)
-	st	AL,@(H'0001,Y)
-	ld	AL,#(?LC73)
-	bsr	$_printf
 	ld	AL,#H'0001
 	bsr	$_SetAsrPlaying
-?L389:
+?L376:
 ?LBE_CsrCvcPluginSetAsr:
 	leavel	#5
-	.SEG	CONST
-?LC73:
-	dc	H'41
-	dc	H'53
-	dc	H'52
-	dc	H'20
-	dc	H'53
-	dc	H'54
-	dc	H'41
-	dc	H'52
-	dc	H'54
-	dc	H'20
-	dc	H'4D
-	dc	H'53
-	dc	H'47
-	dc	H'20
-	dc	H'25
-	dc	H'78
-	dc	H'20
-	dc	H'62
-	dc	H'75
-	dc	H'73
-	dc	H'79
-	dc	H'20
-	dc	H'5B
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'0A
-	dc	H'00
-	.CODE
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 406 used[1] = 110 used[3] = 2 total = 518
-;# Function pattern *movqi3 used[0] = 924 total = 924
-;# Function pattern *movqi8 used[0] = 4 total = 4
-;# Function pattern *movhi used[2] = 28 used[3] = 24 total = 52
-;# Function pattern *addqi0 used[0] = 1 total = 1
-;# Function pattern *addqi2 used[0] = 9 total = 9
-;# Function pattern *andqi3 used[0] = 109 total = 109
+;# Function pattern *movqi2 used[0] = 332 used[1] = 102 used[3] = 2 total = 436
+;# Function pattern *movqi3 used[0] = 767 total = 767
+;# Function pattern *movqi8 used[0] = 3 total = 3
+;# Function pattern *movhi used[2] = 26 used[3] = 22 total = 48
+;# Function pattern *addqi0 used[0] = 2 total = 2
+;# Function pattern *addqi2 used[0] = 8 used[2] = 1 total = 9
+;# Function pattern *andqi3 used[0] = 102 total = 102
 ;# Function pattern *iorqi3 used[0] = 21 total = 21
-;# Function pattern *udivqi3_const used[0] = 2 total = 2
-;# Function pattern *lshrqi3 used[0] = 125 total = 125
+;# Function pattern *udivqi3_const used[0] = 1 total = 1
+;# Function pattern *lshrqi3 used[0] = 118 total = 118
 ;# Function pattern *ashlqi3 used[0] = 10 total = 10
-;# Function pattern *zero_extendqihi2_1 used[0] = 8 total = 8
-;# Function pattern jump used[0] = 99 total = 99
-;# Function pattern *call1 used[0] = 108 total = 108
-;# Function pattern *call_value1 used[0] = 272 total = 272
+;# Function pattern *zero_extendqihi2_1 used[0] = 7 total = 7
+;# Function pattern jump used[0] = 85 total = 85
+;# Function pattern *call1 used[0] = 106 total = 106
+;# Function pattern *call_value1 used[0] = 193 total = 193
 ;# Function pattern tablejump_1 used[0] = 2 total = 2
-;# Function pattern movstrqi+2 used[0] = 13 total = 13
-;# Function pattern movstrqi+3 used[0] = 52 used[1] = 28 total = 80
-;# Function pattern movstrqi+4 used[1] = 14 total = 14
-;# Function pattern movstrqi+5 used[0] = 68 total = 68
+;# Function pattern movstrqi+2 used[0] = 2 total = 2
+;# Function pattern movstrqi+3 used[0] = 51 used[1] = 28 total = 79
+;# Function pattern movstrqi+4 used[1] = 13 total = 13
+;# Function pattern movstrqi+5 used[0] = 64 total = 64
 ;# Function pattern movstrqi+7 used[0] = 4 total = 4
 	MODULE	csr_voice_prompts
 	.LARGE
@@ -161233,11 +158579,10 @@ _handleAudioMessage:
 	ld	AL,@(H'0004,Y)
 	ld	AH,#H'7009
 	bsr	$_MessageSendConditionally
-	ld	AL,#(?LC0)
-	bra	(?L20)
+?LBE5:
+	bra	(?L7)
 ?L11:
 	ld	X,@(H'0005,Y)
-?LBE5:
 	ld	AL,@(H'0003,X)
 	st	AL,@(0,Y)
 	ld	AL,@(H'0004,X)
@@ -161249,14 +158594,9 @@ _handleAudioMessage:
 	ld	AL,@(0,X)
 	ld	AH,@(H'0001,X)
 	bsr	$_CsrVoicePresencesPluginPlayPhrase
-	ld	AL,#(?LC1)
-?L20:
-	bsr	$_puts
 ?LBE4:
 	bra	(?L7)
 ?L15:
-	ld	AL,#(?LC2)
-	bsr	$_puts
 	bsr	$_IsAudioBusy
 	cmp	AL,#H'0000
 	beq	?L7
@@ -161265,301 +158605,29 @@ _handleAudioMessage:
 ?LBE2:
 ?LBE_handleAudioMessage:
 	leavel	#9
-	.SEG	CONST
-?LC0:
-	dc	H'50
-	dc	H'52
-	dc	H'45
-	dc	H'53
-	dc	H'45
-	dc	H'4E
-	dc	H'54
-	dc	H'3A
-	dc	H'51
-	dc	H'75
-	dc	H'65
-	dc	H'75
-	dc	H'65
-	dc	H'00
-?LC1:
-	dc	H'50
-	dc	H'52
-	dc	H'45
-	dc	H'53
-	dc	H'45
-	dc	H'4E
-	dc	H'54
-	dc	H'3A
-	dc	H'73
-	dc	H'74
-	dc	H'61
-	dc	H'72
-	dc	H'74
-	dc	H'00
-?LC2:
-	dc	H'50
-	dc	H'52
-	dc	H'45
-	dc	H'53
-	dc	H'45
-	dc	H'4E
-	dc	H'54
-	dc	H'3A
-	dc	H'73
-	dc	H'74
-	dc	H'6F
-	dc	H'70
-	dc	H'00
-	.CODE
 ;.stabn	192,0,0,?LBB4
 ;.stabn	192,0,0,?LBB5
 ;.stabn	224,0,0,?LBE5
 ;.stabn	224,0,0,?LBE4
 _handleKalimbaMessage:
-	enterl	#9
+	enterl	#4
 ?LBB_handleKalimbaMessage:
-	st	AH,@(H'0005,Y)
 	ld	X,@$XAP_AH
 ?LBB6:
 	ld	AL,@(0,X)
-	st	AL,@(0,Y)
-	ld	AL,@(H'0001,X)
-	st	AL,@(H'0001,Y)
-	ld	AL,@(H'0002,X)
-	st	AL,@(H'0002,Y)
-	ld	AL,@(H'0003,X)
-	st	AL,@(H'0003,Y)
-	ld	AL,@(H'0004,X)
-	st	AL,@(H'0004,Y)
-	ld	AL,#(?LC3)
-	bsr	$_printf
-	ld	X,@(H'0005,Y)
-	ld	AL,@(0,X)
 	cmp	AL,#H'1006
-	beq	?L25
-	cmp	AL,#(H'0001+H'1006)
-	bcc	?L33
-	cmp	AL,#H'1000
-	beq	?L27
-	bra	(?L31)
-?L33:
+	beq	?L24
+	cmp	AL,#H'1006
+	bcz	?L24
 	cmp	AL,#H'1080
-	beq	?L29
-	bra	(?L31)
-?L27:
-	ld	AL,#(?LC4)
-	bsr	$_puts
-	bra	(?L25)
-?L29:
-	ld	AL,#(?LC5)
-	bsr	$_puts
+	bne	?L24
 	bsr	$_IsAudioBusy
 	cmp	AL,#H'0000
-	beq	?L25
-	bsr	$_IsAudioBusy
-	st	AL,@(H'0006,Y)
-	cmp	AL,#($_csr_voice_presences_plugin)
-	bne	?L25
-	bsr	$_IsAudioBusy
-	ld	AH,#H'700A
-	bsr	$_MessageCancelAll
-	ld	AL,#H'0000
-	st	AL,@(0,Y)
-	ld	AL,@(H'0006,Y)
-	ld	AH,#H'700A
-	bsr	$_MessageSend
-	bra	(?L25)
-?L31:
-	ld	X,@(H'0005,Y)
-	ld	AL,@(0,X)
-	st	AL,@(0,Y)
-	ld	AL,#(?LC6)
-	bsr	$_printf
-?L25:
-?LBE6:
-?LBE_handleKalimbaMessage:
-	leavel	#9
-	.SEG	CONST
-?LC3:
-	dc	H'68
-	dc	H'61
-	dc	H'6E
-	dc	H'64
-	dc	H'6C
-	dc	H'65
-	dc	H'4B
-	dc	H'61
-	dc	H'6C
-	dc	H'69
-	dc	H'6D
-	dc	H'62
-	dc	H'61
-	dc	H'4D
-	dc	H'65
-	dc	H'73
-	dc	H'73
-	dc	H'61
-	dc	H'67
-	dc	H'65
-	dc	H'3A
-	dc	H'20
-	dc	H'6D
-	dc	H'73
-	dc	H'67
-	dc	H'20
-	dc	H'69
-	dc	H'64
-	dc	H'5B
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'20
-	dc	H'61
-	dc	H'5B
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'20
-	dc	H'62
-	dc	H'5B
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'20
-	dc	H'63
-	dc	H'5B
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'20
-	dc	H'64
-	dc	H'5B
-	dc	H'25
-	dc	H'78
-	dc	H'5D
-	dc	H'0A
-	dc	H'00
-?LC4:
-	dc	H'50
-	dc	H'52
-	dc	H'45
-	dc	H'53
-	dc	H'45
-	dc	H'4E
-	dc	H'54
-	dc	H'3A
-	dc	H'20
-	dc	H'4B
-	dc	H'61
-	dc	H'6C
-	dc	H'4D
-	dc	H'73
-	dc	H'67
-	dc	H'20
-	dc	H'4D
-	dc	H'55
-	dc	H'53
-	dc	H'49
-	dc	H'43
-	dc	H'5F
-	dc	H'52
-	dc	H'45
-	dc	H'41
-	dc	H'44
-	dc	H'59
-	dc	H'5F
-	dc	H'4D
-	dc	H'53
-	dc	H'47
-	dc	H'00
-?LC5:
-	dc	H'50
-	dc	H'52
-	dc	H'45
-	dc	H'53
-	dc	H'45
-	dc	H'4E
-	dc	H'54
-	dc	H'3A
-	dc	H'20
-	dc	H'4B
-	dc	H'61
-	dc	H'6C
-	dc	H'4D
-	dc	H'73
-	dc	H'67
-	dc	H'20
-	dc	H'4D
-	dc	H'55
-	dc	H'53
-	dc	H'49
-	dc	H'43
-	dc	H'5F
-	dc	H'54
-	dc	H'4F
-	dc	H'4E
-	dc	H'45
-	dc	H'5F
-	dc	H'45
-	dc	H'4E
-	dc	H'44
-	dc	H'00
-?LC6:
-	dc	H'68
-	dc	H'61
-	dc	H'6E
-	dc	H'64
-	dc	H'6C
-	dc	H'65
-	dc	H'4B
-	dc	H'61
-	dc	H'6C
-	dc	H'69
-	dc	H'6D
-	dc	H'62
-	dc	H'61
-	dc	H'4D
-	dc	H'65
-	dc	H'73
-	dc	H'73
-	dc	H'61
-	dc	H'67
-	dc	H'65
-	dc	H'3A
-	dc	H'20
-	dc	H'75
-	dc	H'6E
-	dc	H'68
-	dc	H'61
-	dc	H'6E
-	dc	H'64
-	dc	H'6C
-	dc	H'65
-	dc	H'64
-	dc	H'20
-	dc	H'25
-	dc	H'58
-	dc	H'0A
-	dc	H'00
-	.CODE
-;.stabn	192,0,0,?LBB6
-;.stabn	224,0,0,?LBE6
-_handleInternalMessage:
-	enterl	#4
-?LBB_handleInternalMessage:
-	cmp	AH,#-H'7FDE
-	beq	?L42
-	cmp	AH,#-H'7FDA
-	bne	?L43
-	ld	AL,#(?LC7)
-	bsr	$_puts
-	bsr	$_IsAudioBusy
-	cmp	AL,#H'0000
-	beq	?L38
+	beq	?L24
 	bsr	$_IsAudioBusy
 	st	AL,@(H'0001,Y)
 	cmp	AL,#($_csr_voice_presences_plugin)
-	bne	?L38
+	bne	?L24
 	bsr	$_IsAudioBusy
 	ld	AH,#H'700A
 	bsr	$_MessageCancelAll
@@ -161568,93 +158636,48 @@ _handleInternalMessage:
 	ld	AL,@(H'0001,Y)
 	ld	AH,#H'700A
 	bsr	$_MessageSend
-	bra	(?L38)
+?L24:
+?LBE6:
+?LBE_handleKalimbaMessage:
+	leavel	#4
+_handleInternalMessage:
+	enterl	#4
+?LBB_handleInternalMessage:
+	cmp	AH,#-H'7FDE
+	beq	?L37
+	cmp	AH,#-H'7FDA
+	bne	?L42
+	bsr	$_IsAudioBusy
+	cmp	AL,#H'0000
+	beq	?L37
+	bsr	$_IsAudioBusy
+	st	AL,@(H'0001,Y)
+	cmp	AL,#($_csr_voice_presences_plugin)
+	bne	?L37
+	bsr	$_IsAudioBusy
+	ld	AH,#H'700A
+	bsr	$_MessageCancelAll
+	ld	AL,#H'0000
+	st	AL,@(0,Y)
+	ld	AL,@(H'0001,Y)
+	ld	AH,#H'700A
+	bsr	$_MessageSend
+	bra	(?L37)
 ?L42:
-	ld	AL,#(?LC8)
-	bsr	$_puts
-	bra	(?L38)
-?L43:
 	bsr	$_Panic
-?L38:
+?L37:
 ?LBE_handleInternalMessage:
 	leavel	#4
-	.SEG	CONST
-?LC7:
-	dc	H'50
-	dc	H'52
-	dc	H'45
-	dc	H'53
-	dc	H'45
-	dc	H'4E
-	dc	H'54
-	dc	H'3A
-	dc	H'20
-	dc	H'4D
-	dc	H'45
-	dc	H'53
-	dc	H'53
-	dc	H'41
-	dc	H'47
-	dc	H'45
-	dc	H'5F
-	dc	H'53
-	dc	H'54
-	dc	H'52
-	dc	H'45
-	dc	H'41
-	dc	H'4D
-	dc	H'5F
-	dc	H'44
-	dc	H'49
-	dc	H'53
-	dc	H'43
-	dc	H'4F
-	dc	H'4E
-	dc	H'4E
-	dc	H'45
-	dc	H'43
-	dc	H'54
-	dc	H'00
-?LC8:
-	dc	H'50
-	dc	H'52
-	dc	H'45
-	dc	H'53
-	dc	H'45
-	dc	H'4E
-	dc	H'54
-	dc	H'3A
-	dc	H'20
-	dc	H'4D
-	dc	H'45
-	dc	H'53
-	dc	H'53
-	dc	H'41
-	dc	H'47
-	dc	H'45
-	dc	H'5F
-	dc	H'4D
-	dc	H'4F
-	dc	H'52
-	dc	H'45
-	dc	H'5F
-	dc	H'53
-	dc	H'50
-	dc	H'41
-	dc	H'43
-	dc	H'45
-	dc	H'00
-	.CODE
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 26 used[1] = 8 total = 34
-;# Function pattern *movqi3 used[0] = 40 total = 40
+;# Function pattern *movqi2 used[0] = 19 used[1] = 8 total = 27
+;# Function pattern *movqi3 used[0] = 23 total = 23
 ;# Function pattern *addqi2 used[2] = 1 total = 1
-;# Function pattern jump used[0] = 12 total = 12
+;# Function pattern jump used[0] = 7 total = 7
 ;# Function pattern *call1 used[0] = 10 total = 10
-;# Function pattern *call_value1 used[0] = 23 total = 23
+;# Function pattern *call_value1 used[0] = 15 total = 15
 ;# Function pattern movstrqi+3 used[0] = 5 used[1] = 1 total = 6
-;# Function pattern movstrqi+4 used[1] = 3 total = 3
+;# Function pattern movstrqi+4 used[1] = 2 total = 2
 ;# Function pattern movstrqi+5 used[0] = 12 total = 12
 	MODULE	csr_voice_presences
 	.LARGE
@@ -161685,70 +158708,56 @@ _koovox_phrase_data:
 	DS	1
 	.CODE
 _csrVoicePresencesGetPrompt:
-	enterl	#29
+	enterl	#24
 ?LBB_csrVoicePresencesGetPrompt:
-	st	AL,@(H'0017,Y)
-	st	AH,@(H'0018,Y)
+	st	AL,@(H'0013,Y)
+	ld	X,@$XAP_AH
 ?LBB2:
-	ld	AL,#(?LC0)
-	bsr	$_puts
-	tst	@(H'0018,Y)
+	cmp	AH,#H'0000
 	beq	?L8
-	ld	X,@(H'0018,Y)
-	ld	X,@(H'0009,X)
-	st	X,@(H'001A,Y)
-	ld	X,@(H'0018,Y)
+	ld	AH,@(H'0009,X)
+	st	AH,@(H'0015,Y)
 	ld	AL,@(H'0005,X)
 	smult	@_present_header+H'0001
-	ld	AH,@(H'001A,Y)
-	add	AH,@$XAP_AL
-	st	AH,@(H'001A,Y)
-	ld	AL,#(?LC1)
-	bsr	$_puts
-	ld	AL,@(H'001A,Y)
-	cmp	AL,@_present_header
+	ld	X,@(H'0015,Y)
+	add	X,@$XAP_AL
+	st	X,@(H'0015,Y)
+	cmp	X,@_present_header
 	bcc	?L8
-	tst	@(H'0017,Y)
+	tst	@(H'0013,Y)
 	beq	?L8
-	ld	AL,@(H'001A,Y)
-	add	AL,#H'0001
+	ld	AL,#(?LC0)
 	st	AL,@(0,Y)
-	ld	AL,@_present_header
-	st	AL,@(H'0001,Y)
-	ld	AL,#(?LC2)
-	bsr	$_printf
-	ld	AL,#(?LC3)
-	st	AL,@(0,Y)
-	ld	X,@(H'001A,Y)
-	st	X,@(H'0001,Y)
+	ld	AH,@(H'0015,Y)
+	st	AH,@(H'0001,Y)
 	ld	AL,@$XAP_UY
-	add	AL,#H'0006
+	add	AL,#H'0002
 	bsr	$_sprintf
 	ld	AL,@$XAP_UY
-	add	AL,#H'0006
+	add	AL,#H'0002
 	bsr	$_strlen
 	st	AL,@(0,Y)
 	ld	AL,#H'0001
 	ld	AH,@$XAP_UY
-	add	AH,#H'0006
+	add	AH,#H'0002
 	bsr	$_FileFind
 	bsr	$_StreamFileSource
-	st	AL,@(H'0019,Y)
+	st	AL,@(H'0014,Y)
 	bsr	$_SourceSize
 	cmp	AL,#(H'0001+H'000B)
 	bcc	?L5
-	ld	AL,@(H'0019,Y)
+	ld	AL,@(H'0014,Y)
 	bsr	$_SourceClose
 ?L8:
 	ld	AL,#H'0000
 	bra	(?L1)
 ?L5:
-	ld	AL,@(H'0019,Y)
+	ld	AL,@(H'0014,Y)
 	bsr	$_SourceMap
 	st	AL,@H'fffa
 	ld	X,@$XAP_AL
 	ld	AL,@(H'0004,X)
-	ld	X,@(H'0017,Y)
+	ld	X,@(H'0013,Y)
 	st	AL,@(H'0004,X)
 	ld	X,@H'fffa
 	ld	AH,#H'0000
@@ -161773,20 +158782,20 @@ _csrVoicePresencesGetPrompt:
 	ld	AL,@(H'0008,X)
 	or	AL,@H'fff9
 	or	AH,@H'fff8
-	ld	X,@(H'0017,Y)
+	ld	X,@(H'0013,Y)
 	st	AH,@(0,X)
 	st	AL,@(1,X)
 	ld	X,@H'fffa
 	ld	AL,@(H'0009,X)
-	ld	X,@(H'0017,Y)
+	ld	X,@(H'0013,Y)
 	st	AL,@(H'0002,X)
 	ld	X,@H'fffa
 	ld	AL,@(H'000A,X)
 	asl	#H'0008
 	or	AL,@(H'000B,X)
-	ld	X,@(H'0017,Y)
+	ld	X,@(H'0013,Y)
 	st	AL,@(H'0003,X)
-	ld	X,@(H'0017,Y)
+	ld	X,@(H'0013,Y)
 	ld	AH,@(0,X)
 	ld	AL,@(1,X)
 	cmp	AH,#hwrd(H'0001+H'FFFF)
@@ -161799,188 +158808,51 @@ _csrVoicePresencesGetPrompt:
 	st	AL,@(H'0001,X)
 	ld	AL,#H'0000
 	st	AL,@(0,X)
-	ld	AL,#(?LC4)
-	bsr	$_puts
 ?L6:
-	ld	AL,#(?LC5)
+	ld	AL,#(?LC1)
 	st	AL,@(0,Y)
-	ld	AH,@(H'001A,Y)
+	ld	AH,@(H'0015,Y)
 	st	AH,@(H'0001,Y)
 	ld	AL,@$XAP_UY
-	add	AL,#H'0006
+	add	AL,#H'0002
 	bsr	$_sprintf
-	ld	AL,@$XAP_UY
-	add	AL,#H'0006
-	st	AL,@(0,Y)
-	ld	X,@(H'0017,Y)
-	ld	AL,@(H'0002,X)
-	st	AL,@(H'0001,Y)
-	ld	AL,@(H'0003,X)
-	st	AL,@(H'0002,Y)
-	ld	AL,@(H'0004,X)
-	st	AL,@(H'0003,Y)
-	ld	AH,@(0,X)
-	ld	AL,@(1,X)
-	st	AH,@(H'0004,Y)
-	st	AL,@(H'0005,Y)
-	ld	AL,#(?LC6)
-	bsr	$_printf
-	ld	AL,@(H'0019,Y)
+	ld	AL,@(H'0014,Y)
 	bsr	$_SourceClose
 	cmp	AL,#H'0000
 	bne	?L7
 	bsr	$_Panic
 ?L7:
 	ld	AL,@$XAP_UY
-	add	AL,#H'0006
+	add	AL,#H'0002
 	bsr	$_strlen
 	st	AL,@(0,Y)
 	ld	AL,#H'0001
 	ld	AH,@$XAP_UY
-	add	AH,#H'0006
+	add	AH,#H'0002
 	bsr	$_FileFind
 	bsr	$_StreamFileSource
 ?L1:
 ?LBE2:
 ?LBE_csrVoicePresencesGetPrompt:
-	leavel	#29
+	leavel	#24
 	.SEG	CONST
 ?LC0:
-	dc	H'2A
-	dc	H'2A
-	dc	H'2A
-	dc	H'63
 	dc	H'68
 	dc	H'65
-	dc	H'63
-	dc	H'6B
-	dc	H'5F
-	dc	H'74
-	dc	H'68
+	dc	H'61
+	dc	H'64
 	dc	H'65
-	dc	H'5F
-	dc	H'73
-	dc	H'6F
-	dc	H'75
 	dc	H'72
-	dc	H'63
-	dc	H'65
-	dc	H'2A
-	dc	H'2A
-	dc	H'2A
+	dc	H'73
+	dc	H'2F
+	dc	H'25
+	dc	H'64
+	dc	H'2E
+	dc	H'69
+	dc	H'64
+	dc	H'78
 	dc	H'00
 ?LC1:
-	dc	H'2A
-	dc	H'2A
-	dc	H'2A
-	dc	H'63
-	dc	H'68
-	dc	H'65
-	dc	H'63
-	dc	H'6B
-	dc	H'20
-	dc	H'70
-	dc	H'72
-	dc	H'6F
-	dc	H'6D
-	dc	H'70
-	dc	H'74
-	dc	H'20
-	dc	H'69
-	dc	H'64
-	dc	H'2A
-	dc	H'2A
-	dc	H'2A
-	dc	H'00
-?LC2:
-	dc	H'50
-	dc	H'52
-	dc	H'45
-	dc	H'53
-	dc	H'45
-	dc	H'4E
-	dc	H'54
-	dc	H'3A
-	dc	H'20
-	dc	H'50
-	dc	H'6C
-	dc	H'61
-	dc	H'79
-	dc	H'20
-	dc	H'70
-	dc	H'72
-	dc	H'6F
-	dc	H'6D
-	dc	H'70
-	dc	H'74
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'20
-	dc	H'6F
-	dc	H'66
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'0A
-	dc	H'00
-?LC3:
-	dc	H'68
-	dc	H'65
-	dc	H'61
-	dc	H'64
-	dc	H'65
-	dc	H'72
-	dc	H'73
-	dc	H'2F
-	dc	H'25
-	dc	H'64
-	dc	H'2E
-	dc	H'69
-	dc	H'64
-	dc	H'78
-	dc	H'00
-?LC4:
-	dc	H'50
-	dc	H'72
-	dc	H'6F
-	dc	H'6D
-	dc	H'70
-	dc	H'74
-	dc	H'20
-	dc	H'73
-	dc	H'69
-	dc	H'7A
-	dc	H'65
-	dc	H'20
-	dc	H'61
-	dc	H'64
-	dc	H'6A
-	dc	H'75
-	dc	H'73
-	dc	H'74
-	dc	H'65
-	dc	H'64
-	dc	H'20
-	dc	H'74
-	dc	H'6F
-	dc	H'20
-	dc	H'31
-	dc	H'36
-	dc	H'20
-	dc	H'62
-	dc	H'69
-	dc	H'74
-	dc	H'20
-	dc	H'6D
-	dc	H'61
-	dc	H'78
-	dc	H'69
-	dc	H'6D
-	dc	H'75
-	dc	H'6D
-	dc	H'00
-?LC5:
 	dc	H'70
 	dc	H'72
 	dc	H'6F
@@ -161995,63 +158867,6 @@ _csrVoicePresencesGetPrompt:
 	dc	H'70
 	dc	H'72
 	dc	H'6D
-	dc	H'00
-?LC6:
-	dc	H'46
-	dc	H'69
-	dc	H'6C
-	dc	H'65
-	dc	H'20
-	dc	H'50
-	dc	H'72
-	dc	H'6F
-	dc	H'6D
-	dc	H'70
-	dc	H'74
-	dc	H'3A
-	dc	H'20
-	dc	H'25
-	dc	H'73
-	dc	H'20
-	dc	H'64
-	dc	H'65
-	dc	H'63
-	dc	H'20
-	dc	H'25
-	dc	H'58
-	dc	H'20
-	dc	H'72
-	dc	H'61
-	dc	H'74
-	dc	H'65
-	dc	H'20
-	dc	H'30
-	dc	H'78
-	dc	H'25
-	dc	H'78
-	dc	H'20
-	dc	H'73
-	dc	H'74
-	dc	H'65
-	dc	H'72
-	dc	H'65
-	dc	H'6F
-	dc	H'20
-	dc	H'25
-	dc	H'75
-	dc	H'20
-	dc	H'73
-	dc	H'69
-	dc	H'7A
-	dc	H'65
-	dc	H'20
-	dc	H'30
-	dc	H'78
-	dc	H'25
-	dc	H'6C
-	dc	H'78
-	dc	H'20
-	dc	H'0A
 	dc	H'00
 	.CODE
 ;.stabn	192,0,0,?LBB2
@@ -162093,10 +158908,6 @@ _CsrVoicePresencesPluginPlayDigit:
 	ld	AL,#H'0001
 	bsr	$_SetVpPlaying
 	ld	AL,@(H'0005,Y)
-	st	AL,@(0,Y)
-	ld	AL,#(?LC7)
-	bsr	$_printf
-	ld	AL,@(H'0005,Y)
 	cmp	AL,#H'0005
 	beq	?L24
 	cmp	AL,#(H'0001+H'0005)
@@ -162117,15 +158928,11 @@ _CsrVoicePresencesPluginPlayDigit:
 	ld	AL,@(H'0005,Y)
 	cmp	AL,#H'0006
 	bne	?L19
-	ld	AL,#(?LC8)
-	bsr	$_puts
 	ld	X,@_koovox_phrase_data
 	ld	AL,@(H'0009,Y)
 	st	AL,@(0,Y)
 	bra	(?L31)
 ?L19:
-	ld	AL,#(?LC9)
-	bsr	$_puts
 	ld	X,@_koovox_phrase_data
 	ld	AL,#H'0002
 	st	AL,@(0,Y)
@@ -162142,11 +158949,6 @@ _CsrVoicePresencesPluginPlayDigit:
 	ld	AL,#H'0005
 	bsr	$_StreamKalimbaSink
 	st	AL,@(H'0009,Y)
-	st	AL,@(0,Y)
-	ld	AL,@(H'0008,Y)
-	st	AL,@(H'0001,Y)
-	ld	AL,#(?LC10)
-	bsr	$_printf
 	ld	X,@_koovox_phrase_data
 	ld	AH,#H'0000
 	ld	AL,@(H'0004,X)
@@ -162185,11 +158987,6 @@ _CsrVoicePresencesPluginPlayDigit:
 	ld	AL,#H'0005
 	bsr	$_StreamKalimbaSink
 	st	AL,@(H'000A,Y)
-	st	AL,@(0,Y)
-	ld	AL,@(H'0008,Y)
-	st	AL,@(H'0001,Y)
-	ld	AL,#(?LC10)
-	bsr	$_printf
 	ld	X,@_koovox_phrase_data
 	ld	AH,#H'0000
 	ld	AL,@(H'0004,X)
@@ -162201,11 +158998,6 @@ _CsrVoicePresencesPluginPlayDigit:
 	ld	AL,@(H'000A,Y)
 	ld	AH,#($_csr_voice_presences_plugin)
 	bsr	$_MessageSinkTask
-	ld	AH,#($_csr_voice_presences_plugin)
-	st	AH,@(0,Y)
-	st	AL,@(H'0001,Y)
-	ld	AL,#(?LC11)
-	bsr	$_printf
 	ld	X,@_koovox_phrase_data
 	tst	@(H'0007,X)
 	beq	?L26
@@ -162230,188 +159022,11 @@ _CsrVoicePresencesPluginPlayDigit:
 ?LBE5:
 	bra	(?L11)
 ?L28:
-	ld	AL,#(?LC12)
-	bsr	$_puts
 	bsr	$_Panic
 ?L11:
 ?LBE3:
 ?LBE_CsrVoicePresencesPluginPlayDigit:
 	leavel	#13
-	.SEG	CONST
-?LC7:
-	dc	H'3D
-	dc	H'3D
-	dc	H'64
-	dc	H'65
-	dc	H'63
-	dc	H'6F
-	dc	H'6D
-	dc	H'70
-	dc	H'72
-	dc	H'65
-	dc	H'73
-	dc	H'73
-	dc	H'69
-	dc	H'6F
-	dc	H'6E
-	dc	H'3A
-	dc	H'25
-	dc	H'64
-	dc	H'3D
-	dc	H'3D
-	dc	H'3D
-	dc	H'0A
-	dc	H'00
-?LC8:
-	dc	H'50
-	dc	H'52
-	dc	H'45
-	dc	H'53
-	dc	H'45
-	dc	H'4E
-	dc	H'54
-	dc	H'3A
-	dc	H'20
-	dc	H'70
-	dc	H'6C
-	dc	H'61
-	dc	H'79
-	dc	H'20
-	dc	H'74
-	dc	H'6F
-	dc	H'6E
-	dc	H'65
-	dc	H'00
-?LC9:
-	dc	H'50
-	dc	H'52
-	dc	H'45
-	dc	H'53
-	dc	H'45
-	dc	H'4E
-	dc	H'54
-	dc	H'3A
-	dc	H'20
-	dc	H'70
-	dc	H'6C
-	dc	H'61
-	dc	H'79
-	dc	H'20
-	dc	H'61
-	dc	H'64
-	dc	H'70
-	dc	H'63
-	dc	H'6D
-	dc	H'00
-?LC10:
-	dc	H'50
-	dc	H'52
-	dc	H'45
-	dc	H'53
-	dc	H'45
-	dc	H'4E
-	dc	H'54
-	dc	H'3A
-	dc	H'20
-	dc	H'70
-	dc	H'6C
-	dc	H'61
-	dc	H'79
-	dc	H'20
-	dc	H'64
-	dc	H'73
-	dc	H'70
-	dc	H'20
-	dc	H'6D
-	dc	H'69
-	dc	H'78
-	dc	H'20
-	dc	H'6C
-	dc	H'53
-	dc	H'69
-	dc	H'6E
-	dc	H'6B
-	dc	H'20
-	dc	H'3D
-	dc	H'20
-	dc	H'25
-	dc	H'78
-	dc	H'20
-	dc	H'6C
-	dc	H'53
-	dc	H'6F
-	dc	H'75
-	dc	H'72
-	dc	H'63
-	dc	H'65
-	dc	H'20
-	dc	H'3D
-	dc	H'20
-	dc	H'25
-	dc	H'78
-	dc	H'0A
-	dc	H'00
-?LC11:
-	dc	H'50
-	dc	H'52
-	dc	H'45
-	dc	H'53
-	dc	H'45
-	dc	H'4E
-	dc	H'54
-	dc	H'3A
-	dc	H'20
-	dc	H'73
-	dc	H'69
-	dc	H'6E
-	dc	H'6B
-	dc	H'20
-	dc	H'74
-	dc	H'61
-	dc	H'73
-	dc	H'6B
-	dc	H'20
-	dc	H'6E
-	dc	H'6F
-	dc	H'77
-	dc	H'20
-	dc	H'25
-	dc	H'78
-	dc	H'20
-	dc	H'77
-	dc	H'61
-	dc	H'73
-	dc	H'20
-	dc	H'25
-	dc	H'78
-	dc	H'2E
-	dc	H'0A
-	dc	H'00
-?LC12:
-	dc	H'50
-	dc	H'52
-	dc	H'45
-	dc	H'53
-	dc	H'45
-	dc	H'4E
-	dc	H'54
-	dc	H'3A
-	dc	H'20
-	dc	H'43
-	dc	H'6F
-	dc	H'64
-	dc	H'65
-	dc	H'63
-	dc	H'20
-	dc	H'49
-	dc	H'6E
-	dc	H'76
-	dc	H'61
-	dc	H'6C
-	dc	H'69
-	dc	H'64
-	dc	H'00
-	.CODE
 ;.stabn	192,0,0,?LBB3
 ;.stabn	192,0,0,?LBB4
 ;.stabn	224,0,0,?LBE4
@@ -162427,8 +159042,6 @@ $_CsrVoicePresencesPluginPlayPhrase:
 	beq	?L39
 	bsr	$_Panic
 ?L39:
-	ld	AL,#(?LC13)
-	bsr	$_puts
 	ld	AL,#H'000C
 	bsr	$_PanicUnlessMalloc
 	st	AL,@_koovox_phrase_data
@@ -162470,38 +159083,12 @@ $_CsrVoicePresencesPluginPlayPhrase:
 	bsr	$_SetVpPlaying
 ?LBE_CsrVoicePresencesPluginPlayPhrase:
 	leavel	#5
-	.SEG	CONST
-?LC13:
-	dc	H'50
-	dc	H'52
-	dc	H'45
-	dc	H'53
-	dc	H'45
-	dc	H'4E
-	dc	H'54
-	dc	H'3A
-	dc	H'20
-	dc	H'50
-	dc	H'6C
-	dc	H'61
-	dc	H'79
-	dc	H'20
-	dc	H'50
-	dc	H'68
-	dc	H'72
-	dc	H'61
-	dc	H'73
-	dc	H'65
-	dc	H'3A
-	dc	H'00
-	.CODE
 _CsrVoicePresencesPluginStopPhraseMixable:
-	enterl	#6
+	enterl	#5
 ?LBB_CsrVoicePresencesPluginStopPhraseMixable:
 ?LBB6:
-	ld	AH,#H'0000
-	st	AH,@(H'0001,Y)
-	st	AH,@(H'0002,Y)
+	ld	AL,#H'0000
+	st	AL,@(H'0001,Y)
 	bsr	$_GetCurrentDspStatus
 	cmp	AL,#H'0000
 	beq	?L41
@@ -162512,7 +159099,7 @@ _CsrVoicePresencesPluginStopPhraseMixable:
 	cmp	AL,#H'0000
 	beq	?L43
 	bsr	$_GetAudioPlugin
-	ld	AH,@(H'0002,Y)
+	ld	AH,#H'0000
 	st	AH,@(0,Y)
 	ld	AH,#H'700E
 	bsr	$_MessageSend
@@ -162547,16 +159134,16 @@ _CsrVoicePresencesPluginStopPhraseMixable:
 	ld	AL,#H'0002
 	ld	AH,#H'0000
 	bsr	$_StreamAudioSink
-	st	AL,@(H'0003,Y)
+	st	AL,@(H'0002,Y)
 	ld	AL,#H'0000
 	ld	AH,@(H'0001,Y)
 	bsr	$_StreamDisconnect
 	ld	AL,#H'0000
-	ld	AH,@(H'0003,Y)
+	ld	AH,@(H'0002,Y)
 	bsr	$_StreamDisconnect
 	ld	AL,@(H'0001,Y)
 	bsr	$_SinkClose
-	ld	AL,@(H'0003,Y)
+	ld	AL,@(H'0002,Y)
 	bsr	$_SinkClose
 ?LBE7:
 	bra	(?L43)
@@ -162586,121 +159173,29 @@ _CsrVoicePresencesPluginStopPhraseMixable:
 	ld	AL,@(H'0001,Y)
 	ld	AH,#H'0000
 	bsr	$_MessageSinkTask
-	st	AL,@(H'0002,Y)
 	ld	AL,@(H'0001,Y)
 	bsr	$_SinkClose
 ?L51:
-	ld	AH,@(H'0002,Y)
-	st	AH,@(0,Y)
-	ld	AL,#(?LC14)
-	bsr	$_printf
 	ld	AL,#($_csr_voice_presences_plugin)
 	ld	AH,#-H'7FDA
 	bsr	$_MessageCancelAll
 ?LBE6:
 ?LBE_CsrVoicePresencesPluginStopPhraseMixable:
-	leavel	#6
-	.SEG	CONST
-?LC14:
-	dc	H'50
-	dc	H'52
-	dc	H'45
-	dc	H'53
-	dc	H'45
-	dc	H'4E
-	dc	H'54
-	dc	H'3A
-	dc	H'20
-	dc	H'53
-	dc	H'69
-	dc	H'6E
-	dc	H'6B
-	dc	H'54
-	dc	H'61
-	dc	H'73
-	dc	H'6B
-	dc	H'20
-	dc	H'6E
-	dc	H'6F
-	dc	H'77
-	dc	H'20
-	dc	H'4E
-	dc	H'55
-	dc	H'4C
-	dc	H'4C
-	dc	H'20
-	dc	H'77
-	dc	H'61
-	dc	H'73
-	dc	H'20
-	dc	H'25
-	dc	H'78
-	dc	H'0A
-	dc	H'00
-	.CODE
+	leavel	#5
 ;.stabn	192,0,0,?LBB6
 ;.stabn	192,0,0,?LBB7
 ;.stabn	224,0,0,?LBE7
 ;.stabn	224,0,0,?LBE6
 $_CsrVoicePresencesPluginInit:
-	enterl	#6
+	enterl	#2
 ?LBB_CsrVoicePresencesPluginInit:
-	st	AL,@(H'0002,Y)
-	st	AH,@(H'0003,Y)
-	st	AL,@(0,Y)
-	st	AH,@(H'0001,Y)
-	ld	AL,#(?LC15)
-	bsr	$_printf
-	ld	AL,@(H'0002,Y)
+	ld	X,@$XAP_AH
 	st	AL,@_present_header
 	ld	AH,#H'0000
-	udiv	@(H'0003,Y)
+	udiv	@$XAP_UXL
 	st	AL,@_present_header+H'0001
 ?LBE_CsrVoicePresencesPluginInit:
-	leavel	#6
-	.SEG	CONST
-?LC15:
-	dc	H'50
-	dc	H'52
-	dc	H'45
-	dc	H'53
-	dc	H'45
-	dc	H'4E
-	dc	H'54
-	dc	H'3A
-	dc	H'20
-	dc	H'49
-	dc	H'6E
-	dc	H'69
-	dc	H'74
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'20
-	dc	H'70
-	dc	H'72
-	dc	H'6F
-	dc	H'6D
-	dc	H'70
-	dc	H'74
-	dc	H'73
-	dc	H'20
-	dc	H'25
-	dc	H'64
-	dc	H'20
-	dc	H'6C
-	dc	H'61
-	dc	H'6E
-	dc	H'67
-	dc	H'75
-	dc	H'61
-	dc	H'67
-	dc	H'65
-	dc	H'73
-	dc	H'20
-	dc	H'0A
-	dc	H'00
-	.CODE
+	leavel	#2
 $_CsrVoicePresencesPluginStopPhrase:
 	enterl	#2
 ?LBB_CsrVoicePresencesPluginStopPhrase:
@@ -162708,8 +159203,6 @@ $_CsrVoicePresencesPluginStopPhrase:
 	bne	?L56
 	bsr	$_Panic
 ?L56:
-	ld	AL,#(?LC16)
-	bsr	$_puts
 	ld	X,@_koovox_phrase_data
 	tst	@(H'0008,X)
 	beq	?L57
@@ -162734,40 +159227,17 @@ $_CsrVoicePresencesPluginStopPhrase:
 	bsr	$_SetVpPlaying
 ?LBE_CsrVoicePresencesPluginStopPhrase:
 	leavel	#2
-	.SEG	CONST
-?LC16:
-	dc	H'50
-	dc	H'52
-	dc	H'45
-	dc	H'53
-	dc	H'45
-	dc	H'4E
-	dc	H'54
-	dc	H'3A
-	dc	H'20
-	dc	H'54
-	dc	H'65
-	dc	H'72
-	dc	H'6D
-	dc	H'69
-	dc	H'6E
-	dc	H'61
-	dc	H'74
-	dc	H'65
-	dc	H'64
-	dc	H'00
-	.CODE
 	.SEG	VAR
 _present_header:
 	DS	2
 	ENDMOD
 
-;# Function pattern *movqi2 used[0] = 81 used[1] = 23 total = 104
-;# Function pattern *movqi3 used[0] = 152 total = 152
-;# Function pattern *movhi used[2] = 2 used[3] = 7 total = 9
+;# Function pattern *movqi2 used[0] = 62 used[1] = 23 total = 85
+;# Function pattern *movqi3 used[0] = 121 total = 121
+;# Function pattern *movhi used[2] = 1 used[3] = 6 total = 7
 ;# Function pattern *iorhi3 used[0] = 3 total = 3
-;# Function pattern *addqi0 used[0] = 8 total = 8
-;# Function pattern *addqi2 used[0] = 2 total = 2
+;# Function pattern *addqi0 used[0] = 7 total = 7
+;# Function pattern *addqi2 used[0] = 1 total = 1
 ;# Function pattern *andqi3 used[0] = 2 total = 2
 ;# Function pattern *iorqi3 used[0] = 1 total = 1
 ;# Function pattern *udivqi3 used[0] = 1 total = 1
@@ -162779,9 +159249,9 @@ _present_header:
 ;# Function pattern *zero_extendqihi2_1 used[0] = 2 total = 2
 ;# Function pattern jump used[0] = 13 total = 13
 ;# Function pattern *call1 used[0] = 20 total = 20
-;# Function pattern *call_value1 used[0] = 61 total = 61
+;# Function pattern *call_value1 used[0] = 45 total = 45
 ;# Function pattern zero_extendqihi2+1 used[0] = 1 total = 1
-;# Function pattern movstrqi+3 used[0] = 9 used[1] = 7 total = 16
+;# Function pattern movstrqi+3 used[0] = 10 used[1] = 6 total = 16
 ;# Function pattern movstrqi+4 used[1] = 3 total = 3
 ;# Function pattern movstrqi+5 used[0] = 7 total = 7
 ;# Function pattern movstrqi+7 used[0] = 1 total = 1

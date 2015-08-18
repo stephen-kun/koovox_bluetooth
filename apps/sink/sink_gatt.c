@@ -34,6 +34,8 @@ DESCRIPTION
 #include <csrtypes.h>
 #include <message.h>
 
+#include "koovox_wechat_handle.h"
+
 
 /* Macro for GATT Debug */
 #ifdef DEBUG_GATT
@@ -141,6 +143,9 @@ void gatt_message_handler( Task task, MessageId id, Message message )
                     {
                         GATT_DEBUG(("Start BLE security\n"));
                         ConnectionDmBleSecurityReq(&theSink.task, &cfm->taddr, ble_security_encrypted, ble_connection_slave_directed);
+
+						/*初始化微信ble参数*/
+						koovox_init_wechat();
                     }
                     #endif
                 }

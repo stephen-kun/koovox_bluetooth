@@ -28,7 +28,7 @@ primary_service{
 		uuid		: 0xFEC7,
 		name		: "WRITE_CHARACTERISTIC",
 		flags		: [ FLAG_IRQ],
-        properties 	: [ write],
+        properties 	: [ write ],
         value      	: 0x0
 	},
 	characteristic {

@@ -65,10 +65,14 @@ void handleWechatMessage(Task task, MessageId id, Message message)
                 wechat_data.wechat_transport = m->transport;
                 WechatSetSessionEnable(m->transport, theSink.features.WechatEnableSession);
 
+				koovox_init_wechat();
 				koovox_wechat_connect(TYPE_RFCOMM, NULL, m->transport);
 #if defined(BLE_ENABLED)
-				stop_ble_advertising();
-				koovox.ble_adv = FALSE;
+				if(koovox.ble_adv)
+				{
+					stop_ble_advertising();
+					koovox.ble_adv = FALSE;
+				}
 #endif
             }			
         }
